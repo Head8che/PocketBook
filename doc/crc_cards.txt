@@ -1,0 +1,1 @@
+// we can create CRC cards here to identify the key entity classes (and their generalizations, as appropriate) for this app.

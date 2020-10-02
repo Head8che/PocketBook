@@ -2,8 +2,4 @@ CCID: hagi Github: Head8che
 CCID: abujayya Github: MahmoudAJ
 CCID: aakindel Github: aakindel
 CCID: falmaz	Github: falmaz
-<<<<<<< HEAD
-CCID: edengrac  Github: thefreezer
-=======
 CCID: humanita Github: humnita
->>>>>>> 4ebfaea394c45a0ce43f4d4a80a26cd6e5d2d11e

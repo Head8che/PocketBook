@@ -1,0 +1,126 @@
+
+   Logo Page --> Sign Up (02.01.01)
+       |                 |
+       |                 |
+       V                 V
+     Log In    --->  Books Catalogue 
+   (02.01.01)
+
+
+    (Home Button)   
+   Books Catalogue     --> Click Profile Button <in footer> --> User's Profile Page --> Click Edit Button --> Edit Dialog (02.02.01)
+                                                                       |
+                                                                       |
+                                                                        ----> Click Notifications Button --> Notifications Catalogue --> Click Notification --> Notification Dialog
+
+
+
+                       --> Click Owner Books Button <in footer> --> Owner Books Catalogue (01.04.01) --> Click Filter Button --> Filter ...
+                                                                                |                    Dialog --> Select Status --> Click OK [redirect to filtered catalogue] (01.05.01)
+                                                                                |
+                                                         -----------------------|
+                                                        |                       |
+                                                        |   --------------------|
+                                                        |  |                    |
+                                                        |  |   -----------------|
+                                                        |  |  |                 |
+                                                        |  |  |   --------------|                      ----> Click Scan ISBN Button --> Scan ISBN Dialog --> Description Dialog (01.02.01)
+                                                        |  |  |  |              |                     |
+                                                        |  |  |  |              V                     |
+                                                        |  |  |  |   Click on Book in List --> Book Page (01.06.01) (08.03.01) --> Click Edit Button <floating> --> Edit Dialog (01.06.01)
+                                                        |  |  |  |                                    |                                                                     |
+                                                        |  |  |  |                                    |                                                       ---------------------------- 
+                                                        |  |  |  |                                    |                                                      |                            |
+                                                        |  |  |  |                                    |                                                      V                            V
+                                                        |  |  |  |                                    |                                          Attach Photo (08.01.01)       Delete Photo (08.02.01)
+                                                        |  |  |  |                                    |
+                                                        |  |  |  |                                    |
+                                                        |  |  |  |                                     ----> Click View Requests Button --> Book's Request Page (04.04.01)
+                                                        |  |  |  |                                                                                        |
+                                                        |  |  |  |                                                                                        |
+                                                        |  |  |  |                                                                                 Click on Request
+                                                        |  |  |  |                                                                                        |
+                                                        |  |  |  |                                                                                        |
+                                                        |  |  |  |                                                                                 Request Dialog
+                                                        |  |  |  |                                                                                        |
+                                                        |  |  |  |                                                                -----------------------------------------------
+                                                        |  |  |  |                                                               |                                               |
+                                                        |  |  |  |                                                               V                                               V
+                                                        |  |  |  |                                                  Accept Request (05.01.01)                       Decline Request (05.02.01)
+                                                        |  |  |  |                                                               |                                               |
+                                                        |  |  |  |                                                               |                                               |
+                                                        |  |  |  |                                            Specify Geo Location of Book (09.01.01)                            |
+                                                        |  |  |  |                                                               |                                               |
+                                                        |  |  |  |                                                               V                                               V
+                                                        |  |  |  |                                           Notify  Borrower of Acceptance (05.03.01)             Notify Borrower(s) of Rejection
+                                                        |  |  |  |                                                               |                                               
+                                                        |  |  |  |                                                               V                                               
+                                                        |  |  |  |                                              [Book Status: Accepted] (01.03.01)             
+                                                        |  |  |  | 
+                                                        |  |  |  | 
+                                                        |  |  |  |             
+                                                        |  |  |  |             
+                                                        |  |  |   -----------------> Long-click Book in List --> Delete Dialog [if confirm, redirect to Owner Books Catalogue] (01.07.01)
+                                                        |  |  |  
+                                                        |  |   ------------------> Click Add Button <floating> --> Add Book Dialog (01.01.01) --> [Book Status: Available] (01.03.01)
+                                                        |  |                                                                  |
+                                                        |  |                                                     ---------------------------- 
+                                                        |  |                                                    |                            |
+                                                        |  |                                                    V                            V
+                                                        |  |                                        Attach Photo (08.01.01)       Delete Photo (08.02.01)
+                                                        |  |
+                                                        |   ------------------> Click Loan Book Button --> Scan ISBN Dialog --> Click ...
+                                                        |                                                   OK [book is borrowed] (06.01.01) --> [Book Status: Borrowed] (01.03.01)
+                                                        |
+                                                         --------------------> Click Receive Returned Book Button --> Scan ISBN Dialog --> Click OK [book is received] (07.02.01)
+
+
+
+
+                       --> Click Borrower Books Button <in footer> --> Borrower Books Catalogue (06.03.01) --> Click Search Button --> Search ...
+                                                                                |               Dialog --> Specify Keyword (03.01.01) --> Click OK [redirect to filtered catalogue] (03.02.01)
+                                                                                |
+                                                            --------------------|                                                                             |
+                                                           |                    |                                                                             |
+                                                           |   -----------------|                                                                             |
+                                                           |  |                 |        Click on Book in Filtered Catalogue  --------------------------------
+                                                           |  |   --------------|                      |
+                                                           |  |  |              |                       --> Book Page (01.06.01) (08.03.01) --> Click Request Button <floating> --> Request ... 
+                                                           |  |  |              |                                            Dialog (04.01.01) --> Click OK --> Notify Owner of ... 
+                                                           |  |  |              |                                                   Request (04.03.01) --> [Book Status: Requested] (01.03.01)
+                                                           |  |  |              |
+                                                           |  |  |              |
+                                                           |  |  |              |
+                                                           |  |  |              |                         ----> Click Return Book Button --> Scan ISBN Dialog --> Click ... 
+                                                           |  |  |              |                        |             OK [book is available] (07.01.01) --> [Book Status: Available] (01.03.01)
+                                                           |  |  |              |                        |
+                                                           |  |  |              V                        |
+                                                           |  |  |          Click on Book in List --> Book Page (01.06.01)
+                                                           |  |  |              
+                                                           |  |  |              
+                                                           |  |  |
+                                                           |  |   --------------> Click View Accepted Books Button --> Accepted Books Catalogue (05.04.01)
+                                                           |  |                                                                       |
+                                                           |  |                                                            Click on Book in List
+                                                           |  |                                                                       |                                      
+                                                           |  |                                                                       V                                                   
+                                                           |  |                                              View Geo Location of Book that will be Borrowed (09.02.01)                            
+                                                           |  |                 
+                                                           |  |                 
+                                                           |  | 
+                                                           |   ----------------> Click View Requested Books Button --> Requested Books Catalogue (04.02.01)
+                                                           | 
+                                                             ------------------> Click Receive Accepted Book Button --> Scan ISBN Dialog --> Click OK [book is received] (06.02.01)             
+
+
+
+
+                       --> Click on Book in List --> Book Page (01.06.01) --> [if book is available] Click Request Button <floating> --> Request Dialog (04.01.01) --> Click ...
+                                                                                                                                OK --> Notify Owner of Request ... 
+                                                                                                                                       (04.03.01) --> [Book Status: Requested] (01.03.01)
+
+                       --> Click Other Profiles Button <in footer> --> Click Username --> Other User Profile Page (02.03.01)
+
+
+
+

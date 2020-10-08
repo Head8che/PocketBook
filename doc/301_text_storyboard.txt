@@ -3,19 +3,24 @@
        |                 |
        |                 |
        V                 V
-     Log In    --->  Books Catalogue 
+     Log In    --->  Main Page
    (02.01.01)
 
 
     (Home Button)   
-   Books Catalogue     --> Click Profile Button <in footer> --> User's Profile Page --> Click Edit Button --> Edit Dialog (02.02.01)
-                                                                       |
-                                                                       |
+     Main Page     --> Click Profile Button <in footer (left column)> --> User's Profile Page --> Hamburger Icon
+                                                                       |			|
+                                                                       |			|
+								       |			 -----> Settings  --> Click Edit Button --> Edit Dialog (02.02.01)
+                                                                       |			 -----> Archive   --> Archived Books
+								       |			 -----> Saved     --> Saved Books
+                                                                       |			
+								       |
                                                                         ----> Click Notifications Button --> Notifications Catalogue --> Click Notification --> Notification Dialog
 
 
 
-                       --> Click Owner Books Button <in footer> --> Owner Books Catalogue (01.04.01) --> Click Filter Button --> Filter ...
+                       --> Click Books Button <in footer> --> Owner Books Catalogue (01.04.01) --> Click Filter Button --> Filter ...
                                                                                 |                    Dialog --> Select Status --> Click OK [redirect to filtered catalogue] (01.05.01)
                                                                                 |
                                                          -----------------------|
@@ -77,7 +82,7 @@
 
 
 
-                       --> Click Borrower Books Button <in footer> --> Borrower Books Catalogue (06.03.01) --> Click Search Button --> Search ...
+                       --> Click Books Button <in footer> --> Borrower Books Catalogue (06.03.01) --> Click Search Button --> Search ...
                                                                                 |               Dialog --> Specify Keyword (03.01.01) --> Click OK [redirect to filtered catalogue] (03.02.01)
                                                                                 |
                                                             --------------------|                                                                             |
@@ -116,10 +121,11 @@
 
 
                        --> Click on Book in List --> Book Page (01.06.01) --> [if book is available] Click Request Button <floating> --> Request Dialog (04.01.01) --> Click ...
-                                                                                                                                OK --> Notify Owner of Request ... 
-                                                                                                                                       (04.03.01) --> [Book Status: Requested] (01.03.01)
+                                                                                                                                				OK --> Notify Owner of Request ... 
+                                                                                                                                       				(04.03.01) --> [Book Status: Requested] (01.03.01)
 
-                       --> Click Other Profiles Button <in footer> --> Click Username --> Other User Profile Page (02.03.01)
+                       --> Click Home Button <in footer> --> Click Username on Discovery Page --> Other User Profile Page (02.03.01)
+		       --> Click search Button <in footer> --> Enter Username --> Other User Profile Page (02.03.01)
 
 
 

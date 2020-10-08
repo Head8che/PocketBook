@@ -1,0 +1,24 @@
+Accepting
+-> responsabilites
+- accepts book request
+- prevents further requests on accepted requests
+- declines book request
+- notifies borrower when book accepted
+- shows list of books requested and accepted
+-> collaborators
+- Owner
+- Borrower
+- Book
+
+
+Borrowing
+-> responsabilities
+- denotes book as borrowed
+- confirms book reception
+- views borrowed books with description and owner username
+- scans book ISBN
+-> collaborators
+- Owner
+- Borrower
+- Book
+- Scan

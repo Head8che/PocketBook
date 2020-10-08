@@ -1,0 +1,46 @@
+// we can create CRC cards here to identify the key entity classes (and their generalizations, as appropriate) for this app.
+
+Owner
+- extends User
+responsibilities:
+- adds a Book to personal Book list
+- edits a Book in personal Book list
+- deletes a Book from personal Book list
+- views personal Book list
+- views personal Book list, filtered by Status
+- Scans a Book's ISBN
+- has User profile with unique username and contact info
+- edits contact info in User profile
+- views other Users' profiles (from their presented username)
+- views all Requests on owned Books
+- gets notified of new Request on an owned Book
+- accepts a Request on an owned Book
+- specifies the Geolocation of where an owned Book should be picked up
+- declines a Request on an owned Book
+- Lends out an owned Book
+- receive an owned Book that has been returned
+- attach a Photograph to an owned Book
+- deletes an attached Photograph from an owned Book
+- views an attached Photograph on any Book
+collaborators:
+- Book
+- Status
+- Scan
+- User
+- Lends
+- Request
+- Geolocation
+- Photograph
+
+
+User
+responsibilities:
+- has username
+- has password
+- has email
+- has phone number
+- has list of owned books
+- has list of borrowed books
+collaborators:
+- Owner
+- Borrower

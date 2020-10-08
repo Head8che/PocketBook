@@ -1,3 +1,6 @@
 CCID: hagi Github: Head8che
 CCID: abujayya Github: MahmoudAJ
 CCID: aakindel Github: aakindel
+CCID: falmaz	 Github: MahmoodFalmaz
+CCID: humanita Github: humnita
+CCID: edengrac Github: thefreezer

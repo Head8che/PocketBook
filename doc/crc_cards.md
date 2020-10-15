@@ -15,7 +15,7 @@ Keeps track of its own status| Borrowing
 Has a description that's accessible through the ISBN | Scan
 A book can be borrowed or requested by a borrower | 
 A book accepted for borrowing by the owner| 
-A book can be availbale for borrowing| 
+A book can be available for borrowing| 
 A book's description can be edited| 
 
 
@@ -54,7 +54,7 @@ Has list of borrowed books |
 *As an owner, I want to view and edit a book description in my books.*
 *As an owner, I want to delete a book in my books.*
 
-## Owner Extends User ##
+## Owner extends User ##
 Responsibilities | Collaborators 
 -----------------|---------------
 Adds a Book to personal Book list | Book
@@ -83,17 +83,17 @@ Views an attached Photograph on any Book |
 *As a borrower, I want to receive an accepted book by scanning the book ISBN code to confirm I have borrowed it.*
 *As a borrower, I want to view a list of books I am borrowing, each book with its description and owner username. *
 
-## Borrower ##
+## Borrower extends User ##
 Responsibilities | Collaborators
 -----------------|---------------
-Views every book with a tpye of status  | Book
+Views every book with a type of status  | Book
 Has a unique username and contact info | Status
-Ability to edit ones contact info | Scan*
+Ability to edit one's contact info | Scan*
 Access to search and view username profiles | Status*
 Custom Keyword search of all books (Not Borrowed/Accepted)* | Availablity*
 Search results to display description, owner username and status  | Requesting
 View a list of books that one has requested that displays it's description, owner username and status| User
-Request boooks that are not currently accepted or borrwed | Geolocation
+Request books that are not currently accepted or borrwed | Geolocation
 Updated/Notified of accepted request | Searching*
 View a list of each book that one has requested and have been accepted. Each display description, owner username and status| Accepting
 Scan the accepted book's ISBN Code to confirm that it's been recieved | Borrowing
@@ -147,7 +147,7 @@ Responsibilities | Collaborators
 Accepts a book request | Owner
 Prevents further requests on accepted requests*| Borrower
 Declines book request | Book
-Notify/Update borrower when book status hass been accepted | 
+Notify/Update borrower when book status has been accepted | 
 View list of each book requested and accepted with their description and username | 
 
 
@@ -163,7 +163,7 @@ Denotes book as borrowed | Owner
 Confirms book reception | Borrower
 Views borrowed books with description and owner username | Book
 Scans book ISBN | Scan
-Allow the borrower to view the recieving location of the request book| 
+Allow the borrower to view the receiving location of the request book| 
 
 
 ### Prompt 
@@ -177,7 +177,7 @@ Request for a book to be retruned  | Borrower
 Recieve request for book to be returned | Owner
 Scan a book's ISBN Code	 | Book
 Request for book to be available| Status*
-Confirm the book avaliblity| Scan*
+Confirm the book availability| Scan*
  | Availablity
  | Requesting
  | User

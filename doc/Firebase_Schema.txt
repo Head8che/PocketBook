@@ -1,0 +1,36 @@
+							Books:
+							-BID
+							-Title
+							-Author
+							-ISBN
+							-Comment
+							-Status													
+							-Photo
+							-owner
+							   |
+							   |
+							   |
+							Requests:
+							 -RID
+							 -User
+							 -Date
+    						
+             		 Users:
+			-Username
+			-First Name
+			-Last Name
+			-Email
+	_______________	-Password_______________________
+	|			|			|		
+	|			|			|
+	|			|			|
+	ownedBooks:	  borrowed&requested	       Notifications:       			
+	-BID		     	Books:		        -NID
+	-Status		        -BID			-Description
+	-Borrower               -Status			-Date
+	 (if any)		(requested, borrowing
+				 or requested&accepted)
+				-Owner
+
+		 
+	

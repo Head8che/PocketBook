@@ -1,4 +1,5 @@
-package com.example.pocketbook;
+
+package com.example.pocketbook.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +20,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+<<<<<<< HEAD:app/src/main/java/com/example/pocketbook/activity/MainActivity.java
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+=======
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.widget.Button;
+
+
+>>>>>>> created ViewMyBookActivity:app/src/main/java/com/example/pocketbook/activity/MainActivity.java
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -52,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBooksRecycler = findViewById(R.id.recyler_books);
+
+        viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
+
+        viewMyBookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ViewMyBookActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Initialize Firestore and main RecyclerView
         initFirestore();

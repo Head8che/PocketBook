@@ -22,7 +22,6 @@
         android:text="Below Recycler"
         android:textSize="30sp" />
 
-
     <Button
         android:id="@+id/viewMyBookBtn"
         android:layout_width="wrap_content"

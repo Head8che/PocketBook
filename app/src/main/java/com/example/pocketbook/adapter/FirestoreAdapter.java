@@ -44,9 +44,9 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         }
 
         // Dispatch the event
+        Log.d(TAG, "onEvent:numChanges:" + documentSnapshots.getDocumentChanges().size());
         for (DocumentChange dc : documentSnapshots.getDocumentChanges()) {
             // Snapshot of the changed document
-            Log.d(TAG, "onEvent:numChanges:" + documentSnapshots.getDocumentChanges().size());
             switch (dc.getType()) {
                 case ADDED:
                     onDocumentAdded(dc);

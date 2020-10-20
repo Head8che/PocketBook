@@ -9,6 +9,8 @@ public class Book {
     private String status;
     private String photo;
 
+    public Book() {} // used by firestore to populate a book
+
     public Book(String title, String author, String ISBN, String owner,
                 String comment, String status, String photo ) {
         this.title = title;

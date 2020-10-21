@@ -5,6 +5,8 @@
 app/build/
 google-services.json
 .gradle
+.idea
+.gradle
 **.idea/**
 **.gradle/**
 local.properties

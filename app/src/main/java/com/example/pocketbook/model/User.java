@@ -7,8 +7,6 @@ public class User {
     private String email;
     private String photo;
 
-    public User() {} // used by firestore to automatically create new object
-
     public User(String username, String first_name, String last_name,
                 String email, String photo) {
         this.username = username;

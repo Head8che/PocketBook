@@ -27,7 +27,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
     // Creates new views (invoked by the layout manager)
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BookAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ViewHolder(inflater.inflate(R.layout.item_book, parent, false));
     }
@@ -38,6 +38,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
+        Log.d(TAG, "docSnapshot: ", (Throwable) getSnapshot(position).getData());
         holder.bind(getSnapshot(position));
     }
 
@@ -46,7 +47,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
     // this class represents 1 book
     // you provide access to all the views for a book item here
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView bookTitle;
         TextView bookAuthor;
 
@@ -57,14 +58,17 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
         }
 
         public void bind(final DocumentSnapshot snapshot){
-            Log.d(TAG, String.valueOf(snapshot.getData()));
             Book book = snapshot.toObject(Book.class);
 
             bookTitle.setText(book.getTitle());
             bookAuthor.setText(book.getAuthor());
-
             // click listener
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
     }
 }
 

@@ -3,3 +3,4 @@
 .DS_Store?
 *.dia~
 app/build/
+google-services.json

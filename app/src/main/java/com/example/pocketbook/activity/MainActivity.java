@@ -20,19 +20,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-<<<<<<< HEAD:app/src/main/java/com/example/pocketbook/activity/MainActivity.java
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
-=======
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.widget.Button;
-
-
->>>>>>> created ViewMyBookActivity:app/src/main/java/com/example/pocketbook/activity/MainActivity.java
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";

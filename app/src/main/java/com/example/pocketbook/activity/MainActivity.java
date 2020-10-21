@@ -40,17 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
-
-        viewMyBookBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ViewMyBookActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        
         mBooksRecycler = findViewById(R.id.recyler_books);
 
         viewMyBookBtn = findViewById(R.id.viewMyBookBtn);

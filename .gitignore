@@ -4,3 +4,8 @@
 *.dia~
 app/build/
 google-services.json
+.idea
+.gradle
+**.idea/**
+**.gradle/**
+local.properties

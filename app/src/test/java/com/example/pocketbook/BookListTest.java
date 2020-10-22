@@ -1,11 +1,18 @@
 package com.example.pocketbook;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import android.util.Log;
+
+import org.junit.jupiter.api.Test;
+
+import static android.content.ContentValues.TAG;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BookListTest {
+
+    private static final String TAG = "DEBUG";
 
     /**
      * Create a mock User
@@ -43,7 +50,8 @@ public class BookListTest {
     private Book mockBook() {
         BookDescription description = mockDescription();
         User userId = mockUser();
-        return new Book(userId, description);
+        String bookID = "mockId";
+        return new Book(bookID, userId, description);
     }
 
     /**
@@ -69,16 +77,19 @@ public class BookListTest {
      */
     @Test
     void testAddException() {
-        final BookList bookList = mockBookList();
-        final Book book = mockBook();
+        BookList bookList = mockBookList();
+        // create a real book
+        Book book = mockBook();
+        // create a fake book with the same attributes
+        Book fakeBook = mockBook();
 
+        //add both books
         bookList.add(book);
-        bookList.add(book);
-        // TODO: why is this error occurring?
+        bookList.add(fakeBook);
+
         assertThrows(IllegalArgumentException.class, () -> {
-            bookList.add(book);
+            bookList.add(fakeBook);
         });
-
     }
 
 

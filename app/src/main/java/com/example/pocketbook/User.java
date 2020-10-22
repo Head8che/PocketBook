@@ -1,9 +1,9 @@
 package com.example.pocketbook;
 
 public class User {
-    private String id;
+    private String userId;
 
-    public User(String id) {
-        this.id = id;
+    public User(String userId) {
+        this.userId = userId;
     }
 }

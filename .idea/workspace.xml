@@ -7,14 +7,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a6fbdf5-4d46-4d5c-a0ca-7bba6a13ae2b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/Book.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/BookDescription.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/BookList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/RequestHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/test/java/com/example/pocketbook/BookListTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_junit_jupiter_junit_jupiter_api_5_0_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_junit_platform_junit_platform_commons_1_0_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_opentest4j_opentest4j_1_0_0_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.1.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.1.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/BookList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/BookList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pocketbook/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/example/pocketbook/BookListTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/pocketbook/BookListTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,13 +68,33 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../labs/apps/6/humanita-lab6" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
-  <component name="RunManager" selected="Android JUnit.BookListTest.testAdd">
+  <component name="PsdUISettings">
+    <option name="LAST_EDITED_BUILD_TYPE" value="release" />
+  </component>
+  <component name="RunManager" selected="Android JUnit.BookListTest.testAddException">
+    <configuration name="BookListTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.pocketbook.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.pocketbook" />
+      <option name="MAIN_CLASS_NAME" value="com.example.pocketbook.BookListTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BookListTest.testAdd" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
       <module name="app" />
       <extension name="coverage">
@@ -73,6 +106,23 @@
       <option name="PACKAGE_NAME" value="com.example.pocketbook" />
       <option name="MAIN_CLASS_NAME" value="com.example.pocketbook.BookListTest" />
       <option name="METHOD_NAME" value="testAdd" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BookListTest.testAddException" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.pocketbook.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.pocketbook" />
+      <option name="MAIN_CLASS_NAME" value="com.example.pocketbook.BookListTest" />
+      <option name="METHOD_NAME" value="testAddException" />
       <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
@@ -139,6 +189,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Android JUnit.BookListTest.testAddException" />
+        <item itemvalue="Android JUnit.BookListTest" />
         <item itemvalue="Android JUnit.BookListTest.testAdd" />
       </list>
     </recent_temporary>
@@ -160,37 +212,41 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.md" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="270" y="233" key="#PSD" timestamp="1603226669758">
+    <state x="270" y="233" key="#PSD" timestamp="1603328950711">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state x="270" y="233" key="#PSD/0.0.1504.1003@0.0.1504.1003" timestamp="1603226669758" />
-    <state x="933" y="220" key="#com.intellij.ide.util.MemberChooser" timestamp="1603226139494">
+    <state x="270" y="233" key="#PSD/0.0.1504.1003@0.0.1504.1003" timestamp="1603328950711" />
+    <state x="933" y="220" key="#com.intellij.ide.util.MemberChooser" timestamp="1603379954380">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state x="933" y="220" key="#com.intellij.ide.util.MemberChooser/0.0.1504.1003@0.0.1504.1003" timestamp="1603226139494" />
+    <state x="933" y="220" key="#com.intellij.ide.util.MemberChooser/0.0.1504.1003@0.0.1504.1003" timestamp="1603379954380" />
     <state x="908" y="259" key="FileChooserDialogImpl" timestamp="1603223052182">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
     <state x="908" y="259" key="FileChooserDialogImpl/0.0.1504.1003@0.0.1504.1003" timestamp="1603223052182" />
-    <state width="1460" height="248" key="GridCell.Tab.0.bottom" timestamp="1603226670033">
+    <state width="707" height="247" key="GridCell.Tab.0.bottom" timestamp="1603381232564">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state width="1460" height="248" key="GridCell.Tab.0.bottom/0.0.1504.1003@0.0.1504.1003" timestamp="1603226670033" />
-    <state width="1460" height="248" key="GridCell.Tab.0.center" timestamp="1603226670032">
+    <state width="707" height="247" key="GridCell.Tab.0.bottom/0.0.1504.1003@0.0.1504.1003" timestamp="1603381232564" />
+    <state width="707" height="247" key="GridCell.Tab.0.center" timestamp="1603381232563">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state width="1460" height="248" key="GridCell.Tab.0.center/0.0.1504.1003@0.0.1504.1003" timestamp="1603226670032" />
-    <state width="1460" height="248" key="GridCell.Tab.0.left" timestamp="1603226670030">
+    <state width="707" height="247" key="GridCell.Tab.0.center/0.0.1504.1003@0.0.1504.1003" timestamp="1603381232563" />
+    <state width="707" height="247" key="GridCell.Tab.0.left" timestamp="1603381232562">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state width="1460" height="248" key="GridCell.Tab.0.left/0.0.1504.1003@0.0.1504.1003" timestamp="1603226670030" />
-    <state width="1460" height="248" key="GridCell.Tab.0.right" timestamp="1603226670032">
+    <state width="707" height="247" key="GridCell.Tab.0.left/0.0.1504.1003@0.0.1504.1003" timestamp="1603381232562" />
+    <state width="707" height="247" key="GridCell.Tab.0.right" timestamp="1603381232564">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state width="1460" height="248" key="GridCell.Tab.0.right/0.0.1504.1003@0.0.1504.1003" timestamp="1603226670032" />
+    <state width="707" height="247" key="GridCell.Tab.0.right/0.0.1504.1003@0.0.1504.1003" timestamp="1603381232564" />
     <state x="254" y="144" key="SettingsEditor" timestamp="1603226643064">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
     <state x="254" y="144" key="SettingsEditor/0.0.1504.1003@0.0.1504.1003" timestamp="1603226643064" />
+    <state x="745" y="0" width="765" height="1009" key="com.intellij.ide.util.TipDialog" timestamp="1603379679402">
+      <screen x="0" y="0" width="1504" height="1003" />
+    </state>
+    <state x="745" y="0" width="765" height="1009" key="com.intellij.ide.util.TipDialog/0.0.1504.1003@0.0.1504.1003" timestamp="1603379679402" />
   </component>
 </project>

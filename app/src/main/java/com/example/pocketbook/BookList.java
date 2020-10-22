@@ -1,6 +1,7 @@
 package com.example.pocketbook;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BookList {
@@ -20,7 +21,9 @@ public class BookList {
      *      BookList
      */
     public List<Book> getBookList() {
-        return bookList;
+        List<Book> list = bookList;
+        Collections.sort(list);
+        return list;
     }
 
     /**

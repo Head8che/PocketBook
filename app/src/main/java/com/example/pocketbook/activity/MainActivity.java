@@ -1,4 +1,3 @@
-
 package com.example.pocketbook.activity;
 
 import androidx.annotation.Nullable;
@@ -46,9 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
-
-        mBooksRecycler = findViewById(R.id.recyler_books);
+        mBooksRecycler = findViewById(R.id.recycler_books);
 
         viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
 
@@ -96,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateData(){
         // for demonstration purposes
-        for(int i=1; i<5; i++) {
+        for(int i=1; i<7; i++) {
             String uniqueID = UUID.randomUUID().toString();
-            Book book = new Book(uniqueID, "Book "+i, "Eden", uniqueID, "eden", "none", "available","none");
+            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID, "eden", "none", "available","none");
             mFirestore.collection("books").document(book.getId()).set(book);
         }
     }

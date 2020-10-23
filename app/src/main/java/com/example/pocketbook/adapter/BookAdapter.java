@@ -52,8 +52,8 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            bookTitle = itemView.findViewById(R.id.textView);
-            bookAuthor = itemView.findViewById(R.id.textView2);
+            bookTitle = itemView.findViewById(R.id.view_title);
+            bookAuthor = itemView.findViewById(R.id.view_author);
         }
 
         public void bind(final DocumentSnapshot snapshot){

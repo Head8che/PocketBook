@@ -6,22 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <!-- Main Books recyclerView -->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyler_books"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Below Recycler"
-        android:textSize="30sp" />
-
     <Button
         android:id="@+id/viewMyBookBtn"
         android:layout_width="wrap_content"
@@ -33,6 +17,7 @@
         android:textColor="@color/textWhite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Main Books recyclerView -->
 
     <androidx.recyclerview.widget.RecyclerView

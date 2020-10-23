@@ -6,22 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <!-- Main Books recyclerView -->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyler_books"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Below Recycler"
-        android:textSize="30sp" />
-
     <Button
         android:id="@+id/viewMyBookBtn"
         android:layout_width="wrap_content"
@@ -33,13 +17,33 @@
         android:textColor="@color/textWhite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Main Books recyclerView -->
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyler_books"
+        android:id="@+id/recycler_books"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/viewMyBookBtn" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Below Recycler"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_books" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.pocketbook.model;
 
 public class Book {
+    private String id;
     private String title;
     private String author;
     private String ISBN;
@@ -11,8 +12,9 @@ public class Book {
 
     public Book() {} // used by firestore to populate a book
 
-    public Book(String title, String author, String ISBN, String owner,
+    public Book(String id, String title, String author, String ISBN, String owner,
                 String comment, String status, String photo ) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -22,6 +24,7 @@ public class Book {
         this.photo = photo;
     }
 
+    public String getId() { return id; }
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
     public String getISBN() { return ISBN; }
@@ -30,6 +33,7 @@ public class Book {
     public String getStatus() { return status; }
     public String getPhoto() { return photo; }
 
+    public void setId(String id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setAuthor(String author) { this.author = author; }
     public void setISBN(String ISBN) { this.ISBN = ISBN; }

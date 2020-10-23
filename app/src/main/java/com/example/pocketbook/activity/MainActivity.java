@@ -3,6 +3,7 @@ package com.example.pocketbook.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,9 +25,12 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.UUID;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final int numColumns = 2;
     private static final int LIMIT = 20;
 
     private FirebaseFirestore mFirestore;
@@ -44,14 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
 
-        viewMyBookBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ViewMyBookActivity.class);
-                startActivity(intent);
-            }
-        });
-
         mBooksRecycler = findViewById(R.id.recyler_books);
 
         viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Firestore and main RecyclerView
         initFirestore();
-        addData();
+//        generateData();
         initRecyclerView();
     }
 
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
 
         // Query to retrieve all books
-        mQuery = mFirestore.collection("Books")
+        mQuery = mFirestore.collection("books")
                 .limit(LIMIT);
     }
 
@@ -94,24 +90,23 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // use a linear layout manager
-        mBooksRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(this, numColumns));
         mBooksRecycler.setAdapter(mAdapter);
     }
 
-    private void addData(){
+    private void generateData(){
         // for demonstration purposes
-        Book b1 = new Book("Harry Potter", "JK", "11111", "Eden", "Great book, I never read", "Owned", "none");
-        Book b2 = new Book("Great Gatsby", "Fitzgerald", "22222", "Eden", "Best book on the planet", "Owned", "none");
-
-        mFirestore.collection("Books").document(b1.getISBN()).set(b1); // overwrites B01
-        mFirestore.collection("Books").document(b2.getISBN()).set(b2);
-//        mFirestore.collection("Books").add(b3); // creates new document
+        for(int i=1; i<5; i++) {
+            String uniqueID = UUID.randomUUID().toString();
+            Book book = new Book(uniqueID, "Book "+i, "Eden", uniqueID, "eden", "none", "available","none");
+            mFirestore.collection("books").document(book.getId()).set(book);
+        }
     }
 
     private void retrieveData() {
         // for demonstration purposes
         // query to retrieve all books
-        Query query = mFirestore.collection("Books");
+        Query query = mFirestore.collection("books");
 
         // Getting data once
 //        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -3,4 +3,9 @@
     <string name="title_activity_view_my_book">ViewMyBookActivity</string>
     <string name="tab_text_1">Book</string>
     <string name="tab_text_2">Requests</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="add_book">Add Book</string>
+    <string name="scan">Scan</string>
+    <string name="profile">Profile</string>
 </resources>

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        mBooksRecycler = findViewById(R.id.recyler_books);
+        mBooksRecycler = findViewById(R.id.recycler_books);
 
         viewMyBookBtn = findViewById(R.id.viewMyBookBtn);
 

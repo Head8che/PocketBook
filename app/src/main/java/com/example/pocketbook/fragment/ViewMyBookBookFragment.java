@@ -68,6 +68,9 @@ public class ViewMyBookBookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // set up a user, user = FirebaseAuth. setUser ...
+        // see selected book's owner
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("default_images").child("no_book_cover_light.png");
 
         // Inflate the layout for this fragment

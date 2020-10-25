@@ -39,6 +39,48 @@
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/viewMyBookBookTitleTextView"
+            android:layout_marginTop="16sp"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is My book Title" />
+
+        <TextView
+            android:id="@+id/viewMyBookAuthorTextView"
+            android:layout_marginTop="8sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lengthier Author Name" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="16dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp" >
+
+            <TextView
+                android:id="@+id/viewMyBookISBNTextView"
+                android:layout_marginTop="16sp"
+                android:layout_marginStart="8sp"
+                android:layout_marginEnd="8sp"
+                android:layout_marginBottom="16sp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ISBN: 123-234-1234" />
+
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
     </ScrollView>
@@ -47,12 +89,10 @@
         android:id="@+id/viewMyBookEditBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/flat_button_negative_margin"
-        android:layout_marginEnd="@dimen/flat_button_negative_margin"
         android:text="@string/edit"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:backgroundTint="@color/colorAccent"
+        android:background="@color/colorAccent"
         android:textColor="@color/textWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

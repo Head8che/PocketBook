@@ -50,7 +50,7 @@
         android:id="@+id/viewMyBookViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/bottom_nav_overboard_margin"
+        android:layout_marginBottom="@dimen/bottom_nav_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include

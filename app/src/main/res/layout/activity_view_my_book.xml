@@ -49,12 +49,13 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewMyBookViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/bottom_nav_overboard_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include
         android:id="@+id/include"
         layout="@layout/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

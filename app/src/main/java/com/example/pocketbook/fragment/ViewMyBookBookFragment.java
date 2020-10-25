@@ -4,11 +4,19 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +68,17 @@ public class ViewMyBookBookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("default_images").child("no_book_cover_light.png");
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_my_book_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_my_book_book, container, false);
+
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.viewMyBookBookCoverImageView);
+
+        GlideApp.with(getContext() /* context */)
+        .load(storageReference)
+        .into(imageView);
+
+        return rootView;
     }
 }

@@ -1,4 +1,6 @@
-package com.example.pocketbook;
+package com.example.pocketbook.util;
+
+import com.example.pocketbook.model.User;
 
 import java.util.ArrayList;
 

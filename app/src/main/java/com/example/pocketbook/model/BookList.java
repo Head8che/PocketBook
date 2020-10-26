@@ -1,5 +1,6 @@
-package com.example.pocketbook;
+package com.example.pocketbook.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,16 +10,16 @@ public class BookList {
     private List<Book> bookList;
 
     /**
-     * Default Constructor
+     * Default constructor
+     *  Creates a booklist with no arguments
      */
-    public BookList() {
-        this.bookList = new ArrayList<Book>();
-    }
+    public BookList() { this.bookList = new ArrayList<Book>(); }
+
 
     /**
-     * Getter method
+     * Getter method for bookList
      * @return
-     *      BookList
+     *      bookList as List<Book>
      */
     public List<Book> getBookList() {
         List<Book> list = bookList;
@@ -26,9 +27,11 @@ public class BookList {
         return list;
     }
 
+
     /**
-     * Adds a book to the booklist
+     * Adds a Book o the bookList
      * @param book
+     *      Candidate book to add
      */
     public void add(Book book) {
         if (bookList.contains(book)) {

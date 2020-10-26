@@ -3,6 +3,10 @@ package com.example.pocketbook;
 
 import android.util.Log;
 
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
+
 import org.junit.jupiter.api.Test;
 
 import static android.content.ContentValues.TAG;
@@ -32,15 +36,6 @@ public class BookListTest {
         return new BookList();
     }
 
-    /**
-     * Create and return a mock book description
-     * @return
-     */
-    private BookDescription mockDescription() {
-        return new BookDescription(
-                "mockTitle", "mockAuthor", "mockComment",
-                "mockPicture", "mockISBN");
-    }
 
     /**
      * Creates a mock book for the mock booklist
@@ -48,11 +43,13 @@ public class BookListTest {
      *      Book
      */
     private Book mockBook() {
-        BookDescription description = mockDescription();
         User userId = mockUser();
         String bookID = "mockId";
-        return new Book(bookID, userId, description);
+
+        return new Book(bookID, "mockTitle", "mockAuthor",
+                "mockISBN", userId);
     }
+
 
     /**
      * Test to add a Book to BookList
@@ -91,7 +88,6 @@ public class BookListTest {
             bookList.add(fakeBook);
         });
     }
-
 
 
 

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.User;
+//import com.example.pocketbook.model.User;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -98,8 +98,9 @@ public class MainActivity extends AppCompatActivity {
         // for demonstration purposes
         for(int i=1; i<7; i++) {
             String uniqueID = UUID.randomUUID().toString();
-            User owner = new User("userEden");
-            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID,  owner, "none", "available","none");
+//            User owner = new User("userEden");
+//            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID,  owner, "none", "available","none");
+            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID, "eden", "none", "available","none");
             mFirestore.collection("books").document(book.getId()).set(book);
         }
     }

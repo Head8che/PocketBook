@@ -51,8 +51,8 @@ public class ViewMyBookActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.w("TAG", "signInWithEmail:success");
-                            Toast.makeText(ViewMyBookActivity.this, "Authentication success. ",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ViewMyBookActivity.this, "Authentication success. ",
+//                                    Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
                         } else {

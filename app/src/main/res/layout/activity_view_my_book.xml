@@ -23,24 +23,39 @@
             android:textColor="@color/textBlack" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/viewMyBookTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:textColor="@color/textBlack"
             app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/textBlack" />
+            app:tabTextColor="@color/colorUnselected">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewMyBookBookTab"
+                android:text="@string/view_my_book_tab_1_title"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewMyBookRequestsTab"
+                android:text="@string/view_my_book_tab_2_title"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
+        android:id="@+id/viewMyBookViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/bottom_nav_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include
         android:id="@+id/include"
         layout="@layout/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

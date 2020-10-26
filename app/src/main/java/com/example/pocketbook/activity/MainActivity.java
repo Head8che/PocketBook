@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ViewMyBookActivity.class);
+                // the book UID will actually be gotten onClick, but it's hardcoded for now
+                intent.putExtra("FIRESTORE_BOOK_UID", "fBtIHykc3KqxgPmwlNYO");
                 startActivity(intent);
             }
         });

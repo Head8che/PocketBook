@@ -10,6 +10,9 @@
     <string name="book_cover_image">Book Cover Image</string>
     <string name="scan">Scan</string>
     <string name="profile">Profile</string>
+    <string name="isbn_text">ISBN: %1$s</string>
+    <string name="condition_text">Condition: %1$s</string>
+    <string name="comment_text">Comment: %1$s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

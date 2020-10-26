@@ -89,6 +89,33 @@ public class BookListTest {
         });
     }
 
+    /**
+     * Checks if an existing specified book is
+     * deleted from the booklist.
+     */
+    @Test
+    void testDelete() {
+        BookList bookList = mockBookList();
+        Book book = mockBook();
+        bookList.add(book);
+        bookList.delete(book);
+        assertEquals(0, bookList.getBookList().size());
+    }
 
+    /**
+     * Check an Exception is thrown if
+     * a book that does not exist is attempted to be deleted
+     */
+    @Test
+    void testDeleteException() {
+        // assert that an Exception is thrown if the book does not exist
+        BookList bookList = mockBookList();
+        Book book = mockBook();
+        assertThrows(IllegalArgumentException.class, () -> {
+            bookList.delete(book);
+        });
+
+    }
+    
 
 }

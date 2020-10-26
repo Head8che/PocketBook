@@ -29,7 +29,7 @@ public class BookList {
 
 
     /**
-     * Adds a Book o the bookList
+     * Adds a Book to the bookList
      * @param book
      *      Candidate book to add
      */
@@ -38,5 +38,19 @@ public class BookList {
             throw new IllegalArgumentException();
         }
         bookList.add(book);
+    }
+
+    /**
+     * Deletes the specified book
+     * from the booklist
+     * @param book
+     *      Candidate book to delete
+     */
+    public void delete(Book book) {
+        if (!bookList.contains(book)) {
+            throw new IllegalArgumentException();
+        }
+        bookList.remove(book);
+
     }
 }

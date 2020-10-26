@@ -28,4 +28,11 @@ public class User {
     public String getLast_name() { return last_name; }
     public String getEmail() { return email; }
     public String getPhoto() { return photo; }
+
+    public void setUserId(String userId) { this.userId = userId; }
+    public void setUsername(String username) { this.username = username; }
+    public void setFirst_name(String first_name) { this.first_name = first_name; }
+    public void setLast_name(String last_name) { this.last_name = last_name; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPhoto(String photo) { this.photo = photo; }
 }

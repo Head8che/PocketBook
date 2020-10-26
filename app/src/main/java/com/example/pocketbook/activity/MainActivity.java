@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=1; i<7; i++) {
             String uniqueID = UUID.randomUUID().toString();
             User owner = new User("userEden");
-            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID,  owner, "none", "available","none");
+            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID,  owner.getUserId(), "none", "available","none");
             mFirestore.collection("books").document(book.getId()).set(book);
         }
     }

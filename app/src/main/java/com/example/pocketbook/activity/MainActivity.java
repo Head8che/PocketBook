@@ -10,12 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
+
+//import com.example.pocketbook.model.User;
+
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -71,6 +75,20 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), ViewMyBookActivity.class);
+                // the book UID will actually be gotten onClick, but it's hardcoded for now
+                intent.putExtra("FIRESTORE_BOOK_UID", "fBtIHykc3KqxgPmwlNYO");
+                startActivity(intent);
+            }
+        });
+
+        // Initialize Firestore and main RecyclerView
+        initFirestore();
+//        generateData();
+        initRecyclerView();
+    }
+
                 String email = userEmail.getText().toString().trim();
                 String password = userPassword.getText().toString().trim();
                 if(email.isEmpty()){
@@ -103,8 +121,9 @@ public class MainActivity extends AppCompatActivity {
         // for demonstration purposes
         for(int i=1; i<7; i++) {
             String uniqueID = UUID.randomUUID().toString();
-            User owner = new User("userEden");
-            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID,  owner, "none", "available","none");
+//            User owner = new User("userEden");
+//            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID,  owner, "none", "available","none");
+            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID, "eden", "none", "available","none");
             mFirestore.collection("books").document(book.getId()).set(book);
         }
     }

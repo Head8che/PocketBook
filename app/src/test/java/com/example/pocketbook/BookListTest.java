@@ -1,15 +1,10 @@
 package com.example.pocketbook;
 
 
-import android.util.Log;
-
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
-import com.example.pocketbook.model.User;
 
 import org.junit.jupiter.api.Test;
 
-import static android.content.ContentValues.TAG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

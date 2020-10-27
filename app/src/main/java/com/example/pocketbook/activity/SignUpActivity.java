@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -25,7 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class SignUp extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     EditText Name, Email, Username, Password;
     String name, email, username, password, profileImageUrl;
@@ -118,7 +117,7 @@ public class SignUp extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(SignUp.this, "Account Created Successfully!",
+                            Toast.makeText(SignUpActivity.this, "Account Created Successfully!",
                                     Toast.LENGTH_SHORT).show();
                             mFirestore = FirebaseFirestore.getInstance();
                             mFirestore.collection("users").document(username).set(user);
@@ -127,7 +126,7 @@ public class SignUp extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUp.this, "User Already Exists with the email",
+                            Toast.makeText(SignUpActivity.this, "User Already Exists with the email",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -141,7 +140,7 @@ public class SignUp extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser){
         String keyID = mDatabase.push().getKey();
         mDatabase.child(keyID).setValue(user);
-        Intent loginIntent = new Intent(this,MainActivity.class);
+        Intent loginIntent = new Intent(this,LoginActivity.class);
         startActivity(loginIntent);
 
     }

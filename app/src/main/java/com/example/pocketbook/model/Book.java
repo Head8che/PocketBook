@@ -1,7 +1,6 @@
 package com.example.pocketbook.model;
 
-public class Book implements Comparable<Book>{
-    private String id;
+public class Book {
     private String title;
     private String author;
     private String ISBN;
@@ -10,42 +9,10 @@ public class Book implements Comparable<Book>{
     private String status;
     private String photo;
 
-    /**
-     * Firestore constructor
-     *  to populate a book
-     */
-    public Book() {}
+    public Book() {} // used by firestore to populate a book
 
-    /**
-     * Minimum arg constructor for Book
-     * @param id : uniquely identifies the book in the db
-     * @param title : title of book
-     * @param author : author of book
-     * @param ISBN : ISBN as a String
-     * @param owner : Owner of Book
-     */
-    public Book(String id, String title, String author, String ISBN, String owner) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.ISBN = ISBN;
-        this.owner = owner;
-    }
-
-    /**
-     * Maximum arg constructor for Book
-     * @param id : unique book id
-     * @param title : title of book
-     * @param author : author of book
-     * @param ISBN : isbn retrieved as String of Book
-     * @param owner : User that owns the Book
-     * @param comment : Comment set by owner
-     * @param status : indicates availability of book (available, requested, accepted, borrowed)
-     * @param photo : photo of book by owner
-     */
-    public Book(String id, String title, String author, String ISBN, String owner,
+    public Book(String title, String author, String ISBN, String owner,
                 String comment, String status, String photo ) {
-        this.id = id;
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -55,8 +22,6 @@ public class Book implements Comparable<Book>{
         this.photo = photo;
     }
 
-    /* Getter Functions */
-    public String getId() { return id; }
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
     public String getISBN() { return ISBN; }
@@ -65,8 +30,6 @@ public class Book implements Comparable<Book>{
     public String getStatus() { return status; }
     public String getPhoto() { return photo; }
 
-    /* Setter Functions */
-    public void setId(String id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setAuthor(String author) { this.author = author; }
     public void setISBN(String ISBN) { this.ISBN = ISBN; }
@@ -74,13 +37,4 @@ public class Book implements Comparable<Book>{
     public void setComment(String comment) { this.comment = comment; }
     public void setStatus(String status) { this.status = status; }
     public void setPhoto(String photo) { this.photo = photo; }
-
-    /* Allows comparison between bookIds as Strings
-    *   Overrides compareTo method in Comparable
-    * */
-    @Override
-    public int compareTo(com.example.pocketbook.model.Book book) {
-        return this.id.compareTo(book.getId());
-    }
-
 }

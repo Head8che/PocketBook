@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.Login"></activity>
         <activity android:name=".activity.SignUp" />
+        <activity android:name=".activity.ViewBookActivity"/>
         <activity
             android:name=".activity.ViewMyBookActivity"
             android:label="@string/title_activity_view_my_book"

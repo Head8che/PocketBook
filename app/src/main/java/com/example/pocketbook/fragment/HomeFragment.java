@@ -90,13 +90,9 @@ public class HomeFragment extends Fragment {
                             int totalItemCount = gridLayoutManager.getItemCount();
 
                             if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-                                Log.e("SHOULD_NOT_REACH", "Not at limit yet!");
                                 isScrolling = false;
 
                                 if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
-
-                                    Log.e("ANVIC", String.valueOf(visibleItemCount));
-                                    Log.e("ANTIC", String.valueOf(totalItemCount));
 
                                     Query nextQuery = mFirestore.collection("books").startAfter(lastVisible).limit(LIMIT);
                                     nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,6 +121,16 @@ public class ViewMyBookBookFragment extends Fragment {
         }
 
         /* TODO: handle Edit button and edit book info in catalogue */
+
+        Button editButton = (Button) rootView.findViewById(R.id.viewMyBookEditBtn);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "Implement Edit Functionality!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return rootView;
     }

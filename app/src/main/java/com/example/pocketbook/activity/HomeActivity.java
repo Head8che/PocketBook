@@ -24,7 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final String TAG ="MainActivity";
+    private static final String TAG ="HOME_ACTIVITY";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private StorageReference mStorageRef;

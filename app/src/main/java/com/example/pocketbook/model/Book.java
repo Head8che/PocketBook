@@ -100,8 +100,20 @@ public class Book implements Serializable {
             TODO: upload new image to FirebaseStorage and overwrite old image
         */
     /* Setter Functions */
-    public void setBook(String id) {
+    public void setBook(String id, String title, String author, String isbn, String owner,
+                        String status, String comment, String condition, String photo) {
         this.id = id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim();
+        this.status = status.trim();
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? null : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? null : condition.trim();
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? null : photo.trim();
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", this.id);

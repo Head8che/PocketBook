@@ -26,8 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText Name, Email, Username, Password;
-    String name, email, username, password, profileImageUrl;
+    EditText FirstName, LastName, Email, Username, Password;
+    String firstName, lastName, email, username, password, profileImageUrl;
     private FirebaseDatabase database;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -43,7 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
 
-        Name = findViewById(R.id.Name);
+        FirstName = findViewById(R.id.firstName);
+        LastName = findViewById(R.id.lastName);
         Email = findViewById(R.id.EmailReg);
         Username = findViewById(R.id.userName);
         Password = findViewById(R.id.PasswordReg);
@@ -60,14 +61,21 @@ public class SignUpActivity extends AppCompatActivity {
         registerConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = Name.getText().toString().trim();
+                firstName = FirstName.getText().toString().trim();
+                lastName = LastName.getText().toString().trim();
                 email = Email.getText().toString().trim();
                 username = Username.getText().toString().trim();
                 password = Password.getText().toString().trim();
 
-                if(name.isEmpty()){
-                    Name.setError("Name Required!");
-                    Name.requestFocus();
+                if(firstName.isEmpty()){
+                    FirstName.setError("First Name Required!");
+                    FirstName.requestFocus();
+                    return;
+                }
+
+                if(lastName.isEmpty()){
+                    LastName.setError("Last Name Required!");
+                    LastName.requestFocus();
                     return;
                 }
 
@@ -101,14 +109,15 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                user = new User(name,email,username,password);
-                Register(email,password,name,username);
+                user = new User(firstName,lastName,email,username,password);
+                Register(email,password,firstName, lastName, username);
             }
         });
 
     }
 
-    public void Register(String Email, String Password, String name, String username){
+
+    public void Register(String email, String password, String firstName, String lastName, String username){
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

@@ -32,14 +32,19 @@ public class HomeFragment extends Fragment {
     private Query mQuery;
     private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
+    private ViewGroup mContainer;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
-        mAdapter = new BookAdapter(mQuery);
+        mContainer = container;
+        mAdapter = new BookAdapter(mQuery, getActivity(),mContainer);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         mBooksRecycler.setAdapter(mAdapter);
         return v;

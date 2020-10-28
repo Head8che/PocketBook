@@ -19,14 +19,12 @@
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content" />-->
 
-        <TextView
+        <ImageView
+            android:id="@+id/bookCover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="59dp"
-            android:gravity="center"
-            android:text="Image" />
+            android:layout_height="match_parent"
+            android:clickable="true"
+            card_view:srcCompat="@drawable/ic_scan" />
 
         <TextView
             android:id="@+id/view_title"

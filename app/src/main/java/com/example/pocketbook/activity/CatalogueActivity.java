@@ -1,11 +1,13 @@
 package com.example.pocketbook.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -42,10 +44,11 @@ public class CatalogueActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
-    }
 
-    private void toastMessage(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onBackPressed() {
+        getFragmentManager().popBackStack();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener NavListener =
@@ -74,6 +77,8 @@ public class CatalogueActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+
 }
 
 

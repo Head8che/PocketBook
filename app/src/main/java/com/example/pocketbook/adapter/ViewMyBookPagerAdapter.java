@@ -2,6 +2,8 @@ package com.example.pocketbook.adapter;
 
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
@@ -12,21 +14,21 @@ public class ViewMyBookPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private int numOfTabs;
-    private String user_email;
-    private String bookID;
+    private Book book = null;
+    private BookList catalogue = null;
 
-    public ViewMyBookPagerAdapter(FragmentManager fm, int numOfTabs, String user_email, String bookID) {
+    public ViewMyBookPagerAdapter(FragmentManager fm, int numOfTabs, Book book, BookList catalogue) {
         super(fm);
         this.numOfTabs = numOfTabs;
-        this.user_email = user_email;
-        this.bookID = bookID;
+        this.book = book;
+        this.catalogue = catalogue;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ViewMyBookBookFragment(this.user_email, this.bookID);
+                return new ViewMyBookBookFragment(this.book, this.catalogue);
             case 1:
                 return new ViewMyBookRequestsFragment();
             default:

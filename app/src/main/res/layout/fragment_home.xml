@@ -4,20 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CatalogueActivity">
+    tools:context=".activity.HomeActivity">
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNavigationView"
         >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_books"
             android:layout_width="match_parent"
-            android:layout_height="707dp"
-            android:layout_marginTop="50dp" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 
 </RelativeLayout>

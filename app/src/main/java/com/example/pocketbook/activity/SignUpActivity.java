@@ -41,7 +41,7 @@ import com.google.firebase.storage.UploadTask;
 public class SignUpActivity extends AppCompatActivity {
 
     EditText FirstName, LastName, Email, Username, Password;
-    String firstName, lastName, email, username, password, profilePicture;
+    String firstName, lastName, email, username, password, profileImageUrl;
     private FirebaseDatabase database;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -142,8 +142,8 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
+                user = new User(firstName,lastName,email,username,password);
                 Register(email,password,firstName, lastName, username);
-
             }
         });
 

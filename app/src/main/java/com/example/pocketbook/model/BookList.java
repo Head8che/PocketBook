@@ -3,11 +3,14 @@ package com.example.pocketbook.model;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BookList {
 
-    private List<Book> bookList;
+    // Look into https://www.javatpoint.com/java-list
+    // https://www.geeksforgeeks.org/collections-reverseorder-java-examples/
+    private List<Book> bookList = new ArrayList<Book>();
 
     /**
      * Default constructor
@@ -23,7 +26,8 @@ public class BookList {
      */
     public List<Book> getBookList() {
         List<Book> list = bookList;
-        Collections.sort(list);
+        Comparator c = Collections.reverseOrder();
+        Collections.sort(list,c);
         return list;
     }
 

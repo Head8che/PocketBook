@@ -12,6 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.ViewBookActivity"/>
+        <activity
+            android:name=".activity.ViewMyBookActivity"
+            android:label="@string/title_activity_view_my_book"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.CatalogueActivity" />
 <!--        <activity android:name=".activity.LoginActivity" />-->

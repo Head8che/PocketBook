@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         signUp = findViewById(R.id.RegisterBtn);
         login = findViewById(R.id.LoginBtn);
         forgotPass = findViewById(R.id.ForgotPass);
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Welcome to Pocketbook.",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), CatalogueActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
 //                            intent.putExtra('username')
                             startActivity(intent);
 //                            updateUI(user);

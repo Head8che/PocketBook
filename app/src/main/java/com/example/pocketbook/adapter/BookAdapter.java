@@ -54,7 +54,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (book.getOwner().equals("test@pocketbook.com")) {
+                if (book.getOwner().equals("jane@gmail.com")) {
                     Log.e("OWNERIN", book.getOwner());
                     Context context = holder.itemView.getContext();
                     Intent intent = new Intent(context, ViewMyBookActivity.class);

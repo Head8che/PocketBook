@@ -1,5 +1,6 @@
 package com.example.pocketbook.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -29,6 +30,7 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -82,8 +84,8 @@ public class ViewMyBookActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Implement Delete Functionality!",
-                        Toast.LENGTH_SHORT).show();
+                AlertDialog diaBox = AskOption();
+                diaBox.show();
             }
         });
 
@@ -144,6 +146,27 @@ public class ViewMyBookActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private AlertDialog AskOption() {
+        return new AlertDialog.Builder(this)
+                .setMessage("Delete this book?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        dialog.dismiss();
+                        catalogue.removeBook(book);
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
     }
 
 }

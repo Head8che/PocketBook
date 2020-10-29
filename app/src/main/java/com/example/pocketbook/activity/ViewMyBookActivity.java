@@ -1,16 +1,38 @@
 package com.example.pocketbook.activity;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.AddFragment;
+import com.example.pocketbook.fragment.HomeFragment;
+import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.fragment.ScanFragment;
+import com.example.pocketbook.fragment.SearchFragment;
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,10 +45,11 @@ import java.util.Objects;
 
 public class ViewMyBookActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private String email;
-    private String password;
-    private String bookID;
+    private Book book = null;
+    private User user = null;
+    private BookList catalogue = null;
+
+    FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,41 +60,35 @@ public class ViewMyBookActivity extends AppCompatActivity {
         TabItem requestsTab = findViewById(R.id.viewMyBookRequestsTab);
         ViewPager viewPager = findViewById(R.id.viewMyBookViewPager);
 
-        Bundle extras = getIntent().getExtras();
-        bookID = (extras == null) ? null : extras.getString("FIRESTORE_BOOK_UID");
+        Intent intent = getIntent();
 
-        mAuth = FirebaseAuth.getInstance();
-        email = "test@pocketbook.com";
-        password = "password5";
+//        if (extras) {
+        book = (Book) intent.getSerializableExtra("BOOK");
+//            user = intent.getString("USER");
+        catalogue = (BookList) intent.getSerializableExtra("CATALOGUE");
+//        }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.w("TAG", "signInWithEmail:success");
-//                            Toast.makeText(ViewMyBookActivity.this, "Authentication success. ",
-//                                    Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(ViewMyBookActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                            // ...
-                        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.viewMyBookToolbar);
+        ImageView backButton = (ImageView) findViewById(R.id.viewMyBookBackBtn);
+        TextView deleteButton = (TextView) findViewById(R.id.viewMyBookDeleteBtn);
 
-                        // ...
-                    }
-                });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        String user_email = mAuth.getCurrentUser().getEmail();
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Implement Delete Functionality!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         ViewMyBookPagerAdapter viewMyBookPagerAdapter =
-                new ViewMyBookPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), user_email, bookID);
+                new ViewMyBookPagerAdapter(fm, tabLayout.getTabCount(), book, catalogue);
 
         viewPager.setAdapter(viewMyBookPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -92,5 +109,41 @@ public class ViewMyBookActivity extends AppCompatActivity {
 
             }
         });
+
+        /* TODO: Handle Pocketbook Footer actions */
+
+        /* TODO: Fix Toolbar on Pocketbook Footer Fragment Navigation */
+
+        BottomNavigationView bottomNav = findViewById(R.id.viewMyBookBottomNav);
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFragment = null;
+                switch (item.getItemId()){
+                    case R.id.bottom_nav_home:
+                        selectedFragment = new HomeFragment();
+                        break;
+                    case R.id.bottom_nav_search:
+                        selectedFragment = new SearchFragment();
+                        break;
+                    case R.id.bottom_nav_add:
+                        selectedFragment = new AddFragment();
+                        break;
+                    case R.id.bottom_nav_scan:
+                        selectedFragment = new ScanFragment();
+                        break;
+                    case R.id.bottom_nav_profile:
+                        selectedFragment = new ProfileFragment();
+                        break;
+                }
+                for (Fragment fragment : fm.getFragments()) {
+                    fm.beginTransaction().remove(fragment).commit();
+                }
+
+                fm.beginTransaction().replace(R.id.coordLayout,selectedFragment).commit();
+                return true;
+            }
+        });
     }
+
 }

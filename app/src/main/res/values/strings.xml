@@ -18,4 +18,5 @@
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>
     <string name="request">request</string>
+    <string name="delete">Delete</string>
 </resources>

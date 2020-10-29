@@ -1,58 +1,158 @@
 package com.example.pocketbook.model;
 
-public class Book {
-    private String id; // this attribute makes it easier to get the book document from firebase
+
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Book implements Serializable {
+    private String id;
     private String title;
     private String author;
-    private String ISBN;
+    private String isbn;
     private String owner;
-    private String comment;
     private String status;
-    private String photo;
+    private String comment;
     private String condition;
+    private String photo;
 
-    public Book() {} // used by firestore to populate a book
 
-    public Book(String title, String author, String ISBN, String owner,
-                String comment, String status, String photo ) {
-        this.title = title;
-        this.author = author;
-        this.ISBN = ISBN;
-        this.owner = owner;
-        this.comment = comment;
-        this.status = status;
-        this.photo = photo;
+    /**
+     * Firestore constructor
+     *  to populate a book
+     */
+    public Book() {}
+
+    /**
+     * Minimum arg constructor for Book
+     * @param id : uniquely identifies the book in the db
+     * @param title : title of book
+     * @param author : author of book
+     * @param isbn : isbn as a String
+     * @param owner : Owner of Book
+     * @param status : indicates availability of book (available, requested, accepted, borrowed)
+     */
+    public Book(String id, String title, String author, String isbn, String owner, String status) {
+        this.id = id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim();
+        this.status = status.trim();
     }
 
-    // second constructor with id and condition parameters
-    public Book(String id, String title, String author, String ISBN, String owner, String comment, String status, String photo, String condition) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.ISBN = ISBN;
-        this.owner = owner;
-        this.comment = comment;
-        this.status = status;
-        this.photo = photo;
-        this.condition = condition;
+    /**
+     * Maximum arg constructor for Book
+     * @param id : unique book id
+     * @param title : title of book
+     * @param author : author of book
+     * @param isbn : isbn retrieved as String of Book
+     * @param owner : User that owns the Book
+     * @param status : indicates availability of book (available, requested, accepted, borrowed)
+     * @param comment : Comment set by owner
+     * @param condition : Condition of the book, set by owner
+     * @param photo : photo string of book by owner
+     */
+    public Book(String id, String title, String author, String isbn, String owner,
+                String status, String comment, String condition, String photo ) {
+        this.id = id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim();
+        this.status = status.trim();
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? null : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? null : condition.trim();
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? null : photo.trim();
     }
 
-    public String getTitle() { return title; }
-    public String getAuthor() { return author; }
-    public String getISBN() { return ISBN; }
-    public String getOwner() { return owner; }
-    public String getComment() { return comment; }
-    public String getStatus() { return status; }
-    public String getPhoto() { return photo; }
-    public String getId(){ return id; }
-    public String getCondition() { return condition; }
 
-    public void setTitle(String title) { this.title = title; }
-    public void setAuthor(String author) { this.author = author; }
-    public void setISBN(String ISBN) { this.ISBN = ISBN; }
-    public void setOwner(String owner) { this.owner = owner; }
-    public void setComment(String comment) { this.comment = comment; }
-    public void setStatus(String status) { this.status = status; }
-    public void setPhoto(String photo) { this.photo = photo; }
+    /* Getter Functions */
+    public String getId() { return this.id; }
+    public String getTitle() { return this.title; }
+    public String getAuthor() { return this.author; }
+    public String getISBN() { return this.isbn; }
+    public String getOwner() { return this.owner; }
+    public String getComment() { return this.comment; }
+    public String getCondition() { return this.condition; }
+    public String getStatus() { return this.status; }
+    public String getPhoto() { return this.photo; }
+
+    public StorageReference getBookCover() {
+        if (this.photo == null || this.photo.equals("") || !this.photo.endsWith(".jpg")) {
+            return FirebaseStorage.getInstance().getReference()
+                    .child("default_images").child("no_book_cover_light.png");
+        }
+        return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
+    }
+
+    /*
+            TODO: upload new image to FirebaseStorage and overwrite old image
+        */
+    /* Setter Functions */
+    public void setBook(String id, String title, String author, String isbn, String owner,
+                        String status, String comment, String condition, String photo) {
+        this.id = id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim();
+        this.status = status.trim();
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? null : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? null : condition.trim();
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? null : photo.trim();
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("id", this.id);
+        docData.put("title", this.title);
+        docData.put("author", this.author);
+        docData.put("isbn", this.isbn);
+        docData.put("owner", this.owner);
+        docData.put("status", this.status);
+        docData.put("comment", this.comment);
+        docData.put("condition", this.condition);
+        docData.put("photo", this.photo);
+
+        FirebaseFirestore.getInstance().collection("books").document(this.id)
+            .set(docData)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("SET_BOOK", "Error writing document", e);
+                }
+            });
+
+    }
+
+    /* Allows comparison between bookIds as Strings
+     *   Overrides compareTo method in Comparable
+     * */
+//    @Override
+//    public int compareTo(com.example.pocketbook.model.Book book) {
+//        return this.id.compareTo(book.getTitle());
+//    }
 
 }
+

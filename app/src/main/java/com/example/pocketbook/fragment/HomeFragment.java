@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
-        mAdapter = new BookAdapter(catalogue);
+        mAdapter = new BookAdapter(catalogue, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
         mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

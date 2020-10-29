@@ -15,40 +15,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
+        <!--        <ImageView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content" />-->
 
         <ImageView
-
-
             android:id="@+id/itemBookBookCoverImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:contentDescription="@string/book_cover_image"
-            android:clickable = "true"
             android:src="@drawable/ic_scan" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/view_title"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_above="@+id/view_author"-->
-<!--            android:layout_marginBottom="0dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Book title"-->
-<!--            android:textSize="15sp" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/view_title"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_above="@+id/view_author"-->
+        <!--            android:layout_marginBottom="0dp"-->
+        <!--            android:gravity="center"-->
+        <!--            android:text="Book title"-->
+        <!--            android:textSize="15sp" />-->
 
-<!--        <TextView-->
-<!--            android:id="@+id/view_author"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_marginEnd="0dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Book author"-->
-<!--            android:textSize="15sp" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/view_author"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:layout_marginEnd="0dp"-->
+        <!--            android:gravity="center"-->
+        <!--            android:text="Book author"-->
+        <!--            android:textSize="15sp" />-->
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

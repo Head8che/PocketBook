@@ -75,6 +75,25 @@ public class AddFragment extends Fragment {
                 //go to the view owned book activity
                 ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);
 
+        /**
+         * Add Image Handler
+         *
+         * Resource :
+         * https://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
+         * https://medium.com/@hasangi/capture-image-or-choose-from-gallery-photos-implementation-for-android-a5ca59bc6883
+         */
+        imageButton = view.findViewById(R.id.image_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ///////////// IN PROGRESS
+                // create a dialogue fragment that allows
+                //  - take photo
+                //  - choose from gallery
+                //  - cancel
+                // retrieve the image
+                // add to Firestore
+                // set image as image uploaded as imageView
             }
 
         });

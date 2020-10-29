@@ -1,13 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".fragment.AddFragment"
+android:orientation="vertical">
+
+    <!-- If no image AddImage Button-->
+
+    <!-- Else display image -->
+
+    <!-- EditText Fields -->
+    <EditText
+        android:id="@+id/editText_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Fragment"
-        android:textSize="30dp"
-        android:layout_centerInParent="true"
-        />
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/title"
+        android:layout_margin="7dp" />
+
+    <EditText
+        android:id="@+id/editText_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/author"
+        android:layout_margin="7dp"
+        android:layout_below="@+id/editText_title"/>
+
+    <EditText
+        android:id="@+id/editText_isbn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/isbn"
+        android:layout_margin="7dp"
+        android:layout_below="@id/editText_author"/>
+
+    <EditText
+        android:id="@+id/editText_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/comment"
+        android:layout_margin="7dp"
+        android:layout_below="@id/editText_isbn"/>
+
+    <!-- Style Button using Material Design -->
+    <!-- style="?attr/materialButtonOutlinedStyle"-->
+    <Button
+        android:id="@+id/button_addBook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_book"
+        android:layout_below="@id/editText_comment"
+        android:layout_marginLeft="70dp"/>
+
+
+
 
 </RelativeLayout>

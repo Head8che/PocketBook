@@ -17,6 +17,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddFragment extends Fragment {
 
@@ -28,6 +29,7 @@ public class AddFragment extends Fragment {
     private ImageButton imageButton;
 
     public FirebaseUser owner;
+    private FirebaseFirestore mFirestore;
 
     @Nullable
     @Override

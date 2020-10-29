@@ -54,7 +54,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 Bundle args = new Bundle();
                 args.putString("ID",book.getId());
                 nextFrag.setArguments(args);
-                activity.getFragmentManager().beginTransaction().replace(R.id.container, nextFrag, "findThisFragment").addToBackStack(null).commit();
+                activity.getFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag, "findThisFragment").addToBackStack(null).commit();
             }
         });
     }

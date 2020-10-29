@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ public class ViewBookFragment extends Fragment {
     private TextView isbnField;
     private TextView conditionField;
     private ImageView userProfile;
+    private Button requestButton;
     private String bookId;
     FirebaseFirestore db;
 
@@ -88,6 +90,7 @@ public class ViewBookFragment extends Fragment {
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
 
     
 }

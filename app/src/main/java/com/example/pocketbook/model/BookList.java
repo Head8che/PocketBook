@@ -1,12 +1,13 @@
 package com.example.pocketbook.model;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class BookList {
+public class BookList implements Serializable {
 
     // Look into https://www.javatpoint.com/java-list
     // https://www.geeksforgeeks.org/collections-reverseorder-java-examples/
@@ -42,6 +43,14 @@ public class BookList {
             throw new IllegalArgumentException();
         }
         bookList.add(book);
+    }
+
+    public Book get(int position) {
+        return bookList.get(position);
+    }
+
+    public int size() {
+        return bookList.size();
     }
 
     /**

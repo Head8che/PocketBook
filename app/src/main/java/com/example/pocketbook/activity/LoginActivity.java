@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
 //                            intent.putExtra('username')
                             startActivity(intent);
+                            finish();
 //                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

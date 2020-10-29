@@ -32,6 +32,9 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         View v = inflater.inflate(R.layout.fragment_profile_newuser, container, false);
 
         return super.onCreateView(inflater, container, savedInstanceState);

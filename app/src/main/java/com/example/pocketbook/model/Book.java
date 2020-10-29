@@ -1,5 +1,6 @@
 package com.example.pocketbook.model;
 
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,7 @@ public class Book implements Serializable {
      */
     public Book(String id, String title, String author, String isbn, String owner, String status) {
         // validates the input before setting them
-        parser = new Parser(title, author, isbn);
+        Parser parser = new Parser(title, author, isbn);
 
         this.id = id.trim();
 
@@ -99,6 +100,7 @@ public class Book implements Serializable {
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? null : photo.trim();
     }
+
 
     /* Getter Functions */
     public String getId() { return this.id; }
@@ -175,3 +177,4 @@ public class Book implements Serializable {
 //    }
 
 }
+

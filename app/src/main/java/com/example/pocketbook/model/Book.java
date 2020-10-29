@@ -36,6 +36,43 @@ public class Book implements Serializable {
      */
     public Book() {}
 
+
+    /**
+     * TEMP?
+     * Constructor for Add Book, without id
+     * @param title
+     * @param author
+     * @param isbn
+     * @param owner
+     * @param status
+     */
+    public Book(String title, String author, String isbn, String owner, String status) {
+        // validates the input before setting them
+        Parser parser = new Parser(title, author, isbn);
+
+        this.id = "tempId";
+
+        if (parser.checkTitleAndAuthor()) {
+            this.title = title.trim();
+            this.author = author.trim();
+        }
+        else {
+            this.title = "No Title";
+            this.author = "No Author";
+        }
+
+        if (parser.checkIsbn()) {
+            this.isbn = isbn.trim();
+        }
+        else {
+            this.isbn = "N/A";
+        }
+        this.owner = owner.trim();
+        this.status = status.trim();
+
+    }
+
+
     /**
      * Minimum arg constructor for Book
      * @param id : uniquely identifies the book in the db
@@ -68,8 +105,6 @@ public class Book implements Serializable {
         }
         this.owner = owner.trim();
         this.status = status.trim();
-
-
 
     }
 

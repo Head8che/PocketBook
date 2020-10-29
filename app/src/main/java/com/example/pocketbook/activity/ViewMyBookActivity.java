@@ -64,7 +64,7 @@ public class ViewMyBookActivity extends AppCompatActivity {
 
 //        if (extras) {
         book = (Book) intent.getSerializableExtra("BOOK");
-//            user = intent.getString("USER");
+        user = (User) intent.getSerializableExtra("USER");
         catalogue = (BookList) intent.getSerializableExtra("CATALOGUE");
 //        }
 

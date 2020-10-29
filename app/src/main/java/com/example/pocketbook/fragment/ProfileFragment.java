@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
         import com.example.pocketbook.R;
         import com.example.pocketbook.adapter.BookAdapter;
         import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentChange;
@@ -28,6 +30,16 @@ import com.google.firebase.firestore.DocumentChange;
 
 public class ProfileFragment extends Fragment {
     private TextView firstnLastName, userName, editProfileButton;
+    private User user;
+
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
+
+    public ProfileFragment(User user) {
+        this.user = user;
+        user.getUsername();
+    }
 
     @Nullable
     @Override

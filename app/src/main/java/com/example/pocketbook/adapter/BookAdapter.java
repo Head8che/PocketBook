@@ -1,7 +1,9 @@
 package com.example.pocketbook.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.ViewMyBookActivity;
+import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 
@@ -23,9 +26,11 @@ import java.util.Objects;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private BookList list;
+    private Activity activity;
 
-    public BookAdapter(BookList list) {
+    public BookAdapter(BookList list, Activity activity) {
         this.list = list;
+        this.activity = activity;
     }
 
     @NonNull
@@ -45,11 +50,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = holder.itemView.getContext();
-                Intent intent = new Intent(context, ViewMyBookActivity.class);
-                intent.putExtra("BOOK", (Serializable) book);
-                intent.putExtra("CATALOGUE", (Serializable) list);
-                context.startActivity(intent);
+                ViewBookFragment nextFrag = new ViewBookFragment();
+                Bundle args = new Bundle();
+                args.putString("ID",book.getId());
+                nextFrag.setArguments(args);
+                activity.getFragmentManager().beginTransaction().replace(R.id.container, nextFrag, "findThisFragment").addToBackStack(null).commit();
             }
         });
     }
@@ -82,3 +87,5 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         }
     }
 }
+
+

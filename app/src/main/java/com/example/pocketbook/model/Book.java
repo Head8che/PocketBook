@@ -1,5 +1,6 @@
 package com.example.pocketbook.model;
 
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class Book implements Serializable {
     private String comment;
     private String condition;
     private String photo;
+
 
     /**
      * Firestore constructor
@@ -76,6 +78,7 @@ public class Book implements Serializable {
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? null : photo.trim();
     }
+
 
     /* Getter Functions */
     public String getId() { return this.id; }
@@ -152,3 +155,4 @@ public class Book implements Serializable {
 //    }
 
 }
+

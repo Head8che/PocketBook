@@ -67,5 +67,4 @@ public class Parser {
         return (sum % 11 == 0);
     }
 
-
 }

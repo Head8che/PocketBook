@@ -1,6 +1,8 @@
 package com.example.pocketbook.activity;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
 
 import com.example.pocketbook.fragment.SearchFragment;
+import com.example.pocketbook.fragment.ViewBookFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
@@ -43,6 +46,12 @@ public class HomeActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
     }
+
+    @Override //temporary until we find a way to make the back button work properly
+    public void onBackPressed() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
+    }
+
 
     private void toastMessage(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();

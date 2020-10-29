@@ -9,4 +9,5 @@
     <color name="colorAvailable">#8FED5D</color>
     <color name="colorAccepted">#FFEB3B</color>
     <color name="colorBorrowed">#ED2F21</color>
+    <color name="notAvailable">#FFACACAC</color>
 </resources>

@@ -47,6 +47,11 @@ public class ViewMyBookBookFragment extends Fragment {
         // Required empty public constructor
     }
 
+    ///////////// TEMP
+    public ViewMyBookBookFragment(Book book) {
+        this.book = book;
+    }
+
     public ViewMyBookBookFragment(Book book, BookList catalogue) {
         this.book = book;
         this.catalogue = catalogue;

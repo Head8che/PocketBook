@@ -50,8 +50,6 @@ public class Book implements Serializable {
         // validates the input before setting them
         Parser parser = new Parser(title, author, isbn);
 
-        this.id = "tempId";
-
         if (parser.checkTitleAndAuthor()) {
             this.title = title.trim();
             this.author = author.trim();
@@ -160,9 +158,8 @@ public class Book implements Serializable {
             TODO: upload new image to FirebaseStorage and overwrite old image
         */
     /* Setter Functions */
-    public void setBook(String id, String title, String author, String isbn, String owner,
+    public void setBook(String title, String author, String isbn, String owner,
                         String status, String comment, String condition, String photo) {
-        this.id = id.trim();
         this.title = title.trim();
         this.author = author.trim();
         this.isbn = isbn.trim();
@@ -176,7 +173,6 @@ public class Book implements Serializable {
                 ? null : photo.trim();
 
         Map<String, Object> docData = new HashMap<>();
-        docData.put("id", this.id);
         docData.put("title", this.title);
         docData.put("author", this.author);
         docData.put("isbn", this.isbn);

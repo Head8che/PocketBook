@@ -1,6 +1,8 @@
 package com.example.pocketbook.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String firstName;
     private String lastName;
@@ -8,27 +10,34 @@ public class User {
     private String username;
     private String password;
     private String photo;
-
     public User() {} // used by firestore to automatically create new object
 
 
+
     public User(String firstName, String lastName, String email, String username, String password, String photo) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.photo = photo;
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
+        this.email = email.trim();
+        this.username = username.trim();
+        this.password = password.trim();
+        this.photo = photo.trim();
     }
 
     public User(String firstName, String lastName, String email, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
+        this.email = email.trim();
+        this.username = username.trim();
+        this.password = password.trim();
     }
 
+    public User(String firstName, String lastName, String email, String username) {
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
+        this.email = email.trim();
+        this.username = username.trim();
+        this.password = password.trim();
+    }
     public String getFirstName() {
         return firstName;
     }

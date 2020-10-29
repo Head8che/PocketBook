@@ -4,23 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordLayout"
     tools:context=".activity.ViewMyBookActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-            android:textColor="@color/textBlack" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/viewMyBookToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:title="">
+
+            <ImageView
+                android:id="@+id/viewMyBookBackBtn"
+                android:layout_width="33dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_back"
+                app:tint="@color/colorUnselected">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/viewMyBookDeleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:minHeight="?actionBarSize"
+                android:padding="@dimen/appbar_padding"
+                android:textSize="18sp"
+                android:text="@string/delete"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="@color/colorAccent" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/viewMyBookTabLayout"
@@ -53,9 +74,16 @@
         android:layout_marginBottom="@dimen/bottom_nav_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/bottom_nav"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/viewMyBookBottomNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="@drawable/tab_color"
+        app:itemTextColor="@drawable/tab_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav"
+        xmlns:app="http://schemas.android.com/apk/res-auto"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

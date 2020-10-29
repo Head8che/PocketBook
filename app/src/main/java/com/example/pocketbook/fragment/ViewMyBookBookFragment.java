@@ -2,85 +2,119 @@ package com.example.pocketbook.fragment;
 
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.google.firebase.storage.FirebaseStorage;
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ViewMyBookBookFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ViewMyBookBookFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Book book;
+    private BookList catalogue;
 
     public ViewMyBookBookFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewMyBookBookFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ViewMyBookBookFragment newInstance(String param1, String param2) {
-        ViewMyBookBookFragment fragment = new ViewMyBookBookFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public ViewMyBookBookFragment(Book book, BookList catalogue) {
+        this.book = book;
+        this.catalogue = catalogue;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // set up a user, user = FirebaseAuth. setUser ...
-        // see selected book's owner
-
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("default_images").child("no_book_cover_light.png");
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_my_book_book, container, false);
 
-        ImageView imageView = (ImageView) rootView.findViewById(R.id.viewMyBookBookCoverImageView);
+        /* UNCOMMENT AFTER THE OTHER STATUS ICONS ARE SET UP*/
+        String bookTitle = book.getTitle();
+        String bookAuthor = book.getAuthor();
+        String bookISBN = book.getISBN();
+        StorageReference bookCover = book.getBookCover();
+        String bookStatus = book.getStatus();
+        String bookCondition = book.getCondition();
+        String bookComment = book.getComment();
 
-        GlideApp.with(getContext() /* context */)
-        .load(storageReference)
-        .into(imageView);
+        TextView layoutBookTitle = (TextView) rootView.findViewById(R.id.viewMyBookBookTitleTextView);
+        TextView layoutBookAuthor = (TextView) rootView.findViewById(R.id.viewMyBookAuthorTextView);
+        TextView layoutBookISBN = (TextView) rootView.findViewById(R.id.viewMyBookISBNTextView);
+        ImageView layoutBookCover = (ImageView) rootView.findViewById(R.id.viewMyBookBookCoverImageView);
+        ImageView layoutBookStatus = (ImageView) rootView.findViewById(R.id.viewBookBookStatusImageView);
+        TextView layoutBookCondition = (TextView) rootView.findViewById(R.id.viewMyBookConditionTextView);
+        TextView layoutBookComment = (TextView) rootView.findViewById(R.id.viewMyBookCommentTextView);
+
+        layoutBookTitle.setText(bookTitle);
+        layoutBookAuthor.setText(bookAuthor);
+        layoutBookISBN.setText(getResources().getString(R.string.isbn_text, bookISBN));
+
+        GlideApp.with(Objects.requireNonNull(getContext()))
+                .load(bookCover)
+                .into(layoutBookCover);
+
+        switch(bookStatus) {
+            case "accepted":
+                layoutBookStatus.setImageResource(R.drawable.ic_accepted);
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccepted),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+            case "borrowed":
+                layoutBookStatus.setImageResource(R.drawable.ic_borrowed);
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+            default:
+                layoutBookStatus.setImageResource(R.drawable.ic_available);
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAvailable),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+
+        if (bookCondition != null) {
+            layoutBookCondition.setText(getResources().getString(R.string.condition_text,
+                    bookCondition));
+        } else {
+            layoutBookCondition.setVisibility(View.GONE);
+        }
+
+        if (bookComment != null) {
+            layoutBookComment.setText(getResources().getString(R.string.comment_text,
+                    bookComment));
+        } else {
+            layoutBookComment.setVisibility(View.GONE);
+        }
+
+        /* TODO: handle Edit button and edit book info in catalogue */
+
+        Button editButton = (Button) rootView.findViewById(R.id.viewMyBookEditBtn);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "Implement Edit Functionality!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return rootView;
     }

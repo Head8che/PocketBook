@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.util.Objects;
 
@@ -32,10 +36,11 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     private User current_user = new User();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
+        setContentView(R.layout.activity_login);
         signUp = findViewById(R.id.RegisterBtn);
         login = findViewById(R.id.LoginBtn);
         forgotPass = findViewById(R.id.ForgotPass);
@@ -103,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                             intent.putExtra("CURRENT_USER", current_user);
                                             startActivity(intent);
+
                                         } else {
                                             Log.d(TAG, "No such document");
                                         }
@@ -111,6 +117,20 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+
+
+                            Log.e(TAG, "DocumentSnapshot data: " + current_user.getUsername());
+                            System.out.println(current_user.getUsername());
+                            new ProfileFragment(current_user);
+//                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
+//                                    Toast.LENGTH_SHORT).show();
+
+//                            User current_user = User();
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+//                            updateUI(user);
+
                             Log.e(TAG, "DocumentSnapshot data: " + current_user.getUsername());
 
 //                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);

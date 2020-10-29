@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".fragment.AddFragment"
@@ -11,56 +12,86 @@ android:orientation="vertical">
     <!-- Else display image -->
 
     <!-- EditText Fields -->
-    <EditText
-        android:id="@+id/editText_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/title"
-        android:layout_margin="7dp" />
 
-    <EditText
-        android:id="@+id/editText_author"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/image_button"
+        android:layout_width="191dp"
+        android:layout_height="205dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        app:srcCompat="@drawable/ic_photo_library_white_24dp" />
+
+    <Button
+        android:id="@+id/button_addBook"
+        android:layout_width="219dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/author"
-        android:layout_margin="7dp"
-        android:layout_below="@+id/editText_title"/>
+        android:layout_below="@id/editText_comment"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="42dp"
+        android:background="@drawable/selectors"
+        android:text="@string/add_book"/>
 
     <EditText
         android:id="@+id/editText_isbn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/editText_author"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/isbn"
-        android:layout_margin="7dp"
-        android:layout_below="@id/editText_author"/>
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_title"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="7dp"
+        android:ems="10"
+        android:hint="@string/author"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="286dp"
+        android:layout_marginEnd="102dp"
+        android:layout_marginBottom="7dp"
+        android:ems="10"
+        android:hint="@string/title"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/editText_isbn"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginBottom="7dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/comment"
-        android:layout_margin="7dp"
-        android:layout_below="@id/editText_isbn"/>
+        android:inputType="textPersonName" />
 
     <!-- Style Button using Material Design -->
     <!-- style="?attr/materialButtonOutlinedStyle"-->
-    <Button
-        android:id="@+id/button_addBook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_book"
-        android:layout_below="@id/editText_comment"
-        android:layout_marginLeft="70dp"/>
-
-
 
 
 </RelativeLayout>

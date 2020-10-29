@@ -102,8 +102,6 @@ public class Book implements Serializable {
         this.owner = owner.trim();
         this.status = status.trim();
 
-
-
     }
 
     /**

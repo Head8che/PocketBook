@@ -7,11 +7,11 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/viewMyBookRequestBtn"
+        android:id="@+id/viewBookRequestBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAvailable"
         android:text="@string/request"
         android:textColor="@color/textWhite"
         android:textSize="24sp"
@@ -24,7 +24,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/viewMyBookRequestBtn"
+        app:layout_constraintBottom_toTopOf="@+id/viewBookRequestBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

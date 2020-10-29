@@ -128,14 +128,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_photo_library_white_24dp" />
 
-    <TextView
+    <Button
         android:id="@+id/AddProfilePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="273dp"
+        android:layout_height="54dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:text="Click here to add your profile picture."
         android:textColor="#FFFFFF"
+        android:background="@color/textBlack"
         app:layout_constraintBottom_toBottomOf="@+id/userImage"
         app:layout_constraintStart_toEndOf="@+id/userImage"
         app:layout_constraintTop_toTopOf="@+id/userImage" />

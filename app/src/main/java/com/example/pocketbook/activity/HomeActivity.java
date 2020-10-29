@@ -2,7 +2,6 @@ package com.example.pocketbook.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.AddFragment;
-import com.example.pocketbook.fragment.NewProfileFragment;
+import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
 
@@ -39,13 +38,16 @@ public class HomeActivity extends AppCompatActivity {
     private int array_position;
     private FirebaseUser currentUser;
     String email;
+    private User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_layout);
+        Intent intent = getIntent();
 
+        user = (User) intent.getSerializableExtra("CURRENT_USER");
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
@@ -79,7 +81,7 @@ public class HomeActivity extends AppCompatActivity {
 //                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.bottom_nav_profile:
-                            selectedFragment = new NewProfileFragment();
+                            selectedFragment = new ProfileFragment(user);
 //                            selectedFragment.setArguments(bundle);
                             break;
                     }

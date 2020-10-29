@@ -63,21 +63,22 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     context.startActivity(intent);
                 } else {
                     ViewBookFragment nextFrag = new ViewBookFragment();
-                    Bundle args = new Bundle();
-                    args.putString("ID", book.getId());
-                    args.putString("Title", book.getTitle());
-                    args.putString("Author", book.getAuthor());
-                    args.putString("ISBN", book.getISBN());
-                    args.putString("Owner", book.getOwner());
-                    args.putString("Status", book.getStatus());
-                    args.putString("Comment", book.getComment());
-                    args.putString("Condition", book.getCondition());
-                    args.putString("Photo", book.getPhoto());
-                    nextFrag.setArguments(args);
-                    activity.getFragmentManager().beginTransaction()
-                            .replace(activity.findViewById(R.id.container).getId(), nextFrag, "findThisFragment")
-                            .addToBackStack(null).commit();
+                    Bundle bundle = new Bundle();
+    //                args.putString("ID",book.getId());
+    //                args.putString("Title",book.getTitle());
+    //                args.putString("Author",book.getAuthor());
+    //                args.putString("ISBN",book.getISBN());
+    //                args.putString("Owner",book.getOwner());
+    //                args.putString("Status",book.getStatus());
+    //                args.putString("Comment",book.getComment());
+    //                args.putString("Condition",book.getCondition());
+    //                args.putString("Photo",book.getPhoto());
+                    bundle.putSerializable("book",book);
+                    nextFrag.setArguments(bundle);
+                    activity.getFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
+                    //activity.getFragmentManager().beginTransaction().replace(R.id., nextFrag, "ViewBookFragment").addToBackStack(null).commit();
                 }
+                
             }
         });
     }

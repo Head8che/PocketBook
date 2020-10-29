@@ -1,10 +1,10 @@
 package com.example.pocketbook.model;
 
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.pocketbook.util.Parser;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,7 +14,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class Book implements Serializable {
     private String id;
@@ -34,41 +33,6 @@ public class Book implements Serializable {
      */
     public Book() {}
 
-
-    /**
-     * TEMP?
-     * Constructor for Add Book, without id
-     * @param title
-     * @param author
-     * @param isbn
-     * @param owner
-     * @param status
-     */
-    public Book(String title, String author, String isbn, String owner, String status) {
-        // validates the input before setting them
-        Parser parser = new Parser(title, author, isbn);
-
-        if (parser.checkTitleAndAuthor()) {
-            this.title = title.trim();
-            this.author = author.trim();
-        }
-        else {
-            this.title = "No Title";
-            this.author = "No Author";
-        }
-
-        if (parser.checkIsbn()) {
-            this.isbn = isbn.trim();
-        }
-        else {
-            this.isbn = "N/A";
-        }
-        this.owner = owner.trim();
-        this.status = status.trim();
-
-    }
-
-
     /**
      * Minimum arg constructor for Book
      * @param id : uniquely identifies the book in the db
@@ -79,31 +43,12 @@ public class Book implements Serializable {
      * @param status : indicates availability of book (available, requested, accepted, borrowed)
      */
     public Book(String id, String title, String author, String isbn, String owner, String status) {
-        // validates the input before setting them
-        parser = new Parser(title, author, isbn);
-
         this.id = id.trim();
-
-        if (parser.checkTitleAndAuthor()) {
-            this.title = title.trim();
-            this.author = author.trim();
-        }
-        else {
-            this.title = "No Title";
-            this.author = "No Author";
-        }
-
-        if (parser.checkIsbn()) {
-            this.isbn = isbn.trim();
-        }
-        else {
-            this.isbn = "N/A";
-        }
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
         this.owner = owner.trim();
         this.status = status.trim();
-
-
-
     }
 
     /**
@@ -162,8 +107,9 @@ public class Book implements Serializable {
         ownedBooks list with a new or updated bookID.
      */
     /* Setter Functions */
-    public void setBook(String title, String author, String isbn, String owner,
+    public void editBook(String id, String title, String author, String isbn, String owner,
                         String status, String comment, String condition, String photo) {
+        this.id = id.trim();
         this.title = title.trim();
         this.author = author.trim();
         this.isbn = isbn.trim();
@@ -177,6 +123,7 @@ public class Book implements Serializable {
                 ? null : photo.trim();
 
         Map<String, Object> docData = new HashMap<>();
+        docData.put("id", this.id);
         docData.put("title", this.title);
         docData.put("author", this.author);
         docData.put("isbn", this.isbn);

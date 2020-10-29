@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.activity.ViewMyBookActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
@@ -52,19 +54,30 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewBookFragment nextFrag = new ViewBookFragment();
-                Bundle args = new Bundle();
-                args.putString("ID",book.getId());
-                args.putString("Title",book.getTitle());
-                args.putString("Author",book.getAuthor());
-                args.putString("ISBN",book.getISBN());
-                args.putString("Owner",book.getOwner());
-                args.putString("Status",book.getStatus());
-                args.putString("Comment",book.getComment());
-                args.putString("Condition",book.getCondition());
-                args.putString("Photo",book.getPhoto());
-                nextFrag.setArguments(args);
-                activity.getFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag, "findThisFragment").addToBackStack(null).commit();
+                if (book.getOwner().equals("test@pocketbook.com")) {
+                    Log.e("OWNERIN", book.getOwner());
+                    Context context = holder.itemView.getContext();
+                    Intent intent = new Intent(context, ViewMyBookActivity.class);
+                    intent.putExtra("BOOK", (Serializable) book);
+                    intent.putExtra("CATALOGUE", (Serializable) list);
+                    context.startActivity(intent);
+                } else {
+                    ViewBookFragment nextFrag = new ViewBookFragment();
+                    Bundle args = new Bundle();
+                    args.putString("ID", book.getId());
+                    args.putString("Title", book.getTitle());
+                    args.putString("Author", book.getAuthor());
+                    args.putString("ISBN", book.getISBN());
+                    args.putString("Owner", book.getOwner());
+                    args.putString("Status", book.getStatus());
+                    args.putString("Comment", book.getComment());
+                    args.putString("Condition", book.getCondition());
+                    args.putString("Photo", book.getPhoto());
+                    nextFrag.setArguments(args);
+                    activity.getFragmentManager().beginTransaction()
+                            .replace(activity.findViewById(R.id.container).getId(), nextFrag, "findThisFragment")
+                            .addToBackStack(null).commit();
+                }
             }
         });
     }

@@ -54,6 +54,9 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));

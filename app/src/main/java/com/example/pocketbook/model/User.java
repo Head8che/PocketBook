@@ -2,7 +2,8 @@ package com.example.pocketbook.model;
 
 public class User {
 
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private String email;
     private String username;
     private String password;
@@ -10,38 +11,38 @@ public class User {
 
     public User() {} // used by firestore to automatically create new object
 
-    public User(String fullName, String email, String username) {
-        this.fullName = fullName;
-        this.email = email;
-        this.username = username;
-    }
 
-    public User(String fullName, String email) {
-        this.fullName = fullName;
-        this.email = email;
-    }
-
-    public User(String fullName, String email, String username, String password) {
-        this.fullName = fullName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(String fullName, String email, String username, String password, String photo) {
-        this.fullName = fullName;
+    public User(String firstName, String lastName, String email, String username, String password, String photo) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
         this.photo = photo;
     }
 
-    public String getFullName() {
-        return fullName;
+    public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

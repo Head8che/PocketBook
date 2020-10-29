@@ -64,59 +64,9 @@ public class HomeFragment extends Fragment {
     }
 
 
-//    private void generateData(){
-//        // for demonstration purposes
-//        for(int i=1; i<7; i++) {
-//            String uniqueID = UUID.randomUUID().toString();
-//            Book book = new Book(uniqueID, "Book "+i, "LeFabulous", uniqueID, "eden", "none", "available","none");
-//            mFirestore.collection("books").document(book.getId()).set(book);
-//        }
-//    }
-
     private void retrieveData() {
-        // for demonstration purposes
-        // query to retrieve all books
         Query query = mFirestore.collection("books");
-
-        // Getting data once
-//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//                    for(QueryDocumentSnapshot document : task.getResult())
-//                        Log.d(TAG, document.getId() + " => " + document.getData());
-//                } else
-//                    Log.d(TAG, "Error getting documents: ", task.getException());
-//            }
-//        });
-
-        // Getting data real time
-        // listens to multiple documents
-        // differentiates what kind of changes happened
-//        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.w(TAG, "Listen failed.", e);
-//                    return;
-//                }
-//                for (DocumentChange dc : snapshot.getDocumentChanges()){
-//                    switch (dc.getType()) {
-//                        case ADDED:
-//                            Log.d(TAG, "New book: " + dc.getDocument().getData());
-//                            break;
-//                        case MODIFIED:
-//                            Log.d(TAG, "Modified book: " + dc.getDocument().getData());
-//                            break;
-//                        case REMOVED:
-//                            Log.d(TAG, "Removed book: " + dc.getDocument().getData());
-//                            break;
-//                    }
-//                }
-//            }
-//        });
     }
-
 
     @Override
     public void onStart() {

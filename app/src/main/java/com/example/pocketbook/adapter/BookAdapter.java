@@ -1,30 +1,42 @@
-// responsible for the actual display of books in the UI
-
 package com.example.pocketbook.adapter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.LoginActivity;
+import com.example.pocketbook.activity.ViewMyBookActivity;
+import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
+import com.example.pocketbook.model.BookList;
 
-public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-    private static final String TAG = "Book Adapter";
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
+    private BookList list;
+    private Activity activity;
 
-    public BookAdapter(Query query){
-        super(query);
+    public BookAdapter(BookList list, Activity activity) {
+        this.list = list;
+        this.activity = activity;
     }
 
-    // Creates new views (invoked by the layout manager)
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,39 +44,71 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
         return new ViewHolder(inflater.inflate(R.layout.item_book, parent, false));
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+        Book book = list.getBookAtPosition(position);
+        holder.bind(book);
 
-        holder.bind(getSnapshot(position));
+        /* DETERMINE WHICH PAGE SHOULD BE SELECTED, BASED ON IF USER IS OWNER OF BOOK */
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (book.getOwner().equals("jane@gmail.com")) {
+                    Log.e("OWNERIN", book.getOwner());
+                    Context context = holder.itemView.getContext();
+                    Intent intent = new Intent(context, ViewMyBookActivity.class);
+                    intent.putExtra("BOOK", (Serializable) book);
+                    intent.putExtra("CATALOGUE", (Serializable) list);
+                    context.startActivity(intent);
+                } else {
+                    ViewBookFragment nextFrag = new ViewBookFragment();
+                    Bundle bundle = new Bundle();
+    //                args.putString("ID",book.getId());
+    //                args.putString("Title",book.getTitle());
+    //                args.putString("Author",book.getAuthor());
+    //                args.putString("ISBN",book.getISBN());
+    //                args.putString("Owner",book.getOwner());
+    //                args.putString("Status",book.getStatus());
+    //                args.putString("Comment",book.getComment());
+    //                args.putString("Condition",book.getCondition());
+    //                args.putString("Photo",book.getPhoto());
+                    bundle.putSerializable("book",book);
+                    nextFrag.setArguments(bundle);
+                    activity.getFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
+                    //activity.getFragmentManager().beginTransaction().replace(R.id., nextFrag, "ViewBookFragment").addToBackStack(null).commit();
+                }
+            }
+        });
     }
 
-
-    // Provide a reference to the views for each book item
-    // this class represents 1 book
-    // you provide access to all the views for a book item here
+    @Override
+    public int getItemCount() {
+        return list.getSize();
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView bookTitle;
-        TextView bookAuthor;
+        //        TextView bookTitle;
+//        TextView bookAuthor;
+        ImageView bookCoverImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            bookTitle = itemView.findViewById(R.id.view_title);
-            bookAuthor = itemView.findViewById(R.id.view_author);
+//            bookTitle = itemView.findViewById(R.id.view_title);
+//            bookAuthor = itemView.findViewById(R.id.view_author);
+            bookCoverImageView = itemView.findViewById(R.id.itemBookBookCoverImageView);
         }
 
-        public void bind(final DocumentSnapshot snapshot){
-            Log.d(TAG, String.valueOf(snapshot.getData()));
-            Book book = snapshot.toObject(Book.class);
+        public void bind(final Book book){
 
-            bookTitle.setText(book.getTitle());
-            bookAuthor.setText(book.getAuthor());
+//            bookTitle.setText(book.getTitle());
+//            bookAuthor.setText(book.getAuthor());
 
-            // click listener
+            GlideApp.with(Objects.requireNonNull(itemView.getContext()))
+                    .load(book.getBookCover())
+                    .into(bookCoverImageView);
         }
     }
 }
+
 

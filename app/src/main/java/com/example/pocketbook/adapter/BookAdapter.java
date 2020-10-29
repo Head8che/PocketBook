@@ -3,6 +3,7 @@
 package com.example.pocketbook.adapter;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,6 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
             bookAuthor = itemView.findViewById(R.id.view_author);
             bookCover = itemView.findViewById(R.id.bookCover);
 
-
         }
 
         public void bind(final DocumentSnapshot snapshot){
@@ -73,13 +73,16 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder>{
             Book book = snapshot.toObject(Book.class);
             bookTitle.setText(book.getTitle());
             bookAuthor.setText(book.getAuthor());
-            bookCover.setOnClickListener(new View.OnClickListener() {
 
+            bookCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("TEST","workds");
-
-                    activity.getFragmentManager().beginTransaction().replace(container.getId(), new ViewBookFragment(), "findThisFragment").addToBackStack(null).commit();
+                    Log.d("TEST", book.getId());
+                    ViewBookFragment nextFrag = new ViewBookFragment();
+                    Bundle args = new Bundle();
+                    args.putString("ID",book.getId());
+                    nextFrag.setArguments(args);
+                    activity.getFragmentManager().beginTransaction().replace(container.getId(), nextFrag, "findThisFragment").addToBackStack(null).commit();
                 }
             });
 

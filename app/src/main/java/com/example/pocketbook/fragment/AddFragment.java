@@ -7,17 +7,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddFragment extends Fragment {
 
@@ -50,7 +49,6 @@ public class AddFragment extends Fragment {
         /**
          * Add Book Handler
          */
-        // get the ADD button and create the listener
         addButton = view.findViewById(R.id.button_addBook);
         addButton.setOnClickListener(new View.OnClickListener() {
 
@@ -63,19 +61,18 @@ public class AddFragment extends Fragment {
 
             // get the user credentials
             final FirebaseUser owner = FirebaseAuth.getInstance().getCurrentUser();
-            final String ownerId = owner.getUid();
-
-            // TODO:  how can an id be created before the book has been added?
-            ////// TEMP SOLUTION
-            final String bookId = "tempId";
+            final String ownerId = owner.getEmail(); //TODO : change to email
 
             @Override
             public void onClick(View view) {
                 // create Book object and add to Firestore
-                Book book = new Book(bookId, title, author, isbn, ownerId, status);
-                book.setBook(bookId, title, author, isbn, ownerId, status,
+                Book book = new Book(title, author, isbn, ownerId, status);
+                book.setBook(title, author, isbn, ownerId, status,
                         null, null, null);
-                // go to the view owned book activity
+
+                //go to the view owned book activity
+                ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);
+
             }
 
         });
@@ -91,7 +88,7 @@ public class AddFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ///////////// IN PROGRESS
+                ///////////// TODO:
                 // create a dialogue fragment that allows
                 //  - take photo
                 //  - choose from gallery

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/colorAvailable"
+        android:background="@color/colorAccent"
         android:text="@string/request"
         android:textColor="@color/textWhite"
         android:textSize="24sp"
@@ -53,11 +53,11 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/viewMyBookStatusImageView"
+                    android:id="@+id/viewBookBookStatusImageView"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_gravity="end"
-                    android:contentDescription="@string/book_cover_image"
+                    android:contentDescription="book_status_image"
                     android:src="@drawable/ic_available"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -2,11 +2,9 @@ package com.example.pocketbook.fragment;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,25 +15,11 @@ import android.widget.Toast;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.activity.ViewMyBookActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Executor;
 
 
 public class ViewMyBookBookFragment extends Fragment {
@@ -77,7 +61,7 @@ public class ViewMyBookBookFragment extends Fragment {
         TextView layoutBookAuthor = (TextView) rootView.findViewById(R.id.viewMyBookAuthorTextView);
         TextView layoutBookISBN = (TextView) rootView.findViewById(R.id.viewMyBookISBNTextView);
         ImageView layoutBookCover = (ImageView) rootView.findViewById(R.id.viewMyBookBookCoverImageView);
-        ImageView layoutBookStatus = (ImageView) rootView.findViewById(R.id.viewMyBookStatusImageView);
+        ImageView layoutBookStatus = (ImageView) rootView.findViewById(R.id.viewBookBookStatusImageView);
         TextView layoutBookCondition = (TextView) rootView.findViewById(R.id.viewMyBookConditionTextView);
         TextView layoutBookComment = (TextView) rootView.findViewById(R.id.viewMyBookCommentTextView);
 

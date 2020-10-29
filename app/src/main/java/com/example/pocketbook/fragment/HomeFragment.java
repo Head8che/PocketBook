@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         Book book = document.toObject(Book.class);
-                        catalogue.add(book);
+                        catalogue.addBook(book);
                     }
                     mAdapter.notifyDataSetChanged();
                     lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment {
                                             if (t.isSuccessful()) {
                                                 for (DocumentSnapshot d : t.getResult()) {
                                                     Book book = d.toObject(Book.class);
-                                                    catalogue.add(book);
+                                                    catalogue.addBook(book);
                                                 }
                                                 mAdapter.notifyDataSetChanged();
                                                 lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);

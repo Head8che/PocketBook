@@ -155,10 +155,14 @@ public class Book implements Serializable {
     }
 
     /*
-            TODO: upload new image to FirebaseStorage and overwrite old image
-        */
+        TODO: upload new image to FirebaseStorage and overwrite old image
+    */
+    /*
+        editBook, unlike a potential addBook, does not update the book owner's
+        ownedBooks list with a new or updated bookID.
+     */
     /* Setter Functions */
-    public void setBook(String title, String author, String isbn, String owner,
+    public void editBook(String id, String title, String author, String isbn, String owner,
                         String status, String comment, String condition, String photo) {
         this.title = title.trim();
         this.author = author.trim();

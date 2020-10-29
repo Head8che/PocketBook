@@ -22,6 +22,8 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
@@ -42,7 +44,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Book book = list.get(position);
+        Book book = list.getBookAtPosition(position);
         holder.bind(book);
 
         /* DETERMINE WHICH PAGE SHOULD BE SELECTED, BASED ON IF USER IS OWNER OF BOOK */
@@ -69,7 +71,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.getSize();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

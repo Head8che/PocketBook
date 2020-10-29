@@ -9,16 +9,9 @@ public class Parser {
     String title, author, isbn, comment;
 
     public Parser(String title, String author, String isbn) {
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
-    }
-
-    public Parser(String title, String author, String isbn, String comment) {
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
-        this.comment = comment.trim();
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
     }
 
 
@@ -73,18 +66,6 @@ public class Parser {
         // of digits is divisible by 11.
         return (sum % 11 == 0);
     }
-
-    /**
-     * Checks that comment is less than or equal to 200 characters
-     * @return
-     *      true if length does not exceed limit
-     *      false othewise
-     */
-    public boolean checkComment() {
-        return comment.length() <= 200;
-    }
-
-
 
 
 }

@@ -1,10 +1,10 @@
 package com.example.pocketbook.model;
 
-
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.pocketbook.util.Parser;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Book implements Serializable {
     private String id;
@@ -43,12 +44,31 @@ public class Book implements Serializable {
      * @param status : indicates availability of book (available, requested, accepted, borrowed)
      */
     public Book(String id, String title, String author, String isbn, String owner, String status) {
+        // validates the input before setting them
+        parser = new Parser(title, author, isbn);
+
         this.id = id.trim();
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
+
+        if (parser.checkTitleAndAuthor()) {
+            this.title = title.trim();
+            this.author = author.trim();
+        }
+        else {
+            this.title = "No Title";
+            this.author = "No Author";
+        }
+
+        if (parser.checkIsbn()) {
+            this.isbn = isbn.trim();
+        }
+        else {
+            this.isbn = "N/A";
+        }
         this.owner = owner.trim();
         this.status = status.trim();
+
+
+
     }
 
     /**

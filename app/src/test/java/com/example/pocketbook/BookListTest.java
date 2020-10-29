@@ -1,7 +1,8 @@
 package com.example.pocketbook;
 
-
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ public class BookListTest {
      *      User
      */
     private User mockUser() {
-        return new User("mockUserId");
+        return new User("mockName", "mockEmail", "mockUsername");
     }
 
     /**
@@ -38,11 +39,10 @@ public class BookListTest {
      *      Book
      */
     private Book mockBook() {
-        User userId = mockUser();
-        String bookID = "mockId";
 
-        return new Book(bookID, "mockTitle", "mockAuthor",
-                "mockISBN", userId);
+        return new Book("mockTitle", "mockAuthor",
+                "mockISBN", "mockOwner", "mockComment",
+                "mockStatus", "mockPhoto");
     }
 
 

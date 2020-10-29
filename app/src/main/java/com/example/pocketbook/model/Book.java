@@ -1,5 +1,7 @@
 package com.example.pocketbook.model;
 
+import com.example.pocketbook.util.Parser;
+
 public class Book {
     private String title;
     private String author;
@@ -9,15 +11,40 @@ public class Book {
     private String status;
     private String photo;
 
+    Parser parser;
+
     public Book() {} // used by firestore to populate a book
 
+    public Book(String title, String author, String ISBN) {
+        // validates the arguments
+        parser = new Parser(title, author, ISBN);
+
+        if (parser.checkTitleAndAuthor()) {
+            this.title = title;
+            this.author = author;
+        }
+        if (parser.checkIsbn()) {
+            this.ISBN = ISBN;
+        }
+    }
+
     public Book(String title, String author, String ISBN, String owner,
-                String comment, String status, String photo ) {
-        this.title = title;
-        this.author = author;
-        this.ISBN = ISBN;
+                String comment, String status, String photo) {
+        // validates the arguments
+        parser = new Parser(title, author, ISBN, comment);
+        if (parser.checkTitleAndAuthor()) {
+            this.title = title;
+            this.author = author;
+        }
+        if (parser.checkIsbn()) {
+            this.ISBN = ISBN;
+        }
+
+        if (parser.checkComment()) {
+            this.comment = comment;
+        }
+
         this.owner = owner;
-        this.comment = comment;
         this.status = status;
         this.photo = photo;
     }
@@ -37,4 +64,5 @@ public class Book {
     public void setComment(String comment) { this.comment = comment; }
     public void setStatus(String status) { this.status = status; }
     public void setPhoto(String photo) { this.photo = photo; }
+
 }

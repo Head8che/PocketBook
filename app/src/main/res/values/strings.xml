@@ -18,4 +18,8 @@
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>
     <string name="request">request</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <string name="isbn">ISBN</string>
+    <string name="comment">Comment</string>
 </resources>

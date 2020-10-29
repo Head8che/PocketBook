@@ -6,10 +6,10 @@ public class Request {
     private String requester;
     private String requestee;
     private String bookRequested;
-    private Date requestDate;
+    private String requestDate;
     private String requestStatus;
 
-    public Request(String requester, String requestee, String bookRequested, Date requestDate) {
+    public Request(String requester, String requestee, String bookRequested, String requestDate) {
         this.requester = requester;
         this.requestee = requestee;
         this.bookRequested = bookRequested;
@@ -41,11 +41,11 @@ public class Request {
         this.bookRequested = bookRequested;
     }
 
-    public Date getRequestDate() {
+    public String getRequestDate() {
         return requestDate;
     }
 
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(String requestDate) {
         this.requestDate = requestDate;
     }
 

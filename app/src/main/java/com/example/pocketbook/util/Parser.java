@@ -67,17 +67,5 @@ public class Parser {
         return (sum % 11 == 0);
     }
 
-    /**
-     * Checks that comment is less than or equal to 200 characters
-     * @return
-     *      true if length does not exceed limit
-     *      false othewise
-     */
-    public boolean checkComment() {
-        return comment.length() <= 200;
-    }
-
-
-
 
 }

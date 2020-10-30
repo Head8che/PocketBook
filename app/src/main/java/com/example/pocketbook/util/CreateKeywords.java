@@ -26,7 +26,7 @@ public class CreateKeywords {
         keywords.add(""); // first element is empty string
 
         // fields we're interested in
-        String[] fields = {"title", "comment", "isbn"};
+        String[] fields = {"title", "author", "isbn"};
 
         // TODO: better algorithm
         for(int i=0; i<fields.length; i++){
@@ -34,7 +34,7 @@ public class CreateKeywords {
             switch (fields[i]){
                 case "isbn": f = mBook.getISBN().toLowerCase(); break;
                 case "title": f = mBook.getTitle().toLowerCase(); break;
-                case "comment": f = mBook.getComment().toLowerCase(); break;
+                case "author": f = mBook.getAuthor().toLowerCase(); break;
             }
             for(int j=0; j<f.length(); j++) {
                 curr += f.charAt(j);

@@ -61,7 +61,7 @@ public class BookList implements Serializable {
 
         Map<String, Object> docData = new LinkedHashMap<>();
         docData.put("id", book.getId());
-        docData.put("title", book.getBookTitle());
+        docData.put("title", book.getTitle());
         docData.put("author", book.getAuthor());
         docData.put("isbn", book.getISBN());
         docData.put("owner", book.getOwner());

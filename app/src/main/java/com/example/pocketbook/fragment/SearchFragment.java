@@ -7,27 +7,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.util.CreateKeywords;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class SearchFragment extends Fragment implements LinearBookAdapter.OnBookSelectedListener {
@@ -54,8 +52,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").limit(LIMIT);
+        //        addKeywords();
     }
 
     @Nullable
@@ -63,6 +60,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
 
+        // TODO: see if possible to switch to BookList and BookAdapter
         mBooksRecycler = v.findViewById(R.id.search_recycler_books);
         mBooksRecycler.setLayoutManager(new LinearLayoutManager(v.getContext()));
 
@@ -81,15 +79,19 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("onQueryTextChange", newText);
+                newText = newText.toLowerCase();
+
+                // TODO: add batch loading
+                mQuery = mFirestore.collection("catalogue").whereArrayContains("keywords", newText);
+                mAdapter.setQuery(mQuery);
                 return true;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.i("onQueryTextSubmit", query);
-
-
+                // TODO: implement this
+                // TODO: no reloading but conclusion
                 return true;
             }
         });
@@ -157,6 +159,25 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
 //            }
 //        });
         return v;
+    }
+
+    private void addKeywords(){
+        // TEMPORARY function
+        // adds keywords field to every book
+
+        mFirestore.collection("catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        CreateKeywords kw = new CreateKeywords(document.toObject(Book.class));
+                        kw.create();
+                    }
+                } else {
+                    Log.d(TAG, "RIP ", task.getException());
+                }
+            }
+        });
     }
 
     @Override

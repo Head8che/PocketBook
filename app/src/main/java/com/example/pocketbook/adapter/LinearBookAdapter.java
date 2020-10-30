@@ -68,8 +68,8 @@ public class LinearBookAdapter extends FirestoreAdapter<LinearBookAdapter.ViewHo
                          final OnBookSelectedListener listener){
             Book book = snapshot.toObject(Book.class);
 
-            Log.d("LinearBookAdapter", book.getBookTitle());
-            bookTitle.setText(book.getBookTitle());
+//            Log.d("LinearBookAdapter", book.getBookTitle());
+            bookTitle.setText(book.getTitle());
             description.setText(book.getComment());
             username.setText(book.getOwner());
             status.setText(book.getStatus());

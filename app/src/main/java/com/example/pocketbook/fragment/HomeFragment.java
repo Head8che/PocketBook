@@ -38,10 +38,6 @@ public class HomeFragment extends Fragment {
 
     private BookList catalogue = new BookList();
 
-    private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
-
     private ScrollUpdate scrollUpdate;
 
     @Override

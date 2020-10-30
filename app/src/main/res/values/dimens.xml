@@ -6,6 +6,10 @@
     <dimen name="bottom_nav_margin">56dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="fragment_title_size">25sp</dimen>
+
+    <dimen name="small_book_width">100dp</dimen>
+    <dimen name="small_book_height">140dp</dimen>
     <dimen name="medium_book_width">164dp</dimen>
     <dimen name="medium_book_height">240dp</dimen>
     <dimen name="large_book_width">270dp</dimen>

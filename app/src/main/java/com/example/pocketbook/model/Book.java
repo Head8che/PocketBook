@@ -94,10 +94,20 @@ public class Book implements Serializable {
     public StorageReference getBookCover() {
         if (this.photo == null || this.photo.equals("") || !this.photo.endsWith(".jpg")) {
             return FirebaseStorage.getInstance().getReference()
-                    .child("default_images").child("no_book_cover_light.png");
-        }
+                    .child("default_images").child("no_book_cover_light.png"); }
         return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
     }
+
+    public void setId(String id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
+    public void setOwner(String owner) { this.owner = owner; }
+    public void setComment(String comment) { this.comment = comment; }
+    public void setCondition(String condition) { this.condition = condition; }
+    public void setStatus(String status) { this.status = status; }
+    public void setPhoto(String photo) { this.photo = photo; }
+
 
     /*
         TODO: upload new image to FirebaseStorage and overwrite old image
@@ -107,48 +117,49 @@ public class Book implements Serializable {
         ownedBooks list with a new or updated bookID.
      */
     /* Setter Functions */
-    public void setBook(String title, String author, String isbn, String owner,
-                        String status, String comment, String condition, String photo) {
-        this.id = id.trim();
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
-        this.owner = owner.trim();
-        this.status = status.trim();
-        this.comment = ((comment == null) || (comment.trim().equals("")))
-                ? null : comment.trim();
-        this.condition = ((condition == null) || (condition.trim().equals("")))
-                ? null : condition.trim();
-        this.photo = ((photo == null) || (photo.trim().equals("")))
-                ? null : photo.trim();
 
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("id", this.id);
-        docData.put("title", this.title);
-        docData.put("author", this.author);
-        docData.put("isbn", this.isbn);
-        docData.put("owner", this.owner);
-        docData.put("status", this.status);
-        docData.put("comment", this.comment);
-        docData.put("condition", this.condition);
-        docData.put("photo", this.photo);
-
-        FirebaseFirestore.getInstance().collection("books").document(this.id)
-            .set(docData)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w("SET_BOOK", "Error writing document", e);
-                }
-            });
-
-    }
+//    public void editBook(String id, String title, String author, String isbn, String owner,
+//                        String status, String comment, String condition, String photo) {
+//        this.id = id.trim();
+//        this.title = title.trim();
+//        this.author = author.trim();
+//        this.isbn = isbn.trim();
+//        this.owner = owner.trim();
+//        this.status = status.trim();
+//        this.comment = ((comment == null) || (comment.trim().equals("")))
+//                ? null : comment.trim();
+//        this.condition = ((condition == null) || (condition.trim().equals("")))
+//                ? null : condition.trim();
+//        this.photo = ((photo == null) || (photo.trim().equals("")))
+//                ? null : photo.trim();
+//
+//        Map<String, Object> docData = new HashMap<>();
+//        docData.put("id", this.id);
+//        docData.put("title", this.title);
+//        docData.put("author", this.author);
+//        docData.put("isbn", this.isbn);
+//        docData.put("owner", this.owner);
+//        docData.put("status", this.status);
+//        docData.put("comment", this.comment);
+//        docData.put("condition", this.condition);
+//        docData.put("photo", this.photo);
+//
+//        FirebaseFirestore.getInstance().collection("books").document(this.id)
+//            .set(docData)
+//            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                @Override
+//                public void onSuccess(Void aVoid) {
+//                    Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
+//                }
+//            })
+//            .addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Log.w("SET_BOOK", "Error writing document", e);
+//                }
+//            });
+//
+//    }
 
     /* Allows comparison between bookIds as Strings
      *   Overrides compareTo method in Comparable

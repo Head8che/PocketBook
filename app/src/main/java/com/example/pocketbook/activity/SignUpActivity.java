@@ -162,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if(successfulUpload) {
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!",
                                         Toast.LENGTH_SHORT).show();
-                                profilePicture = username+".jpg";
+                                String profilePicture = username+".jpg";
                                 user = new User(firstName,lastName,email,username,password,profilePicture);
                                 mFirestore = FirebaseFirestore.getInstance();
                                 mFirestore.collection("users").document(email).set(user);

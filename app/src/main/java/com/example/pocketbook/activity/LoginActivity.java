@@ -90,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
-
                             assert user != null;
                             DocumentReference docRef = FirebaseFirestore.getInstance()
                                     .collection("users").document(Objects.requireNonNull(user.getEmail()));
@@ -101,14 +100,14 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
                                             current_user = document.toObject(User.class);
-//                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
-//                                                    Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
+                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
+                                                    Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                             intent.putExtra("CURRENT_USER", current_user);
                                             startActivity(intent);
-
+                                            finish();
                                         } else {
                                             Log.d(TAG, "No such document");
                                         }
@@ -118,24 +117,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
 
-
-                            Log.e(TAG, "DocumentSnapshot data: " + current_user.getUsername());
-                            System.out.println(current_user.getUsername());
-                            new ProfileFragment(current_user);
-//                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
-//                                    Toast.LENGTH_SHORT).show();
-
-//                            User current_user = User();
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-//                            updateUI(user);
-
-                            Log.e(TAG, "DocumentSnapshot data: " + current_user.getUsername());
-
-//                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-//                            intent.putExtra("CURRENT_USER", current_user);
-//                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -144,8 +125,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
-
 }
-

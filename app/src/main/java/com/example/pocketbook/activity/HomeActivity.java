@@ -30,9 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private static final String TAG ="HOME_ACTIVITY";
-
     private static final String TAG ="MainActivity";
 
     private FirebaseAuth mAuth;
@@ -54,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("CURRENT_USER");
+//        Toast.makeText(this,user.getFirstName(),Toast.LENGTH_SHORT).show();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
@@ -76,7 +74,6 @@ public class HomeActivity extends AppCompatActivity {
                     switch (item.getItemId()){
                         case R.id.bottom_nav_home:
                             selectedFragment = new HomeFragment();
-
                             break;
                         case R.id.bottom_nav_search:
                             selectedFragment = new SearchFragment();
@@ -86,21 +83,6 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         case R.id.bottom_nav_scan:
                             selectedFragment = new ScanFragment();
-                            break;
-                        case R.id.bottom_nav_profile:
-                            selectedFragment = new ProfileFragment();
-                            break;
-                        case R.id.bottom_nav_search:
-                            selectedFragment = new SearchFragment();
-
-                            break;
-                        case R.id.bottom_nav_add:
-                            selectedFragment = new AddFragment();
-
-                            break;
-                        case R.id.bottom_nav_scan:
-                            selectedFragment = new ScanFragment();
-
                             break;
                         case R.id.bottom_nav_profile:
                             selectedFragment = new ProfileFragment(user);

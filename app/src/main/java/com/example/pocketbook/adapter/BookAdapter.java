@@ -22,6 +22,7 @@ import com.example.pocketbook.activity.ViewMyBookActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (book.getOwner().equals("test@pocketbook.com")) {
+                if (book.getOwner().equals("jane@gmail.com")) {
                     Log.e("OWNERIN", book.getOwner());
                     Context context = holder.itemView.getContext();
                     Intent intent = new Intent(context, ViewMyBookActivity.class);

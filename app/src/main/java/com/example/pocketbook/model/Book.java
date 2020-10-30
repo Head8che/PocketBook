@@ -107,7 +107,7 @@ public class Book implements Serializable {
         ownedBooks list with a new or updated bookID.
      */
     /* Setter Functions */
-    public void editBook(String id, String title, String author, String isbn, String owner,
+    public void setBook(String title, String author, String isbn, String owner,
                         String status, String comment, String condition, String photo) {
         this.id = id.trim();
         this.title = title.trim();
@@ -159,4 +159,3 @@ public class Book implements Serializable {
 //    }
 
 }
-

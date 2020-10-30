@@ -21,6 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.util.Objects;
 
@@ -32,10 +36,11 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     private User current_user = new User();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
+        setContentView(R.layout.activity_login);
         signUp = findViewById(R.id.RegisterBtn);
         login = findViewById(R.id.LoginBtn);
         forgotPass = findViewById(R.id.ForgotPass);

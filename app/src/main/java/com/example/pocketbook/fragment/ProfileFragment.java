@@ -6,14 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,9 +45,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
-            container.removeAllViews();
+          container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(R.layout.profile_layout, container, false);
         String first_Name = currentUser.getFirstName();
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();

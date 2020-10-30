@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,8 +13,7 @@
         android:layout_height="@dimen/small_book_height"
         app:cardCornerRadius="4dp"
         app:cardElevation="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/item_book_cover"
@@ -30,42 +29,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginLeft="5dp"
         android:text="Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toEndOf="@+id/book_card"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_toRightOf="@id/book_card"/>
 
     <TextView
         android:id="@+id/item_book_owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Owned by You"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toEndOf="@+id/book_card"
-        app:layout_constraintTop_toBottomOf="@+id/item_book_description" />
+        android:layout_below="@+id/item_book_description"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp"
+        android:layout_toRightOf="@id/book_card"
+        android:text="Owned by You" />
 
     <TextView
         android:id="@+id/item_book_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="12dp"
+        android:layout_toRightOf="@id/book_card"
+        android:layout_below="@id/item_book_title"
         android:text="Long description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.122"
-        app:layout_constraintStart_toEndOf="@id/book_card"
-        app:layout_constraintTop_toBottomOf="@+id/item_book_title" />
+        android:maxLength="70"/>
 
     <TextView
         android:id="@+id/item_book_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="54dp"
         android:layout_marginTop="12dp"
-        android:text="Status"
-        app:layout_constraintStart_toEndOf="@+id/item_book_title"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_toEndOf="@+id/item_book_title"
+        android:layout_toRightOf="@id/book_card"
+        android:text="Status" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -2,11 +2,13 @@ package com.example.pocketbook.adapter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,9 +38,9 @@ public class LinearBookAdapter extends FirestoreAdapter<LinearBookAdapter.ViewHo
 
     @NonNull
     @Override
-    public LinearBookAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new LinearBookAdapter.ViewHolder(inflater.inflate(R.layout.item_book_linear, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.item_book_linear, parent, false));
     }
 
     @Override
@@ -66,7 +68,8 @@ public class LinearBookAdapter extends FirestoreAdapter<LinearBookAdapter.ViewHo
                          final OnBookSelectedListener listener){
             Book book = snapshot.toObject(Book.class);
 
-            bookTitle.setText(book.getTitle());
+            Log.d("LinearBookAdapter", book.getBookTitle());
+            bookTitle.setText(book.getBookTitle());
             description.setText(book.getComment());
             username.setText(book.getOwner());
             status.setText(book.getStatus());

@@ -18,6 +18,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.util.ScrollUpdate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,6 +42,8 @@ public class HomeFragment extends Fragment {
     private boolean isScrolling = false;
     private boolean isLastItemReached = false;
 
+    private ScrollUpdate scrollUpdate;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,7 @@ public class HomeFragment extends Fragment {
         mFirestore = FirebaseFirestore.getInstance();
 
         // Query to retrieve all books
-        mQuery = mFirestore.collection("books").limit(LIMIT);
+        mQuery = mFirestore.collection("catalogue").limit(LIMIT);
     }
 
     @Nullable
@@ -58,73 +61,15 @@ public class HomeFragment extends Fragment {
         if (container != null) {
             container.removeAllViews();
         }
+
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
         mAdapter = new BookAdapter(catalogue, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
-        mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        Book book = document.toObject(Book.class);
-                        catalogue.addBook(book);
-                    }
-                    mAdapter.notifyDataSetChanged();
-                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
-
-                    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                isScrolling = true;
-                            }
-                        }
-
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-
-                            GridLayoutManager gridLayoutManager = ((GridLayoutManager) recyclerView.getLayoutManager());
-                            assert gridLayoutManager != null;
-                            int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
-                            int visibleItemCount = gridLayoutManager.getChildCount();
-                            int totalItemCount = gridLayoutManager.getItemCount();
-
-                            if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-                                isScrolling = false;
-
-                                if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
-
-                                    Query nextQuery = mFirestore.collection("books").startAfter(lastVisible).limit(LIMIT);
-                                    nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> t) {
-                                            if (t.isSuccessful()) {
-                                                for (DocumentSnapshot d : t.getResult()) {
-                                                    Book book = d.toObject(Book.class);
-                                                    catalogue.addBook(book);
-                                                }
-                                                mAdapter.notifyDataSetChanged();
-                                                lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);
-
-                                                if (t.getResult().size() < LIMIT) {
-                                                    isLastItemReached = true;
-                                                }
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    };
-                    mBooksRecycler.addOnScrollListener(onScrollListener);
-                }
-            }
-        });
+        scrollUpdate = new ScrollUpdate(catalogue, mQuery, mAdapter, mBooksRecycler);
+        scrollUpdate.load();
 
         return v;
     }

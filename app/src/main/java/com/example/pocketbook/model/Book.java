@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class Book implements Serializable {
     private String id;
-    private String title;
+    private String bookTitle;
     private String author;
     private String isbn;
     private String owner;
@@ -36,15 +36,15 @@ public class Book implements Serializable {
     /**
      * Minimum arg constructor for Book
      * @param id : uniquely identifies the book in the db
-     * @param title : title of book
+     * @param bookTitle : bookTitle of book
      * @param author : author of book
      * @param isbn : isbn as a String
      * @param owner : Owner of Book
      * @param status : indicates availability of book (available, requested, accepted, borrowed)
      */
-    public Book(String id, String title, String author, String isbn, String owner, String status) {
+    public Book(String id, String bookTitle, String author, String isbn, String owner, String status) {
         this.id = id.trim();
-        this.title = title.trim();
+        this.bookTitle = bookTitle.trim();
         this.author = author.trim();
         this.isbn = isbn.trim();
         this.owner = owner.trim();
@@ -54,7 +54,7 @@ public class Book implements Serializable {
     /**
      * Maximum arg constructor for Book
      * @param id : unique book id
-     * @param title : title of book
+     * @param bookTitle : bookTitle of book
      * @param author : author of book
      * @param isbn : isbn retrieved as String of Book
      * @param owner : User that owns the Book
@@ -63,10 +63,10 @@ public class Book implements Serializable {
      * @param condition : Condition of the book, set by owner
      * @param photo : photo string of book by owner
      */
-    public Book(String id, String title, String author, String isbn, String owner,
+    public Book(String id, String bookTitle, String author, String isbn, String owner,
                 String status, String comment, String condition, String photo ) {
         this.id = id.trim();
-        this.title = title.trim();
+        this.bookTitle = bookTitle.trim();
         this.author = author.trim();
         this.isbn = isbn.trim();
         this.owner = owner.trim();
@@ -82,7 +82,7 @@ public class Book implements Serializable {
 
     /* Getter Functions */
     public String getId() { return this.id; }
-    public String getTitle() { return this.title; }
+    public String getBookTitle() { return this.bookTitle; }
     public String getAuthor() { return this.author; }
     public String getISBN() { return this.isbn; }
     public String getOwner() { return this.owner; }
@@ -107,10 +107,10 @@ public class Book implements Serializable {
         ownedBooks list with a new or updated bookID.
      */
     /* Setter Functions */
-    public void editBook(String id, String title, String author, String isbn, String owner,
+    public void editBook(String id, String bookTitle, String author, String isbn, String owner,
                         String status, String comment, String condition, String photo) {
         this.id = id.trim();
-        this.title = title.trim();
+        this.bookTitle = bookTitle.trim();
         this.author = author.trim();
         this.isbn = isbn.trim();
         this.owner = owner.trim();
@@ -124,7 +124,7 @@ public class Book implements Serializable {
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", this.id);
-        docData.put("title", this.title);
+        docData.put("bookTitle", this.bookTitle);
         docData.put("author", this.author);
         docData.put("isbn", this.isbn);
         docData.put("owner", this.owner);

@@ -150,7 +150,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void Register(String email, String password, String firstName, String lastName, String username){
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -158,6 +157,7 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+
                             boolean successfulUpload = uploadImage();
                             if(successfulUpload) {
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!",

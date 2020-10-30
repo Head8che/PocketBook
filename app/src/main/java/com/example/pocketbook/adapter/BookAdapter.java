@@ -22,6 +22,7 @@ import com.example.pocketbook.activity.ViewMyBookActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
 import java.util.ArrayList;

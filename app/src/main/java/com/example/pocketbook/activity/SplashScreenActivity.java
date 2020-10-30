@@ -23,7 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         /* UNCOMMENT OUT THE LINE BELOW TO ACCESS LOGIN PAGE */
-//         FirebaseAuth.getInstance().signOut();
+         FirebaseAuth.getInstance().signOut();
 
         /* Duration of wait in milliseconds */
         int SPLASH_DISPLAY_LENGTH = 3000;

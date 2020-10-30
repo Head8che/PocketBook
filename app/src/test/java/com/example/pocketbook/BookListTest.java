@@ -5,6 +5,9 @@ import android.app.Instrumentation;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;

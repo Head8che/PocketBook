@@ -165,7 +165,7 @@ public class ViewBookFragment extends Fragment {
                                     Log.w("test", "Error adding document", e);
                                 }
                             });
-                    db.collection("books").document(bookId)
+                    db.collection("catalogue").document(bookId)
                             .update("status", "requested")
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

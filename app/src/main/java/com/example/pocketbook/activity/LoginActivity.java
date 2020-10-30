@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
-
                             assert user != null;
                             DocumentReference docRef = FirebaseFirestore.getInstance()
                                     .collection("users").document(Objects.requireNonNull(user.getEmail()));
@@ -96,13 +95,14 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
                                             current_user = document.toObject(User.class);
-//                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
-//                                                    Toast.LENGTH_SHORT).show();
+                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
+                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
+                                                    Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                             intent.putExtra("CURRENT_USER", current_user);
                                             startActivity(intent);
+                                            finish();
                                         } else {
                                             Log.d(TAG, "No such document");
                                         }
@@ -111,11 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                            Log.e(TAG, "DocumentSnapshot data: " + current_user.getUsername());
 
-//                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-//                            intent.putExtra("CURRENT_USER", current_user);
-//                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -124,8 +120,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
-
 }
-

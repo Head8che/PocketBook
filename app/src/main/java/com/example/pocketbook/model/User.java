@@ -10,8 +10,8 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String photo;
-
     public User() {} // used by firestore to automatically create new object
+
 
 
     public User(String firstName, String lastName, String email, String username, String password, String photo) {
@@ -20,7 +20,7 @@ public class User implements Serializable {
         this.email = email.trim();
         this.username = username.trim();
         this.password = password.trim();
-        this.photo = photo.trim();
+        this.photo = photo;
     }
 
     public User(String firstName, String lastName, String email, String username, String password) {

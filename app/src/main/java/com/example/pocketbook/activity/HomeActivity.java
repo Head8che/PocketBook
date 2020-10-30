@@ -46,12 +46,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_layout);
         Intent intent = getIntent();
-
         user = (User) intent.getSerializableExtra("CURRENT_USER");
+        Toast.makeText(this,user.getFirstName(),Toast.LENGTH_SHORT).show();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
-
     }
 
     private void toastMessage(String message) {
@@ -66,23 +65,18 @@ public class HomeActivity extends AppCompatActivity {
                     switch (item.getItemId()){
                         case R.id.bottom_nav_home:
                             selectedFragment = new HomeFragment();
-//                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.bottom_nav_search:
                             selectedFragment = new SearchFragment();
-//                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.bottom_nav_add:
                             selectedFragment = new AddFragment();
-//                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.bottom_nav_scan:
                             selectedFragment = new ScanFragment();
-//                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.bottom_nav_profile:
                             selectedFragment = new ProfileFragment(user);
-//                            selectedFragment.setArguments(bundle);
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,selectedFragment).commit();

@@ -7,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.model.Book;
@@ -26,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.util.Objects;
 
@@ -78,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     public void Register(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -100,8 +100,14 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
                                             current_user = document.toObject(User.class);
+                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
+                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
+                                                    Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                            intent.putExtra("CURRENT_USER", current_user);
+                                            startActivity(intent);
+                                            finish();
                                         } else {
                                             Log.d(TAG, "No such document");
                                         }
@@ -111,20 +117,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
 
-                            Log.e(TAG, "DocumentSnapshot data: " + current_user.getUsername());
-
-                            System.out.println(current_user.getUsername());
-
-                            new ProfileFragment(current_user);
-
-//                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
-//                                    Toast.LENGTH_SHORT).show();
-
-//                            User current_user = User();
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-//                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -133,7 +125,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
-
 }

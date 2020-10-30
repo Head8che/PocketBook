@@ -49,10 +49,17 @@ public class HomeFragment extends Fragment {
         mFirestore = FirebaseFirestore.getInstance();
 
         // Query to retrieve all books
+
         mQuery = mFirestore.collection("books").limit(LIMIT);
     }
 
     @Nullable
+
+    private void retrieveData() {
+        Query query = mFirestore.collection("books");
+    }
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {

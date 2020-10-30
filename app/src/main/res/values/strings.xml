@@ -2,6 +2,8 @@
     <string name="app_name">Pocketbook</string>
     <string name="title_activity_view_my_book">ViewMyBookActivity</string>
     <string name="view_my_book_tab_1_title">Book</string>
+    <string name="profileTab1">Owner</string>
+    <string name="profileTab2">Borrower</string>
     <string name="view_my_book_tab_2_title">Requests</string>
     <string name="home">Home</string>
     <string name="search">Search</string>
@@ -20,4 +22,6 @@
     <string name="lengthier_author_name">Lengthier Author Name</string>
     <string name="request">request</string>
     <string name="delete">Delete</string>
+    <string name="email_password"><![CDATA[Email & Password]]></string>
+    <string name="click_here_to_add_your_profile_picture">Click here to add your profile picture.</string>
 </resources>

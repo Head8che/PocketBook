@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.pocketbook.util.Parser;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,6 +15,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Book implements Serializable {
     private String id;
@@ -26,12 +28,48 @@ public class Book implements Serializable {
     private String condition;
     private String photo;
 
+    Parser parser;
 
     /**
      * Firestore constructor
      *  to populate a book
      */
     public Book() {}
+
+
+    /**
+     * TEMP?
+     * Constructor for Add Book, without id
+     * @param title
+     * @param author
+     * @param isbn
+     * @param owner
+     * @param status
+     */
+    public Book(String title, String author, String isbn, String owner, String status) {
+        // validates the input before setting them
+        Parser parser = new Parser(title, author, isbn);
+
+        if (parser.checkTitleAndAuthor()) {
+            this.title = title.trim();
+            this.author = author.trim();
+        }
+        else {
+            this.title = "No Title";
+            this.author = "No Author";
+        }
+
+        if (parser.checkIsbn()) {
+            this.isbn = isbn.trim();
+        }
+        else {
+            this.isbn = "N/A";
+        }
+        this.owner = owner.trim();
+        this.status = status.trim();
+
+    }
+
 
     /**
      * Minimum arg constructor for Book
@@ -43,12 +81,29 @@ public class Book implements Serializable {
      * @param status : indicates availability of book (available, requested, accepted, borrowed)
      */
     public Book(String id, String title, String author, String isbn, String owner, String status) {
+        // validates the input before setting them
+        Parser parser = new Parser(title, author, isbn);
+
         this.id = id.trim();
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
+
+        if (parser.checkTitleAndAuthor()) {
+            this.title = title.trim();
+            this.author = author.trim();
+        }
+        else {
+            this.title = "No Title";
+            this.author = "No Author";
+        }
+
+        if (parser.checkIsbn()) {
+            this.isbn = isbn.trim();
+        }
+        else {
+            this.isbn = "N/A";
+        }
         this.owner = owner.trim();
         this.status = status.trim();
+
     }
 
     /**
@@ -117,6 +172,44 @@ public class Book implements Serializable {
         ownedBooks list with a new or updated bookID.
      */
     /* Setter Functions */
+    public void editBook(String id, String title, String author, String isbn, String owner,
+                        String status, String comment, String condition, String photo) {
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim();
+        this.status = status.trim();
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? null : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? null : condition.trim();
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? null : photo.trim();
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("title", this.title);
+        docData.put("author", this.author);
+        docData.put("isbn", this.isbn);
+        docData.put("owner", this.owner);
+        docData.put("status", this.status);
+        docData.put("comment", this.comment);
+        docData.put("condition", this.condition);
+        docData.put("photo", this.photo);
+
+        FirebaseFirestore.getInstance().collection("books").document(this.id)
+            .set(docData)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("SET_BOOK", "Error writing document", e);
+                }
+            });
 
 //    public void editBook(String id, String title, String author, String isbn, String owner,
 //                        String status, String comment, String condition, String photo) {
@@ -169,4 +262,5 @@ public class Book implements Serializable {
 //        return this.id.compareTo(book.getTitle());
 //    }
 
+    }
 }

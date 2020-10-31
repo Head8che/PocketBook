@@ -7,16 +7,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+
+import java.util.Objects;
 
 /** Login **/
 public class LoginActivity extends AppCompatActivity {
@@ -24,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button signUp, login, forgotPass;
     private EditText userEmail, userPassword;
     private final String TAG = "MainActivity";
+    private User current_user = new User();
 
 
     @Override
@@ -66,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     public void Register(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -77,11 +89,34 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Welcome to Pocketbook.",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-//                            intent.putExtra('username')
-                            startActivity(intent);
-                            finish();
-//                            updateUI(user);
+
+                            assert user != null;
+                            DocumentReference docRef = FirebaseFirestore.getInstance()
+                                    .collection("users").document(Objects.requireNonNull(user.getEmail()));
+
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            current_user = document.toObject(User.class);
+                                            Log.e(TAG, "DocumentSnapshot data: " + document.getData());
+                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
+                                                    Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                            intent.putExtra("CURRENT_USER", current_user);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    } else {
+                                        Log.d(TAG, "get failed with ", task.getException());
+                                    }
+                                }
+                            });
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -90,7 +125,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
-
 }

@@ -81,8 +81,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     public void startListening() {
         if (mQuery != null && mRegistration == null) {
             mRegistration = mQuery.addSnapshotListener(this);
-            System.out.println("MSNAPPP: " + mSnapshots.toString());
-            Log.e(TAG, "MSNAPPP: " + mSnapshots.toString());
         }
     }
 
@@ -94,6 +92,20 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
         mSnapshots.clear();
         notifyDataSetChanged();
+    }
+
+
+    public void setQuery(Query query) {
+        // Stop listening
+        stopListening();
+
+        // Clear existing data
+        mSnapshots.clear();
+        notifyDataSetChanged();
+
+        // Listen to new query
+        mQuery = query;
+        startListening();
     }
 
     @Override

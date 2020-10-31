@@ -1,47 +1,57 @@
 package com.example.pocketbook.model;
 
-public class User {
+import java.io.Serializable;
 
-    private String fullName;
+public class User implements Serializable {
+
+    private String firstName;
+    private String lastName;
     private String email;
     private String username;
     private String password;
     private String photo;
-
     public User() {} // used by firestore to automatically create new object
 
-    public User(String fullName, String email, String username) {
-        this.fullName = fullName;
-        this.email = email;
-        this.username = username;
-    }
 
-    public User(String fullName, String email) {
-        this.fullName = fullName;
-        this.email = email;
-    }
 
-    public User(String fullName, String email, String username, String password) {
-        this.fullName = fullName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(String fullName, String email, String username, String password, String photo) {
-        this.fullName = fullName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+    public User(String firstName, String lastName, String email, String username, String password, String photo) {
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
+        this.email = email.trim();
+        this.username = username.trim();
+        this.password = password.trim();
         this.photo = photo;
     }
 
-    public String getFullName() {
-        return fullName;
+    public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
+        this.email = email.trim();
+        this.username = username.trim();
+        this.password = password.trim();
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public User(String firstName, String lastName, String email, String username) {
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
+        this.email = email.trim();
+        this.username = username.trim();
+        this.password = password.trim();
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

@@ -1,61 +1,37 @@
 package com.example.pocketbook.model;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class Request {
+public class Request implements Serializable {
     private String requester;
     private String requestee;
-    private String bookRequested;
+    private String requestedBook;
     private String requestDate;
-    private String requestStatus;
+    private Book requestedBookObject;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
-    public Request(String requester, String requestee, String bookRequested, String requestDate) {
-        this.requester = requester;
-        this.requestee = requestee;
-        this.bookRequested = bookRequested;
-        this.requestDate = requestDate;
-        this.requestStatus = "Pending";
+    public Request(String requester, String requestee, String requestedBook) {
+        this.requester = requester.trim().toLowerCase();  // lowercase email
+        this.requestee = requestee.trim().toLowerCase();  // lowercase email
+        this.requestedBook = requestedBook.trim();
+        this.requestDate = LocalDateTime.now().format(formatter).trim();
+        this.requestedBookObject = null;
     }
 
-    public String getRequester() {
-        return requester;
+    public Request(String requester, String requestee, Book requestedBookObject) {
+        this.requester = requester.trim().toLowerCase();  // lowercase email
+        this.requestee = requestee.trim().toLowerCase();  // lowercase email
+        this.requestedBook = requestedBookObject.getId().trim();
+        this.requestedBookObject = requestedBookObject;
+        this.requestDate = LocalDateTime.now().format(formatter).trim();
     }
 
-    public void setRequester(String requester) {
-        this.requester = requester;
-    }
-
-    public String getRequestee() {
-        return requestee;
-    }
-
-    public void setRequestee(String requestee) {
-        this.requestee = requestee;
-    }
-
-    public String getBookRequested() {
-        return bookRequested;
-    }
-
-    public void setBookRequested(String bookRequested) {
-        this.bookRequested = bookRequested;
-    }
-
-    public String getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(String requestDate) {
-        this.requestDate = requestDate;
-    }
-
-    public String getRequestStatus() {
-        return requestStatus;
-    }
-
-    public void setRequestStatus(String requestStatus) {
-        this.requestStatus = requestStatus;
-    }
-
+    public String getRequester() { return this.requester; }
+    public String getRequestee() { return this.requestee; }
+    public String getRequestedBook() { return this.requestedBook; }
+    public Book getRequestedBookObject() { return this.requestedBookObject; }
+    public String getRequestDate() { return this.requestDate; }
 
 }

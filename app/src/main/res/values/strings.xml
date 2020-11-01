@@ -21,6 +21,8 @@
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>
     <string name="request">request</string>
+    <string name="search_hint">Title, Author, ISBN</string>
+
     <string name="email_password"><![CDATA[Email & Password]]></string>
     <string name="click_here_to_add_your_profile_picture">Click here to add your profile picture.</string>
     <string name="title">Title</string>

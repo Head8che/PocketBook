@@ -53,7 +53,6 @@ public class ViewMyBookBookFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_my_book_book, container, false);
 
-        /* UNCOMMENT AFTER THE OTHER STATUS ICONS ARE SET UP*/
         String bookTitle = book.getTitle();
         String bookAuthor = book.getAuthor();
         String bookISBN = book.getISBN();

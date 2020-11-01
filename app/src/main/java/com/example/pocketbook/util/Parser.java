@@ -7,11 +7,29 @@ package com.example.pocketbook.util;
 public class Parser {
 
     String title, author, isbn, comment;
+    String[] untrimmed;
+    String[] trimmed;
 
+    /**
+     * Minimum arg constructor
+     * @param title
+     * @param author
+     * @param isbn
+     */
     public Parser(String title, String author, String isbn) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
+        String[] untrimmed = {title, author, isbn};
+        String[] trimmed = trimAll(untrimmed);
+
+        this.title = trimmed[0];
+        this.author = trimmed[1];
+        this.isbn = trimmed[2];
+    }
+
+    public String[] trimAll(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            args[i].trim();
+        }
+        return args;
     }
 
 

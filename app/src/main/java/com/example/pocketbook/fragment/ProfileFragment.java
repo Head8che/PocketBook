@@ -2,13 +2,16 @@ package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.util.ScrollUpdate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,6 +31,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private static final int numColumns = 2;
@@ -40,16 +47,29 @@ public class ProfileFragment extends Fragment {
     private TextView editProfile;
     private static final String USERS = "users";
     private User currentUser;
-    private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
+    private ScrollUpdate scrollUpdate;
 
-    public ProfileFragment(){
-        // Empty Constructor
+    public static ProfileFragment newInstance(User user) {
+        ProfileFragment profileFragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("PF_USER", user);
+        profileFragment.setArguments(args);
+        return profileFragment;
     }
 
-    public ProfileFragment(User currentUser){
-        this.currentUser = currentUser;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            this.currentUser = (User) getArguments().getSerializable("PF_USER");
+        }
+
+        // Initialize Firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        // Query to retrieve all books
+        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -61,86 +81,32 @@ public class ProfileFragment extends Fragment {
         }
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
+        StorageReference userProfilePicture = currentUser.getProfilePicture();
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
-        mAdapter = new BookAdapter(ownedBooks, getActivity());
+        mAdapter = new BookAdapter(currentUser, ownedBooks, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
+
 
         String first_Name = currentUser.getFirstName();
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();
         // TODO: obtain user_photo from firebase
         String user_Pic = currentUser.getPhoto();
-
+        ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
         TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
         TextView UserName = (TextView) v.findViewById(R.id.user_name);
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
 
+        GlideApp.with(Objects.requireNonNull(getContext()))
+                .load(userProfilePicture)
+                .circleCrop()
+                .into(profilePicture);
+
         editProfile = v.findViewById(R.id.edit_profile_button);
 
-        mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        Book book = document.toObject(Book.class);
-                        ownedBooks.addBook(book);
-                    }
-                    mAdapter.notifyDataSetChanged();
-//                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
-
-
-                    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                isScrolling = true;
-                            }
-                        }
-
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-
-                            GridLayoutManager gridLayoutManager = ((GridLayoutManager) recyclerView.getLayoutManager());
-                            assert gridLayoutManager != null;
-                            int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
-                            int visibleItemCount = gridLayoutManager.getChildCount();
-                            int totalItemCount = gridLayoutManager.getItemCount();
-
-                            if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-                                isScrolling = false;
-
-                                if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
-
-                                    Query nextQuery = mFirestore.collection("books").startAfter(lastVisible).limit(LIMIT);
-                                    nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> t) {
-                                            if (t.isSuccessful()) {
-                                                for (DocumentSnapshot d : t.getResult()) {
-                                                    Book book = d.toObject(Book.class);
-                                                    ownedBooks.addBook(book);
-                                                }
-                                                mAdapter.notifyDataSetChanged();
-                                                lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);
-
-                                                if (t.getResult().size() < LIMIT) {
-                                                    isLastItemReached = true;
-                                                }
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    };
-                    mBooksRecycler.addOnScrollListener(onScrollListener);
-                }
-            }
-        });
-
+        scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
+        scrollUpdate.load();
 
         //
 //        private FirebaseAuth mAuth;
@@ -170,17 +136,5 @@ public class ProfileFragment extends Fragment {
         });
         return v;
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
-        // Query to retrieve all books
-        mQuery = mFirestore.collection("books").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
-
-    }
-
-
 
 }

@@ -149,7 +149,7 @@ public class EditProfileFragment extends Fragment {
                     return;
 
                 }
-                currentUser = new User(first_Name,last_Name, username,email,password);
+                currentUser = new User(first_Name,last_Name, username,email,password, null);
                 UpdateInfo(email,password);
                 mFirestore = FirebaseFirestore.getInstance();
                 mFirestore = FirebaseFirestore.getInstance();

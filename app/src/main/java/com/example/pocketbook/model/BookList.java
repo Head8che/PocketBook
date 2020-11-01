@@ -15,6 +15,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,6 @@ public class BookList implements Serializable {
      */
     public BookList() {
         this.bookList = new LinkedHashMap<String, Book>();
-//        FirebaseApp.initializeApp(this);
     }
 
     /**
@@ -37,14 +37,32 @@ public class BookList implements Serializable {
      * @return
      *      bookList as List<Book>
      */
+    /* TODO: EXTEND */
     public Map<String, Book> getBookList() {
         return bookList;
     }
 
-    public boolean containsBook(Book book) {
-        // returns true if book can be found in bookList
-        return bookList.get(book.getId()) != null;
+    /* TODO: EXTEND */
+    public Book getBook(String id) {
+        return bookList.get(id);
     }
+
+    // this method is specific to BookList (i.e. not from superclass)
+    public Book getBookAtPosition(int position) {
+        List<String> keys = new ArrayList<String>(bookList.keySet());
+        String positionalBookID = keys.get(position);
+        return bookList.get(positionalBookID);
+    }
+
+    /* TODO: EXTEND */
+    public int getSize() {
+        return bookList.size();
+    }
+
+    /* TODO: EXTEND */
+    // overloaded containsBook methods return true if book can be found in bookList
+    public boolean containsBook(String bookID) { return bookList.get(bookID) != null; }
+    public boolean containsBook(Book book) { return bookList.get(book.getId()) != null; }
 
 
     /**
@@ -52,58 +70,10 @@ public class BookList implements Serializable {
      * @param book
      *      Candidate book to add
      */
+    /* TODO: EXTEND */
     public boolean addBook(Book book) {
-        String bookID = book.getId();
-        if (bookList.get(bookID) != null) {  // if book is already in list
-            return false;
-        }
-        bookList.put(bookID, book);
-
-        Map<String, Object> docData = new LinkedHashMap<>();
-        docData.put("id", book.getId());
-        docData.put("title", book.getTitle());
-        docData.put("author", book.getAuthor());
-        docData.put("isbn", book.getISBN());
-        docData.put("owner", book.getOwner());
-        docData.put("status", book.getStatus());
-        docData.put("comment", book.getComment());
-        docData.put("condition", book.getCondition());
-        docData.put("photo", book.getPhoto());
-
-//        FirebaseFirestore.getInstance().collection("books").document(book.getId())
-//                .set(docData)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w("SET_BOOK", "Error writing document", e);
-//                    }
-//                });
-
-        /*
-            TODO: Update book owner's owned_books list
-        */
-
-        return true;
-    }
-
-    public Book getBook(String id) {
-        return bookList.get(id);
-    }
-
-    public Book getBookAtPosition(int position) {
-        List<String> keys = new ArrayList<String>(bookList.keySet());
-        String positionalBookID = keys.get(position);
-        return bookList.get(positionalBookID);
-    }
-
-    public int getSize() {
-        return bookList.size();
+        addBookToListFirebase(book);
+        return addBookToListLocal(book);
     }
 
     /**
@@ -112,39 +82,84 @@ public class BookList implements Serializable {
      * @param book
      *      Candidate book to remove
      */
+    /* TODO: EXTEND */
     public boolean removeBook(Book book) {
+        removeBookFromListFirebase(book);
+        return removeBookFromListLocal(book);
+    }
+
+    /* TODO: EXTEND & OVERRIDE */
+    public boolean addBookToListLocal(Book book) {
         String bookID = book.getId();
-        if (bookList.get(bookID) == null) {  // if book is not in list
+        if (containsBook(bookID)) {  // if book is already in list
             return false;
         }
-        bookList.remove(bookID);
-
-//        FirebaseFirestore.getInstance().collection("books").document(book.getId())
-//                .delete()
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("DELETE_BOOK", "DocumentSnapshot successfully deleted!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w("DELETE_BOOK", "Error deleting document", e);
-//                    }
-//                });
-
-        /*
-            TODO: Update book owner's owned_books list
-        */
-
+        bookList.put(bookID, book);
         return true;
     }
 
-    public void clear() {
-        List<String> keys = new ArrayList<String>(bookList.keySet());
-        for (String key : keys) {
-            bookList.remove(getBook(key));
+    /* TODO: EXTEND & OVERRIDE */
+    public boolean removeBookFromListLocal(Book book) {
+        String bookID = book.getId();
+        if (!containsBook(bookID)) {  // if book is not in list
+            return false;
         }
+        bookList.remove(bookID);
+        return true;
+    }
+
+    /* TODO: EXTEND & OVERRIDE */
+    public void addBookToListFirebase(Book book) {
+
+        if (containsBook(book)) {  // if book is already in list
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("catalogue").document(book.getId())
+                .update("id", book.getId(),
+                        "title", book.getTitle(),
+                        "author", book.getAuthor(),
+                        "isbn", book.getISBN(),
+                        "owner", book.getOwner(),
+                        "status", book.getStatus(),
+                        "comment", book.getComment(),
+                        "condition", book.getCondition(),
+                        "photo", book.getPhoto()
+                )
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("NEW_BOOK", "Book data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("NEW_BOOK", "Error writing book data!");
+                    }
+                });
+    }
+
+    /* TODO: EXTEND & OVERRIDE */
+    public void removeBookFromListFirebase(Book book) {
+
+        if (!containsBook(book)) {  // if book is not already in list
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("catalogue").document(book.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("REMOVE_BOOK", "Book data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("REMOVE_BOOK", "Error writing book data!");
+                    }
+                });
     }
 }

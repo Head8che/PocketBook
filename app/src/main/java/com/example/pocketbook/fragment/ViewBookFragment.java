@@ -48,7 +48,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 
-public class ViewBookFragment extends Fragment {
+public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;

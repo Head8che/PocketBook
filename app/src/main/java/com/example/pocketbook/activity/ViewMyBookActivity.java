@@ -65,9 +65,9 @@ public class ViewMyBookActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
 //        if (extras) {
-        book = (Book) intent.getSerializableExtra("BOOK");
-        user = (User) intent.getSerializableExtra("USER");
-        catalogue = (BookList) intent.getSerializableExtra("CATALOGUE");
+        book = (Book) intent.getSerializableExtra("BAI_BOOK");
+        user = (User) intent.getSerializableExtra("BAI_USER");
+        catalogue = (BookList) intent.getSerializableExtra("BAI_CATALOGUE");
 //        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.viewMyBookToolbar);
@@ -123,19 +123,19 @@ public class ViewMyBookActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()){
                     case R.id.bottom_nav_home:
-                        selectedFragment = new HomeFragment();
+                        selectedFragment = HomeFragment.newInstance(user, new BookList());
                         break;
                     case R.id.bottom_nav_search:
-                        selectedFragment = new SearchFragment();
+                        selectedFragment = SearchFragment.newInstance(user, new BookList());
                         break;
                     case R.id.bottom_nav_add:
-                        selectedFragment = new AddFragment();
+                        selectedFragment = AddFragment.newInstance(user, new BookList());
                         break;
                     case R.id.bottom_nav_scan:
                         selectedFragment = new ScanFragment();
                         break;
                     case R.id.bottom_nav_profile:
-                        selectedFragment = new ProfileFragment();
+                        selectedFragment = ProfileFragment.newInstance(user);
                         break;
                 }
                 for (Fragment fragment : fm.getFragments()) {

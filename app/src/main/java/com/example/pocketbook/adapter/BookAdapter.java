@@ -22,6 +22,7 @@ import com.example.pocketbook.activity.ViewMyBookActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.google.firebase.firestore.Query;
 
 import java.io.Serializable;
@@ -31,10 +32,12 @@ import java.util.Objects;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private BookList list;
+    private User currentUser;
     private Activity activity;
 
-    public BookAdapter(BookList list, Activity activity) {
+    public BookAdapter(User currentUser, BookList list, Activity activity) {
         this.list = list;
+        this.currentUser = currentUser;
         this.activity = activity;
     }
 
@@ -59,13 +62,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     Log.e("OWNERIN", book.getOwner());
                     Context context = holder.itemView.getContext();
                     Intent intent = new Intent(context, ViewMyBookActivity.class);
-                    intent.putExtra("BOOK", (Serializable) book);
-                    intent.putExtra("CATALOGUE", (Serializable) list);
+                    intent.putExtra("BAI_BOOK", (Serializable) book);
+                    intent.putExtra("BAI_USER", (Serializable) currentUser);
+                    intent.putExtra("BAI_CATALOGUE", (Serializable) list);
                     context.startActivity(intent);
                 } else {
-                    ViewBookFragment nextFrag = new ViewBookFragment();
+                    ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("book",book);
+                    bundle.putSerializable("BA_USER", currentUser);
+                    bundle.putSerializable("BA_BOOK", book);
                     nextFrag.setArguments(bundle);
                     activity.getFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
                     //activity.getFragmentManager().beginTransaction().replace(R.id., nextFrag, "ViewBookFragment").addToBackStack(null).commit();

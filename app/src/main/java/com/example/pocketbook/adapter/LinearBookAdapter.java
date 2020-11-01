@@ -18,6 +18,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
@@ -66,7 +67,7 @@ public class LinearBookAdapter extends FirestoreAdapter<LinearBookAdapter.ViewHo
 
         public void bind(final DocumentSnapshot snapshot,
                          final OnBookSelectedListener listener){
-            Book book = snapshot.toObject(Book.class);
+            Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);
 
 //            Log.d("LinearBookAdapter", book.getBookTitle());
             bookTitle.setText(book.getTitle());

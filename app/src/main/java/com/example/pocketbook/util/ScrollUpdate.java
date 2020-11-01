@@ -44,8 +44,8 @@ public class ScrollUpdate {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
-                        Book book = document.toObject(Book.class);
-                        catalogue.addBook(book);
+                        Book book = FirebaseIntegrity.getBookFromFirestore(document);
+                        catalogue.addBookToListLocal(book);
                     }
                     mAdapter.notifyDataSetChanged();
 
@@ -76,14 +76,14 @@ public class ScrollUpdate {
 
                                     if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
 
-                                        Query nextQuery = mFirestore.collection("books").startAfter(lastVisible).limit(LIMIT);
+                                        Query nextQuery = mFirestore.collection("catalogue").startAfter(lastVisible).limit(LIMIT);
                                         nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> t) {
                                                 if (t.isSuccessful()) {
                                                     for (DocumentSnapshot d : t.getResult()) {
-                                                        Book book = d.toObject(Book.class);
-                                                        catalogue.addBook(book);
+                                                        Book book = FirebaseIntegrity.getBookFromFirestore(d);
+                                                        catalogue.addBookToListLocal(book);
                                                     }
                                                     mAdapter.notifyDataSetChanged();
                                                     lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);

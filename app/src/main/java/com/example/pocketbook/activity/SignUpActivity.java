@@ -142,7 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                user = new User(firstName,lastName,email,username,password);
+                user = new User(firstName,lastName,email,username,password, null);
                 Register(email,password,firstName, lastName, username);
             }
         });
@@ -170,7 +170,7 @@ public class SignUpActivity extends AppCompatActivity {
                             } else{
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!",
                                         Toast.LENGTH_SHORT).show();
-                                user = new User(firstName,lastName,email,username,password);
+                                user = new User(firstName,lastName,email,username,password, null);
                                 mFirestore = FirebaseFirestore.getInstance();
                                 mFirestore.collection("users").document(email).set(user);
                                 FirebaseUser user = mAuth.getCurrentUser();

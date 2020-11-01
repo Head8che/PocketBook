@@ -1,5 +1,8 @@
 package com.example.pocketbook.model;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -84,5 +87,13 @@ public class User implements Serializable {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+
+    public StorageReference getProfilePicture() {
+        if (this.photo == null || this.photo.equals("") || !this.photo.endsWith(".jpg")) {
+            return FirebaseStorage.getInstance().getReference()
+                    .child("default_images").child("no_profileImg.png"); }
+        return FirebaseStorage.getInstance().getReference().child("profile_pictures").child(this.photo);
     }
 }

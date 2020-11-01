@@ -67,8 +67,11 @@ public class AddFragment extends Fragment {
             public void onClick(View view) {
                 // create Book object and add to Firestore
                 Book book = new Book(title, author, isbn, ownerId, status);
-//                book.setBook(title, author, isbn, ownerId, status,
-//                        null, null, null);
+                book.setTitle(title);
+                book.setAuthor(author);
+                book.setIsbn(isbn);
+                book.setOwner(ownerId);
+                book.setStatus(status);
 
                 //go to the view owned book activity
                 ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);

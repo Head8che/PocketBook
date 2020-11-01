@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
@@ -28,6 +30,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private static final int numColumns = 2;
@@ -41,7 +46,6 @@ public class ProfileFragment extends Fragment {
     private TextView editProfile;
     private static final String USERS = "users";
     private User currentUser;
-
     private ScrollUpdate scrollUpdate;
 
     public ProfileFragment(){
@@ -61,20 +65,27 @@ public class ProfileFragment extends Fragment {
         }
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
+        StorageReference userProfilePicture = currentUser.getProfilePicture();
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         mAdapter = new BookAdapter(ownedBooks, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
+
 
         String first_Name = currentUser.getFirstName();
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();
         // TODO: obtain user_photo from firebase
         String user_Pic = currentUser.getPhoto();
-
+        ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
         TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
         TextView UserName = (TextView) v.findViewById(R.id.user_name);
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
+
+        GlideApp.with(Objects.requireNonNull(getContext()))
+                .load(userProfilePicture)
+                .circleCrop()
+                .into(profilePicture);
 
         editProfile = v.findViewById(R.id.edit_profile_button);
 

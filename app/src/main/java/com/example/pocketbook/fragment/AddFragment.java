@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -27,12 +29,31 @@ public class AddFragment extends Fragment {
     private Button addButton;
     private ImageButton imageButton;
 
-    public FirebaseUser owner;
+    private User currentUser;
+    private BookList catalogue;
+
+    public static AddFragment newInstance(User user, BookList catalogue) {
+        AddFragment addFragment = new AddFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("AF_USER", user);
+        args.putSerializable("AF_CATALOGUE", catalogue);
+        addFragment.setArguments(args);
+        return addFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            this.currentUser = (User) getArguments().getSerializable("AF_USER");
+            this.catalogue = (BookList) getArguments().getSerializable("AF_CATALOGUE");
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        owner = FirebaseAuth.getInstance().getCurrentUser();
         return inflater.inflate(R.layout.fragment_add, container, false);
     }
 
@@ -60,18 +81,14 @@ public class AddFragment extends Fragment {
             final String status = "available";
 
             // get the user credentials
-            final FirebaseUser owner = FirebaseAuth.getInstance().getCurrentUser();
-            final String ownerId = owner.getEmail(); //TODO : change to email
+            final String owner = currentUser.getEmail(); //TODO : change to email
 
             @Override
             public void onClick(View view) {
                 // create Book object and add to Firestore
-                Book book = new Book(title, author, isbn, ownerId, status);
-                book.setTitle(title);
-                book.setAuthor(author);
-                book.setIsbn(isbn);
-                book.setOwner(ownerId);
-                book.setStatus(status);
+                Book book = new Book(null, title, author, isbn, owner, status,
+                        null, null, null);
+                book.pushNewBookToFirebase();
 
                 //go to the view owned book activity
                 ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);

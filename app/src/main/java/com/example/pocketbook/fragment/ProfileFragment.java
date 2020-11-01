@@ -2,6 +2,7 @@ package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,12 +49,27 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
-    public ProfileFragment(){
-        // Empty Constructor
+    public static ProfileFragment newInstance(User user) {
+        ProfileFragment profileFragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("PF_USER", user);
+        profileFragment.setArguments(args);
+        return profileFragment;
     }
 
-    public ProfileFragment(User currentUser){
-        this.currentUser = currentUser;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            this.currentUser = (User) getArguments().getSerializable("PF_USER");
+        }
+
+        // Initialize Firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        // Query to retrieve all books
+        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,7 +83,7 @@ public class ProfileFragment extends Fragment {
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         StorageReference userProfilePicture = currentUser.getProfilePicture();
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
-        mAdapter = new BookAdapter(ownedBooks, getActivity());
+        mAdapter = new BookAdapter(currentUser, ownedBooks, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
 
@@ -120,17 +136,5 @@ public class ProfileFragment extends Fragment {
         });
         return v;
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
-        // Query to retrieve all books
-        mQuery = mFirestore.collection("books").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
-
-    }
-
-
 
 }

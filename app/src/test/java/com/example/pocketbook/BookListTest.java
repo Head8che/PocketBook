@@ -79,7 +79,7 @@ public class BookListTest {
         String bookID = "mockId";
 
         return new Book(bookID, "mockTitle", "mockAuthor",
-                "mockISBN", "booklisttest@email.com", "available");
+                "mockISBN", "booklisttest@email.com", "available", null, null, null);
     }
 
 
@@ -137,9 +137,6 @@ public class BookListTest {
 
         // should still only be one book in list
         assertEquals(1, bookList.getSize());
-
-        // clear mockBook data from Firebase
-        bookList.clear();
     }
 
     /**

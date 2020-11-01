@@ -19,14 +19,11 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
-import com.example.pocketbook.util.CreateKeywords;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class SearchFragment extends Fragment implements LinearBookAdapter.OnBookSelectedListener {
     private static final String TAG = "SearchFragment";
@@ -37,7 +34,8 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     private RecyclerView mBooksRecycler;
     private LinearBookAdapter mAdapter;
 
-    private BookList catalogue = new BookList();
+    private User currentUser;
+    private BookList catalogue;
 
     private DocumentSnapshot lastVisible;
     private boolean isScrolling = false;
@@ -45,14 +43,27 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
 
     private SearchView searchView;
 
+    public static SearchFragment newInstance(User user, BookList catalogue) {
+        SearchFragment searchFragment = new SearchFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("SF_USER", user);
+        args.putSerializable("SF_CATALOGUE", catalogue);
+        searchFragment.setArguments(args);
+        return searchFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            this.currentUser = (User) getArguments().getSerializable("SF_USER");
+            this.catalogue = (BookList) getArguments().getSerializable("SF_CATALOGUE");
+        }
+
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        //        addKeywords();
     }
 
     @Nullable
@@ -82,6 +93,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
                 newText = newText.toLowerCase();
 
                 // TODO: add batch loading
+                // TODO: update query not to include books that currentUser owns
                 mQuery = mFirestore.collection("catalogue").whereArrayContains("keywords", newText);
                 mAdapter.setQuery(mQuery);
                 return true;
@@ -96,88 +108,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
             }
         });
 
-//        mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (DocumentSnapshot document : task.getResult()) {
-//                        Book book = document.toObject(Book.class);
-//                        catalogue.add(book);
-//                    }
-//                    mAdapter.notifyDataSetChanged();
-//                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
-//
-////
-////                    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-////                        @Override
-////                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-////                            super.onScrollStateChanged(recyclerView, newState);
-////                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-////                                isScrolling = true;
-////                            }
-////                        }
-////
-////                        @Override
-////                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-////                            super.onScrolled(recyclerView, dx, dy);
-////
-////                            LinearLayoutManager linearLayout = ((LinearLayoutManager) recyclerView.getLayoutManager());
-////                            assert linearLayout != null;
-////                            int firstVisibleItemPosition = linearLayout.findFirstVisibleItemPosition();
-////                            int visibleItemCount = linearLayout.getChildCount();
-////                            int totalItemCount = linearLayout.getItemCount();
-////
-////                            if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-////                                isScrolling = false;
-////
-////                                if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
-////
-////                                    Query nextQuery = mFirestore.collection("books").startAfter(lastVisible).limit(LIMIT);
-////                                    nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-////                                        @Override
-////                                        public void onComplete(@NonNull Task<QuerySnapshot> t) {
-////                                            if (t.isSuccessful()) {
-////                                                for (DocumentSnapshot d : t.getResult()) {
-////                                                    Book book = d.toObject(Book.class);
-////                                                    catalogue.add(book);
-////                                                }
-////                                                mAdapter.notifyDataSetChanged();
-////                                                lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);
-////
-////                                                if (t.getResult().size() < LIMIT) {
-////                                                    isLastItemReached = true;
-////                                                }
-////                                            }
-////                                        }
-////                                    });
-////                                }
-////                            }
-////                        }
-////                    };
-////                    mBooksRecycler.addOnScrollListener(onScrollListener);
-//                }
-//            }
-//        });
         return v;
-    }
-
-    private void addKeywords(){
-        // TEMPORARY function
-        // adds keywords field to every book
-
-        mFirestore.collection("catalogue").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for(QueryDocumentSnapshot document : task.getResult()){
-                        CreateKeywords kw = new CreateKeywords(document.toObject(Book.class));
-                        kw.create();
-                    }
-                } else {
-                    Log.d(TAG, "RIP ", task.getException());
-                }
-            }
-        });
     }
 
     @Override
@@ -201,7 +132,8 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
         // Go to ViewMyBookActivity
-        ViewBookFragment nextFrag = new ViewBookFragment();
+        Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);;
+        ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
 //        Bundle args = new Bundle();
 //        args.putString("ID",Book.class snapshot.getId());
 //        nextFrag.setArguments(args);

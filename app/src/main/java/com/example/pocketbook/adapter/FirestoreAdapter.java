@@ -32,8 +32,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     public FirestoreAdapter(Query query) {
         mQuery = query;
-        System.out.println("MSNAP: " + mSnapshots.toString());
-        Log.e(TAG, "MSNAPQP: " + mSnapshots.toString());
     }
 
     @Override

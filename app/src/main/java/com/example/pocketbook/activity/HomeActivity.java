@@ -21,6 +21,7 @@ import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewBookFragment;
+import com.example.pocketbook.model.BookList;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.example.pocketbook.model.User;
@@ -55,12 +56,14 @@ public class HomeActivity extends AppCompatActivity {
 //        Toast.makeText(this,user.getFirstName(),Toast.LENGTH_SHORT).show();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                HomeFragment.newInstance(user, new BookList())).commit();
     }
 
     @Override //temporary until we find a way to make the back button work properly
     public void onBackPressed() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                HomeFragment.newInstance(user, new BookList())).commit();
     }
   
     private void toastMessage(String message) {
@@ -74,19 +77,19 @@ public class HomeActivity extends AppCompatActivity {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()){
                         case R.id.bottom_nav_home:
-                            selectedFragment = new HomeFragment();
+                            selectedFragment = HomeFragment.newInstance(user, new BookList());
                             break;
                         case R.id.bottom_nav_search:
-                            selectedFragment = new SearchFragment();
+                            selectedFragment = SearchFragment.newInstance(user, new BookList());
                             break;
                         case R.id.bottom_nav_add:
-                            selectedFragment = new AddFragment();
+                            selectedFragment = AddFragment.newInstance(user, new BookList());
                             break;
                         case R.id.bottom_nav_scan:
                             selectedFragment = new ScanFragment();
                             break;
                         case R.id.bottom_nav_profile:
-                            selectedFragment = new ProfileFragment(user);
+                            selectedFragment = ProfileFragment.newInstance(user);
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,selectedFragment).commit();

@@ -13,6 +13,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /** Login **/
@@ -85,8 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(LoginActivity.this, "Welcome to Pocketbook.",
-                                    Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             assert user != null;
@@ -99,9 +99,10 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
-                                            current_user = document.toObject(User.class);
+                                            current_user = FirebaseIntegrity.getUserFromFirestore(document);
                                             Log.e(TAG, "DocumentSnapshot data: " + document.getData());
-                                            Toast.makeText(LoginActivity.this, current_user.getUsername(),
+                                            Toast.makeText(LoginActivity.this, String.format(Locale.CANADA,
+                                                    "Welcome to Pocketbook, %s.",current_user.getFirstName()),
                                                     Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                             intent.putExtra("CURRENT_USER", current_user);

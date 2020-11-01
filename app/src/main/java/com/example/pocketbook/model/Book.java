@@ -197,19 +197,19 @@ public class Book implements Serializable {
         docData.put("photo", this.photo);
 
         FirebaseFirestore.getInstance().collection("books").document(this.id)
-            .set(docData)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w("SET_BOOK", "Error writing document", e);
-                }
-            });
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("SET_BOOK", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("SET_BOOK", "Error writing document", e);
+                    }
+                });
 
 //    public void editBook(String id, String title, String author, String isbn, String owner,
 //                        String status, String comment, String condition, String photo) {
@@ -254,12 +254,12 @@ public class Book implements Serializable {
 //
 //    }
 
-    /* Allows comparison between bookIds as Strings
-     *   Overrides compareTo method in Comparable
-     * */
+        /* Allows comparison between bookIds as Strings
+         *   Overrides compareTo method in Comparable
+         * */
 //    @Override
 //    public int compareTo(com.example.pocketbook.model.Book book) {
 //        return this.id.compareTo(book.getTitle());
 //    }
-
+    }
 }

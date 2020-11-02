@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
+
 public class ProfileFragment extends Fragment {
     private static final int numColumns = 2;
     private static final int LIMIT = 20;
@@ -49,6 +50,11 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     public static ProfileFragment newInstance(User user) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -56,6 +62,7 @@ public class ProfileFragment extends Fragment {
         profileFragment.setArguments(args);
         return profileFragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,12 +79,13 @@ public class ProfileFragment extends Fragment {
 
     }
 
+
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
-          container.removeAllViews();
+            container.removeAllViews();
         }
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
@@ -107,24 +115,6 @@ public class ProfileFragment extends Fragment {
 
         scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
         scrollUpdate.load();
-
-        //
-//        private FirebaseAuth mAuth;
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference storageRef = storage.getReferenceFromUrl("gs://am-d5edb.appspot.com").child("users").child(mAuth.getUid()+".jpg");
-//
-//        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                Log.e("Tuts+", "uri: " + uri.toString());
-//                DownloadLink = uri.toString();
-//                CircleImageView iv = (CircleImageView) view.findViewById(R.id.profilePictureEditFragment);
-//                Picasso.with(getContext()).load(uri.toString()).placeholder(R.drawable.ic_launcher3slanted).error(R.drawable.ic_launcher3slanted).into(iv);
-//                //Handle whatever you're going to do with the URL here
-//            }
-//        });
-
-
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

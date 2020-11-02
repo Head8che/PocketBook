@@ -9,143 +9,113 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="57dp">
+        tools:layout_editor_absoluteX="-31dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/cancelBtn"
-                android:layout_width="52dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="151dp"
-                android:text="Cancel"
-                android:textColor="#FFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userImage"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/doneBtn"
-                android:layout_width="52dp"
-                android:layout_height="22dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="151dp"
-                android:text="Done"
-                android:gravity="right"
-                android:textColor="#FFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/cancelBtn"
-                app:layout_constraintTop_toBottomOf="@+id/firstName"
-                app:layout_constraintVertical_bias="1.0" />
-
-
             <ImageView
-                android:id="@+id/userImage"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="8dp"
+                android:id="@+id/profile_image"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="36dp"
+                android:src="@mipmap/ic_user_foreground"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.063"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_photo_library_white_24dp" />
-
-            <EditText
-                android:id="@+id/EmailReg"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:autofillHints=""
-                android:background="@drawable/round"
-                android:ems="10"
-                android:hint="✉  Email"
-                android:inputType="textEmailAddress"
-                android:padding="16dp"
-                android:radius="64dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userName" />
-
-            <EditText
-                android:id="@+id/lastName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round"
-                android:ems="10"
-                android:hint="👤  Last Name"
-                android:inputType="textPersonName"
-                android:padding="16dp"
-                android:radius="64dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/firstName" />
-
-            <EditText
-                android:id="@+id/firstName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="124dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="377dp"
-                android:background="@drawable/round"
-                android:ems="10"
-                android:hint="👤  First Name"
-                android:inputType="textPersonName"
-                android:padding="16dp"
-                android:radius="64dp"
-                app:layout_constraintBottom_toTopOf="@+id/cancelBtn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/userName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round"
-                android:ems="10"
-                android:hint="👤  Username"
-                android:inputType="textPersonName"
-                android:padding="16dp"
-                android:radius="64dp"
+            <TextView
+                android:id="@+id/editProfilePicture"
+                android:layout_width="162dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/textBlack"
+                android:gravity="center_horizontal"
+                android:text="@string/change_profile_photo"
+                android:textColor="@color/textWhite"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lastName" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
             <TextView
-                android:id="@+id/AddProfilePicture"
-                android:layout_width="273dp"
-                android:layout_height="54dp"
+                android:id="@+id/profileName"
+                android:layout_width="109dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:gravity="center_horizontal"
+                android:text="@string/name"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="106dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="28dp"
+                android:gravity="center_horizontal"
+                android:text="@string/username"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+
+            <TextView
+                android:id="@+id/userEmail"
+                android:layout_width="106dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="28dp"
+                android:gravity="center_horizontal"
+                android:text="@string/email"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+            <TextView
+                android:id="@+id/userProfileName"
+                android:layout_width="272dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="8dp"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.666"
+                app:layout_constraintStart_toEndOf="@+id/profileName"
+                app:layout_constraintTop_toTopOf="@+id/profileName" />
+
+            <TextView
+                android:id="@+id/userProfileUserName"
+                android:layout_width="272dp"
+                android:layout_height="23dp"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.857"
+                app:layout_constraintStart_toEndOf="@+id/userName"
+                app:layout_constraintTop_toTopOf="@+id/userName" />
+
+            <TextView
+                android:id="@+id/UserProfileEmail"
+                android:layout_width="272dp"
+                android:layout_height="23dp"
                 android:layout_marginStart="16dp"
-                android:text="Click here to add your profile picture."
-                android:textColor="#FFFFFF"
-                android:background="@color/textBlack"
-                app:layout_constraintBottom_toBottomOf="@+id/userImage"
-                app:layout_constraintStart_toEndOf="@+id/userImage"
-                app:layout_constraintTop_toTopOf="@+id/userImage" />
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/userEmail"
+                app:layout_constraintTop_toTopOf="@+id/userEmail" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

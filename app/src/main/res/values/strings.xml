@@ -31,4 +31,10 @@
     <string name="condition">Condition</string>
     <string name="comment">Comment</string>
     <string name="delete">Delete</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="suggested_books">Suggested Books</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="change_profile_photo">Change Profile Photo</string>
 </resources>

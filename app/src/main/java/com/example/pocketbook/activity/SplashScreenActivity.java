@@ -20,7 +20,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        Objects.requireNonNull(getSupportActionBar()).hide();
 
         /* UNCOMMENT OUT THE LINE BELOW TO ACCESS LOGIN PAGE */
          FirebaseAuth.getInstance().signOut();

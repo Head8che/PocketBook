@@ -131,7 +131,6 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
 
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
-        // Go to ViewMyBookActivity
         Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);;
         ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
 //        Bundle args = new Bundle();

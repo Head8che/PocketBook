@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".fragment.AddFragment"
-android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.AddFragment"
+    android:orientation="vertical">
 
     <!-- If no image AddImage Button-->
 
@@ -13,27 +13,24 @@ android:orientation="vertical">
 
     <!-- EditText Fields -->
 
-    <ImageButton
-        android:id="@+id/image_button"
-        android:layout_width="191dp"
-        android:layout_height="205dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        app:srcCompat="@drawable/ic_photo_library_white_24dp" />
-
-
 
     <ScrollView
         android:id="@+id/view_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_centerHorizontal="true">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/image_button"
+                android:layout_width="191dp"
+                android:layout_height="205dp"
+                app:srcCompat="@drawable/ic_photo_library_white_24dp" />
 
             <EditText
                 android:id="@+id/editText_title"
@@ -72,9 +69,9 @@ android:orientation="vertical">
                 android:inputType="textPersonName" />
 
             <Spinner
-                android:id="@+id/spinner_status"
+                android:id="@+id/spinner_conditions"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="63dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="7dp" />
         </LinearLayout>
@@ -82,17 +79,14 @@ android:orientation="vertical">
 
     <Button
         android:id="@+id/button_addBook"
-        android:layout_width="219dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/view_description"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/view_description"
+        android:layout_margin="@dimen/activity_vertical_margin"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="@dimen/activity_vertical_margin"
-        android:layout_marginTop="120dp"
-        android:layout_marginEnd="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="90dp"
-        android:background="@drawable/selectors"
-        android:text="@string/add_book" />
+        android:background="@color/colorAccent"
+        android:text="@string/add_book"
+        android:textColor="@color/colorPrimary" />
 
     <!-- Style Button using Material Design -->
     <!-- style="?attr/materialButtonOutlinedStyle"-->

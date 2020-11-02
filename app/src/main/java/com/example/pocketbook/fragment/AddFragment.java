@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,8 @@ import com.example.pocketbook.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class AddFragment extends Fragment {
 
     private EditText authorText;
@@ -28,6 +33,7 @@ public class AddFragment extends Fragment {
     private EditText commentText;
     private Button addButton;
     private ImageButton imageButton;
+    private String condition;
 
     private User currentUser;
     private BookList catalogue;
@@ -67,38 +73,31 @@ public class AddFragment extends Fragment {
         isbnText = (EditText) view.findViewById(R.id.editText_isbn);
         commentText = (EditText) view.findViewById(R.id.editText_comment);
 
-        /**
-         * Add Book Handler
-         */
-        addButton = view.findViewById(R.id.button_addBook);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        /* Drop-down menu for Conditions */
+        Spinner conditionsSpinner = (Spinner) view.findViewById(R.id.spinner_conditions);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        // Resource : https://stackoverflow.com/questions/12275678/how-to-set-arrayadapter-for-spinner-in-fragment
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity().getBaseContext(),
+                R.array.bookConditions, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        conditionsSpinner.setAdapter(spinnerAdapter);
 
-            final String author = authorText.getText().toString();
-            final String title = titleText.getText().toString();
-            final String isbn = isbnText.getText().toString();
-            final String comment = commentText.getText().toString();
-            // all new books to be added are available
-            final String status = "available";
-
-            // get the user credentials
-            final String owner = currentUser.getEmail(); //TODO : change to email
-
+        conditionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                // create Book object and add to Firestore
-                Book book = new Book(null, title, author, isbn, owner, status,
-                        null, null, null);
-                book.pushNewBookToFirebase();
-
-                //go to the view owned book activity
-                ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);
-
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                condition = adapterView.getItemAtPosition(i).toString();
             }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
 
         /**
-         * Add Image Handler
+         * TODO : Add Image Handler
          *
          * Resource :
          * https://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
@@ -117,6 +116,34 @@ public class AddFragment extends Fragment {
                 // add to Firestore
                 // set image as image uploaded as imageView
             }
+        });
+
+        /* Add Book Handler */
+        addButton = view.findViewById(R.id.button_addBook);
+        addButton.setOnClickListener(new View.OnClickListener() {
+
+            final String author = authorText.getText().toString();
+            final String title = titleText.getText().toString();
+            final String isbn = isbnText.getText().toString();
+            final String comment = commentText.getText().toString();
+            // all new books to be added are available
+            final String status = "AVAILABLE";
+
+            // get the user credentials
+            final String owner = currentUser.getEmail(); //TODO : change to email
+
+            @Override
+            public void onClick(View view) {
+                // create Book object and add to Firestore
+                Book book = new Book(null, title, author, isbn, owner, status,
+                        null, condition, null);
+                book.pushNewBookToFirebase();
+
+                //go to the view owned book activity
+                ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);
+
+            }
+
         });
 
     }

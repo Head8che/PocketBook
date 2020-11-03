@@ -67,12 +67,10 @@ public class ViewMyBookRequestsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
-            Log.d("not nullllllll","nottttttttttttttttttttt");
             this.book = (Book) getArguments().getSerializable("VMBF_BOOK");
 //            mParam1 = getArguments().getSerializable(ARG_PARAM1);
 //            mParam2 = getArguments().getSerializable(ARG_PARAM2);
         }
-        Log.d("nullllllll","nulllllllllllllllllllllllllllllllllllllll");
     }
 
     @Override
@@ -81,11 +79,9 @@ public class ViewMyBookRequestsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_my_book_requests, container, false);
 
-        Log.d("nnnnnnnnnnnnnnn","aaaaaaaaaaaaaaa");
-        Log.d("maopppppppppppppppppp", book.getRequestList().getRequestList().toString());
         requestsRecycler = view.findViewById(R.id.viewMyBookRequestsRecyclerView);
         requestsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        requestAdapter = new RequestAdapter(this.book);
+        requestAdapter = new RequestAdapter(this.book, this.currentUser);
         requestsRecycler.setAdapter(requestAdapter);
 
 

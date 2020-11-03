@@ -40,13 +40,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/viewBookUserProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="72dp"
-                android:layout_marginBottom="4dp"
-                app:srcCompat="@mipmap/ic_user_foreground"
-                android:contentDescription="TODO" />
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@color/colorAccent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

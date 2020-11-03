@@ -50,12 +50,10 @@ public class RequestList implements Serializable {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Request request = document.toObject(Request.class);
-                                Log.d("reeeeeeeeeeeeee",request.getRequester());
                                 requestList.put(request.getRequester(),request);
-                                Log.d("reeeeeeeeeeeeeeqqqqqqqqq",requestList.toString());
-                                //Log.d("temp", document.getId() + " => " + document.getData());
                             }
                         } else {
+                            Log.d("temp","failed to get data!");
                         }
                     }
                 });

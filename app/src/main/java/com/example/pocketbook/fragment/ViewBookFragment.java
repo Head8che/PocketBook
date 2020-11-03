@@ -47,6 +47,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
@@ -55,6 +57,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     private Book book;
     private User currentUser;
+    //private User bookOwner;
 
     private ImageView userProfile;
     private ImageView bookCoverImageView;
@@ -122,7 +125,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         TextView commentField = view.findViewById(R.id.viewBookComment);
 
         Button requestButton = view.findViewById(R.id.viewBookRequestBtn);
-        ImageView userProfilePicture = view.findViewById(R.id.viewBookUserProfile);
+        CircleImageView userProfilePicture = view.findViewById(R.id.viewBookUserProfile);
         ImageView bookCoverImageView = view.findViewById(R.id.bookCover);
         ImageView bookStatusImage = (ImageView) view.findViewById(R.id.viewBookBookStatusImageView);
 

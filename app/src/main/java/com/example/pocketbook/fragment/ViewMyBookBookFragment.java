@@ -1,5 +1,6 @@
 package com.example.pocketbook.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.EditBookActivity;
+import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.google.firebase.storage.StorageReference;
@@ -115,8 +118,9 @@ public class ViewMyBookBookFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(rootView.getContext(), "Implement Edit Functionality!",
-                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), EditBookActivity.class);
+//                intent.putExtra("CURRENT_USER", currentUser);
+                startActivity(intent);
             }
         });
 

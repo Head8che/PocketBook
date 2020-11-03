@@ -15,7 +15,7 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/viewMyBookFragToolbar"
+            android:id="@+id/editBookToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -23,7 +23,7 @@
             app:title="">
 
             <ImageView
-                android:id="@+id/viewMyBookFragBackBtn"
+                android:id="@+id/editBookCancelBtn"
                 android:layout_width="33dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_close"
@@ -33,7 +33,7 @@
             </ImageView>
 
             <TextView
-                android:id="@+id/viewMyBookFragDeleteBtn"
+                android:id="@+id/editBookSaveBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -69,7 +69,7 @@
                 app:cardUseCompatPadding="true" >
 
                 <ImageView
-                    android:id="@+id/editMyBookBookCoverImageView"
+                    android:id="@+id/editBookBookCoverField"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/book_cover_image"
@@ -87,81 +87,86 @@
                 android:text="@string/change_photo"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBookTitleField"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_gravity="center_horizontal"
                 android:hint="@string/title">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editBookTitleField"
                     android:layout_width="340dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBookAuthorField"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:hint="@string/author">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editBookAuthorField"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBookISBNField"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:hint="@string/isbn">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editBookISBNField"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBookConditionField"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:hint="@string/condition">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editBookConditionField"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editBookCommentField"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:layout_marginBottom="32dp"
                 android:hint="@string/comment">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editBookCommentField"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp" />
 

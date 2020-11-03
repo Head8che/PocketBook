@@ -1,6 +1,7 @@
 package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.example.pocketbook.activity.EditBookActivity;
+import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
@@ -119,9 +122,9 @@ public class ProfileFragment extends Fragment {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditProfileFragment nextFrag = new EditProfileFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container,nextFrag).commit();
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                intent.putExtra("currentUser", currentUser);
+                startActivity(intent);
             }
         });
         return v;

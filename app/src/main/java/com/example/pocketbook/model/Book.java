@@ -72,7 +72,8 @@ public class Book extends Object implements Serializable {
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? null : photo.trim();
 
-        this.requestList = new RequestList();
+        this.requestList = new RequestList(this.id);
+        Log.d("inboooooooooooook",requestList.getRequestList().toString());
     }
 
 
@@ -86,6 +87,8 @@ public class Book extends Object implements Serializable {
     public String getCondition() { return this.condition; }
     public String getStatus() { return this.status; }
     public String getPhoto() { return this.photo; }
+
+    public RequestList getRequestList() { return this.requestList; }
 
     public StorageReference getBookCover() {
         if (this.photo == null || this.photo.equals("") || !(this.photo.endsWith(".jpg"))) {
@@ -208,6 +211,9 @@ public class Book extends Object implements Serializable {
     }
 
     public boolean addRequest(Request request) {
+        if (!this.status.equals("requested")) {
+            this.setStatus("requested");
+        }
         return requestList.addRequest(request);
     }
 

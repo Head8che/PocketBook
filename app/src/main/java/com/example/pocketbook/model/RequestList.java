@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,9 +29,42 @@ import java.util.Map;
 public class RequestList implements Serializable {
 
     private LinkedHashMap<String, Request> requestList;
+    private static int tempCount;
+    private FirebaseFirestore db;
+    private String bookId;
 
-    public RequestList() {
+    public RequestList(String bookId) {
+
         this.requestList = new LinkedHashMap<String, Request>();
+        this.db = FirebaseFirestore.getInstance();
+        this.bookId = bookId;
+        this.getData();
+    }
+
+    public void getData(){
+        db.collection("catalogue").document(bookId)
+                .collection("requests").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Request request = document.toObject(Request.class);
+                                Log.d("reeeeeeeeeeeeee",request.getRequester());
+                                requestList.put(request.getRequester(),request);
+                                Log.d("reeeeeeeeeeeeeeqqqqqqqqq",requestList.toString());
+                                //Log.d("temp", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                        }
+                    }
+                });
+    }
+
+    public Request getRequestAtPosition(int position) {
+        List<String> keys = new ArrayList<String>(requestList.keySet());
+        String positionalRequestID = keys.get(position);
+        return requestList.get(positionalRequestID);
     }
 
     /* TODO: EXTEND */
@@ -99,7 +134,7 @@ public class RequestList implements Serializable {
         docData.put("requestDate", requestDate);
         docData.put("requestedBook", requestedBook);
 
-        FirebaseFirestore.getInstance().collection("catalogue").document(requestedBook)
+        db.collection("catalogue").document(requestedBook)
                 .collection("requests").document(requester)
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -126,7 +161,7 @@ public class RequestList implements Serializable {
         String requester = request.getRequester();
         String requestedBook = request.getRequestedBook();
 
-        FirebaseFirestore.getInstance().collection("catalogue").document(requestedBook)
+        db.collection("catalogue").document(requestedBook)
                 .collection("requests").document(requester)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

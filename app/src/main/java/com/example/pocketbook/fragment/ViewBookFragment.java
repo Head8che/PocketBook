@@ -115,14 +115,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         }
         View view = inflater.inflate(R.layout.fragment_view_book, container, true);
 
-        String bookTitle = book.getTitle();
-        String bookAuthor = book.getAuthor();
-        String bookISBN = book.getISBN();
-        StorageReference bookCover = book.getBookCover();
-        String bookStatus = book.getStatus();
-        String bookCondition = book.getCondition();
-        String bookComment = book.getComment();
-
         TextView bookTitleField = view.findViewById(R.id.viewBookTitle);
         TextView bookAuthorField = view.findViewById(R.id.viewBookAuthor);
         TextView isbnField = view.findViewById(R.id.viewBookISBN);
@@ -136,7 +128,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
         bookTitleField.setText(bookTitle);
         bookAuthorField.setText(bookAuthor);
-        isbnField.setText(bookISBN);
+        isbnField.setText(bookIsbn);
 
         GlideApp.with(Objects.requireNonNull(getContext()))
                 .load(bookCover)
@@ -190,17 +182,13 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             requestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     book.addRequest(new Request(currentUser.getEmail(), book.getOwner(), book));
-
                     Toast.makeText(getActivity(), String.format(Locale.CANADA,
                             "You have requested %s!",book.getTitle()),
                             Toast.LENGTH_SHORT).show();
 
                     getActivity().onBackPressed();
                 }
-                //TODO: set status to requested in book object
-
             });
         }
         // return view

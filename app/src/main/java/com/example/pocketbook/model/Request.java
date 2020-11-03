@@ -1,8 +1,11 @@
 package com.example.pocketbook.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Request implements Serializable {
     private String requester;
@@ -11,7 +14,11 @@ public class Request implements Serializable {
     private String requestDate;
     private Book requestedBookObject;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    private static DateFormat df = new SimpleDateFormat("MMM dd, yyyy",Locale.ENGLISH);
 
+    public Request(){
+
+    }
     public Request(String requester, String requestee, String requestedBook) {
         this.requester = requester.trim().toLowerCase();  // lowercase email
         this.requestee = requestee.trim().toLowerCase();  // lowercase email

@@ -1,6 +1,7 @@
 package com.example.pocketbook.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,26 +15,29 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 public class AddFragment extends Fragment {
 
-    private EditText authorText;
-    private EditText titleText;
-    private EditText isbnText;
-    private EditText commentText;
+    private EditText authorEditText;
+    private EditText titleEditText;
+    private EditText isbnEditText;
+    private EditText commentEditText;
     private Button addButton;
     private ImageButton imageButton;
+
     private String condition;
+//    private String photo;
+//    private String author;
+//    private String  isbn;
+//    private String comment;
+//    private String status;
+//    private String title;
+//    private String owner;
 
     private User currentUser;
     private BookList catalogue;
@@ -68,10 +72,10 @@ public class AddFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // get all the EditText fields
-        authorText = (EditText) view.findViewById(R.id.editText_author);
-        titleText = (EditText) view.findViewById(R.id.editText_title);
-        isbnText = (EditText) view.findViewById(R.id.editText_isbn);
-        commentText = (EditText) view.findViewById(R.id.editText_comment);
+        authorEditText = (EditText) view.findViewById(R.id.editText_author);
+        titleEditText = (EditText) view.findViewById(R.id.editText_title);
+        isbnEditText = (EditText) view.findViewById(R.id.editText_isbn);
+        commentEditText = (EditText) view.findViewById(R.id.editText_comment);
 
         /* Drop-down menu for Conditions */
         Spinner conditionsSpinner = (Spinner) view.findViewById(R.id.spinner_conditions);
@@ -118,26 +122,37 @@ public class AddFragment extends Fragment {
             }
         });
 
+//        author = authorText.getText().toString();
+//        title = titleText.getText().toString();
+//        isbn = isbnText.getText().toString();
+//        comment = commentText.getText().toString();
+//        // all new books to be added are available
+//        status = "AVAILABLE";
+//
+//        // get the user credentials
+//        owner = currentUser.getEmail();
+
         /* Add Book Handler */
         addButton = view.findViewById(R.id.button_addBook);
         addButton.setOnClickListener(new View.OnClickListener() {
 
-            final String author = authorText.getText().toString();
-            final String title = titleText.getText().toString();
-            final String isbn = isbnText.getText().toString();
-            final String comment = commentText.getText().toString();
-            // all new books to be added are available
-            final String status = "AVAILABLE";
-
-            // get the user credentials
-            final String owner = currentUser.getEmail(); //TODO : change to email
-
             @Override
             public void onClick(View view) {
                 // create Book object and add to Firestore
+                final String author = authorEditText.getText().toString();
+                final String title = titleEditText.getText().toString();
+                final String isbn = isbnEditText.getText().toString();
+                final String comment = commentEditText.getText().toString();
+                // all new books to be added are available
+                final String status = "AVAILABLE";
+
+                // get the user credentials
+                final String owner = currentUser.getEmail();
+
                 Book book = new Book(null, title, author, isbn, owner, status,
-                        null, condition, null);
+                        comment, condition, null);
                 book.pushNewBookToFirebase();
+
 
                 //go to the view owned book activity
                 ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);

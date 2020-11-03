@@ -9,9 +9,49 @@
     android:orientation="vertical"
     tools:context=".activity.EditBookActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/viewMyBookFragToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:title="">
+
+            <ImageView
+                android:id="@+id/viewMyBookFragBackBtn"
+                android:layout_width="33dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_close"
+                android:contentDescription="@string/cancel"
+                app:tint="@color/colorUnselected">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/viewMyBookFragDeleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:minHeight="?actionBarSize"
+                android:padding="@dimen/appbar_padding"
+                android:textSize="18sp"
+                android:text="@string/save"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="@color/colorAccent" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,8 +60,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="@dimen/large_book_width"
-                android:layout_height="@dimen/large_book_height"
+                android:layout_width="@dimen/med_large_book_width"
+                android:layout_height="@dimen/med_large_book_height"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="4dp"
@@ -37,9 +77,18 @@
 
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:text="@string/change_photo"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editBookTitleField"
-                android:layout_width="340dp"
+                android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_marginTop="5dp"
                 android:layout_gravity="center_horizontal"
@@ -107,7 +156,7 @@
                 android:layout_height="65dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="32dp"
                 android:hint="@string/comment">
 
                 <com.google.android.material.textfield.TextInputEditText

@@ -48,7 +48,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 
-public class ViewBookFragment extends Fragment {
+public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -125,9 +125,9 @@ public class ViewBookFragment extends Fragment {
 
         TextView bookTitleField = view.findViewById(R.id.viewBookTitle);
         TextView bookAuthorField = view.findViewById(R.id.viewBookAuthor);
-        TextView isbnField = view.findViewById(R.id.isbnField);
-        TextView conditionField = view.findViewById(R.id.conditionField);
-        TextView commentField = view.findViewById(R.id.commentField);
+        TextView isbnField = view.findViewById(R.id.viewBookISBN);
+        TextView conditionField = view.findViewById(R.id.viewBookCondition);
+        TextView commentField = view.findViewById(R.id.viewBookComment);
 
         Button requestButton = view.findViewById(R.id.viewBookRequestBtn);
         ImageView userProfilePicture = view.findViewById(R.id.viewBookUserProfile);

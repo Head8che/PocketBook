@@ -33,6 +33,19 @@
             </ImageView>
 
             <TextView
+                android:id="@+id/editBookPageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:minHeight="?actionBarSize"
+                android:padding="@dimen/appbar_padding"
+                android:textSize="18sp"
+                android:letterSpacing="0.02"
+                android:textColor="@color/textBlack"
+                android:text="@string/editBookPageTitle"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
+
+            <TextView
                 android:id="@+id/editBookSaveBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

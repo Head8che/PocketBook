@@ -6,32 +6,97 @@ package com.example.pocketbook.util;
  */
 public class Parser {
 
-    String title, author, isbn, comment;
-    String[] untrimmed;
-    String[] trimmed;
+    private String title;
+    private String author;
+    private String isbn;
+    private String status;
+    private String comment;
+    private String ownerEmail;
+    private String photo;
+    private String condition;
+
+    private String[] conditions;
+    private String[] statuses;
+    private String[] parsedArguments;
+
+
+
+    public Parser(String title, String author, String isbn, String ownerEmail, String status,
+                    String comment, String photo, String condition) {
+
+        // initialize the permitted values for conditions and statuses
+        setConditions();
+        setStatuses();
+
+        // trim all values
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.status = status.trim();
+        this.ownerEmail = ownerEmail.trim();
+        this.condition = condition; // set my drop down menu options
+        this.comment = comment; // can be null
+        this.photo = photo; // can be null
+    }
+
 
     /**
-     * Minimum arg constructor
-     * @param title
-     * @param author
-     * @param isbn
+     * Statuses Initializer
      */
-    public Parser(String title, String author, String isbn) {
-        String[] untrimmed = {title, author, isbn};
-        String[] trimmed = trimAll(untrimmed);
-
-        this.title = trimmed[0];
-        this.author = trimmed[1];
-        this.isbn = trimmed[2];
+    private void setStatuses() {
+        this.statuses = new String[]
+                {
+                        "AVAILABLE",
+                        "REQUESTED",
+                        "BORROWED",
+                        "ACCEPTED"
+                };
     }
 
-    public String[] trimAll(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            args[i].trim();
+    /**
+     * Conditions Initializer
+     */
+    private void setConditions() {
+        this.conditions = new String[]
+                {
+                        "BRAND NEW",
+                        "LIKE NEW",
+                        "VERY GOOD",
+                        "GOOD",
+                        "ACCEPTABLE"
+                };
+
+    }
+
+    /**
+     * Checks if the status specified is in the list of statuses
+     * @return
+     *      true if status is in statuses
+     *      false otherwise
+     */
+    private boolean checkStatus() {
+        for (String s : statuses) {
+            if (status.equals(s)) {
+                return true;
+            }
         }
-        return args;
+        return false;
     }
 
+    /**
+     * Checks if the condition specified is in the list of conditions
+     * @return
+     *      true if condition is in conditions
+     *      false otherwise
+     */
+    private boolean checkCondition() {
+        for (String s : conditions) {
+            if (condition.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Check that the fields are not empty
@@ -85,4 +150,90 @@ public class Parser {
         return (sum % 11 == 0);
     }
 
+    /**
+     * If the comment is null,
+     * set the comment to be empty
+     */
+    public void setEmptyComment() {
+        comment = "";
+    }
+
+    /**
+     * All email should be lowercase
+     */
+    public void setLowerEmail() {
+        ownerEmail.toLowerCase();
+    }
+
+    /**
+     * If no photo is specified,
+     * set it to an empty string
+     */
+    public void setEmptyPhoto() {
+        photo = "";
+    }
+
+    /**
+     * Add to a string Array
+     * @param arg
+     * @return
+     */
+    public String[] _addArgument(String arg) {
+        // create a new array with increased length
+        int oldLength = parsedArguments.length;
+        String[] newArray = new String[oldLength + 1];
+        // copy parsedArguments to newArray
+        if (newArray.length >= 0)
+            System.arraycopy(parsedArguments, 0, newArray, 0, newArray.length);
+
+        // add new element to newArray
+        newArray[oldLength] = arg;
+
+        return newArray;
+    }
+
+    /**
+     *
+     */
+    public void checkAttributes() {
+        // minimum check
+        if (checkTitleAndAuthor() &&
+                checkIsbn()) {
+            // add to parsedArguments
+            parsedArguments = _addArgument(title);
+            parsedArguments = _addArgument(author);
+            parsedArguments = _addArgument(isbn);
+        }
+        // check the condition
+        if (checkCondition()) {
+            parsedArguments = _addArgument(condition);
+        }
+        else {
+            condition = "N/A";
+            parsedArguments = _addArgument(condition);
+        }
+        // check the status
+        if (checkStatus()) {
+            parsedArguments = _addArgument(status);
+        }
+        // check for photo
+        if (photo.equals(null)) {
+            setEmptyPhoto();
+            parsedArguments = _addArgument(photo);
+        }
+        // check for comment
+        if (comment.equals(null)) {
+            setEmptyComment();
+            parsedArguments = _addArgument(comment);
+        }
+    }
+
+    /**
+     * Returns the attributes after parsing
+     * @return
+     *      String array of parsed attributes
+     */
+    public String[] returnParsedArguments() {
+        return parsedArguments;
+    }
 }

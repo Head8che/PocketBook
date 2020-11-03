@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bookConditions">
+        <item>Select condition</item>
+        <item>Brand New</item>
+        <item>Like New</item>
+        <item>Very Good</item>
+        <item>Good</item>
+        <item>Acceptable</item>
+    </string-array>
+    
+</resources>

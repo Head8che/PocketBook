@@ -119,7 +119,7 @@ public class ViewMyBookBookFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), EditBookActivity.class);
-//                intent.putExtra("CURRENT_USER", currentUser);
+                intent.putExtra("VMBBF_BOOK", book);
                 startActivity(intent);
             }
         });

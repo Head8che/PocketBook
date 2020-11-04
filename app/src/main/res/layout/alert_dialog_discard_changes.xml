@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<androidx.cardview.widget.CardView
+    android:layout_width="340dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
+    app:contentPaddingTop="48dp"
+    app:contentPaddingBottom="48dp"
+    app:cardCornerRadius="20dp"
+    android:layout_gravity="center"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/discardTitleTextView"
+            android:layout_width="wrap_content"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@color/textBlack"
+            android:text="@string/discard_changes_title" />
+
+        <TextView
+            android:id="@+id/discardContentTextView"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:textColor="@color/textBlack"
+            android:text="@string/discard_changes_content" />
+
+        <Button
+            android:id="@+id/keepEditingBtn"
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_round_btn_accent"
+            android:textStyle="bold"
+            android:textColor="@color/textWhite"
+            android:textAppearance="@style/alertDialogBtnStyle"
+            android:letterSpacing="0.1"
+            android:text="@string/keep_editing" />
+
+        <TextView
+            android:id="@+id/discardBtn"
+            android:layout_marginTop="16dp"
+            android:layout_width="100dp"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/textBlack"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:letterSpacing="0.07"
+            android:text="@string/discard" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+</FrameLayout>

@@ -20,12 +20,17 @@ import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private BookList list;
     private User currentUser;
+    private User bookOwner;
     private FragmentActivity activity;
 
     public BookAdapter(User currentUser, BookList list, FragmentActivity activity) {
@@ -61,12 +66,24 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     nextFrag.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
                 } else {
-                    ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("BA_USER", currentUser);
-                    bundle.putSerializable("BA_BOOK", book);
-                    nextFrag.setArguments(bundle);
-                    activity.getSupportFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("BA_CURRENTUSER", currentUser);
+//                    bundle.putSerializable("BA_BOOK", book);
+                    FirebaseFirestore.getInstance().collection("users").document(book.getOwner())
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot document = task.getResult();
+                            bookOwner = new User(document.getString("firstName"),document.getString("lastName"),document.getString("email")
+                                    ,document.getString("username"),document.getString("password"),document.getString("photo"));
+                            ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser,bookOwner, book);
+                            activity.getSupportFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
+                        }
+                    });
+//                    bundle.putSerializable("BA_BOOKOWNER",bookOwner);
+//
+//                    nextFrag.setArguments(bundle);
+
                     //activity.getFragmentManager().beginTransaction().replace(R.id., nextFrag, "ViewBookFragment").addToBackStack(null).commit();
                 }
                 

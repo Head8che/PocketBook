@@ -1,6 +1,7 @@
 package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.example.pocketbook.activity.EditBookActivity;
+import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
@@ -23,17 +26,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.ScrollUpdate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
+
 
 public class ProfileFragment extends Fragment {
     private static final int numColumns = 2;
@@ -49,6 +57,11 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     public static ProfileFragment newInstance(User user) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -57,9 +70,11 @@ public class ProfileFragment extends Fragment {
         return profileFragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("PF_USER");
@@ -70,14 +85,38 @@ public class ProfileFragment extends Fragment {
         // Query to retrieve all books
         mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail());
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                    return;
+                }
+
+                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                getParentFragmentManager()
+                        .beginTransaction()
+                        .detach(ProfileFragment.this)
+                        .attach(ProfileFragment.this)
+                        .commitAllowingStateLoss();
+            }
+
+        });
+
     }
+
 
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
-          container.removeAllViews();
+            container.removeAllViews();
         }
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
@@ -108,30 +147,12 @@ public class ProfileFragment extends Fragment {
         scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
         scrollUpdate.load();
 
-        //
-//        private FirebaseAuth mAuth;
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference storageRef = storage.getReferenceFromUrl("gs://am-d5edb.appspot.com").child("users").child(mAuth.getUid()+".jpg");
-//
-//        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                Log.e("Tuts+", "uri: " + uri.toString());
-//                DownloadLink = uri.toString();
-//                CircleImageView iv = (CircleImageView) view.findViewById(R.id.profilePictureEditFragment);
-//                Picasso.with(getContext()).load(uri.toString()).placeholder(R.drawable.ic_launcher3slanted).error(R.drawable.ic_launcher3slanted).into(iv);
-//                //Handle whatever you're going to do with the URL here
-//            }
-//        });
-
-
-
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditProfileFragment nextFrag = new EditProfileFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container,nextFrag).commit();
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                intent.putExtra("currentUser", currentUser);
+                startActivity(intent);
             }
         });
         return v;

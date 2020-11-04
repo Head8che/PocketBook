@@ -44,4 +44,13 @@
     <string name="discard">DISCARD</string>
     <string name="editBookPageTitle">Edit Book</string>
 
+    <string name="edit_profile">Edit Profile</string>
+    <string name="suggested_books">Suggested Books</string>
+    <string name="email">Email</string>
+
+    <string name="name">Name</string>
+    <string name="change_profile_photo">Change Profile Photo</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+
 </resources>

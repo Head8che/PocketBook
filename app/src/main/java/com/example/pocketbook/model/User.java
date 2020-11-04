@@ -50,6 +50,9 @@ public class User implements Serializable {
         this.notificationList = new NotificationList();
     }
 
+    public User(String first_name, String last_name, String user_name) {
+    }
+
     public String getFirstName() { return this.firstName; }
     public String getLastName() { return this.lastName; }
     public String getEmail() { return this.email; }

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.EditBookActivity">
+    android:background="@color/textBlack">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -66,7 +64,13 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?android:attr/actionBarSize">
 
-        <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-31dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -195,3 +199,110 @@
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="36dp"
+                android:src="@mipmap/ic_user_foreground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/editProfilePicture"
+                android:layout_width="162dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/textBlack"
+                android:gravity="center_horizontal"
+                android:text="@string/change_profile_photo"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="109dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:gravity="center_horizontal"
+                android:text="@string/name"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="106dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="28dp"
+                android:gravity="center_horizontal"
+                android:text="@string/username"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+
+            <TextView
+                android:id="@+id/userEmail"
+                android:layout_width="106dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="28dp"
+                android:gravity="center_horizontal"
+                android:text="@string/email"
+                android:textColor="@color/textWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+            <TextView
+                android:id="@+id/userProfileName"
+                android:layout_width="272dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="8dp"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.666"
+                app:layout_constraintStart_toEndOf="@+id/profileName"
+                app:layout_constraintTop_toTopOf="@+id/profileName" />
+
+            <TextView
+                android:id="@+id/userProfileUserName"
+                android:layout_width="272dp"
+                android:layout_height="23dp"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.857"
+                app:layout_constraintStart_toEndOf="@+id/userName"
+                app:layout_constraintTop_toTopOf="@+id/userName" />
+
+            <TextView
+                android:id="@+id/UserProfileEmail"
+                android:layout_width="272dp"
+                android:layout_height="23dp"
+                android:layout_marginStart="16dp"
+                android:text=""
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/userEmail"
+                app:layout_constraintTop_toTopOf="@+id/userEmail" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

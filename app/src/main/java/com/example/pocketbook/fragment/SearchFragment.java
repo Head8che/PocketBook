@@ -69,8 +69,10 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         View v = inflater.inflate(R.layout.fragment_search, container, false);
-
         // TODO: see if possible to switch to BookList and BookAdapter
         mBooksRecycler = v.findViewById(R.id.search_recycler_books);
         mBooksRecycler.setLayoutManager(new LinearLayoutManager(v.getContext()));

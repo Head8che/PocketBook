@@ -150,7 +150,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         boolean available;
         //boolean alreadyRequested = false;
         switch(bookStatus) {
-            case "borrowed":
+            case "BORROWED":
                 requestButton.setClickable(false);
                 requestButton.setText("Not Available");
                 requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
@@ -158,7 +158,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
                 available = false;
                 break;
-            case "accepted":
+            case "ACCEPTED":
                 requestButton.setClickable(false);
                 requestButton.setText("Not Available");
                 requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
@@ -166,7 +166,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
                 available = false;
                 break;
-            case "requested":
+            case "REQUESTED":
                 if (book.getRequestList().containsRequest(currentUser.getEmail())){
                     requestButton.setText("Already Requested!");
                     requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));

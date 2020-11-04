@@ -80,10 +80,10 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
                 android:text="@string/this_is_my_book_title"
-
+                android:textColor="@color/colorTitle"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:gravity="center" />
 
 
             <TextView
@@ -94,7 +94,8 @@
                 android:layout_marginTop="4sp"
                 android:text="@string/lengthier_author_name"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center"/>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

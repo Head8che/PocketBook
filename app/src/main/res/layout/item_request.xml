@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/itemRequestProfileImageView"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@color/colorAccent" />
+
+    <LinearLayout
+        android:id="@+id/itemRequestLinearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/itemRequestProfileImageView"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/itemRequestUsernameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/usename"
+            android:textColor="@color/colorTitle"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/itemRequestDateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dateFormat"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/itemRequestLinearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        style="attr/buttonBarStyle"
+
+        >
+
+        <Button
+            android:id="@+id/itemRequestAcceptButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/accept"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="end"
+            style="attr/buttonBarButtonStyle"
+            />
+        <Button
+            android:id="@+id/itemRequestDeclineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/decline"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary"
+
+            style="attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -9,9 +9,11 @@
     <dimen name="fragment_title_size">25sp</dimen>
 
     <dimen name="small_book_width">100dp</dimen>
-    <dimen name="small_book_height">140dp</dimen>
+    <dimen name="small_book_height">146dp</dimen>
     <dimen name="medium_book_width">164dp</dimen>
     <dimen name="medium_book_height">240dp</dimen>
+    <dimen name="med_large_book_width">230dp</dimen>
+    <dimen name="med_large_book_height">336dp</dimen>
     <dimen name="large_book_width">270dp</dimen>
     <dimen name="large_book_height">395dp</dimen>
     <dimen name="splash_screen_logo_image_size">200dp</dimen>

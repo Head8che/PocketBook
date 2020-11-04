@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,9 +29,36 @@ import java.util.Map;
 public class RequestList implements Serializable {
 
     private LinkedHashMap<String, Request> requestList;
+    private String bookId;
 
-    public RequestList() {
+    public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
+        this.bookId = bookId;
+        this.getData();
+    }
+
+    public void getData(){
+        FirebaseFirestore.getInstance().collection("catalogue").document(bookId)
+                .collection("requests").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Request request = document.toObject(Request.class);
+                                requestList.put(request.getRequester(),request);
+                            }
+                        } else {
+                            Log.d("temp","failed to get data!");
+                        }
+                    }
+                });
+    }
+
+    public Request getRequestAtPosition(int position) {
+        List<String> keys = new ArrayList<String>(requestList.keySet());
+        String positionalRequestID = keys.get(position);
+        return requestList.get(positionalRequestID);
     }
 
     /* TODO: EXTEND */

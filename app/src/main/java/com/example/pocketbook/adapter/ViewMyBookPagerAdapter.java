@@ -14,8 +14,8 @@ public class ViewMyBookPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private int numOfTabs;
-    private Book book = null;
-    private BookList catalogue = null;
+    private Book book;
+    private BookList catalogue;
 
     public ViewMyBookPagerAdapter(FragmentManager fm, int numOfTabs, Book book, BookList catalogue) {
         super(fm);
@@ -30,7 +30,7 @@ public class ViewMyBookPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ViewMyBookBookFragment(this.book, this.catalogue);
             case 1:
-                return new ViewMyBookRequestsFragment();
+                return new ViewMyBookRequestsFragment(this.book);
             default:
                 return null;
         }

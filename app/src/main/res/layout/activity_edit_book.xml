@@ -91,6 +91,7 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/editBookChangePhotoBtn"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:gravity="center"

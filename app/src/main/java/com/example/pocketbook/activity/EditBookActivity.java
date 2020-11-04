@@ -1,32 +1,43 @@
 package com.example.pocketbook.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
 
 public class EditBookActivity extends AppCompatActivity {
+
+    Book book;
 
     private String bookTitle;
     private String bookAuthor;
@@ -41,13 +52,15 @@ public class EditBookActivity extends AppCompatActivity {
     TextInputEditText layoutBookCondition;
     TextInputEditText layoutBookComment;
 
+    Uri filePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_book);
 
         Intent intent = getIntent();
-        Book book = (Book) intent.getSerializableExtra("VMBBF_BOOK");
+        book = (Book) intent.getSerializableExtra("VMBBF_BOOK");
         StorageReference bookCover = book.getBookCover();
 
         bookTitle = book.getTitle();
@@ -59,6 +72,7 @@ public class EditBookActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.editBookToolbar);
         ImageView cancelButton = (ImageView) findViewById(R.id.editBookCancelBtn);
         TextView saveButton = (TextView) findViewById(R.id.editBookSaveBtn);
+        TextView changePhotoButton = (TextView) findViewById(R.id.editBookChangePhotoBtn);
 
         layoutBookTitle = (TextInputEditText) findViewById(R.id.editBookTitleField);
         layoutBookAuthor = (TextInputEditText) findViewById(R.id.editBookAuthorField);
@@ -77,6 +91,13 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showSpinnerDialog();
+            }
+        });
+
+        changePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageSelectorDialog();
             }
         });
 
@@ -171,7 +192,7 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                layoutBookCondition.setText("GREAT");
+                layoutBookCondition.setText(R.string.greatCondition);
             }
         });
 
@@ -179,7 +200,7 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                layoutBookCondition.setText("GOOD");
+                layoutBookCondition.setText(R.string.goodCondition);
             }
         });
 
@@ -187,7 +208,7 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                layoutBookCondition.setText("FAIR");
+                layoutBookCondition.setText(R.string.fairCondition);
             }
         });
 
@@ -195,7 +216,7 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                layoutBookCondition.setText("ACCEPTABLE");
+                layoutBookCondition.setText(R.string.acceptableCondition);
             }
         });
     }
@@ -235,5 +256,24 @@ public class EditBookActivity extends AppCompatActivity {
                 && bookCondition.equals(layoutBookCondition.getText().toString())
                 && bookComment.equals(layoutBookComment.getText().toString())
                 ;
+    }
+
+    private void showImageSelectorDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.alert_dialog_book_photo, null);
+
+        TextView takePhotoOption = view.findViewById(R.id.takePhotoField);
+        TextView choosePhotoOption = view.findViewById(R.id.choosePhotoField);
+        TextView removePhotoOption = view.findViewById(R.id.removePhotoField);
+
+        String bookPhoto = book.getPhoto();
+
+        if ((bookPhoto == null) || (bookPhoto.equals(""))) {
+            removePhotoOption.setVisibility(View.GONE);
+        }
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
     }
 }

@@ -49,4 +49,9 @@
     <string name="fairCondition">Fair</string>
     <string name="acceptableCondition">Acceptable</string>
 
+    <string name="bookPhotoDialogTitle">Change Book Photo</string>
+    <string name="takePhoto">Take Photo</string>
+    <string name="choosePhoto">Choose Photo</string>
+    <string name="removePhoto">Remove Current Photo</string>
+
 </resources>

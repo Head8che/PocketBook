@@ -1,7 +1,6 @@
 package com.example.pocketbook.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +29,7 @@ public class AddFragment extends Fragment {
     private EditText isbnEditText;
     private EditText commentEditText;
     private Button addButton;
-    private ImageButton imageButton;
+    private ImageView imageView;
 
     private String condition;
 //    private String photo;
@@ -107,20 +108,22 @@ public class AddFragment extends Fragment {
          * https://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
          * https://medium.com/@hasangi/capture-image-or-choose-from-gallery-photos-implementation-for-android-a5ca59bc6883
          */
-        imageButton = view.findViewById(R.id.image_button);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ///////////// TODO:
-                // create a dialogue fragment that allows
-                //  - take photo
-                //  - choose from gallery
-                //  - cancel
-                // retrieve the image
-                // add to Firestore
-                // set image as image uploaded as imageView
-            }
-        });
+        imageView = view.findViewById(R.id.image_view);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ///////////// TODO:
+//                // create a dialogue fragment that allows
+//                //  - take photo
+//                //  - choose from gallery
+//                //  - cancel
+//                // retrieve the image
+//                // add to Firestore
+//                // set image as image uploaded as imageView
+//
+//                pri
+//            }
+//        });
 
 //        author = authorText.getText().toString();
 //        title = titleText.getText().toString();
@@ -154,12 +157,14 @@ public class AddFragment extends Fragment {
                 book.pushNewBookToFirebase();
 
 
-                //go to the view owned book activity
+                //TODO : go to the view owned book activity
                 ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);
+                String finishAddMsg = "You have added a book.";
 
             }
 
         });
 
     }
+
 }

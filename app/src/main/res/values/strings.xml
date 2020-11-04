@@ -12,7 +12,7 @@
     <string name="book_cover_image">Book Cover Image</string>
     <string name="scan">Scan</string>
     <string name="profile">Profile</string>
-    <string name="isbn_text">ISBN:</string>
+    <string name="isbn_text">ISBN: %1$s</string>
     <string name="condition_text">Condition: %1$s</string>
     <string name="comment_text">Comment: %1$s</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
@@ -31,8 +31,19 @@
     <string name="condition">Condition</string>
     <string name="comment">Comment</string>
     <string name="delete">Delete</string>
+
     <string name="usename">Usename</string>
     <string name="dateFormat">MMM DD,YYYY</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="change_photo">CHANGE PHOTO</string>
+    <string name="discard_changes_title">Discard Changes?</string>
+    <string name="discard_changes_content">If you go back now, you will lose your changes.</string>
+    <string name="keep_editing">KEEP EDITING</string>
+    <string name="discard">DISCARD</string>
+    <string name="editBookPageTitle">Edit Book</string>
+
 </resources>

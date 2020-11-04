@@ -2,6 +2,7 @@ package com.example.pocketbook.model;
 
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -57,6 +58,7 @@ public class Book extends Object implements Serializable {
      */
     public Book(String id, String title, String author, String isbn, String owner,
                 String status, String comment, String condition, String photo) {
+
         this.id = (id == null) ? null : id.trim();
         this.title = title.trim();
         this.author = author.trim();
@@ -98,6 +100,7 @@ public class Book extends Object implements Serializable {
         return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
     }
 
+    /* Setter Functions for Local and Firebase */
     public void setTitle(String title) {
         setTitleLocal(title);
         setTitleFirebase(title);
@@ -131,7 +134,8 @@ public class Book extends Object implements Serializable {
                 ? null : photo.trim();
     }
 
-
+    /* Setter Function Definitions
+     */
     public void setTitleLocal(String title) { this.title = title.trim(); }
     public void setAuthorLocal(String author) { this.author = author.trim(); }
     public void setIsbnLocal(String isbn) { this.isbn = isbn.trim(); }
@@ -177,6 +181,9 @@ public class Book extends Object implements Serializable {
                 });
     }
 
+    /*
+    Pushes a new Book to Firebase
+     */
     public void pushNewBookToFirebase() {
 
         DocumentReference bookDoc = FirebaseFirestore.getInstance().collection("books").document();
@@ -199,6 +206,7 @@ public class Book extends Object implements Serializable {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("NEW_BOOK", "Book data successfully written!");
+                        Log.d("DESCRIPTION : ", id + title + author + isbn + owner + status + comment + condition);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -209,6 +217,7 @@ public class Book extends Object implements Serializable {
                 });
 
     }
+
 
     public boolean addRequest(Request request) {
         if (!this.status.equals("requested")) {

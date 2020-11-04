@@ -9,31 +9,36 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 public class AddFragment extends Fragment {
 
-    private EditText authorText;
-    private EditText titleText;
-    private EditText isbnText;
-    private EditText commentText;
+    private EditText authorEditText;
+    private EditText titleEditText;
+    private EditText isbnEditText;
+    private EditText commentEditText;
     private Button addButton;
-    private ImageButton imageButton;
+    private ImageView imageView;
+
     private String condition;
+//    private String photo;
+//    private String author;
+//    private String  isbn;
+//    private String comment;
+//    private String status;
+//    private String title;
+//    private String owner;
 
     private User currentUser;
     private BookList catalogue;
@@ -68,10 +73,10 @@ public class AddFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // get all the EditText fields
-        authorText = (EditText) view.findViewById(R.id.editText_author);
-        titleText = (EditText) view.findViewById(R.id.editText_title);
-        isbnText = (EditText) view.findViewById(R.id.editText_isbn);
-        commentText = (EditText) view.findViewById(R.id.editText_comment);
+        authorEditText = (EditText) view.findViewById(R.id.editText_author);
+        titleEditText = (EditText) view.findViewById(R.id.editText_title);
+        isbnEditText = (EditText) view.findViewById(R.id.editText_isbn);
+        commentEditText = (EditText) view.findViewById(R.id.editText_comment);
 
         /* Drop-down menu for Conditions */
         Spinner conditionsSpinner = (Spinner) view.findViewById(R.id.spinner_conditions);
@@ -103,48 +108,63 @@ public class AddFragment extends Fragment {
          * https://stackoverflow.com/questions/9107900/how-to-upload-image-from-gallery-in-android
          * https://medium.com/@hasangi/capture-image-or-choose-from-gallery-photos-implementation-for-android-a5ca59bc6883
          */
-        imageButton = view.findViewById(R.id.image_button);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ///////////// TODO:
-                // create a dialogue fragment that allows
-                //  - take photo
-                //  - choose from gallery
-                //  - cancel
-                // retrieve the image
-                // add to Firestore
-                // set image as image uploaded as imageView
-            }
-        });
+        imageView = view.findViewById(R.id.image_view);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ///////////// TODO:
+//                // create a dialogue fragment that allows
+//                //  - take photo
+//                //  - choose from gallery
+//                //  - cancel
+//                // retrieve the image
+//                // add to Firestore
+//                // set image as image uploaded as imageView
+//
+//                pri
+//            }
+//        });
+
+//        author = authorText.getText().toString();
+//        title = titleText.getText().toString();
+//        isbn = isbnText.getText().toString();
+//        comment = commentText.getText().toString();
+//        // all new books to be added are available
+//        status = "AVAILABLE";
+//
+//        // get the user credentials
+//        owner = currentUser.getEmail();
 
         /* Add Book Handler */
         addButton = view.findViewById(R.id.button_addBook);
         addButton.setOnClickListener(new View.OnClickListener() {
 
-            final String author = authorText.getText().toString();
-            final String title = titleText.getText().toString();
-            final String isbn = isbnText.getText().toString();
-            final String comment = commentText.getText().toString();
-            // all new books to be added are available
-            final String status = "AVAILABLE";
-
-            // get the user credentials
-            final String owner = currentUser.getEmail(); //TODO : change to email
-
             @Override
             public void onClick(View view) {
                 // create Book object and add to Firestore
+                final String author = authorEditText.getText().toString();
+                final String title = titleEditText.getText().toString();
+                final String isbn = isbnEditText.getText().toString();
+                final String comment = commentEditText.getText().toString();
+                // all new books to be added are available
+                final String status = "AVAILABLE";
+
+                // get the user credentials
+                final String owner = currentUser.getEmail();
+
                 Book book = new Book(null, title, author, isbn, owner, status,
-                        null, condition, null);
+                        comment, condition, null);
                 book.pushNewBookToFirebase();
 
-                //go to the view owned book activity
+
+                //TODO : go to the view owned book activity
                 ViewMyBookBookFragment viewMyBookBookFragment = new ViewMyBookBookFragment(book);
+                String finishAddMsg = "You have added a book.";
 
             }
 
         });
 
     }
+
 }

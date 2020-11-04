@@ -134,7 +134,9 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
         bookTitleField.setText(bookTitle);
         bookAuthorField.setText(bookAuthor);
-        isbnField.setText(bookIsbn);
+
+        isbnField.setText(getResources().getString(R.string.isbn_text, bookISBN));
+
 
         GlideApp.with(Objects.requireNonNull(getContext()))
                 .load(bookCover)
@@ -210,5 +212,5 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     }
 
 
-    
+
 }

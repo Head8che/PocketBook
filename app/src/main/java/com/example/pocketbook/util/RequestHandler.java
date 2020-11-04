@@ -19,6 +19,7 @@ public class RequestHandler {
         PENDING
     }
 
+
     private BookStatus bookState;
     private RequestStatus requestStatus;
     private ArrayList<User> requesters;

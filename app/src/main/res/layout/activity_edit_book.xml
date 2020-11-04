@@ -164,7 +164,11 @@
                     android:id="@+id/editBookConditionField"
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:longClickable="false"
+                    android:maxLines="1"
+                    android:inputType="text"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp" />
 

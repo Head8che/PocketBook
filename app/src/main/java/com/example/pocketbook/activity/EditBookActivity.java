@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -72,6 +73,13 @@ public class EditBookActivity extends AppCompatActivity {
         layoutBookCondition.setText(bookCondition);
         layoutBookComment.setText(bookComment);
 
+        layoutBookCondition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSpinnerDialog();
+            }
+        });
+
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
                 .load(bookCover)
                 .into(layoutBookCover);
@@ -122,6 +130,74 @@ public class EditBookActivity extends AppCompatActivity {
         } else {
             showCancelDialog();
         }
+    }
+
+    private void showSpinnerDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.alert_dialog_condition_spinner, null);
+
+        TextView greatOption = view.findViewById(R.id.spinnerDialogGreatField);
+        TextView goodOption = view.findViewById(R.id.spinnerDialogGoodField);
+        TextView fairOption = view.findViewById(R.id.spinnerDialogFairField);
+        TextView acceptableOption = view.findViewById(R.id.spinnerDialogAcceptableField);
+        TextView selectedOption;
+
+        if (layoutBookCondition != null) {
+            switch (layoutBookCondition.getText().toString()) {
+                case "GREAT":
+                    selectedOption = greatOption;
+                    break;
+                case "GOOD":
+                    selectedOption = goodOption;
+                    break;
+                case "FAIR":
+                    selectedOption = fairOption;
+                    break;
+                default:
+                    selectedOption = acceptableOption;
+                    break;
+            }
+            selectedOption.setBackgroundColor(ContextCompat
+                    .getColor(getBaseContext(), R.color.colorAccent));
+            selectedOption.setTextColor(ContextCompat
+                    .getColor(getBaseContext(), R.color.textWhite));
+        }
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+
+        greatOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                layoutBookCondition.setText("GREAT");
+            }
+        });
+
+        goodOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                layoutBookCondition.setText("GOOD");
+            }
+        });
+
+        fairOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                layoutBookCondition.setText("FAIR");
+            }
+        });
+
+        acceptableOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                layoutBookCondition.setText("ACCEPTABLE");
+            }
+        });
     }
 
     private void showCancelDialog() {

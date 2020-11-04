@@ -87,7 +87,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
 
         public void bind(Request request){
-            notifyDataSetChanged();
             String requesterEmail = request.getRequester();
             FirebaseFirestore.getInstance().collection("users").document(requesterEmail)
                     .get()
@@ -98,13 +97,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                                 DocumentSnapshot document = task.getResult();
                                 mRequester = new User(document.getString("firstName"),document.getString("lastName"),document.getString("email")
                                 ,document.getString("username"),document.getString("password"),document.getString("photo"));
+                                username.setText(mRequester.getUsername());
+                                GlideApp.with(Objects.requireNonNull(itemView.getContext()))
+                                        .load(mRequester.getProfilePicture())
+                                        .into(userProfile);
                             }
                         }
                     });
-            username.setText(mRequester.getUsername());
-            GlideApp.with(Objects.requireNonNull(itemView.getContext()))
-                    .load(mRequester.getProfilePicture())
-                    .into(userProfile);
             date.setText(request.getRequestDate());
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override

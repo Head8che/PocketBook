@@ -25,6 +25,7 @@ import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.Request;
+import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,6 +45,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -57,7 +59,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     private Book book;
     private User currentUser;
-    //private User bookOwner;
+    private User bookOwner;
 
     private ImageView userProfile;
     private ImageView bookCoverImageView;
@@ -75,15 +77,15 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     private String bookComment;
     private String bookIsbn;
     private String bookCondition;
-    private String bookOwner;
     private String bookStatus;
     private StorageReference bookCover;
 
-    public static ViewBookFragment newInstance(User user, Book book) {
+    public static ViewBookFragment newInstance(User currentUser, User bookOwner, Book book) {
         ViewBookFragment viewBookFragment = new ViewBookFragment();
         Bundle args = new Bundle();
-        args.putSerializable("BA_USER", user);
+        args.putSerializable("BA_CURRENTUSER", currentUser);
         args.putSerializable("BA_BOOK", book);
+        args.putSerializable("BA_BOOKOWNER", bookOwner);
         viewBookFragment.setArguments(args);
         return viewBookFragment;
     }
@@ -94,8 +96,10 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            this.currentUser = (User) getArguments().getSerializable("BA_USER");
+            this.currentUser = (User) getArguments().getSerializable("BA_CURRENTUSER");
             this.book = (Book) getArguments().getSerializable("BA_BOOK");
+            this.bookOwner = (User) getArguments().getSerializable("BA_BOOKOWNER");
+            //Log.d("debugkjwewwee",bookOwner.toString());
         }
 
         bookId = book.getId();
@@ -104,7 +108,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         bookComment = book.getComment();
         bookIsbn = book.getISBN();
         bookCondition = book.getCondition();
-        bookOwner = book.getOwner();
         bookStatus =  book.getStatus();
         bookCover = book.getBookCover();
         db = FirebaseFirestore.getInstance();
@@ -138,7 +141,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .into(bookCoverImageView);
 
         GlideApp.with(Objects.requireNonNull(getContext()))
-                .load(currentUser.getProfilePicture())
+                .load(bookOwner.getProfilePicture())
                 .circleCrop()
                 .into(userProfilePicture);
 
@@ -158,9 +161,17 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 requestButton.setText("Not Available");
                 requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_borrowed);
-                bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccepted),android.graphics.PorterDuff.Mode.SRC_IN);
+                bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
                 available = false;
                 break;
+            case "requested":
+                if (book.getRequestList().containsRequest(currentUser.getEmail())){
+                    requestButton.setText("Already Requested!");
+                    requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
+                    bookStatusImage.setImageResource(R.drawable.ic_borrowed);
+                    bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
+                    available = false;
+                }
             default:
                 bookStatusImage.setImageResource(R.drawable.ic_available);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAvailable), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -185,7 +196,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             requestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    book.addRequest(new Request(currentUser.getEmail(), book.getOwner(), book));
+                    book.addRequest(new Request(currentUser.getEmail(), bookOwner.getEmail(), book));
                     Toast.makeText(getActivity(), String.format(Locale.CANADA,
                             "You have requested %s!",book.getTitle()),
                             Toast.LENGTH_SHORT).show();

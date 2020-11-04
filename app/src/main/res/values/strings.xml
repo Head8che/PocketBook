@@ -39,4 +39,7 @@
     <string name="change_profile_photo">Change Profile Photo</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="profile_image">profile_Image</string>
+    <string name="firstlastname">FirstLastName</string>
+    <string name="profile_username">UserName</string>
 </resources>

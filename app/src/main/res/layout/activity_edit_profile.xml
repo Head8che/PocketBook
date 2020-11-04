@@ -4,48 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/textBlack">
+    android:background="@color/textWhite">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/BookToolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="">
+        android:layout_height="wrap_content"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark"
+        tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/viewMyBookBackBtn"
-            android:layout_width="33dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_back"
-            app:tint="@color/colorUnselected">
-        </ImageView>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/editProfileToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="">
 
-        <TextView
-            android:id="@+id/viewMyBookDeleteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:minHeight="?actionBarSize"
-            android:layout_marginEnd="24dp"
-            android:text="Save"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/editProfileBackBtn"
+                android:layout_width="33dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_back"
+                app:tint="@color/colorUnselected">
+            </ImageView>
 
-    </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:id="@+id/editProfileSaveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:gravity="center_vertical"
+                android:minHeight="?actionBarSize"
+                android:layout_marginEnd="24dp"
+                android:text="Save"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-31dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="-28dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -65,96 +72,109 @@
 
             <TextView
                 android:id="@+id/editProfilePicture"
-                android:layout_width="162dp"
-                android:layout_height="18dp"
+                android:layout_width="161dp"
+                android:layout_height="29dp"
                 android:layout_marginTop="24dp"
-                android:background="@color/textBlack"
                 android:gravity="center_horizontal"
                 android:text="@string/change_profile_photo"
-                android:textColor="@color/textWhite"
+                android:textColor="@color/textBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
+
             <TextView
-                android:id="@+id/profileName"
+                android:id="@+id/FirstName"
                 android:layout_width="109dp"
                 android:layout_height="23dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="100dp"
-                android:gravity="center_horizontal"
-                android:text="@string/name"
-                android:textColor="@color/textWhite"
+                android:layout_marginTop="124dp"
+                android:text="@string/first_name"
+                android:textColor="@color/textBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.052"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
-
             <TextView
-                android:id="@+id/userName"
-                android:layout_width="106dp"
+                android:id="@+id/LastName"
+                android:layout_width="109dp"
                 android:layout_height="23dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="28dp"
-                android:gravity="center_horizontal"
-                android:text="@string/username"
-                android:textColor="@color/textWhite"
+                android:text="@string/last_name"
+                android:textColor="@color/textBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.052"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+                app:layout_constraintTop_toBottomOf="@+id/FirstName" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="109dp"
+                android:layout_height="23dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/username"
+                android:textColor="@color/textBlack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LastName" />
 
             <TextView
                 android:id="@+id/userEmail"
-                android:layout_width="106dp"
+                android:layout_width="109dp"
                 android:layout_height="23dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="28dp"
-                android:gravity="center_horizontal"
                 android:text="@string/email"
-                android:textColor="@color/textWhite"
+                android:textColor="@color/textBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.052"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userName" />
 
-            <TextView
-                android:id="@+id/userProfileName"
-                android:layout_width="272dp"
-                android:layout_height="23dp"
-                android:layout_marginStart="8dp"
-                android:text=""
-                android:textColor="@color/textWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.666"
-                app:layout_constraintStart_toEndOf="@+id/profileName"
-                app:layout_constraintTop_toTopOf="@+id/profileName" />
 
-            <TextView
+            <EditText
+                android:id="@+id/userProfileFirstName"
+                android:layout_width="272dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="14dp"
+                android:inputType="textPersonName"
+                android:textColor="@color/textBlack"
+                app:layout_constraintBaseline_toBaselineOf="@+id/FirstName"
+                app:layout_constraintStart_toEndOf="@+id/FirstName" />
+
+            <EditText
+                android:id="@+id/userProfileLastName"
+                android:layout_width="272dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="14dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textColor="@color/textBlack"
+                app:layout_constraintBaseline_toBaselineOf="@+id/LastName"
+                app:layout_constraintStart_toEndOf="@+id/LastName" />
+
+            <EditText
                 android:id="@+id/userProfileUserName"
                 android:layout_width="272dp"
-                android:layout_height="23dp"
-                android:text=""
-                android:textColor="@color/textWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.857"
-                app:layout_constraintStart_toEndOf="@+id/userName"
-                app:layout_constraintTop_toTopOf="@+id/userName" />
+                android:layout_height="40dp"
+                android:layout_marginStart="14dp"
+                android:inputType="textPersonName"
+                android:textColor="@color/textBlack"
+                app:layout_constraintBaseline_toBaselineOf="@+id/userName"
+                app:layout_constraintStart_toEndOf="@+id/userName" />
 
-            <TextView
-                android:id="@+id/UserProfileEmail"
+            <EditText
+                android:id="@+id/userProfileEmail"
                 android:layout_width="272dp"
-                android:layout_height="23dp"
-                android:layout_marginStart="16dp"
-                android:text=""
-                android:textColor="@color/textWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/userEmail"
-                app:layout_constraintTop_toTopOf="@+id/userEmail" />
-
+                android:layout_height="40dp"
+                android:layout_marginStart="14dp"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/textBlack"
+                app:layout_constraintBaseline_toBaselineOf="@+id/userEmail"
+                app:layout_constraintStart_toEndOf="@+id/userEmail" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

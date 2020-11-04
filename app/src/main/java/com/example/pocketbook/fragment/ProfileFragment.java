@@ -26,12 +26,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.ScrollUpdate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
@@ -71,6 +75,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("PF_USER");
         }
@@ -79,6 +84,29 @@ public class ProfileFragment extends Fragment {
         mFirestore = FirebaseFirestore.getInstance();
         // Query to retrieve all books
         mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail());
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                    return;
+                }
+
+                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                getParentFragmentManager()
+                        .beginTransaction()
+                        .detach(ProfileFragment.this)
+                        .attach(ProfileFragment.this)
+                        .commitAllowingStateLoss();
+            }
+
+        });
 
     }
 

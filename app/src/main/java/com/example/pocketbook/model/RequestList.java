@@ -29,20 +29,16 @@ import java.util.Map;
 public class RequestList implements Serializable {
 
     private LinkedHashMap<String, Request> requestList;
-    private static int tempCount;
-    private FirebaseFirestore db;
     private String bookId;
 
     public RequestList(String bookId) {
-
         this.requestList = new LinkedHashMap<String, Request>();
-        this.db = FirebaseFirestore.getInstance();
         this.bookId = bookId;
         this.getData();
     }
 
     public void getData(){
-        db.collection("catalogue").document(bookId)
+        FirebaseFirestore.getInstance().collection("catalogue").document(bookId)
                 .collection("requests").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -132,7 +128,7 @@ public class RequestList implements Serializable {
         docData.put("requestDate", requestDate);
         docData.put("requestedBook", requestedBook);
 
-        db.collection("catalogue").document(requestedBook)
+        FirebaseFirestore.getInstance().collection("catalogue").document(requestedBook)
                 .collection("requests").document(requester)
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -159,7 +155,7 @@ public class RequestList implements Serializable {
         String requester = request.getRequester();
         String requestedBook = request.getRequestedBook();
 
-        db.collection("catalogue").document(requestedBook)
+        FirebaseFirestore.getInstance().collection("catalogue").document(requestedBook)
                 .collection("requests").document(requester)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

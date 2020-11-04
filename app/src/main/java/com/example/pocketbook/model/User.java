@@ -53,6 +53,27 @@ public class User implements Serializable {
     public String getFirstName() { return this.firstName; }
     public String getLastName() { return this.lastName; }
     public String getEmail() { return this.email; }
+
+    public ArrayList<String> getOwnedBooks() {
+        return ownedBooks;
+    }
+
+    public ArrayList<String> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public ArrayList<String> getAcceptedBooks() {
+        return acceptedBooks;
+    }
+
+    public ArrayList<String> getRequestedBooks() {
+        return requestedBooks;
+    }
+
+    public NotificationList getNotificationList() {
+        return notificationList;
+    }
+
     public String getUsername() { return this.username; }
     public String getPassword() { return this.password; }
     public String getPhoto() { return this.photo; }

@@ -1,95 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.AddFragment"
-    android:orientation="vertical">
+    tools:context=".fragment.AddFragment">
 
-    <!-- If no image AddImage Button-->
 
     <!-- Else display image -->
 
     <!-- EditText Fields -->
 
 
-    <ScrollView
-        android:id="@+id/view_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_centerHorizontal="true">
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="194dp"
+        android:layout_height="171dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:srcCompat="@drawable/ic_photo_library_white_24dp" />
+
+    </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton3"
+        android:layout_width="46dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="216dp"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:src="@drawable/ic_add"
+        android:foregroundGravity="bottom"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.787"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="195dp"
+        android:layout_height="255dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginBottom="54dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/button_addBook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+        <EditText
+            android:id="@+id/editText_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:ems="10"
+            android:hint="@string/title"
+            android:inputType="textPersonName" />
 
-            <ImageButton
-                android:id="@+id/image_button"
-                android:layout_width="191dp"
-                android:layout_height="205dp"
-                app:srcCompat="@drawable/ic_photo_library_white_24dp" />
+        <EditText
+            android:id="@+id/editText_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/author"
+            android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/editText_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:hint="@string/title"
-                android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/editText_isbn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/isbn"
+            android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/editText_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:hint="@string/author"
-                android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/editText_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:ems="10"
+            android:hint="@string/comment"
+            android:inputType="textPersonName" />
 
-            <EditText
-                android:id="@+id/editText_isbn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:hint="@string/isbn"
-                android:inputType="textPersonName" />
+        <Spinner
+            android:id="@+id/spinner_conditions"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="305dp" />
 
-            <EditText
-                android:id="@+id/editText_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ems="10"
-                android:hint="@string/comment"
-                android:inputType="textPersonName" />
-
-            <Spinner
-                android:id="@+id/spinner_conditions"
-                android:layout_width="match_parent"
-                android:layout_height="63dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="7dp" />
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_addBook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/view_description"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="116dp"
         android:background="@color/colorAccent"
         android:text="@string/add_book"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
     <!-- Style Button using Material Design -->
     <!-- style="?attr/materialButtonOutlinedStyle"-->
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

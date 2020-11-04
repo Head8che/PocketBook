@@ -82,6 +82,37 @@ public class EditBookActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!noChanges()) {
+                    String newTitle = layoutBookTitle.getText().toString();
+                    String newAuthor = layoutBookAuthor.getText().toString();
+                    String newISBN = layoutBookISBN.getText().toString();
+                    String newCondition = layoutBookCondition.getText().toString();
+                    String newComment = layoutBookComment.getText().toString();
+
+                    if (!(bookTitle.equals(newTitle))) {
+                        book.setTitle(newTitle);
+                    }
+                    if (!(bookAuthor.equals(newAuthor))) {
+                        book.setAuthor(newAuthor);
+                    }
+                    if (!(bookISBN.equals(newISBN))) {
+                        book.setIsbn(newISBN);
+                    }
+                    if (!(bookCondition.equals(newCondition))) {
+                        book.setCondition(newCondition);
+                    }
+                    if (!(bookComment.equals(newComment))) {
+                        book.setComment(newComment);
+                    }
+
+                }
+                finish();
+            }
+        });
     }
 
     @Override

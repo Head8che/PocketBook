@@ -31,6 +31,12 @@
     <string name="condition">Condition</string>
     <string name="comment">Comment</string>
     <string name="delete">Delete</string>
+
+    <string name="usename">Usename</string>
+    <string name="dateFormat">MMM DD,YYYY</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="change_photo">CHANGE PHOTO</string>
@@ -39,4 +45,5 @@
     <string name="keep_editing">KEEP EDITING</string>
     <string name="discard">DISCARD</string>
     <string name="editBookPageTitle">Edit Book</string>
+
 </resources>

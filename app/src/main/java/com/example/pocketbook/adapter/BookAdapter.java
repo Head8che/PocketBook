@@ -56,7 +56,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (book.getOwner().equals("jane@gmail.com")) {
+                if (book.getOwner().equals("jake@gmail.com")) {
                     Log.e("OWNERIN", book.getOwner());
                     ViewMyBookFragment nextFrag = ViewMyBookFragment.newInstance(currentUser, book, list);
                     Bundle bundle = new Bundle();

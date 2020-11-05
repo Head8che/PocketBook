@@ -163,16 +163,14 @@ public class SignUpActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                                 profileImageUrl = username+".jpg";
                                 user = new User(firstName,lastName,email,username,password,profileImageUrl);
-                                mFirestore = FirebaseFirestore.getInstance();
-                                mFirestore.collection("users").document(email).set(user);
+                                user.setNewUserFirebase();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             } else{
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!",
                                         Toast.LENGTH_SHORT).show();
                                 user = new User(firstName,lastName,email,username,password, null);
-                                mFirestore = FirebaseFirestore.getInstance();
-                                mFirestore.collection("users").document(email).set(user);
+                                user.setNewUserFirebase();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             }
@@ -191,8 +189,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void updateUI(FirebaseUser currentUser){
-        String keyID = mDatabase.push().getKey();
-        mDatabase.child(keyID).setValue(user);
         Intent loginIntent = new Intent(this,LoginActivity.class);
         startActivity(loginIntent);
     }

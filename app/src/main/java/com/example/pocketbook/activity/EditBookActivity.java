@@ -1,20 +1,13 @@
 package com.example.pocketbook.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -30,18 +23,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,6 +54,7 @@ public class EditBookActivity extends AppCompatActivity {
 
     String currentPhotoPath;
     Bitmap currentPhoto;
+    String removedPhoto;
 
     TextInputEditText layoutBookTitle;
     TextInputEditText layoutBookAuthor;
@@ -164,8 +153,9 @@ public class EditBookActivity extends AppCompatActivity {
                     if (currentPhotoPath != null) {
                         if (currentPhotoPath.equals("BITMAP")) {
                             book.setBookCover(currentPhoto);
+                        } else {
+                            book.setBookCover(currentPhotoPath);
                         }
-                        book.setBookCover(currentPhotoPath);
                     }
 
                 }
@@ -299,8 +289,10 @@ public class EditBookActivity extends AppCompatActivity {
 
         String bookPhoto = book.getPhoto();
 
-        if ((bookPhoto == null) || (bookPhoto.equals(""))) {
+        if ((removedPhoto != null) || (bookPhoto == null) || (bookPhoto.equals(""))) {
             removePhotoOption.setVisibility(View.GONE);
+        } else {
+            removePhotoOption.setVisibility(View.VISIBLE);
         }
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
@@ -325,49 +317,20 @@ public class EditBookActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), LAUNCH_GALLERY_CODE);
             }
         });
-//
-//        fairOption.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                alertDialog.dismiss();
-//                layoutBookCondition.setText(R.string.fairCondition);
-//            }
-//        });
-//
-//        acceptableOption.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                alertDialog.dismiss();
-//                layoutBookCondition.setText(R.string.acceptableCondition);
-//            }
-//        });
-    }
 
-    private void selectImage(Context context) {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setTitle("Choose your profile picture");
-
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
+        removePhotoOption.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Take Photo")) {
-                    openCamera();
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_PICK);
-                    startActivityForResult(Intent.createChooser(intent, "Select Image"), 1);
-
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
+            public void onClick(View v) {
+                removedPhoto = book.getPhoto();
+                book.setPhoto("");
+                alertDialog.dismiss();
+                GlideApp.with(Objects.requireNonNull(getApplicationContext()))
+                        .load(book.getBookCover())
+                        .into(layoutBookCover);
+                book.setPhoto(removedPhoto);
+                currentPhotoPath = "REMOVE";
             }
         });
-        builder.show();
     }
 
     private void openCamera() {
@@ -422,6 +385,7 @@ public class EditBookActivity extends AppCompatActivity {
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
                 myImage.setImageBitmap(myBitmap);
+                removedPhoto = null;
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.e("EDIT_BOOK_ACTIVITY", "Camera failed!");
             }
@@ -434,13 +398,14 @@ public class EditBookActivity extends AppCompatActivity {
                     currentPhotoPath = "BITMAP";
                     ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
                     myImage.setImageBitmap(currentPhoto);
+                    removedPhoto = null;
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(EditBookActivity.this, "Failed Gallery!", Toast.LENGTH_SHORT).show();
+                Log.e("EDIT_BOOK_ACTIVITY", "Failed Gallery!");
             }
         }
     }

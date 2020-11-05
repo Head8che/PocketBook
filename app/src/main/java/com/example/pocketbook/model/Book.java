@@ -114,6 +114,24 @@ public class Book extends Object implements Serializable {
 
             StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(getId()+".jpg");
 
+            if (localURL.equals("REMOVE")) {
+                childRef.delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("REMOVE_BOOK_COVER", "Book data successfully written!");
+                                setPhoto("");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("REMOVE_BOOK_COVER", "Error writing book data!");
+                            }
+                        });
+                return;
+            }
+
             //uploading the image
             UploadTask uploadTask = childRef.putFile(Uri.fromFile(new File(localURL)));
 

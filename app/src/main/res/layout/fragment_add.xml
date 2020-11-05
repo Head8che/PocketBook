@@ -33,14 +33,13 @@
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton3"
+        android:id="@+id/button_addImage"
         android:layout_width="46dp"
         android:layout_height="44dp"
         android:layout_marginTop="216dp"
         android:layout_marginBottom="12dp"
         android:clickable="true"
         android:src="@drawable/ic_add"
-        android:foregroundGravity="bottom"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.787"

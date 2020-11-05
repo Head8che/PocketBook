@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.ImageAdder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,7 +47,7 @@ import com.google.firebase.storage.UploadTask;
 
 import static android.app.Activity.RESULT_OK;
 
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends Fragment implements ImageAdder {
     EditText FirstName, LastName, Email, Username, Password;
     String first_Name, last_Name, email, username, password, profileImageUrl;
     private FirebaseDatabase database;
@@ -203,7 +204,8 @@ public class EditProfileFragment extends Fragment {
 //        }
 //    }
 
-    public boolean uploadImage(){
+    @Override
+    public boolean uploadImageToFirebase(){
         if(filePath != null) {
             pd.show();
             StorageReference childRef = storageRef.child(username+".jpg");
@@ -230,8 +232,8 @@ public class EditProfileFragment extends Fragment {
 
     }
 
-
-    private void openCamera() {
+    @Override
+    public void openCamera() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Profile Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera");
@@ -244,7 +246,8 @@ public class EditProfileFragment extends Fragment {
 
     }
 
-    private void selectImage(Context context) {
+    @Override
+    public void selectImage(Context context) {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

@@ -191,4 +191,11 @@ public class RequestList implements Serializable {
         return false;
     }
 
+    /**
+     * Returns the number of requests made for the Book
+     * @return
+     */
+    public int requestListSize() {
+        return this.requestList.size();
+    }
 }

@@ -1,12 +1,8 @@
 package com.example.pocketbook.activity;
 
 
-import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,18 +12,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.AddFragment;
-import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
-import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.BookList;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.example.pocketbook.model.User;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
@@ -89,7 +83,12 @@ public class HomeActivity extends AppCompatActivity {
                             selectedFragment = new ScanFragment();
                             break;
                         case R.id.bottom_nav_profile:
-                            selectedFragment = ProfileFragment.newInstance(user);
+//                            mFirestore = FirebaseFirestore.getInstance();
+//                            // Query to retrieve all books
+//                            mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+//                            if
+                            selectedFragment = OwnerFragment.newInstance(user);
+//                            selectedFragment = ProfileFragment.newInstance(user);
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,selectedFragment).commit();

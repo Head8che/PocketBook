@@ -49,10 +49,6 @@
 
             </androidx.appcompat.widget.Toolbar>
 
-            <!--            <Space-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="50dp" />-->
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -85,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="0dp"
                 android:gravity="center_horizontal"
                 android:text="firstlastname"
                 android:textColor="@color/textBlack"
@@ -102,6 +98,19 @@
                 android:text="profile_username"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/itemRequestAcceptButton"
+                style="attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:backgroundTint="@color/colorAccent"
+                android:gravity="center_horizontal"
+                android:text="Edit"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

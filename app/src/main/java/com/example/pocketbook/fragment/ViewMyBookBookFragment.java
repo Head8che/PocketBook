@@ -84,7 +84,12 @@ public class ViewMyBookBookFragment extends Fragment {
                             .attach(ViewMyBookBookFragment.this)
                             .commitAllowingStateLoss();
                 } else {
-                    Objects.requireNonNull(getActivity()).getFragmentManager().popBackStack();
+                    if ( getActivity() == null) {
+                        getParentFragmentManager().beginTransaction()
+                                .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
+                    } else {
+                        getActivity().getFragmentManager().popBackStack();
+                    }
                 }
 
 

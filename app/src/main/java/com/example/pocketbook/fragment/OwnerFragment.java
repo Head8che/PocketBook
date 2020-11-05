@@ -1,6 +1,7 @@
 package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
@@ -101,9 +103,15 @@ public class OwnerFragment extends Fragment {
         scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
         scrollUpdate.load();
 
-
-
-
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                intent.putExtra("currentUser", currentUser);
+                startActivity(intent);
+            }
+        });
+        
         return v;
     }
 }

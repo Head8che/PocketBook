@@ -44,7 +44,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -60,8 +62,10 @@ public class EditBookActivity extends AppCompatActivity {
     private String bookCondition;
     private String bookComment;
     private int LAUNCH_CAMERA_CODE = 1408;
+    private int LAUNCH_GALLERY_CODE = 1922;
 
     String currentPhotoPath;
+    Bitmap currentPhoto;
 
     TextInputEditText layoutBookTitle;
     TextInputEditText layoutBookAuthor;
@@ -158,6 +162,9 @@ public class EditBookActivity extends AppCompatActivity {
                         book.setComment(newComment);
                     }
                     if (currentPhotoPath != null) {
+                        if (currentPhotoPath.equals("BITMAP")) {
+                            book.setBookCover(currentPhoto);
+                        }
                         book.setBookCover(currentPhotoPath);
                     }
 
@@ -307,6 +314,60 @@ public class EditBookActivity extends AppCompatActivity {
                 openCamera();
             }
         });
+
+        choosePhotoOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_PICK);
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), LAUNCH_GALLERY_CODE);
+            }
+        });
+//
+//        fairOption.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//                layoutBookCondition.setText(R.string.fairCondition);
+//            }
+//        });
+//
+//        acceptableOption.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//                layoutBookCondition.setText(R.string.acceptableCondition);
+//            }
+//        });
+    }
+
+    private void selectImage(Context context) {
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle("Choose your profile picture");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take Photo")) {
+                    openCamera();
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_PICK);
+                    startActivityForResult(Intent.createChooser(intent, "Select Image"), 1);
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     private void openCamera() {
@@ -361,9 +422,25 @@ public class EditBookActivity extends AppCompatActivity {
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
                 myImage.setImageBitmap(myBitmap);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.e("EDIT_BOOK_ACTIVITY", "Camera failed!");
+            }
+        } else if (requestCode == LAUNCH_GALLERY_CODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                try {
+                    InputStream inputStream = getBaseContext()
+                            .getContentResolver().openInputStream(data.getData());
+                    currentPhoto = BitmapFactory.decodeStream(inputStream);
+                    currentPhotoPath = "BITMAP";
+                    ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
+                    myImage.setImageBitmap(currentPhoto);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(EditBookActivity.this, "Failed Gallery!", Toast.LENGTH_SHORT).show();
             }
         }
     }

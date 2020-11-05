@@ -53,5 +53,6 @@
     <string name="takePhoto">Take Photo</string>
     <string name="choosePhoto">Choose Photo</string>
     <string name="removePhoto">Remove Current Photo</string>
+    <string name="addBookFragmentTitle">Add New Book</string>
 
 </resources>

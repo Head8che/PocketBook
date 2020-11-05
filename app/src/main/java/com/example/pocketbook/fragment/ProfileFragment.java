@@ -42,7 +42,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
-
+/**
+ * Profile Page fragment that contains the user Profile (Books/Info)
+ */
 public class ProfileFragment extends Fragment {
     private static final int NUM_COLUMNS = 2;
     private static final int LIMIT = 20;
@@ -57,7 +59,11 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
-
+    /**
+     * Profile fragment instance that bundles the user information to be accessible/displayed
+     * @param user
+     * @return
+     */
     public static ProfileFragment newInstance(User user) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -66,7 +72,10 @@ public class ProfileFragment extends Fragment {
         return profileFragment;
     }
 
-
+    /**
+     * Obtains and create the information/data required for this screen.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +114,13 @@ public class ProfileFragment extends Fragment {
 
     }
 
-
+    /**
+     * Inflates the layout/container in the respectful fields and fills the fields that require the user information
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override

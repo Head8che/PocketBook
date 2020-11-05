@@ -42,6 +42,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Home Page Screen
+ */
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG ="MainActivity";
     private FirebaseFirestore mFirestore;
@@ -80,10 +83,17 @@ public class HomeActivity extends AppCompatActivity {
                 HomeFragment.newInstance(currentUser, new BookList())).commit();
     }
 
+    /**
+     * Greeting message displayed on the screen open successful logging in.
+     * @param message
+     */
     private void toastMessage(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Bottom navigation bar options
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener NavListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 @Override

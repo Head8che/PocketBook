@@ -54,7 +54,7 @@ public class EditBookActivity extends AppCompatActivity {
 
     String currentPhotoPath;
     Bitmap currentPhoto;
-    String removedPhoto;
+    Boolean removePhoto;
 
     TextInputEditText layoutBookTitle;
     TextInputEditText layoutBookAuthor;
@@ -80,6 +80,8 @@ public class EditBookActivity extends AppCompatActivity {
         bookISBN = book.getISBN();
         bookCondition = book.getCondition();
         bookComment = book.getComment();
+
+        removePhoto = (book.getPhoto() != null) && (!book.getPhoto().equals(""));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.editBookToolbar);
         ImageView cancelButton = (ImageView) findViewById(R.id.editBookCancelBtn);
@@ -289,10 +291,10 @@ public class EditBookActivity extends AppCompatActivity {
 
         String bookPhoto = book.getPhoto();
 
-        if ((removedPhoto != null) || (bookPhoto == null) || (bookPhoto.equals(""))) {
-            removePhotoOption.setVisibility(View.GONE);
-        } else {
+        if (removePhoto) {
             removePhotoOption.setVisibility(View.VISIBLE);
+        } else {
+            removePhotoOption.setVisibility(View.GONE);
         }
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
@@ -321,7 +323,7 @@ public class EditBookActivity extends AppCompatActivity {
         removePhotoOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removedPhoto = book.getPhoto();
+                String removedPhoto = book.getPhoto();
                 book.setPhoto("");
                 alertDialog.dismiss();
                 GlideApp.with(Objects.requireNonNull(getApplicationContext()))
@@ -329,6 +331,7 @@ public class EditBookActivity extends AppCompatActivity {
                         .into(layoutBookCover);
                 book.setPhoto(removedPhoto);
                 currentPhotoPath = "REMOVE";
+                removePhoto = false;
             }
         });
     }
@@ -385,7 +388,8 @@ public class EditBookActivity extends AppCompatActivity {
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
                 myImage.setImageBitmap(myBitmap);
-                removedPhoto = null;
+                removePhoto = true;
+                currentPhoto = null;
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.e("EDIT_BOOK_ACTIVITY", "Camera failed!");
             }
@@ -398,7 +402,7 @@ public class EditBookActivity extends AppCompatActivity {
                     currentPhotoPath = "BITMAP";
                     ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
                     myImage.setImageBitmap(currentPhoto);
-                    removedPhoto = null;
+                    removePhoto = true;
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

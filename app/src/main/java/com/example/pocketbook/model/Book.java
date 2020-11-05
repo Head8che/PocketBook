@@ -1,6 +1,7 @@
 package com.example.pocketbook.model;
 
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -112,6 +114,24 @@ public class Book extends Object implements Serializable {
 
             StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(getId()+".jpg");
 
+            if (localURL.equals("REMOVE")) {
+                childRef.delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("REMOVE_BOOK_COVER", "Book data successfully written!");
+                                setPhoto("");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("REMOVE_BOOK_COVER", "Error writing book data!");
+                            }
+                        });
+                return;
+            }
+
             //uploading the image
             UploadTask uploadTask = childRef.putFile(Uri.fromFile(new File(localURL)));
 
@@ -127,6 +147,31 @@ public class Book extends Object implements Serializable {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    Log.e("SET_BOOK_COVER", "Failed upload!");
+                }
+            });
+        }
+    }
+
+    public void setBookCover(Bitmap bitmap) {
+        if(bitmap != null) {
+
+            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(getId()+".jpg");
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            //uploading the image
+            UploadTask uploadTask = childRef.putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SET_BOOK_COVER", "Successful upload!");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
                     Log.e("SET_BOOK_COVER", "Failed upload!");
                 }
             });

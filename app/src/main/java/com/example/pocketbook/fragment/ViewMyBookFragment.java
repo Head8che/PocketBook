@@ -22,6 +22,8 @@ import com.example.pocketbook.model.User;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Objects;
+
 public class ViewMyBookFragment extends Fragment {
 
     private Book book;
@@ -117,7 +119,7 @@ public class ViewMyBookFragment extends Fragment {
                         //your deleting code
                         dialog.dismiss();
                         catalogue.removeBook(book);
-                        getActivity().finish();
+                        Objects.requireNonNull(getActivity()).onBackPressed();
                     }
 
                 })

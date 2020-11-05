@@ -69,13 +69,17 @@ public class ViewMyBookBookFragment extends Fragment {
                     return;
                 }
 
-                book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+                if ((snapshot != null) && snapshot.exists()) {
+                    book = FirebaseIntegrity.getBookFromFirestore(snapshot);
 
-                getParentFragmentManager()
-                        .beginTransaction()
-                        .detach(ViewMyBookBookFragment.this)
-                        .attach(ViewMyBookBookFragment.this)
-                        .commitAllowingStateLoss();
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .detach(ViewMyBookBookFragment.this)
+                            .attach(ViewMyBookBookFragment.this)
+                            .commitAllowingStateLoss();
+                } else {
+                    Objects.requireNonNull(getActivity()).getFragmentManager().popBackStack();
+                }
 
 
             }
@@ -144,8 +148,6 @@ public class ViewMyBookBookFragment extends Fragment {
         } else {
             layoutBookComment.setVisibility(View.GONE);
         }
-
-        /* TODO: handle Edit button and edit book info in catalogue */
 
         Button editButton = (Button) rootView.findViewById(R.id.viewMyBookEditBtn);
 

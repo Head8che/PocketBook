@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firstName = FirstName.getText().toString().trim();
                 lastName = LastName.getText().toString().trim();
-                email = Email.getText().toString().trim();
+                email = Email.getText().toString().trim().toLowerCase();
                 username = Username.getText().toString().trim();
                 password = Password.getText().toString().trim();
 
@@ -163,16 +163,14 @@ public class SignUpActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                                 profileImageUrl = username+".jpg";
                                 user = new User(firstName,lastName,email,username,password,profileImageUrl);
-                                mFirestore = FirebaseFirestore.getInstance();
-                                mFirestore.collection("users").document(email).set(user);
+                                user.setNewUserFirebase();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             } else{
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!",
                                         Toast.LENGTH_SHORT).show();
                                 user = new User(firstName,lastName,email,username,password, null);
-                                mFirestore = FirebaseFirestore.getInstance();
-                                mFirestore.collection("users").document(email).set(user);
+                                user.setNewUserFirebase();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             }
@@ -191,11 +189,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void updateUI(FirebaseUser currentUser){
-        String keyID = mDatabase.push().getKey();
-        mDatabase.child(keyID).setValue(user);
         Intent loginIntent = new Intent(this,LoginActivity.class);
         startActivity(loginIntent);
-
     }
 
     @Override
@@ -218,7 +213,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public boolean uploadImage(){
-
         if(filePath != null) {
             pd.show();
 

@@ -37,20 +37,7 @@
                 android:elevation="0dp"
                 app:title="">
 
-                <ImageView
-                    android:id="@+id/viewMyBookFragBackBtn"
-                    android:layout_width="33dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_back"
-                    app:tint="@color/colorUnselected">
-
-                </ImageView>
-
             </androidx.appcompat.widget.Toolbar>
-
-            <!--            <Space-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="50dp" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -84,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="0dp"
                 android:gravity="center_horizontal"
                 android:text="firstlastname"
                 android:textColor="@color/textBlack"
@@ -102,12 +89,24 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/edit_profile_button"
+                style="attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:backgroundTint="@color/colorAccent"
+                android:gravity="center_horizontal"
+                android:text="Edit"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/viewMyBookFragTabLayout"
+                    android:id="@+id/profileTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
@@ -115,19 +114,17 @@
                     app:tabTextColor="@color/colorUnselected">
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/viewMyBookFragBookTab"
+                        android:id="@+id/profileFragOwnerTab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/view_my_book_tab_1_title" />
+                        android:text="@string/owner" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/viewMyBookFragRequestsTab"
+                        android:id="@+id/profileFragBorrowerTab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/view_my_book_tab_2_title" />
-
+                        android:text="@string/borrower" />
                 </com.google.android.material.tabs.TabLayout>
-
             </LinearLayout>
 
 
@@ -139,7 +136,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-               />
+                app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
         </LinearLayout>
     </ScrollView>

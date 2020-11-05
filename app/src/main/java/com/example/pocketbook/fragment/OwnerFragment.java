@@ -3,48 +3,34 @@ package com.example.pocketbook.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.request.RequestOptions;
-import com.example.pocketbook.activity.EditBookActivity;
-import com.example.pocketbook.activity.EditProfileActivity;
-import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
-import com.example.pocketbook.model.User;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.adapter.BookAdapter;
-import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.ScrollUpdate;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
+public class OwnerFragment extends Fragment {
 
-public class ProfileFragment extends Fragment {
-    private static final int NUM_COLUMNS = 2;
+    private static final int numColumns = 2;
     private static final int LIMIT = 20;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
@@ -57,15 +43,14 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
-
-    public static ProfileFragment newInstance(User user) {
+    public static OwnerFragment newInstance(User user) {
+        OwnerFragment ownerFragment = new OwnerFragment();
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putSerializable("PF_USER", user);
-        profileFragment.setArguments(args);
-        return profileFragment;
+        ownerFragment.setArguments(args);
+        return ownerFragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,33 +63,9 @@ public class ProfileFragment extends Fragment {
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
         // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").limit(LIMIT);
-
-
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
-                .document(currentUser.getEmail());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("VMBBF_LISTENER", "Listen failed.", e);
-                    return;
-                }
-
-                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
-
-                getParentFragmentManager()
-                        .beginTransaction()
-                        .detach(ProfileFragment.this)
-                        .attach(ProfileFragment.this)
-                        .commitAllowingStateLoss();
-            }
-
-        });
+        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 
     }
-
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -113,10 +74,10 @@ public class ProfileFragment extends Fragment {
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         StorageReference userProfilePicture = currentUser.getProfilePicture();
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         mAdapter = new BookAdapter(currentUser, ownedBooks, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
@@ -150,7 +111,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
         return v;
     }
-
 }

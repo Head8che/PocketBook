@@ -37,11 +37,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
+/**
+ * A Sign up screen that allows users to sign up with there credentials(Email/Password/First name/Last name and username)
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     EditText FirstName, LastName, Email, Username, Password;
     String firstName, lastName, email, username, password, profileImageUrl;
+
     private FirebaseDatabase database;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -149,6 +152,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * registers the user with the provided credentials
+     * @param email
+     * @param password
+     * @param firstName
+     * @param lastName
+     * @param username
+     */
     public void Register(String email, String password, String firstName, String lastName, String username){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -188,11 +199,21 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Updates the user interface once they have successfully signed up.
+     * @param currentUser
+     */
     public void updateUI(FirebaseUser currentUser){
         Intent loginIntent = new Intent(this,LoginActivity.class);
         startActivity(loginIntent);
     }
 
+    /**
+     * Allows the users to set the bitmap image from the gallery to the image field.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -212,6 +233,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * uploads the image of the user to firebase with a unique id
+     * @return
+     */
     public boolean uploadImage(){
         if(filePath != null) {
             pd.show();
@@ -242,6 +267,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Allows the camera to be initiated upon request from the user
+     */
     private void openCamera() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Profile Picture");
@@ -254,6 +282,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Allows the user to select method type of image (Take Image/ Choose from Gallery)
+     * @param context
+     */
     private void selectImage(Context context) {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 

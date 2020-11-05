@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = userEmail.getText().toString().trim();
+                String email = userEmail.getText().toString().trim().toLowerCase();
                 String password = userPassword.getText().toString().trim();
                 if(email.isEmpty()){
                     userEmail.setError("Need an email!");

@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firstName = FirstName.getText().toString().trim();
                 lastName = LastName.getText().toString().trim();
-                email = Email.getText().toString().trim();
+                email = Email.getText().toString().trim().toLowerCase();
                 username = Username.getText().toString().trim();
                 password = Password.getText().toString().trim();
 

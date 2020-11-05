@@ -111,7 +111,7 @@ public class OwnerFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        
+
         return v;
     }
 }

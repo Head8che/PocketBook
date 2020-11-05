@@ -120,6 +120,7 @@ public class EditProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
                 first_name = firstName.getText().toString().trim();
                 last_name = lastName.getText().toString().trim();
                 user_name = userName.getText().toString().trim();
@@ -148,6 +149,25 @@ public class EditProfileActivity extends AppCompatActivity {
                 current_user.setLastName(last_name);
                 current_user.setUsername(user_name);
                 Log.d("Current User", current_user.getFirstName());
+
+                DocumentReference docRef = FirebaseFirestore.getInstance()
+                        .collection("users").document(Objects.requireNonNull(current_user.getEmail()));
+
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                current_user = FirebaseIntegrity.getUserFromFirestore(document);
+                                Intent intent = new Intent();
+                                setResult(RESULT_OK, intent);
+                                finish();
+
+                            }
+                        }
+                    }
+                });
             }
         });
 

@@ -34,7 +34,7 @@ public class RequestList implements Serializable {
     public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
         this.bookId = bookId;
-        this.getData();
+        if (this.bookId != null) {this.getData();}
     }
 
     public void getData(){

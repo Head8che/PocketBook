@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.model.RequestList;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -74,12 +75,12 @@ public class Book extends Object implements Serializable {
         this.status = status.trim().toUpperCase();  /* one of ["AVAILABLE", "REQUESTED",
                                                                "ACCEPTED", "BORROWED"] */
         this.comment = ((comment == null) || (comment.trim().equals("")))
-                ? null : comment.trim();
+                ? "" : comment.trim();
         this.condition = ((condition == null) || (condition.trim().equals("")))
-                ? null : condition.trim().toUpperCase();  /* one of ["GREAT", "GOOD",
+                ? "" : condition.trim().toUpperCase();  /* one of ["GREAT", "GOOD",
                                                                      "FAIR", "ACCEPTABLE"] */
         this.photo = ((photo == null) || (photo.trim().equals("")))
-                ? null : photo.trim();
+                ? "" : photo.trim();
 
         this.requestList = new RequestList(this.id);
         Log.d("inboooooooooooook",requestList.getRequestList().toString());
@@ -162,12 +163,15 @@ public class Book extends Object implements Serializable {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
+            Book thisBook = this;
+
             //uploading the image
             UploadTask uploadTask = childRef.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Log.e("SET_BOOK_COVER", "Successful upload!");
+                    thisBook.setPhoto(thisBook.id+".jpg");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -220,11 +224,11 @@ public class Book extends Object implements Serializable {
     public void setIsbnLocal(String isbn) { this.isbn = isbn.trim(); }
     public void setCommentLocal(String comment) {
         this.comment = ((comment == null) || (comment.trim().equals("")))
-                ? null : comment.trim();
+                ? "" : comment.trim();
     }
     public void setConditionLocal(String condition) {
         this.condition = ((condition == null) || (condition.trim().equals("")))
-                ? null : condition.trim().toUpperCase();
+                ? "" : condition.trim().toUpperCase();
     }
     public void setStatusLocal(String status) {
         this.status = status.trim().toUpperCase();
@@ -232,7 +236,7 @@ public class Book extends Object implements Serializable {
 
     public void setPhotoLocal(String photo) {
         this.photo = ((photo == null) || (photo.trim().equals("")))
-            ? null : photo.trim();
+            ? "" : photo.trim();
     }
 
     public void setTitleFirebase(String title) { setBookDataFirebase("title", title); }
@@ -287,6 +291,8 @@ public class Book extends Object implements Serializable {
         docData.put("condition", (this.condition == null) ? "" : this.condition);
         docData.put("photo", (this.photo == null) ? "" : this.photo);
 
+        Book thisBook = this;
+
         FirebaseFirestore.getInstance().collection("catalogue").document(this.id)
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -294,6 +300,7 @@ public class Book extends Object implements Serializable {
                     public void onSuccess(Void aVoid) {
                         Log.d("NEW_BOOK", "Book data successfully written!");
                         Log.d("DESCRIPTION : ", id + title + author + isbn + owner + status + comment + condition);
+                        FirebaseIntegrity.createKeywordsForBook(thisBook);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

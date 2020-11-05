@@ -6,12 +6,15 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
     TODO: handle setPhoto() & uploading image to FirebaseStorage and overwriting old image;
@@ -30,7 +33,7 @@ public class User implements Serializable {
     private ArrayList<String> borrowedBooks;
     private ArrayList<String> acceptedBooks;
     private ArrayList<String> requestedBooks;
-    private NotificationList notificationList;
+//    private NotificationList notificationList;
 
     public User() {} // used by firestore to automatically create new object
 
@@ -47,7 +50,7 @@ public class User implements Serializable {
         this.acceptedBooks = new ArrayList<String>();
         this.requestedBooks = new ArrayList<String>();
 
-        this.notificationList = new NotificationList();
+//        this.notificationList = new NotificationList();
     }
 
     public String getFirstName() { return this.firstName; }
@@ -70,9 +73,9 @@ public class User implements Serializable {
         return requestedBooks;
     }
 
-    public NotificationList getNotificationList() {
-        return notificationList;
-    }
+//    public NotificationList getNotificationList() {
+//        return notificationList;
+//    }
 
     public String getUsername() { return this.username; }
     public String getPassword() { return this.password; }
@@ -139,6 +142,32 @@ public class User implements Serializable {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e("SET_USER", "Error writing user data!", e);
+                    }
+                });
+    }
+
+    public void setNewUserFirebase() {
+        DocumentReference userDoc = FirebaseFirestore.getInstance().collection("users").document(this.email);
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("firstName", this.firstName);
+        docData.put("lastName", this.lastName);
+        docData.put("email", this.email);
+        docData.put("username", this.username);
+        docData.put("password", this.password);
+        docData.put("photo", (photo == null) ? "" : this.photo);
+
+        userDoc.set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("NEW_USER", "User data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("NEW_USER", "Error writing user data!", e);
                     }
                 });
     }

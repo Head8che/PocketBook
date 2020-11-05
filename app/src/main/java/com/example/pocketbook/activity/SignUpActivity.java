@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firstName = FirstName.getText().toString().trim();
                 lastName = LastName.getText().toString().trim();
-                email = Email.getText().toString().trim();
+                email = Email.getText().toString().trim().toLowerCase();
                 username = Username.getText().toString().trim();
                 password = Password.getText().toString().trim();
 
@@ -191,7 +191,6 @@ public class SignUpActivity extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser){
         Intent loginIntent = new Intent(this,LoginActivity.class);
         startActivity(loginIntent);
-
     }
 
     @Override
@@ -214,7 +213,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public boolean uploadImage(){
-
         if(filePath != null) {
             pd.show();
 

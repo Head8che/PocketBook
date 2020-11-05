@@ -66,5 +66,10 @@
     <string name="takePhoto">Take Photo</string>
     <string name="choosePhoto">Choose Photo</string>
     <string name="removePhoto">Remove Current Photo</string>
+    <string name="suggest_books">Suggest Books</string>
+    <string name="new_profile_username">profile_username</string>
+    <string name="new_profile_firstlastname">firstlastname</string>
+    <string name="owner">Owner</string>
+    <string name="borrower">Borrower</string>
 
 </resources>

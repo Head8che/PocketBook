@@ -72,7 +72,7 @@ public class OwnerFragment extends Fragment {
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_view_owner_books, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         StorageReference userProfilePicture = currentUser.getProfilePicture();
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
@@ -103,14 +103,7 @@ public class OwnerFragment extends Fragment {
 
 
 
-//        editProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                EditProfileFragment nextFrag = new EditProfileFragment();
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.container,nextFrag).commit();
-//            }
-//        });
+
         return v;
     }
 }

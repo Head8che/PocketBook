@@ -44,7 +44,7 @@ import java.util.Objects;
 
 
 public class ProfileFragment extends Fragment {
-    private static final int numColumns = 2;
+    private static final int NUM_COLUMNS = 2;
     private static final int LIMIT = 20;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
@@ -57,11 +57,7 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
-    /**
-     *
-     * @param user
-     * @return
-     */
+
     public static ProfileFragment newInstance(User user) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -75,7 +71,6 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("PF_USER");
         }
@@ -83,7 +78,7 @@ public class ProfileFragment extends Fragment {
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
         // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+        mQuery = mFirestore.collection("catalogue").limit(LIMIT);
 
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
@@ -118,10 +113,10 @@ public class ProfileFragment extends Fragment {
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         StorageReference userProfilePicture = currentUser.getProfilePicture();
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
         mAdapter = new BookAdapter(currentUser, ownedBooks, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 

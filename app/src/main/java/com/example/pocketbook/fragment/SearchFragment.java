@@ -133,7 +133,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
 
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
-        Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);;
+        Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);
 //        ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
 //        Bundle args = new Bundle();
 //        args.putString("ID",Book.class snapshot.getId());

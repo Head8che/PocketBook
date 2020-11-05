@@ -92,13 +92,23 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
 
-                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+                if ((snapshot != null) && snapshot.exists()) {
 
-                getParentFragmentManager()
-                        .beginTransaction()
-                        .detach(ProfileFragment.this)
-                        .attach(ProfileFragment.this)
-                        .commitAllowingStateLoss();
+                    currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .detach(ProfileFragment.this)
+                            .attach(ProfileFragment.this)
+                            .commitAllowingStateLoss();
+                } else {
+                    if ( getActivity() == null) {
+                        getParentFragmentManager().beginTransaction()
+                                .detach(ProfileFragment.this).commitAllowingStateLoss();
+                    } else {
+                        getActivity().getFragmentManager().popBackStack();
+                    }
+                }
             }
 
         });

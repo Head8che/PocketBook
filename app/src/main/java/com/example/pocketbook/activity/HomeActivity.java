@@ -133,7 +133,10 @@ public class HomeActivity extends AppCompatActivity {
                         //     break;
 
                     }
-                    if (item.getItemId() ==  R.id.bottom_nav_profile){
+                    if (item.getItemId() ==  R.id.bottom_nav_profile) {
+                        Fragment profileFragment = ProfileFragment.newInstance(currentUser);
+                        Fragment ownerFragment = OwnerFragment.newInstance(currentUser);
+
                         mFirestore = FirebaseFirestore.getInstance();
                         mFirestore.collection("catalogue")
                                 .whereEqualTo("owner",currentUser.getEmail())
@@ -142,23 +145,18 @@ public class HomeActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                if (document.exists()) {
-                                                    check = 1;
-                                                }
+                                            if (task.getResult().isEmpty()) {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, profileFragment).commit();
+                                            } else {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, ownerFragment).commit();
                                             }
                                         }
                                     }
                                 });
-                        if (check == 0){
-                            selectedFragment = ProfileFragment.newInstance(currentUser);
-                        }
-                        else {
-                            selectedFragment = OwnerFragment.newInstance(currentUser);
-//
-                        }
                     }
-                    if (selectedFragment != null) {
+                    if ((selectedFragment != null) && (item.getItemId() !=  R.id.bottom_nav_profile)) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();
                     }
                     return true;

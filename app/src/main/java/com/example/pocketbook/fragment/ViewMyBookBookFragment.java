@@ -23,6 +23,7 @@ import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -44,19 +45,24 @@ public class ViewMyBookBookFragment extends Fragment {
         // Required empty public constructor
     }
 
-    ///////////// TEMP
-    public ViewMyBookBookFragment(Book book) {
-        this.book = book;
-    }
 
-    public ViewMyBookBookFragment(Book book, BookList catalogue) {
-        this.book = book;
-        this.catalogue = catalogue;
+    public static ViewMyBookBookFragment newInstance(Book book, BookList catalogue) {
+        ViewMyBookBookFragment fragment = new ViewMyBookBookFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("VMBPA_BOOK", book);
+        args.putSerializable("VMBPA_CATALOGUE", catalogue);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            this.book = (Book) getArguments().getSerializable("VMBPA_BOOK");
+            this.catalogue = (BookList) getArguments().getSerializable("VMBPA_CATALOGUE");
+        }
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("catalogue")
                 .document(book.getId());
@@ -78,7 +84,12 @@ public class ViewMyBookBookFragment extends Fragment {
                             .attach(ViewMyBookBookFragment.this)
                             .commitAllowingStateLoss();
                 } else {
-                    Objects.requireNonNull(getActivity()).getFragmentManager().popBackStack();
+                    if ( getActivity() == null) {
+                        getParentFragmentManager().beginTransaction()
+                                .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
+                    } else {
+                        getActivity().getFragmentManager().popBackStack();
+                    }
                 }
 
 

@@ -38,15 +38,6 @@
                 android:elevation="0dp"
                 app:title="">
 
-                <ImageView
-                    android:id="@+id/viewMyBookFragBackBtn"
-                    android:layout_width="33dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_back"
-                    app:tint="@color/colorUnselected">
-
-                </ImageView>
-
             </androidx.appcompat.widget.Toolbar>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,7 +91,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/itemRequestAcceptButton"
+                android:id="@+id/edit_profile_button"
                 style="attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="37dp"

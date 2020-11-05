@@ -77,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container,
                 HomeFragment.newInstance(user, new BookList())).commit();
     }
-  
+
     private void toastMessage(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
@@ -100,40 +100,64 @@ public class HomeActivity extends AppCompatActivity {
                         case R.id.bottom_nav_scan:
                             selectedFragment = new ScanFragment();
                             break;
-                        case R.id.bottom_nav_profile:
-                            mFirestore = FirebaseFirestore.getInstance();
-                            mFirestore.collection("catalogue")
-                                    .whereEqualTo("owner",user.getEmail())
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    if (document.exists()) {
-                                                        check = 1;
-                                                    }
+
+                        // case R.id.bottom_nav_profile:
+                        //     mFirestore = FirebaseFirestore.getInstance();
+                        //     mFirestore.collection("catalogue")
+                        //             .whereEqualTo("owner",user.getEmail())
+                        //             .get()
+                        //             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        //                 @Override
+                        //                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        //                     if (task.isSuccessful()) {
+                        //                         for (QueryDocumentSnapshot document : task.getResult()) {
+                        //                             if (document.exists()) {
+                        //                                 check = 1;
+                        //                             }
+                        //                         }
+                        //                     }
+                        //                     Log.d("CHECKOne", String.valueOf(check));
+                        //                 }
+                        //             });
+
+                        //     Log.d("Final_Check", String.valueOf(check));
+                        //     if (String.valueOf(check) == String.valueOf(0){
+                        //         selectedFragment = ProfileFragment.newInstance(user);
+                        //     }
+                        //     else {
+                        //         selectedFragment = OwnerFragment.newInstance(user);                            }
+                        //     break;
+
+                    }
+                    if (item.getItemId() ==  R.id.bottom_nav_profile){
+                        mFirestore = FirebaseFirestore.getInstance();
+                        mFirestore.collection("catalogue")
+                                .whereEqualTo("owner",user.getEmail())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                if (document.exists()) {
+                                                    check = 1;
                                                 }
                                             }
-                                            Log.d("CHECKOne", String.valueOf(check));
                                         }
-                                    });
-//                            Log.d("Final_Check", String.valueOf(check));
-//                            if (String.valueOf(check) == String.valueOf(0)){
-//                                selectedFragment = ProfileFragment.newInstance(user);
-//                            }
-//                            else {
-//                                selectedFragment = OwnerFragment.newInstance(user);
-//                            }
+                                    }
+                                });
+                        if (check == 0){
                             selectedFragment = ProfileFragment.newInstance(user);
-                            break;
-
+                        }
+                        else {
+                            selectedFragment = OwnerFragment.newInstance(user);
+//
+                        }
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,selectedFragment).commit();
                     return true;
                 }
             };
-
 
     @Override
     protected void onDestroy() {
@@ -142,5 +166,3 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 }
-
-

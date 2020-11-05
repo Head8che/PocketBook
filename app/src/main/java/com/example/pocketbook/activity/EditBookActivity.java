@@ -1,20 +1,13 @@
 package com.example.pocketbook.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -30,21 +23,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -60,8 +50,11 @@ public class EditBookActivity extends AppCompatActivity {
     private String bookCondition;
     private String bookComment;
     private int LAUNCH_CAMERA_CODE = 1408;
+    private int LAUNCH_GALLERY_CODE = 1922;
 
     String currentPhotoPath;
+    Bitmap currentPhoto;
+    String removedPhoto;
 
     TextInputEditText layoutBookTitle;
     TextInputEditText layoutBookAuthor;
@@ -158,7 +151,11 @@ public class EditBookActivity extends AppCompatActivity {
                         book.setComment(newComment);
                     }
                     if (currentPhotoPath != null) {
-                        book.setBookCover(currentPhotoPath);
+                        if (currentPhotoPath.equals("BITMAP")) {
+                            book.setBookCover(currentPhoto);
+                        } else {
+                            book.setBookCover(currentPhotoPath);
+                        }
                     }
 
                 }
@@ -292,8 +289,10 @@ public class EditBookActivity extends AppCompatActivity {
 
         String bookPhoto = book.getPhoto();
 
-        if ((bookPhoto == null) || (bookPhoto.equals(""))) {
+        if ((removedPhoto != null) || (bookPhoto == null) || (bookPhoto.equals(""))) {
             removePhotoOption.setVisibility(View.GONE);
+        } else {
+            removePhotoOption.setVisibility(View.VISIBLE);
         }
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
@@ -305,6 +304,31 @@ public class EditBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 alertDialog.dismiss();
                 openCamera();
+            }
+        });
+
+        choosePhotoOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_PICK);
+                startActivityForResult(Intent.createChooser(intent, "Select Image"), LAUNCH_GALLERY_CODE);
+            }
+        });
+
+        removePhotoOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removedPhoto = book.getPhoto();
+                book.setPhoto("");
+                alertDialog.dismiss();
+                GlideApp.with(Objects.requireNonNull(getApplicationContext()))
+                        .load(book.getBookCover())
+                        .into(layoutBookCover);
+                book.setPhoto(removedPhoto);
+                currentPhotoPath = "REMOVE";
             }
         });
     }
@@ -361,9 +385,27 @@ public class EditBookActivity extends AppCompatActivity {
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
                 myImage.setImageBitmap(myBitmap);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
+                removedPhoto = null;
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.e("EDIT_BOOK_ACTIVITY", "Camera failed!");
+            }
+        } else if (requestCode == LAUNCH_GALLERY_CODE) {
+            if(resultCode == Activity.RESULT_OK) {
+                try {
+                    InputStream inputStream = getBaseContext()
+                            .getContentResolver().openInputStream(data.getData());
+                    currentPhoto = BitmapFactory.decodeStream(inputStream);
+                    currentPhotoPath = "BITMAP";
+                    ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
+                    myImage.setImageBitmap(currentPhoto);
+                    removedPhoto = null;
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.e("EDIT_BOOK_ACTIVITY", "Failed Gallery!");
             }
         }
     }

@@ -25,13 +25,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
@@ -43,24 +48,21 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EditBookActivity extends AppCompatActivity {
+public class AddBookActivity extends AppCompatActivity {
 
-    Book book;
+//    Book book;
+    User currentUser;
 
     private Boolean validTitle;
     private Boolean validAuthor;
     private Boolean validISBN;
-    private String bookTitle;
-    private String bookAuthor;
-    private String bookISBN;
-    private String bookCondition;
-    private String bookComment;
     private int LAUNCH_CAMERA_CODE = 1408;
     private int LAUNCH_GALLERY_CODE = 1922;
 
     String currentPhotoPath;
     Bitmap currentPhoto;
     Boolean removePhoto;
+    StorageReference currentBookCover;
 
     TextInputEditText layoutBookTitle;
     TextInputEditText layoutBookAuthor;
@@ -78,54 +80,44 @@ public class EditBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_book);
+        setContentView(R.layout.activity_add_book);
 
         Intent intent = getIntent();
-        book = (Book) intent.getSerializableExtra("VMBBF_BOOK");
-        StorageReference bookCover = book.getBookCover();
+        currentUser = (User) intent.getSerializableExtra("HA_USER");
+        currentBookCover = FirebaseStorage.getInstance().getReference()
+                .child("default_images").child("no_book_cover_light.png");
 
-        bookTitle = book.getTitle();
-        bookAuthor = book.getAuthor();
-        bookISBN = book.getISBN();
-        bookCondition = book.getCondition();
-        bookComment = book.getComment();
+        removePhoto = false;
+        validTitle = false;
+        validAuthor = false;
+        validISBN = false;
 
-        removePhoto = (book.getPhoto() != null) && (!book.getPhoto().equals(""));
-        validTitle = true;
-        validAuthor = true;
-        validISBN = true;
+        Toolbar toolbar = (Toolbar) findViewById(R.id.addBookToolbar);
+        ImageView cancelButton = (ImageView) findViewById(R.id.addBookCancelBtn);
+        TextView saveButton = (TextView) findViewById(R.id.addBookSaveBtn);
+        TextView changePhotoButton = (TextView) findViewById(R.id.addBookChangePhotoBtn);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.editBookToolbar);
-        ImageView cancelButton = (ImageView) findViewById(R.id.editBookCancelBtn);
-        TextView saveButton = (TextView) findViewById(R.id.editBookSaveBtn);
-        TextView changePhotoButton = (TextView) findViewById(R.id.editBookChangePhotoBtn);
+        layoutBookTitle = (TextInputEditText) findViewById(R.id.addBookTitleField);
+        layoutBookAuthor = (TextInputEditText) findViewById(R.id.addBookAuthorField);
+        layoutBookISBN = (TextInputEditText) findViewById(R.id.addBookISBNField);
+        layoutBookCover = (ImageView) findViewById(R.id.addBookBookCoverField);
+        layoutBookCondition = (TextInputEditText) findViewById(R.id.addBookConditionField);
+        layoutBookComment = (TextInputEditText) findViewById(R.id.addBookCommentField);
 
-        layoutBookTitle = (TextInputEditText) findViewById(R.id.editBookTitleField);
-        layoutBookAuthor = (TextInputEditText) findViewById(R.id.editBookAuthorField);
-        layoutBookISBN = (TextInputEditText) findViewById(R.id.editBookISBNField);
-        layoutBookCover = (ImageView) findViewById(R.id.editBookBookCoverField);
-        layoutBookCondition = (TextInputEditText) findViewById(R.id.editBookConditionField);
-        layoutBookComment = (TextInputEditText) findViewById(R.id.editBookCommentField);
+        layoutBookCondition.setText(R.string.fairCondition);
 
-        layoutBookTitle.setText(bookTitle);
-        layoutBookAuthor.setText(bookAuthor);
-        layoutBookISBN.setText(bookISBN);
-        layoutBookCondition.setText(bookCondition);
-        layoutBookComment.setText(bookComment);
-
-        layoutBookTitleContainer = (TextInputLayout) findViewById(R.id.editBookTitleContainer);
-        layoutBookAuthorContainer = (TextInputLayout) findViewById(R.id.editBookAuthorContainer);
-        layoutBookISBNContainer = (TextInputLayout) findViewById(R.id.editBookISBNContainer);
-        layoutBookConditionContainer = (TextInputLayout) findViewById(R.id.editBookConditionContainer);
-        layoutBookCommentContainer = (TextInputLayout) findViewById(R.id.editBookCommentContainer);
+        layoutBookTitleContainer = (TextInputLayout) findViewById(R.id.addBookTitleContainer);
+        layoutBookAuthorContainer = (TextInputLayout) findViewById(R.id.addBookAuthorContainer);
+        layoutBookISBNContainer = (TextInputLayout) findViewById(R.id.addBookISBNContainer);
+        layoutBookConditionContainer = (TextInputLayout) findViewById(R.id.addBookConditionContainer);
+        layoutBookCommentContainer = (TextInputLayout) findViewById(R.id.addBookCommentContainer);
 
         layoutBookTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (layoutBookTitle.getText().toString().equals("")) {
+                if (s.toString().equals("")) {
                     layoutBookTitle.setError("Input required");
                     layoutBookTitleContainer.setErrorEnabled(true);
-                    validTitle = false;
                 } else {
                     validTitle = true;
                     layoutBookTitleContainer.setErrorEnabled(false);
@@ -141,10 +133,9 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (layoutBookAuthor.getText().toString().equals("")) {
+                if (s.toString().equals("")) {
                     layoutBookAuthor.setError("Input required");
                     layoutBookAuthorContainer.setErrorEnabled(true);
-                    validAuthor = false;
                 } else {
                     validAuthor = true;
                     layoutBookAuthorContainer.setErrorEnabled(false);
@@ -160,10 +151,9 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (layoutBookISBN.getText().toString().equals("")) {
+                if (s.toString().equals("")) {
                     layoutBookISBN.setError("Input required");
                     layoutBookISBNContainer.setErrorEnabled(true);
-                    validISBN = false;
                 } else {
                     validISBN = true;
                     layoutBookISBNContainer.setErrorEnabled(false);
@@ -190,8 +180,7 @@ public class EditBookActivity extends AppCompatActivity {
         });
 
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
-                .load(bookCover)
-                .signature(new ObjectKey(String.valueOf(book.getPhotoCacheValue())))
+                .load(currentBookCover)
                 .into(layoutBookCover);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -206,27 +195,17 @@ public class EditBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validTitle && validAuthor && validISBN) {
                     if (!noChanges()) {
-                        String newTitle = layoutBookTitle.getText().toString();
-                        String newAuthor = layoutBookAuthor.getText().toString();
-                        String newISBN = layoutBookISBN.getText().toString();
-                        String newCondition = layoutBookCondition.getText().toString();
-                        String newComment = layoutBookComment.getText().toString();
+                        String title = layoutBookTitle.getText().toString();
+                        String author = layoutBookAuthor.getText().toString();
+                        String isbn = layoutBookISBN.getText().toString();
+                        String condition = layoutBookCondition.getText().toString();
+                        String comment = layoutBookComment.getText().toString();
 
-                        if (!(bookTitle.equals(newTitle))) {
-                            book.setTitle(newTitle);
-                        }
-                        if (!(bookAuthor.equals(newAuthor))) {
-                            book.setAuthor(newAuthor);
-                        }
-                        if (!(bookISBN.equals(newISBN))) {
-                            book.setIsbn(newISBN);
-                        }
-                        if (!(bookCondition.equals(newCondition))) {
-                            book.setCondition(newCondition);
-                        }
-                        if (!(bookComment.equals(newComment))) {
-                            book.setComment(newComment);
-                        }
+                        // if all booleans are good, pushNewBook
+                        Book book = new Book(null, title, author, isbn, currentUser.getEmail(),
+                                "AVAILABLE", comment, condition, null);
+                        book.pushNewBookToFirebase();
+                        SystemClock.sleep(300);
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
                                 book.setBookCover(currentPhoto);
@@ -234,8 +213,13 @@ public class EditBookActivity extends AppCompatActivity {
                                 book.setBookCover(currentPhotoPath);
                             }
                         }
+
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("ABA_BOOK", book);
+                        setResult(Activity.RESULT_OK, resultIntent);
+                        finish();
+
                     }
-                    finish();
                 } else {
                     if (!validTitle) {
                         layoutBookTitle.setError("Input required");
@@ -361,11 +345,11 @@ public class EditBookActivity extends AppCompatActivity {
     }
 
     private boolean noChanges() {
-        return bookTitle.equals(layoutBookTitle.getText().toString())
-                && bookAuthor.equals(layoutBookAuthor.getText().toString())
-                && bookISBN.equals(layoutBookISBN.getText().toString())
-                && bookCondition.equals(layoutBookCondition.getText().toString())
-                && bookComment.equals(layoutBookComment.getText().toString())
+        return String.valueOf(layoutBookTitle.getText()).equals("")
+                && String.valueOf(layoutBookAuthor.getText()).equals("")
+                && String.valueOf(layoutBookISBN.getText()).equals("")
+                && String.valueOf(layoutBookCondition.getText()).equals("FAIR")
+                && String.valueOf(layoutBookComment.getText()).equals("")
                 && (currentPhotoPath == null)
                 ;
     }
@@ -378,7 +362,7 @@ public class EditBookActivity extends AppCompatActivity {
         TextView choosePhotoOption = view.findViewById(R.id.choosePhotoField);
         TextView removePhotoOption = view.findViewById(R.id.removePhotoField);
 
-        String bookPhoto = book.getPhoto();
+//        String bookPhoto = book.getPhoto();
 
         if (removePhoto) {
             removePhotoOption.setVisibility(View.VISIBLE);
@@ -412,13 +396,13 @@ public class EditBookActivity extends AppCompatActivity {
         removePhotoOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String removedPhoto = book.getPhoto();
-                book.setPhoto("");
+//                String removedPhoto = book.getPhoto();
+//                book.setPhoto("");
                 alertDialog.dismiss();
                 GlideApp.with(Objects.requireNonNull(getApplicationContext()))
-                        .load(book.getBookCover())
+                        .load(currentBookCover)
                         .into(layoutBookCover);
-                book.setPhoto(removedPhoto);
+//                book.setPhoto(removedPhoto);
                 currentPhotoPath = "REMOVE";
                 removePhoto = false;
             }
@@ -436,7 +420,7 @@ public class EditBookActivity extends AppCompatActivity {
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 // display error state to the user
-                Log.e("EDIT_BOOK_ACTIVITY", ex.toString());
+                Log.e("ADD_BOOK_ACTIVITY", ex.toString());
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -447,7 +431,7 @@ public class EditBookActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, LAUNCH_CAMERA_CODE);
             }
         } else {
-            Log.e("EDIT_BOOK_ACTIVITY", "Failed to resolve activity!");
+            Log.e("ADD_BOOK_ACTIVITY", "Failed to resolve activity!");
         }
 
     }
@@ -475,12 +459,12 @@ public class EditBookActivity extends AppCompatActivity {
         if (requestCode == LAUNCH_CAMERA_CODE) {
             if(resultCode == Activity.RESULT_OK) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
-                ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
+                ImageView myImage = (ImageView) findViewById(R.id.addBookBookCoverField);
                 myImage.setImageBitmap(myBitmap);
                 removePhoto = true;
                 currentPhoto = null;
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.e("EDIT_BOOK_ACTIVITY", "Camera failed!");
+                Log.e("ADD_BOOK_ACTIVITY", "Camera failed!");
             }
         } else if (requestCode == LAUNCH_GALLERY_CODE) {
             if(resultCode == Activity.RESULT_OK) {
@@ -489,7 +473,7 @@ public class EditBookActivity extends AppCompatActivity {
                             .getContentResolver().openInputStream(data.getData());
                     currentPhoto = BitmapFactory.decodeStream(inputStream);
                     currentPhotoPath = "BITMAP";
-                    ImageView myImage = (ImageView) findViewById(R.id.editBookBookCoverField);
+                    ImageView myImage = (ImageView) findViewById(R.id.addBookBookCoverField);
                     myImage.setImageBitmap(currentPhoto);
                     removePhoto = true;
 
@@ -498,7 +482,7 @@ public class EditBookActivity extends AppCompatActivity {
                 }
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.e("EDIT_BOOK_ACTIVITY", "Failed Gallery!");
+                Log.e("ADD_BOOK_ACTIVITY", "Failed Gallery!");
             }
         }
     }

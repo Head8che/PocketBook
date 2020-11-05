@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
+import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
@@ -150,10 +151,10 @@ public class HomeActivity extends AppCompatActivity {
                                     }
                                 });
                         if (check == 0){
-                            selectedFragment = ProfileFragment.newInstance(user);
+                            selectedFragment = ProfileFragment.newInstance(currentUser);
                         }
                         else {
-                            selectedFragment = OwnerFragment.newInstance(user);
+                            selectedFragment = OwnerFragment.newInstance(currentUser);
 //
                         }
                     }

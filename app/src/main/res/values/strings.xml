@@ -44,4 +44,14 @@
     <string name="discard">DISCARD</string>
     <string name="editBookPageTitle">Edit Book</string>
 
+    <string name="greatCondition">Great</string>
+    <string name="goodCondition">Good</string>
+    <string name="fairCondition">Fair</string>
+    <string name="acceptableCondition">Acceptable</string>
+
+    <string name="bookPhotoDialogTitle">Change Book Photo</string>
+    <string name="takePhoto">Take Photo</string>
+    <string name="choosePhoto">Choose Photo</string>
+    <string name="removePhoto">Remove Current Photo</string>
+
 </resources>

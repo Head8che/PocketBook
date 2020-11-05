@@ -26,56 +26,57 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/spinnerDialogGreatField"
-                android:paddingTop="16dp"
+                android:id="@+id/bookPhotoDialogTitle"
+                android:paddingTop="24dp"
                 android:paddingBottom="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 android:letterSpacing="0.05"
                 android:textColor="@color/textBlack"
-                android:text="@string/greatCondition" />
+                android:text="@string/bookPhotoDialogTitle" />
 
             <TextView
-                android:id="@+id/spinnerDialogGoodField"
+                android:id="@+id/takePhotoField"
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"
-                android:paddingStart="16dp"
+                android:paddingStart="32dp"
                 android:paddingEnd="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:letterSpacing="0.05"
                 android:textColor="@color/textBlack"
-                android:text="@string/goodCondition" />
+                android:text="@string/takePhoto" />
 
             <TextView
-                android:id="@+id/spinnerDialogFairField"
+                android:id="@+id/choosePhotoField"
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"
-                android:paddingStart="16dp"
+                android:paddingStart="32dp"
                 android:paddingEnd="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:letterSpacing="0.05"
                 android:textColor="@color/textBlack"
-                android:text="@string/fairCondition" />
+                android:text="@string/choosePhoto" />
 
             <TextView
-                android:id="@+id/spinnerDialogAcceptableField"
+                android:id="@+id/removePhotoField"
                 android:paddingTop="8dp"
-                android:paddingBottom="16dp"
-                android:paddingStart="16dp"
+                android:paddingBottom="24dp"
+                android:paddingStart="32dp"
                 android:paddingEnd="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:letterSpacing="0.05"
                 android:textColor="@color/textBlack"
-                android:text="@string/acceptableCondition" />
+                android:text="@string/removePhoto" />
 
 
         </LinearLayout>

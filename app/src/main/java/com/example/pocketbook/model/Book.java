@@ -1,11 +1,13 @@
 package com.example.pocketbook.model;
 
 
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.model.RequestList;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,7 +15,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +40,7 @@ public class Book extends Object implements Serializable {
     private String condition;
     private String photo;
     private RequestList requestList;
+    private String photoCacheValue = String.valueOf(System.currentTimeMillis());
 
 
     /**
@@ -89,6 +94,7 @@ public class Book extends Object implements Serializable {
     public String getCondition() { return this.condition; }
     public String getStatus() { return this.status; }
     public String getPhoto() { return this.photo; }
+    public String getPhotoCacheValue() { return photoCacheValue; }
 
     public RequestList getRequestList() { return this.requestList; }
 
@@ -97,7 +103,34 @@ public class Book extends Object implements Serializable {
             return FirebaseStorage.getInstance().getReference()
                     .child("default_images").child("no_book_cover_light.png");
         }
+        Log.e("RETURN_BOOK_COVER", this.photo);
         return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
+    }
+
+    public void setBookCover(String localURL) {
+        if(localURL != null) {
+
+            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(getId()+".jpg");
+
+            //uploading the image
+            UploadTask uploadTask = childRef.putFile(Uri.fromFile(new File(localURL)));
+
+            Log.e("SET_BOOK_COVER", "After parse!");
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SET_BOOK_COVER", "Successful upload!");
+                    setPhoto(getId()+".jpg");
+                    resetPhotoCacheValue();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("SET_BOOK_COVER", "Failed upload!");
+                }
+            });
+        }
     }
 
     /* Setter Functions for Local and Firebase */
@@ -126,12 +159,13 @@ public class Book extends Object implements Serializable {
         setStatusFirebase(status);
     }
 
-    /*
-        TODO: upload new image to FirebaseStorage and overwrite old image
-    */
     public void setPhoto(String photo) {
-        this.photo = ((photo == null) || (photo.trim().equals("")))
-                ? null : photo.trim();
+        setPhotoLocal(photo);
+        setPhotoFirebase(photo);
+    }
+
+    public void resetPhotoCacheValue() {
+        photoCacheValue = String.valueOf(System.currentTimeMillis());
     }
 
     /* Setter Function Definitions
@@ -151,6 +185,11 @@ public class Book extends Object implements Serializable {
         this.status = status.trim().toUpperCase();
     }
 
+    public void setPhotoLocal(String photo) {
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+            ? null : photo.trim();
+    }
+
     public void setTitleFirebase(String title) { setBookDataFirebase("title", title); }
     public void setAuthorFirebase(String author) { setBookDataFirebase("author", author); }
     public void setIsbnFirebase(String isbn) { setBookDataFirebase("isbn", isbn); }
@@ -162,6 +201,9 @@ public class Book extends Object implements Serializable {
     }
     public void setStatusFirebase(String status) {
         setBookDataFirebase("status", (this.status == null) ? "" : this.status);
+    }
+    public void setPhotoFirebase(String status) {
+        setBookDataFirebase("photo", (this.photo == null) ? "" : this.photo);
     }
 
     public void setBookDataFirebase(String bookFieldName, String bookFieldValue) {

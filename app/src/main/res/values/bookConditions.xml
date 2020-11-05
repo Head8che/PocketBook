@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="bookConditions">
-        <item>Select condition</item>
-        <item>Brand New</item>
-        <item>Like New</item>
-        <item>Very Good</item>
-        <item>Good</item>
-        <item>Acceptable</item>
+        <item>@string/greatCondition</item>
+        <item>@string/goodCondition</item>
+        <item>@string/fairCondition</item>
+        <item>@string/acceptableCondition</item>
     </string-array>
     
 </resources>

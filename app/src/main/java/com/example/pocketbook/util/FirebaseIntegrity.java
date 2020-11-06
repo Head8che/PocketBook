@@ -117,7 +117,7 @@ public class FirebaseIntegrity {
     public static void removeAuthorFromFirestore(String author) {
         CollectionReference catalogueRef = FirebaseFirestore.getInstance().collection("catalogue");
         catalogueRef
-                .whereEqualTo("author", "M0cK^U+H0R")
+                .whereEqualTo("author", author)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -126,6 +126,25 @@ public class FirebaseIntegrity {
                             for (DocumentSnapshot document : task.getResult()) {
                                 if (document.exists()) {
                                     catalogueRef.document(document.getId()).delete();
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    public static void removeUserFromFirebase(String email){
+        CollectionReference usersRef = FirebaseFirestore.getInstance().collection("users");
+        usersRef
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    usersRef.document(document.getId()).delete();
                                 }
                             }
                         }

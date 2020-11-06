@@ -74,6 +74,12 @@ public class Book implements Serializable {
         this.owner = owner.trim().toLowerCase();  // lowercase email
         this.status = status.trim().toUpperCase();  /* one of ["AVAILABLE", "REQUESTED",
                                                                "ACCEPTED", "BORROWED"] */
+
+        if (!(status.equals("AVAILABLE")) && !(status.equals("REQUESTED"))
+                && !(status.equals("ACCEPTED")) && !(status.equals("BORROWED"))) {
+            this.status = "AVAILABLE";
+        }
+
         this.comment = ((comment == null) || (comment.trim().equals("")))
                 ? "" : comment.trim();
         this.condition = ((condition == null) || (condition.trim().equals("")))
@@ -205,13 +211,17 @@ public class Book implements Serializable {
         setConditionLocal(condition);
         setConditionFirebase(condition);
     }
-    public void setStatus(String status) {
+    public boolean setStatus(String status) {
         String statusUpper = status.toUpperCase();
 
         if (!(statusUpper.equals("AVAILABLE")) && !(statusUpper.equals("REQUESTED"))
-        && !(statusUpper.equals("ACCEPTED")) && !(statusUpper.equals("BORROWED")))
+        && !(statusUpper.equals("ACCEPTED")) && !(statusUpper.equals("BORROWED"))) {
+            return false;
+        }
         setStatusLocal(status);
         setStatusFirebase(status);
+
+        return true;
     }
 
     public void setPhoto(String photo) {
@@ -232,8 +242,15 @@ public class Book implements Serializable {
         this.condition = ((condition == null) || (condition.trim().equals("")))
                 ? "" : condition.trim().toUpperCase();
     }
-    public void setStatusLocal(String status) {
+    public boolean setStatusLocal(String status) {
+        String statusUpper = status.toUpperCase();
+
+        if (!(statusUpper.equals("AVAILABLE")) && !(statusUpper.equals("REQUESTED"))
+                && !(statusUpper.equals("ACCEPTED")) && !(statusUpper.equals("BORROWED"))) {
+            return false;
+        }
         this.status = status.trim().toUpperCase();
+        return true;
     }
 
     public void setPhotoLocal(String photo) {

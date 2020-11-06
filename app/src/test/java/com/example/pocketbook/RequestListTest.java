@@ -28,6 +28,15 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 
+/**
+ * NOTE :
+ * To run an individual test,
+ * Run tab -> Edit Configurations ...
+ *              -> (select your test)
+ *              -> Shorten command line
+ *              -> class path
+ */
+
 @RunWith(MockitoJUnitRunner.class)
 public class RequestListTest {
     private RequestList mockRequestList(){

@@ -60,7 +60,7 @@ public class ViewBookFragmentTest {
     @Before
     public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
-        // Asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.bottom_nav_home));  // click on home button
         mockOwner = new User("amockFirst", "amockLast", "aaa@test.com", "amockUser", "mock", "");

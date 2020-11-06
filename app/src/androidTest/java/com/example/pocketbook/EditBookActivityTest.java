@@ -52,11 +52,11 @@
 //    public void setUp() throws Exception{
 //        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
 //
-//        // Asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+//        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
 //        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 //        solo.clickOnView(solo.getView(R.id.bottom_nav_add));  // click on add button
 //
-//        // Asserts that the current activity is EditBookActivity. Otherwise, show “Wrong Activity”
+//        // Asserts that the current activity is EditBookActivity. Otherwise, show Wrong Activity
 //        solo.assertCurrentActivity("Wrong Activity", EditBookActivity.class);
 //        solo.sleep(2000); // give it time to change activity
 //    }
@@ -87,7 +87,7 @@
 //
 //        solo.clickOnView(cancelBtn); // click cancel button
 //
-//        // Asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+//        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
 //        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 //    }
 //
@@ -273,7 +273,7 @@
 //
 //        solo.clickOnText("DISCARD"); // click discard text
 //
-//        // Asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+//        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
 //        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 //
 //    }
@@ -301,7 +301,7 @@
 //
 //        solo.clickOnText("KEEP EDITING"); // click keep editing text
 //
-//        // Asserts that the current activity is EditBookActivity. Otherwise, show “Wrong Activity”
+//        // Asserts that the current activity is EditBookActivity. Otherwise, show Wrong Activity
 //        solo.assertCurrentActivity("Wrong Activity", EditBookActivity.class);
 //
 //    }

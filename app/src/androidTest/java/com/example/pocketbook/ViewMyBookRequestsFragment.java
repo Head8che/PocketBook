@@ -63,7 +63,7 @@ public class ViewMyBookRequestsFragment {
         mockRequest = new Request("test@gmail.com", "mock@mock.com", mockBook);
         mockBook.addRequest(mockRequest);
 
-        //asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.bottom_nav_profile));  // click on profile button
         solo.clickInRecyclerView(0); //click on the only book in the recycler
@@ -97,7 +97,7 @@ public class ViewMyBookRequestsFragment {
      */
     @Test
     public void testDisplayInfo(){
-        //asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         //asserts whether the request's info appears on screen
         assertTrue(solo.waitForText(mockRequester.getUsername(), 1, 2000));
@@ -112,7 +112,7 @@ public class ViewMyBookRequestsFragment {
      */
     @Test
     public void testAcceptRequest(){
-        //asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         Button acceptRequest = (Button) solo.getView(R.id.itemRequestAcceptButton);
         Button declineRequest = (Button) solo.getView(R.id.itemRequestDeclineButton);
@@ -131,7 +131,7 @@ public class ViewMyBookRequestsFragment {
      */
     @Test
     public void testDeclineRequest(){
-        //asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         Button declineRequest = (Button) solo.getView(R.id.itemRequestDeclineButton);
         solo.clickOnView(declineRequest);

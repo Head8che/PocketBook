@@ -89,6 +89,14 @@ public class BookList implements Serializable {
     }
 
     /* TODO: EXTEND & OVERRIDE */
+
+    /**
+     * Adds a book to the local LinkedHashMap if it exists
+     * @param book : candidate book to add
+     * @return
+     *      returns true if successful
+     *      false otherwise
+     */
     public boolean addBookToListLocal(Book book) {
         String bookID = book.getId();
         if (containsBook(bookID)) {  // if book is already in list
@@ -99,6 +107,14 @@ public class BookList implements Serializable {
     }
 
     /* TODO: EXTEND & OVERRIDE */
+
+    /**
+     * Removes a book from the LinkedHashMap if it exists
+     * @param book
+     * @return
+     *      true if removed successfully
+     *      false otherwise
+     */
     public boolean removeBookFromListLocal(Book book) {
         String bookID = book.getId();
         if (!containsBook(bookID)) {  // if book is not in list
@@ -109,6 +125,11 @@ public class BookList implements Serializable {
     }
 
     /* TODO: EXTEND & OVERRIDE */
+
+    /**
+     * Adds a book to the catalogue collection firebase
+     * @param book : candidate Book to add
+     */
     public void addBookToListFirebase(Book book) {
 
         if (containsBook(book)) {  // if book is already in list
@@ -141,6 +162,11 @@ public class BookList implements Serializable {
     }
 
     /* TODO: EXTEND & OVERRIDE */
+
+    /**
+     * Removes a book from the catalogue collection in Firebase
+     * @param book : candidate Book to remove
+     */
     public void removeBookFromListFirebase(Book book) {
 
         if (!containsBook(book)) {  // if book is not already in list

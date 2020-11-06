@@ -1,6 +1,8 @@
 package com.example.pocketbook.fragment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
 
 /**
  * A {@link Fragment} subclass.
@@ -138,7 +141,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .load(bookOwner.getProfilePicture())
                 .circleCrop()
                 .into(userProfilePicture);
-        
+
         //get the username of the book's owner from firestore and set it in its field
         FirebaseFirestore.getInstance().collection("users").document(book.getOwner()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -156,7 +159,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         //boolean to track if a book is available for being requested
         boolean available = false;
 
-        switch(book.getStatus()) {
+        
+        switch(book.getStatus().toUpperCase()) {
 
             //if the book is borrowed or accepted by another user, it is not available for requesting
             case "BORROWED":
@@ -177,6 +181,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 available = false;
                 break;
 
+
             case "REQUESTED":
                 //if the book has been requested by this user before, it is not available for requesting again
                 if (book.getRequestList().containsRequest(currentUser.getEmail())){
@@ -186,8 +191,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                     bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorRequested),android.graphics.PorterDuff.Mode.SRC_IN);
                     available = false;
                 }
-                //if the book has no requests, it is available for requesting
-                else if (book.getRequestList().getSize() == 0){
+                //if the book has no requests or hasn't been requested by the user yet, it is available for requesting
+                else {
                     book.setStatus("AVAILABLE");
                     available =  true;
                 }
@@ -198,28 +203,31 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 bookStatusImage.setImageResource(R.drawable.ic_available);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAvailable), android.graphics.PorterDuff.Mode.SRC_IN);
                 available = true;
+                String d ="true";
         }
+
+
 
         // if the book is available for requesting, the user can tap the request button to request the book
         if (available) {
-            requestButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
                     //add a pending request to the book's requestList
                     book.addRequest(new Request(currentUser.getEmail(), bookOwner.getEmail(), book));
 
                     //display a message confirming that the book has been requested
-                    Toast.makeText(getActivity(), String.format(Locale.CANADA,
-                            "You have requested %s!",book.getTitle()),
-                            Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Request sent!")
+                            .setMessage("You have requested "+book.getTitle()+"!" )
+                            .show();
 
                     //go back to the previous fragment
                     getActivity().onBackPressed();
                 }
             });
-        }
-
+       }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

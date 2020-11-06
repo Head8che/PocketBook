@@ -66,7 +66,7 @@ public class BookListTest {
         String bookID = "mockId";
 
         return new Book(bookID, "mockTitle", "mockAuthor",
-                "mockISBN", "booklisttest@email.com", "available", null, null, null);
+                "mockISBN", "booklisttest@email.com", "available", null, null, null,true);
     }
 
 

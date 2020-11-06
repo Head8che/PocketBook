@@ -32,18 +32,23 @@ public class RequestList implements Serializable {
     private LinkedHashMap<String, Request> requestList;
     private String bookId;
 
-    /* Constructor only for testing */
-    public RequestList(String bookId, boolean testing) {
-        this.requestList = new LinkedHashMap<String, Request>();
-        this.bookId = bookId;
-    }
-
+    /* Default Constructor */
     public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
         this.bookId = bookId;
         if ((this.bookId != null) && (this.bookId != "") ) {this.getData();}
     }
 
+    /* Constructor only for testing */
+    public RequestList(String bookId, boolean testing) {
+        this.requestList = new LinkedHashMap<String, Request>();
+        this.bookId = bookId;
+    }
+
+    /**
+     * Retrieves the data about the book
+     * using the bookId from Firebase
+     */
     public void getData(){
         FirebaseFirestore.getInstance().collection("catalogue").document(bookId)
                 .collection("requests").get()
@@ -53,15 +58,20 @@ public class RequestList implements Serializable {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Request request = document.toObject(Request.class);
-                                requestList.put(request.getRequester(),request);
+                                requestList.put(request.getRequester(), request);
                             }
                         } else {
-                            Log.d("temp","failed to get data!");
+                            Log.d("temp", "failed to get data!");
                         }
                     }
                 });
     }
 
+    /**
+     * Helper functon to return the request
+     * @param position : position of request in the ArrayList
+     * @return
+     */
     public Request getRequestAtPosition(int position) {
         List<String> keys = new ArrayList<String>(requestList.keySet());
         String positionalRequestID = keys.get(position);
@@ -74,15 +84,24 @@ public class RequestList implements Serializable {
     }
 
     /* TODO: EXTEND */
-    public Request getRequest(String requester) { return requestList.get(requester); }
+    public Request getRequest(String requester) {
+        return requestList.get(requester);
+    }
 
     /* TODO: EXTEND */
-    public int getSize() { return requestList.size(); }
+    public int getSize() {
+        return requestList.size();
+    }
 
     /* TODO: EXTEND */
     // overloaded containsRequest methods return true if request can be found in requestList
-    public boolean containsRequest(String requester) { return requestList.get(requester) != null; }
-    public boolean containsRequest(Request request) { return requestList.get(request.getRequester()) != null; }
+    public boolean containsRequest(String requester) {
+        return requestList.get(requester) != null;
+    }
+
+    public boolean containsRequest(Request request) {
+        return requestList.get(request.getRequester()) != null;
+    }
 
     /* TODO: EXTEND */
     public boolean addRequest(Request request) {
@@ -103,7 +122,7 @@ public class RequestList implements Serializable {
         if (containsRequest(requestID)) {  // if request is already in list
             return false;
         }
-        requestList.put(requestID, request);
+        this.requestList.put(requestID, request);
         return true;
     }
 
@@ -179,6 +198,13 @@ public class RequestList implements Serializable {
                 });
     }
 
+    /**
+     * Decline a request for the Book
+     * @param request : Request made by another user
+     * @return
+     *      true if succeeded
+     *      false otherwise
+     */
     public boolean declineRequest(Request request) {
         if (removeRequest(request)) {
             /* TODO: notify requester of decline */
@@ -190,22 +216,31 @@ public class RequestList implements Serializable {
         return false;
     }
 
+    /**
+     * Allows a request made on a book to be accepted
+     * and declining all other requests made on the Book
+     * @param request : request made for the book
+     * @return
+     *      true if successful
+     *      false otherwise
+     */
     public boolean acceptRequest(Request request) {
         /* TODO: update requester's acceptedBooks (firebase) */
         /* TODO: update requestee's (currentUser) acceptedBooks (local & firebase) */
         Iterator it = requestList.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            Request otherRequest = (Request)pair.getValue();
+            Map.Entry pair = (Map.Entry) it.next();
+            Request otherRequest = (Request) pair.getValue();
             // decline all other requests
-            if (request.getRequester() != otherRequest.getRequester())
+            if (!(request.getRequester().equals(otherRequest.getRequester())))
                 declineRequest(otherRequest);
-            else {
-                removeRequestFromListLocal(request); // TODO: also remove from firebase
-                return true;
-            }
+//            else {
+//                removeRequestFromListLocal(request); // TODO: also remove from firebase
+//                return true;
+//            }
+       }
+            return false;
         }
-        return false;
+
     }
 
-}

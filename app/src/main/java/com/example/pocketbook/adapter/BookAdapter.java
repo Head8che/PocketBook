@@ -22,6 +22,7 @@ import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -32,6 +33,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private User currentUser;
     private User bookOwner;
     private FragmentActivity activity;
+    private FirebaseAuth mAuth;
 
     public BookAdapter(User currentUser, BookList list, FragmentActivity activity) {
         this.list = list;
@@ -56,7 +58,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (book.getOwner().equals("jake@gmail.com")) {
+                mAuth = FirebaseAuth.getInstance();
+                if (book.getOwner().equals(mAuth.getCurrentUser().getEmail())) {
                     Log.e("OWNERIN", book.getOwner());
                     ViewMyBookFragment nextFrag = ViewMyBookFragment.newInstance(currentUser, book, list);
                     Bundle bundle = new Bundle();

@@ -321,6 +321,7 @@ public class Book extends Object implements Serializable {
     }
 
     public boolean acceptRequest(Request request) {
+        this.setStatus("ACCEPTED");
         return requestList.acceptRequest(request);
     }
 

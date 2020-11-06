@@ -148,7 +148,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .into(userProfilePicture);
 
         boolean available;
-        //boolean alreadyRequested = false;
         switch(bookStatus) {
             case "BORROWED":
                 requestButton.setClickable(false);

@@ -41,10 +41,12 @@ public class RequestList implements Serializable {
     public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
         this.bookId = bookId;
-        if ((this.bookId != null) && (this.bookId != "") ) {this.getData();}
+        if ((this.bookId != null) && (this.bookId != "")) {
+            this.getData();
+        }
     }
 
-    public void getData(){
+    public void getData() {
         FirebaseFirestore.getInstance().collection("catalogue").document(bookId)
                 .collection("requests").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -53,10 +55,10 @@ public class RequestList implements Serializable {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Request request = document.toObject(Request.class);
-                                requestList.put(request.getRequester(),request);
+                                requestList.put(request.getRequester(), request);
                             }
                         } else {
-                            Log.d("temp","failed to get data!");
+                            Log.d("temp", "failed to get data!");
                         }
                     }
                 });
@@ -74,15 +76,24 @@ public class RequestList implements Serializable {
     }
 
     /* TODO: EXTEND */
-    public Request getRequest(String requester) { return requestList.get(requester); }
+    public Request getRequest(String requester) {
+        return requestList.get(requester);
+    }
 
     /* TODO: EXTEND */
-    public int getSize() { return requestList.size(); }
+    public int getSize() {
+        return requestList.size();
+    }
 
     /* TODO: EXTEND */
     // overloaded containsRequest methods return true if request can be found in requestList
-    public boolean containsRequest(String requester) { return requestList.get(requester) != null; }
-    public boolean containsRequest(Request request) { return requestList.get(request.getRequester()) != null; }
+    public boolean containsRequest(String requester) {
+        return requestList.get(requester) != null;
+    }
+
+    public boolean containsRequest(Request request) {
+        return requestList.get(request.getRequester()) != null;
+    }
 
     /* TODO: EXTEND */
     public boolean addRequest(Request request) {
@@ -195,17 +206,18 @@ public class RequestList implements Serializable {
         /* TODO: update requestee's (currentUser) acceptedBooks (local & firebase) */
         Iterator it = requestList.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            Request otherRequest = (Request)pair.getValue();
+            Map.Entry pair = (Map.Entry) it.next();
+            Request otherRequest = (Request) pair.getValue();
             // decline all other requests
-            if (request.getRequester() != otherRequest.getRequester())
+            if (!(request.getRequester().equals(otherRequest.getRequester())))
                 declineRequest(otherRequest);
-            else {
-                removeRequestFromListLocal(request); // TODO: also remove from firebase
-                return true;
-            }
+//            else {
+//                removeRequestFromListLocal(request); // TODO: also remove from firebase
+//                return true;
+//            }
+       }
+            return false;
         }
-        return false;
+
     }
 
-}

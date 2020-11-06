@@ -60,6 +60,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
+
     testCompile 'org.powermock:powermock:1.6.5'
     testCompile 'org.powermock:powermock-module-junit4:1.6.5'
     testCompile 'org.powermock:powermock-api-mockito:1.6.5'

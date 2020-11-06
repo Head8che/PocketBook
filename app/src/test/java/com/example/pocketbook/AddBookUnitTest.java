@@ -1,5 +1,5 @@
 package com.example.pocketbook;
 
-public class AddFragmentTest {
+public class AddBookUnitTest {
 
 }

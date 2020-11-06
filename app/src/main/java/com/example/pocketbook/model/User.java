@@ -54,12 +54,12 @@ public class User implements Serializable {
      * @param photo
      */
     public User(String firstName, String lastName, String email, String username, String password, String photo) {
-        this.firstName = firstName.trim();
-        this.lastName = lastName.trim();
-        this.email = email.trim();
-        this.username = username.trim();
-        this.password = password.trim();
-        this.photo = ((photo == null) || (photo.trim().equals(""))) ? null : photo.trim();
+        this.firstName = (firstName == null) ? "" : firstName.trim();
+        this.lastName = (lastName == null) ? "" : lastName.trim();
+        this.email = (email == null) ? "" : email.trim();
+        this.username = (username == null) ? "" : username.trim();
+        this.password = (password == null) ? "" : password.trim();
+        this.photo = (photo == null) ? "" : photo.trim();
 
         this.ownedBooks = new ArrayList<String>();
         this.borrowedBooks = new ArrayList<String>();
@@ -67,32 +67,6 @@ public class User implements Serializable {
         this.requestedBooks = new ArrayList<String>();
 
 //        this.notificationList = new NotificationList();
-    }
-
-    /**
-     *  User constructor that contains the firstname/lastname/email/username/password/photo values
-     *  ownedbook/borrowedbook/acceptedboook/request books array list
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @param username
-     * @param password
-     */
-    public User(String firstName, String lastName, String email, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
-    /**
-     * User constructor that obtains the user firstname/lastname/email
-     * @param first_name
-     * @param last_name
-     * @param user_name
-     */
-    public User(String first_name, String last_name, String user_name) {
     }
 
     public String getFirstName() { return this.firstName; }

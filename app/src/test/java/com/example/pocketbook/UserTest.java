@@ -25,13 +25,13 @@ public class UserTest {
 
     @Test
     public void setUsernameTest() {
-        User user = new User("Taylor","Smith","taylorsmith@gmail.com","Taytay","taylor123");
+        User user = new User("Taylor","Smith","taylorsmith@gmail.com","Taytay","taylor123", null);
         assertEquals(user.getUsername(), "Taytay");
     }
 
     @Test
     public void setPasswordTest() {
-        User user = new User("Taylor","Smith","taylorsmith@gmail.com","TaylorSmith","taylor123");
+        User user = new User("Taylor","Smith","taylorsmith@gmail.com","TaylorSmith","taylor123", null);
         assertEquals(user.getPassword(), "taylor123");
     }
 
@@ -50,7 +50,16 @@ public class UserTest {
         assertEquals(user.getFirstName(), "Taylor");
         assertEquals(user.getLastName(), "Smith");
         assertEquals(user.getUsername(), "TaylorSmith");
-        assertEquals(user.getPhoto(), null);
+        assertEquals(user.getPhoto(), "");
+    }
+
+    @Test
+    public void constructorTestWithPhoto(){
+        User user = new User("Taylor","Smith","taylorsmith@gmail.com","TaylorSmith","taylor123","TaylorSmith.jpg");
+        assertEquals(user.getFirstName(), "Taylor");
+        assertEquals(user.getLastName(), "Smith");
+        assertEquals(user.getUsername(), "TaylorSmith");
+        assertEquals(user.getPhoto(), "TaylorSmith.jpg");
     }
 
     @Test
@@ -58,6 +67,24 @@ public class UserTest {
         User user = new User("Mario","Luigi","supersmash@gmail.com","supersmash","kart101",null);
         userList.add(user);
         User updatedUserInfo = new User("Luigi","Mario","supersmash@bros.com","supersmashbros","kart101",null);
+        userList.set(0,updatedUserInfo);
+        assertTrue(userList.contains(updatedUserInfo));
+    }
+
+    @Test
+    public void editProfileTestWithPhoto() {
+        User user = new User("Mario","Luigi","supermario@gmail.com","supermario","kart101",null);
+        userList.add(user);
+        User updatedUserInfo = new User("Luigi","Mario","supersmash@bros.com","supersmashbros","kart#34101","supersmash.jpeg");
+        userList.set(0,updatedUserInfo);
+        assertTrue(userList.contains(updatedUserInfo));
+    }
+
+    @Test
+    public void editProfileTestWithoutPhoto() {
+        User user = new User("Mario","Luigi","supersmash@hotmail.com","supersmash","kart101","supermario.jpeg");
+        userList.add(user);
+        User updatedUserInfo = new User("Luigi","Mario","supersmash@pocketbook.com","supersmashbrospocketbook","kart@12101",null);
         userList.set(0,updatedUserInfo);
         assertTrue(userList.contains(updatedUserInfo));
     }

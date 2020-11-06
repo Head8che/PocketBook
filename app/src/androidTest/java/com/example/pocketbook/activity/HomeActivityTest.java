@@ -1,14 +1,18 @@
 package com.example.pocketbook.activity;
 
 import android.app.Instrumentation;
+import android.content.Context;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.view.View;
 
 import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.example.pocketbook.R;
+import com.example.pocketbook.model.User;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,12 +29,23 @@ import static org.junit.Assert.assertNotNull;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class HomeActivityUITest {
+public class HomeActivityTest {
 
     @Rule
-    public ActivityTestRule<HomeActivity> nActivityTestRule = new ActivityTestRule<HomeActivity>(HomeActivity.class);
-
-    private HomeActivity nActivity = null;
+    @Rule
+    public ActivityTestRule<HomeActivity> rule =
+            new ActivityTestRule<HomeActivity>(HomeActivity.class, true, true) {
+                @Override
+                protected Intent getActivityIntent() {  // start HomeActivity with User object
+                    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+                    Intent result = new Intent(targetContext, HomeActivity.class);
+                    result.putExtra("CURRENT_USER", user = new User("mockFirstName",
+                            "mockLastName", "mock@mock.com", "mockUsername",
+                            "mockPassword", null));
+                    return result;
+                }
+            };
+    
 
     Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(HomeActivity.class.getName(),null,false);//monitor to show when second activity opens
 

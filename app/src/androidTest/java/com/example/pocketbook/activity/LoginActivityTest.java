@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoginUITest {
+public class LoginActivityTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> nActivityTestRule = new ActivityTestRule<LoginActivity>(LoginActivity.class);

@@ -1,13 +1,15 @@
-package com.example.pocketbook;
+package com.example.pocketbook.activity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.pocketbook.R;
 import com.example.pocketbook.activity.AddBookActivity;
 import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.model.User;
@@ -117,7 +119,7 @@ public class AddBookActivityTest {
     @Test
     public void checkNoTitleSave(){
         View saveBtn = solo.getView(R.id.addBookSaveBtn);
-        TextInputEditText titleField = (TextInputEditText) solo.getView(R.id.addBookTitleField);
+        EditText titleField = (EditText) solo.getView(R.id.addBookTitleField);
 
         assertNotNull(titleField);  // title field exists
         assertEquals("", Objects.requireNonNull(titleField.getText()).toString());

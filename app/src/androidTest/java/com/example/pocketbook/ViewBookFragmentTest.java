@@ -15,6 +15,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.pocketbook.activity.AddBookActivity;
 import com.example.pocketbook.activity.HomeActivity;
+import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -73,11 +74,10 @@ public class ViewBookFragmentTest {
         FirebaseIntegrity.removeUserFromFirebase("aaa@test.com");
     }
 
-//    @Test
-//    public void start(){
-//        Activity activity = rule.getActivity();
-//        Fragment fragment = solo.getCurrentActivity().getFragmentManager().findFragmentById(R.id.container);
-//    }
+    @Test
+    public void start(){
+        Activity activity = rule.getActivity();
+    }
 
 
     @Test
@@ -102,14 +102,12 @@ public class ViewBookFragmentTest {
     @Test
     public void testRequestBook(){
 
-        Fragment fragment = solo.getCurrentActivity().getFragmentManager().findFragmentById(R.id.container);
-        assertEquals(fragment.getTag())
         Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
 
         solo.clickOnView(requestBtn);
 
         assertTrue(mockBook.getRequestList().containsRequest("mock@mock.com"));
-
+        assertTrue(solo.waitForText("mockRequester.getUsername()", 1, 2000))
         solo.clickInRecyclerView(0);
 
         assertFalse(requestBtn.isClickable());

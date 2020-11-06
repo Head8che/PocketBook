@@ -201,6 +201,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 available = true;
         }
 
+        requestButton.setEnabled(true);
         // if the book is available for requesting, the user can tap the request button to request the book
         if (available) {
             requestButton.setOnClickListener(new View.OnClickListener() {

@@ -52,7 +52,7 @@ public class RequestListTest {
 
 
     @Test
-    void testRequestBook() {
+    public void testRequestBook() {
 
         // get a random mockBook
         Book bookToRequest = mockBook();
@@ -65,28 +65,28 @@ public class RequestListTest {
         Request requestBook = new Request(borrower, owner, bookToRequest);
         // add to list of requests for this book
         // assert that there are 0 requests for this book
-        RequestList requestList = new RequestList(bookToRequest.getId());
+        RequestList requestList = new RequestList(bookToRequest.getId(), true);
         assertEquals(0, requestList.getSize());
-        requestList.addRequest(requestBook);
+        requestList.addRequestToListLocal(requestBook);
         // ensures that the request has been added
         assertEquals(1, requestList.getSize());
 
     }
 
-    @Test
-    void viewRequestedBooks() {
-
-    }
-
-    @Test
-    void newRequestNotification() {
-
-    }
-
-    @Test
-    void viewAllRequestsForBook() {
-
-    }
+//    @Test
+//    void viewRequestedBooks() {
+//
+//    }
+//
+//    @Test
+//    void newRequestNotification() {
+//
+//    }
+//
+//    @Test
+//    void viewAllRequestsForBook() {
+//
+//    }
     
 
 }

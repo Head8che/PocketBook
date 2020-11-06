@@ -31,6 +31,12 @@ public class RequestList implements Serializable {
     private LinkedHashMap<String, Request> requestList;
     private String bookId;
 
+    /* Constructor only for testing */
+    public RequestList(String bookId, boolean testing) {
+        this.requestList = new LinkedHashMap<String, Request>();
+        this.bookId = bookId;
+    }
+
     public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
         this.bookId = bookId;
@@ -191,11 +197,4 @@ public class RequestList implements Serializable {
         return false;
     }
 
-    /**
-     * Returns the number of requests made for the Book
-     * @return
-     */
-    public int requestListSize() {
-        return this.requestList.size();
-    }
 }

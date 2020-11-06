@@ -1,5 +1,7 @@
 package com.example.pocketbook;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.example.pocketbook.model.Book;
@@ -8,17 +10,32 @@ import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import static org.junit.Assert.*;
 
+
+@RunWith(MockitoJUnitRunner.class)
 public class RequestListTest {
     private RequestList mockRequestList(){
         return new RequestList(mockBook().getId());
     }
 
+    @Mock
+    private Context mockContext;
+
+    private void mockFirebase() {
+
+    }
 
     /**
      * Create a mock Book that is AVAILABLE
@@ -26,11 +43,9 @@ public class RequestListTest {
      * @return
      */
     private Book mockBook(){
-        Book mockBook = new Book("mockBook", "testTitle", "testAuthor",
+        return new Book("mockBook", "testTitle", "testAuthor",
                 "074754624X", "jane@gmail.com", "AVAILABLE",
-                "this is a test", "GOOD", "");
-        mockBook.pushNewBookToFirebase();
-        return mockBook;
+                "this is a test", "GOOD", null,true);
     }
 
     private User mockOwner() {
@@ -60,19 +75,19 @@ public class RequestListTest {
         String owner = mockOwner().getEmail();
         // user wants to borrow this book
         String borrower = mockBorrower().getEmail();
-
         // request for it
         Request requestBook = new Request(borrower, owner, bookToRequest);
         // add to list of requests for this book
         // assert that there are 0 requests for this book
-        RequestList requestList = new RequestList(bookToRequest.getId(), true);
+        RequestList requestList = bookToRequest.getRequestList();
         assertEquals(0, requestList.getSize());
+
         requestList.addRequestToListLocal(requestBook);
         // ensures that the request has been added
         assertEquals(1, requestList.getSize());
 
     }
-
+//
 //    @Test
 //    void viewRequestedBooks() {
 //
@@ -85,8 +100,15 @@ public class RequestListTest {
 //
 //    @Test
 //    void viewAllRequestsForBook() {
-//
+//        // get a random mockBook
+//        Book bookToRequest = mockBook();
+//        // create an owner for this book
+//        String owner = mockOwner().getEmail();
+//        // user wants to borrow this book
+//        String borrower = mockBorrower().getEmail();
+//        // request for it
+//        Request requestBook = new Request(borrower, owner, bookToRequest);
 //    }
-    
+//
 
 }

@@ -151,7 +151,6 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
     }
-
     /**
      * registers the user with the provided credentials
      * @param email
@@ -198,7 +197,6 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     }
-
     /**
      * Updates the user interface once they have successfully signed up.
      * @param currentUser

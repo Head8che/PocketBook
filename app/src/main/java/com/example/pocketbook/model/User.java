@@ -69,6 +69,23 @@ public class User implements Serializable {
     }
 
     /**
+     *  User constructor that contains the firstname/lastname/email/username/password/photo values
+     *  ownedbook/borrowedbook/acceptedboook/request books array list
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param username
+     * @param password
+     */
+    public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    /**
      * User constructor that obtains the user firstname/lastname/email
      * @param first_name
      * @param last_name
@@ -152,7 +169,6 @@ public class User implements Serializable {
         setFirstNameLocal(firstName);
         setFirstNameFirebase(firstName);
     }
-
     /**
      * sets Lastname
      * @param lastName
@@ -168,7 +184,6 @@ public class User implements Serializable {
         setEmailLocal(email);
         setEmailFirebase(email);
     }
-
     /**
      * sets password
      * @param password
@@ -177,7 +192,6 @@ public class User implements Serializable {
         setPasswordLocal(password);
         setPasswordFirebase(password);
     }
-
     /**
      * sets username
      * @param username
@@ -190,7 +204,6 @@ public class User implements Serializable {
     /*
         TODO: upload new image to FirebaseStorage and overwrite old image
     */
-
     /**
      * sets photo
      * @param photo
@@ -212,6 +225,7 @@ public class User implements Serializable {
     public void setLastNameFirebase(String title) { setUserDataFirebase("lastName", lastName); }
     public void setUsernameFirebase(String title) { setUserDataFirebase("username", username); }
     public void setPasswordFirebase(String title) { setUserDataFirebase("password", password); }
+
 
     public void setUserDataFirebase(String userFieldName, String userFieldValue) {
         FirebaseFirestore.getInstance().collection("users").document(this.email)

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 
 /**
@@ -40,24 +41,10 @@ public class ViewMyBookRequestsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public ViewMyBookRequestsFragment(Book book) {
-        this.book = book;
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param book Parameter 1.
-     * param currentUser Parameter 2.
-     * @return A new instance of fragment ViewMyBookRequestsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ViewMyBookRequestsFragment newInstance(Book book) {
-        ViewMyBookRequestsFragment fragment = new ViewMyBookRequestsFragment(book);
+        ViewMyBookRequestsFragment fragment = new ViewMyBookRequestsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(VMBF_BOOK, book);
-        //args.putSerializable(VMBF_USER, currentUser);
+        args.putSerializable("VMBPA_BOOK", book);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,10 +53,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
-            this.book = (Book) getArguments().getSerializable("VMBF_BOOK");
-//            mParam1 = getArguments().getSerializable(ARG_PARAM1);
-//            mParam2 = getArguments().getSerializable(ARG_PARAM2);
+            this.book = (Book) getArguments().getSerializable("VMBPA_BOOK");
         }
     }
 

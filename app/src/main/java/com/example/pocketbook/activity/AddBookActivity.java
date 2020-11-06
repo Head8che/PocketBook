@@ -48,6 +48,9 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Allows the user to add a new book to be placed/available on PocketBook
+ */
 public class AddBookActivity extends AppCompatActivity {
 
 //    Book book;
@@ -239,6 +242,9 @@ public class AddBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Back button actions
+     */
     @Override
     public void onBackPressed() {
         if (noChanges()) {
@@ -247,6 +253,10 @@ public class AddBookActivity extends AppCompatActivity {
             showCancelDialog();
         }
     }
+
+    /**
+     * Spinning Dialog
+     */
 
     private void showSpinnerDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -316,6 +326,10 @@ public class AddBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Cancel Dialog
+     */
+
     private void showCancelDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.alert_dialog_discard_changes, null);
@@ -353,6 +367,11 @@ public class AddBookActivity extends AppCompatActivity {
                 && (currentPhotoPath == null)
                 ;
     }
+
+
+    /**
+     * Image Option dialog
+     */
 
     private void showImageSelectorDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -409,6 +428,10 @@ public class AddBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initiates the camera
+     */
+
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -435,7 +458,11 @@ public class AddBookActivity extends AppCompatActivity {
         }
 
     }
-
+    /**
+     * Create an image file for the images to be stored
+     * @return
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -451,6 +478,13 @@ public class AddBookActivity extends AppCompatActivity {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+    /**
+     * User Activity on the type of image and if it's should be stored or not
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

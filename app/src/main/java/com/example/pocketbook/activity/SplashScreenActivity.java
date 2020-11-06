@@ -21,6 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
+/**
+ * splashscreen(Intro loading Screen to the PocketBook App)
+ */
 public class SplashScreenActivity extends AppCompatActivity {
 
     private Intent mainIntent;

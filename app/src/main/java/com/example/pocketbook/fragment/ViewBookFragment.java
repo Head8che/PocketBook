@@ -1,10 +1,6 @@
 package com.example.pocketbook.fragment;
 
-import android.app.AlertDialog;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,46 +8,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-
+import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.Request;
-import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.StorageReference;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
+/**
+ * A {@link Fragment} subclass.
+ * Use the {@link ViewBookFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     private Book book;
@@ -75,7 +51,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
      * @param book: the book being viewed
      * @return
      */
-
     public static ViewBookFragment newInstance(User currentUser, User bookOwner, Book book) {
         ViewBookFragment viewBookFragment = new ViewBookFragment();
         Bundle args = new Bundle();
@@ -206,7 +181,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             });
         }
 
-        //return the view
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

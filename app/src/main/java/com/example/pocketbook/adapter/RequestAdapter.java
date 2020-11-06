@@ -33,12 +33,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     private Book mBook;
     private RequestList mRequestList;
-    private Book tempBook;
     private User mRequester;
-    private User mCurrentUser;
     private String username;
 
-    public RequestAdapter(Book mBook, User mCurrentUser) {
+    public RequestAdapter(Book mBook) {
         this.mBook = mBook;
         this.mRequestList = mBook.getRequestList();
     }
@@ -56,8 +54,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         Request request = mRequestList.getRequestAtPosition(position);
         holder.bind(request);
-        //Log.d("testtttttttttttttt2222",user.getUsername());
-
     }
 
 
@@ -109,6 +105,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 accept.setText("Accepted");
                 accept.setClickable(false);
             }
+
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

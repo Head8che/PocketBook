@@ -80,8 +80,21 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override //temporary until we find a way to make the back button work properly
     public void onBackPressed() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                HomeFragment.newInstance(currentUser, new BookList())).commit();
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home) {
+                bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                        HomeFragment.newInstance(currentUser, new BookList())).commit();
+                return;
+            }
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
     }
 
     /**

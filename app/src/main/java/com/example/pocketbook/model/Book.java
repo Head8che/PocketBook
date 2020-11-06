@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /*
     TODO: handle setPhoto() & uploading image to FirebaseStorage and overwriting old image;
@@ -43,7 +44,6 @@ public class Book extends Object implements Serializable {
     private String condition;
     private String photo;
     private RequestList requestList;
-    private String photoCacheValue = String.valueOf(System.currentTimeMillis());
 
 
     /**
@@ -97,7 +97,6 @@ public class Book extends Object implements Serializable {
     public String getCondition() { return this.condition; }
     public String getStatus() { return this.status; }
     public String getPhoto() { return this.photo; }
-    public String getPhotoCacheValue() { return photoCacheValue; }
 
     public RequestList getRequestList() { return this.requestList; }
 
@@ -113,7 +112,9 @@ public class Book extends Object implements Serializable {
     public void setBookCover(String localURL) {
         if(localURL != null) {
 
-            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(getId()+".jpg");
+            String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
+
+            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(photoName);
 
             if (localURL.equals("REMOVE")) {
                 childRef.delete()
@@ -142,8 +143,7 @@ public class Book extends Object implements Serializable {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Log.e("SET_BOOK_COVER", "Successful upload!");
-                    setPhoto(getId()+".jpg");
-                    resetPhotoCacheValue();
+                    setPhoto(photoName);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -155,9 +155,12 @@ public class Book extends Object implements Serializable {
     }
 
     public void setBookCover(Bitmap bitmap) {
+
+        String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
+
         if(bitmap != null) {
 
-            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(getId()+".jpg");
+            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(photoName);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -171,7 +174,7 @@ public class Book extends Object implements Serializable {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Log.e("SET_BOOK_COVER", "Successful upload!");
-                    thisBook.setPhoto(thisBook.id+".jpg");
+                    thisBook.setPhoto(photoName);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -211,10 +214,6 @@ public class Book extends Object implements Serializable {
     public void setPhoto(String photo) {
         setPhotoLocal(photo);
         setPhotoFirebase(photo);
-    }
-
-    public void resetPhotoCacheValue() {
-        photoCacheValue = String.valueOf(System.currentTimeMillis());
     }
 
     /* Setter Function Definitions

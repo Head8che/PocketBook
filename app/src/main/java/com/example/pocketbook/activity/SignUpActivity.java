@@ -201,7 +201,7 @@ public class SignUpActivity extends AppCompatActivity {
      * @param currentUser
      */
     public void updateUI(FirebaseUser currentUser){
-        Intent loginIntent = new Intent(this,LoginActivity.class);
+        Intent loginIntent = new Intent(this, LogInActivity.class);
         startActivity(loginIntent);
     }
 

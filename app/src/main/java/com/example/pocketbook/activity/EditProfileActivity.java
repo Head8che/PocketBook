@@ -52,6 +52,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * User Edit Profile
+ * Allows user to update (First name/ Last name)
+ * User inputs are validated
+ */
 public class EditProfileActivity extends AppCompatActivity {
     private EditText firstName, lastName, userName, userEmail;
     String first_name, last_name, user_name, email, profileImg;
@@ -201,6 +206,10 @@ public class EditProfileActivity extends AppCompatActivity {
         mDatabase.child(KeyID).setValue(current_user);
     }
 
+    /**
+     * uploads new user image
+     * @return
+     */
     public boolean uploadImage(){
         if(filePath != null) {
             pd.show();
@@ -229,6 +238,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Allows the camera to be initiated upon request from the user
+     */
     private void openCamera(){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE,"New Profile Picture");
@@ -240,6 +252,10 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivityForResult(cameraIntent,0);
     }
 
+    /**
+     * Allows the user to select method type of image (Take Image/ Choose from Gallery)
+     * @param context
+     */
     private void selectImage(Context context) {
         final CharSequence[] options = {"Take Photo","Choose Photo","Remove Current Photo"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -263,7 +279,12 @@ public class EditProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
-
+    /**
+     * Allows the users to set the bitmap image from the gallery to the image field.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

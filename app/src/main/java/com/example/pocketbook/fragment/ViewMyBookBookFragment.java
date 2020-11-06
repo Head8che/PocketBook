@@ -84,7 +84,12 @@ public class ViewMyBookBookFragment extends Fragment {
                             .attach(ViewMyBookBookFragment.this)
                             .commitAllowingStateLoss();
                 } else {
-                    Objects.requireNonNull(getActivity()).getFragmentManager().popBackStack();
+                    if ( getActivity() == null) {
+                        getParentFragmentManager().beginTransaction()
+                                .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
+                    } else {
+                        getActivity().getFragmentManager().popBackStack();
+                    }
                 }
 
 
@@ -124,13 +129,18 @@ public class ViewMyBookBookFragment extends Fragment {
                 .load(bookCover)
                 .into(layoutBookCover);
 
-        switch(bookStatus) {
-            case "accepted":
+        switch(bookStatus.toUpperCase()) {
+            case "REQUESTED":
+                layoutBookStatus.setImageResource(R.drawable.ic_requested);
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorRequested),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+            case "ACCEPTED":
                 layoutBookStatus.setImageResource(R.drawable.ic_accepted);
                 layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccepted),
                         android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
-            case "borrowed":
+            case "BORROWED":
                 layoutBookStatus.setImageResource(R.drawable.ic_borrowed);
                 layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),
                         android.graphics.PorterDuff.Mode.SRC_IN);

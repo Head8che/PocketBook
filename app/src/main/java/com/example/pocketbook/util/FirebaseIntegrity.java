@@ -8,12 +8,14 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 public class FirebaseIntegrity {
@@ -110,5 +112,24 @@ public class FirebaseIntegrity {
 
         FirebaseFirestore.getInstance().collection("catalogue")
                 .document(book.getId()).update("keywords", keywords);
+    }
+
+    public static void removeAuthorFromFirestore(String author) {
+        CollectionReference catalogueRef = FirebaseFirestore.getInstance().collection("catalogue");
+        catalogueRef
+                .whereEqualTo("author", "M0cK^U+H0R")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    catalogueRef.document(document.getId()).delete();
+                                }
+                            }
+                        }
+                    }
+                });
     }
 }

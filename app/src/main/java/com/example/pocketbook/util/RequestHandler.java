@@ -6,34 +6,25 @@ import java.util.ArrayList;
 
 public class RequestHandler {
 
-    /* To use enums : Enum.X */
-    enum BookStatus {
-        AVAILABLE,
-        REQUESTED,
-        ACCEPTED,
-        BORROWED
-    }
-    enum RequestStatus {
-        ACCEPT,
-        REJECT,
-        PENDING
-    }
-
-
-    private BookStatus bookState;
-    private RequestStatus requestStatus;
     private ArrayList<User> requesters;
+    private String[] bookStatuses;
+    private String status;
 
 
     /**
      * Default Constructor to handle Incoming Requests
-     * @param bookState : status of the book being requested
-     * @param requestStatus : status of request for owner
+     * @param status : status of book
      * @param requesters : list of users for the requesting for the book
      */
-    public RequestHandler(BookStatus bookState, RequestStatus requestStatus, ArrayList<User> requesters) {
-        this.bookState = bookState;
-        this.requestStatus = requestStatus;
+    public RequestHandler(String status, ArrayList<User> requesters) {
+        this.bookStatuses = new String[]
+                {
+                        "AVAILABLE",
+                        "REQUESTED",
+                        "BORROWED",
+                        "ACCEPTED"
+                };
+        this.status = status;
         this.requesters = requesters;
     }
 }

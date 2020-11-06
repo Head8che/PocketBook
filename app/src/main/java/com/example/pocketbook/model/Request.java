@@ -15,8 +15,11 @@ public class Request implements Serializable {
     private Book requestedBookObject;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
+    /* Empty constructor */
     public Request(){
     }
+
+    /* Constructor without Book object */
     public Request(String requester, String requestee, String requestedBook) {
         this.requester = requester.trim().toLowerCase();  // lowercase email
         this.requestee = requestee.trim().toLowerCase();  // lowercase email
@@ -25,6 +28,7 @@ public class Request implements Serializable {
         this.requestedBookObject = null;
     }
 
+    /* Constructor with a Book object */
     public Request(String requester, String requestee, Book requestedBookObject) {
         this.requester = requester.trim().toLowerCase();  // lowercase email
         this.requestee = requestee.trim().toLowerCase();  // lowercase email
@@ -33,6 +37,7 @@ public class Request implements Serializable {
         this.requestDate = LocalDateTime.now().format(formatter).trim();
     }
 
+    /* Getter methods */
     public String getRequester() { return this.requester; }
     public String getRequestee() { return this.requestee; }
     public String getRequestedBook() { return this.requestedBook; }

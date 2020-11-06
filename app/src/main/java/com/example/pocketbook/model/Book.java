@@ -33,7 +33,7 @@ import java.util.UUID;
           will likely be similar to how SignUpActivity sets images.
 */
 
-public class Book extends Object implements Serializable {
+public class Book implements Serializable {
     private String id;
     private String title;
     private String author;
@@ -83,7 +83,6 @@ public class Book extends Object implements Serializable {
                 ? "" : photo.trim();
 
         this.requestList = new RequestList(this.id);
-        Log.d("inboooooooooooook",requestList.getRequestList().toString());
     }
 
 

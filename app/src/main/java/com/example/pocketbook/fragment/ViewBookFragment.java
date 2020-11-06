@@ -102,6 +102,15 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         bookCoverImageView = view.findViewById(R.id.bookCover);
         bookStatusImage = (ImageView) view.findViewById(R.id.viewBookBookStatusImageView);
 
+        ImageView backButton = (ImageView) view.findViewById(R.id.viewBookFragBackBtn);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
         //set the views' values to the values of the book being viewed
         bookTitleField.setText(book.getTitle());
         bookAuthorField.setText(book.getAuthor());

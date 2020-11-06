@@ -37,6 +37,7 @@
 
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="back">Back</string>
     <string name="change_photo">CHANGE PHOTO</string>
     <string name="discard_changes_title">Discard Changes?</string>
     <string name="discard_changes_content">If you go back now, you will lose your changes.</string>

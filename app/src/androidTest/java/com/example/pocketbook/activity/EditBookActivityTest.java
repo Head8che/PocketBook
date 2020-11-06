@@ -80,11 +80,11 @@ public class EditBookActivityTest {
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
 
-        // Asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
+        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.bottom_nav_add));  // click on add button
 
-        // Asserts that the current activity is AddBookActivity. Otherwise, show “Wrong Activity”
+        // Asserts that the current activity is AddBookActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", AddBookActivity.class);
         solo.sleep(2000); // give it time to change activity
     }

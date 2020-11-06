@@ -69,18 +69,29 @@ public class ViewBookFragmentTest {
         mockBook.pushNewBookToFirebase();
     }
 
+    /**
+     * runs after each test
+     * removes the mockBook and mockOwner from firebase
+     */
     @After
     public void removeMockFromFirebase() {
         FirebaseIntegrity.removeAuthorFromFirestore("mockAuthor");
-//        FirebaseIntegrity.removeUserFromFirebase("aaa@test.com");
+        FirebaseIntegrity.removeUserFromFirebase("aaa@test.com");
     }
 
+    /**
+     * Gets the Activity
+     * @throws Exception
+     */
     @Test
     public void start(){
         Activity activity = rule.getActivity();
     }
 
 
+    /**
+     * test whether the info of a book is displayed correctly
+     */
     @Test
     public void testDisplayInfo(){
         solo.clickInRecyclerView(0);
@@ -100,23 +111,16 @@ public class ViewBookFragmentTest {
         assertEquals(mockOwner.getUsername(),username.getText().toString());
     }
 
+    /**
+     * test whether a book is requested after taping on request
+     */
     @Test
     public void testRequestBook(){
         solo.clickInRecyclerView(0);
         Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
         solo.clickOnView(requestBtn);
         assertTrue(solo.waitForText("You have requested mockTitle!"));
-        assertEquals(1,mockBook.getRequestList().getSize());
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
     }
-
-    @Test
-    public void testRequestRquestedBook(){
-        mockBook.addRequest(new Request("mock@mock.com","aaa@test.com",mockBook));
-        solo.sleep(2000);
-        solo.clickInRecyclerView(0);
-        Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
-        assertFalse(requestBtn.isClickable());
-
-    }
-
+    
 }

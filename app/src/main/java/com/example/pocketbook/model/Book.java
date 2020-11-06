@@ -331,7 +331,6 @@ public class Book implements Serializable {
 
     }
 
-
     public boolean addRequest(Request request) {
         if (!this.status.equals("REQUESTED")) {
             this.setStatus("REQUESTED");

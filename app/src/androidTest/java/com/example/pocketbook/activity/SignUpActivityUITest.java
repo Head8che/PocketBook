@@ -13,7 +13,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 
-public class SignUpActivityUITestOne {
+public class SignUpActivityUITest {
 
     @Rule
     public ActivityTestRule<SignUpActivity> Activity = new ActivityTestRule<SignUpActivity>(SignUpActivity.class);

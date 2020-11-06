@@ -1,27 +1,24 @@
 package com.example.pocketbook.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +26,9 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * A {@link RecyclerView.Adapter<RequestAdapter.ViewHolder>} subclass.
+ */
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>{
 
     private Book mBook;
@@ -36,6 +36,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     private User mRequester;
     private String username;
 
+    /**
+     * constructor for the RequestAdapter
+     * @param mBook: the book for which the requests are being viewed
+     */
     public RequestAdapter(Book mBook) {
         this.mBook = mBook;
         this.mRequestList = mBook.getRequestList();
@@ -55,9 +59,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         Request request = mRequestList.getRequestAtPosition(position);
         holder.bind(request);
     }
-
-
-
+    
     @Override
     public int getItemCount() {
         return mRequestList.getSize();

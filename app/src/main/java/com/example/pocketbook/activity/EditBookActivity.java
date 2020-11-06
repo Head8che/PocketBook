@@ -191,7 +191,6 @@ public class EditBookActivity extends AppCompatActivity {
 
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
                 .load(bookCover)
-                .signature(new ObjectKey(String.valueOf(book.getPhotoCacheValue())))
                 .into(layoutBookCover);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {

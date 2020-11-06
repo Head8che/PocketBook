@@ -29,6 +29,7 @@ public class Notification implements Serializable {
     private String notificationDate;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
+    /* Default Constructor */
     public Notification(String message, String sender, String receiver, String relatedBook,
                         String seen, String type){
         this.message = message.trim();
@@ -50,6 +51,9 @@ public class Notification implements Serializable {
     public String getType() { return this.type; }
     public String getNotificationDate() {  return this.notificationDate;  }
 
+    /**
+     * Adds a notification to Firebase
+     */
     public void pushNewNotificationToFirebase() {
 
         Map<String, Object> docData = new HashMap<>();

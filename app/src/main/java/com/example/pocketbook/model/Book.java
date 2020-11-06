@@ -58,25 +58,52 @@ public class Book implements Serializable {
      * @param title : title of book
      * @param author : author of book
      * @param isbn : isbn retrieved as String of Book
+     * @param isbn : isbn retrieved as String of Book
      * @param owner : User that owns the Book
      * @param status : indicates availability of book (available, requested, accepted, borrowed)
      * @param comment : Comment set by owner
      * @param condition : Condition of the book, set by owner
      * @param photo : photo string of book by owner
      */
+    public Book(String id, String title, String author, String isbn, String owner,
+                String status, String comment, String condition, String photo) {
+
+        this.id = (id == null) ? null : id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim().toLowerCase();  // lowercase email
+        this.status = status.trim().toUpperCase();  /* one of ["AVAILABLE", "REQUESTED",
+                                                               "ACCEPTED", "BORROWED"] */
+
+        if (!(status.equals("AVAILABLE")) && !(status.equals("REQUESTED"))
+                && !(status.equals("ACCEPTED")) && !(status.equals("BORROWED"))) {
+            this.status = "AVAILABLE";
+        }
+
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? "" : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? "" : condition.trim().toUpperCase();  /* one of ["GREAT", "GOOD",
+                                                                     "FAIR", "ACCEPTABLE"] */
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? "" : photo.trim();
+
+        this.requestList = new RequestList(this.id);
+    }
 
     /**
      * Constructor made for testing
-     * @param id
-     * @param title
-     * @param author
-     * @param isbn
-     * @param owner
-     * @param status
-     * @param comment
-     * @param condition
-     * @param photo
-     * @param testing
+     * @param id : unique book id
+     * @param title : title of book
+     * @param author : author of book
+     * @param isbn : isbn retrieved as String of Book
+     * @param owner : User that owns the Book
+     * @param status : indicates availability of book (available, requested, accepted, borrowed)
+     * @param comment : Comment set by owner
+     * @param condition : Condition of the book, set by owner
+     * @param photo : photo string of book by owner
+     * @param testing : true if the constructor is needed
      */
     public Book(String id, String title, String author, String isbn, String owner,
                 String status, String comment, String condition, String photo, boolean testing) {
@@ -105,33 +132,6 @@ public class Book implements Serializable {
         this.requestList = new RequestList(this.id, true);
     }
 
-    public Book(String id, String title, String author, String isbn, String owner,
-                String status, String comment, String condition, String photo) {
-
-        this.id = (id == null) ? null : id.trim();
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
-        this.owner = owner.trim().toLowerCase();  // lowercase email
-        this.status = status.trim().toUpperCase();  /* one of ["AVAILABLE", "REQUESTED",
-                                                               "ACCEPTED", "BORROWED"] */
-
-        if (!(status.equals("AVAILABLE")) && !(status.equals("REQUESTED"))
-                && !(status.equals("ACCEPTED")) && !(status.equals("BORROWED"))) {
-            this.status = "AVAILABLE";
-        }
-
-        this.comment = ((comment == null) || (comment.trim().equals("")))
-                ? "" : comment.trim();
-        this.condition = ((condition == null) || (condition.trim().equals("")))
-                ? "" : condition.trim().toUpperCase();  /* one of ["GREAT", "GOOD",
-                                                                     "FAIR", "ACCEPTABLE"] */
-        this.photo = ((photo == null) || (photo.trim().equals("")))
-                ? "" : photo.trim();
-
-        this.requestList = new RequestList(this.id);
-    }
-
 
     /* Getter Functions */
     public String getId() { return this.id; }
@@ -155,6 +155,11 @@ public class Book implements Serializable {
         return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
     }
 
+    /**
+     * Sets the cover of the book as an image
+     * if the url is a local file
+     * @param localURL : url of the book
+     */
     public void setBookCover(String localURL) {
         if(localURL != null) {
 
@@ -200,6 +205,11 @@ public class Book implements Serializable {
         }
     }
 
+    /**
+     * Sets the cover of the book
+     * if the argument is a bimap file
+     * @param bitmap : photo of book
+     */
     public void setBookCover(Bitmap bitmap) {
 
         String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
@@ -270,7 +280,7 @@ public class Book implements Serializable {
         setPhotoFirebase(photo);
     }
 
-    /* Setter Function Definitions
+    /* Setter Function Attributes
      */
     public void setTitleLocal(String title) { this.title = title.trim(); }
     public void setAuthorLocal(String author) { this.author = author.trim(); }
@@ -372,6 +382,13 @@ public class Book implements Serializable {
 
     }
 
+    /**
+     * Adds a request to the request list
+     * @param request
+     * @return
+     *      true if successful,
+     *      false otherwise
+     */
     public boolean addRequest(Request request) {
         if (!this.status.equals("REQUESTED")) {
             this.setStatus("REQUESTED");
@@ -379,11 +396,20 @@ public class Book implements Serializable {
         return requestList.addRequest(request);
     }
 
+    /**
+     * Accepts a request made to the book
+     * @param request : request made to the owner
+     * @return
+     *      true if ACCEPTED
+     */
     public boolean acceptRequest(Request request) {
         this.setStatus("ACCEPTED");
         return requestList.acceptRequest(request);
     }
 
+    /**
+     * Declines a request made to the book
+     */
     public boolean declineRequest(Request request) {
         return requestList.declineRequest(request);
     }

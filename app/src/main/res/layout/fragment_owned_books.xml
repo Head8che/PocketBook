@@ -98,7 +98,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="4sp"
                 android:gravity="center_horizontal"
-                android:text="profile_username"
+                android:text="@string/profileOwned_username"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

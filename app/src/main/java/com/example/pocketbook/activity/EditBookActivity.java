@@ -43,6 +43,11 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * User Edit Book Activity
+ * Allows user to update the books they own
+ * User inputs are validated
+ */
 public class EditBookActivity extends AppCompatActivity {
 
     Book book;
@@ -254,6 +259,9 @@ public class EditBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Back button
+     */
     @Override
     public void onBackPressed() {
         if (noChanges()) {
@@ -263,6 +271,9 @@ public class EditBookActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Spinning Dialog
+     */
     private void showSpinnerDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.alert_dialog_condition_spinner, null);
@@ -331,6 +342,9 @@ public class EditBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Cancel Dialog
+     */
     private void showCancelDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.alert_dialog_discard_changes, null);
@@ -369,6 +383,9 @@ public class EditBookActivity extends AppCompatActivity {
                 ;
     }
 
+    /**
+     * Image Option dialog
+     */
     private void showImageSelectorDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.alert_dialog_book_photo, null);
@@ -424,6 +441,9 @@ public class EditBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initiates the camera
+     */
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -451,6 +471,11 @@ public class EditBookActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Create an image file for the images to be stored
+     * @return
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -467,6 +492,12 @@ public class EditBookActivity extends AppCompatActivity {
         return image;
     }
 
+    /**
+     * User Activity on the type of image and if it's should be stored or not
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

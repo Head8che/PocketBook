@@ -109,7 +109,7 @@
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ISBN: 123-234-1234"
+                        android:text="@string/isbn_123_234_1234"
                         />
 
                     <TextView
@@ -122,7 +122,7 @@
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Condition: New" />
+                        android:text="@string/condition_new" />
 
                     <TextView
                         android:id="@+id/viewMyBookCommentTextView"
@@ -134,7 +134,7 @@
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Comment: This book is good!" />
+                        android:text="@string/comment_this_book_is_good" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -14,16 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditBookActivity;
-import com.example.pocketbook.activity.HomeActivity;
-import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
-import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,7 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.Locale;
 import java.util.Objects;
 
 

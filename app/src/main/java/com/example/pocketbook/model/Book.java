@@ -64,6 +64,47 @@ public class Book implements Serializable {
      * @param condition : Condition of the book, set by owner
      * @param photo : photo string of book by owner
      */
+
+    /**
+     * Constructor made for testing
+     * @param id
+     * @param title
+     * @param author
+     * @param isbn
+     * @param owner
+     * @param status
+     * @param comment
+     * @param condition
+     * @param photo
+     * @param testing
+     */
+    public Book(String id, String title, String author, String isbn, String owner,
+                String status, String comment, String condition, String photo, boolean testing) {
+
+        this.id = (id == null) ? null : id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim().toLowerCase();  // lowercase email
+        this.status = status.trim().toUpperCase();  /* one of ["AVAILABLE", "REQUESTED",
+                                                               "ACCEPTED", "BORROWED"] */
+
+        if (!(status.equals("AVAILABLE")) && !(status.equals("REQUESTED"))
+                && !(status.equals("ACCEPTED")) && !(status.equals("BORROWED"))) {
+            this.status = "AVAILABLE";
+        }
+
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? "" : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? "" : condition.trim().toUpperCase();  /* one of ["GREAT", "GOOD",
+                                                                     "FAIR", "ACCEPTABLE"] */
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? "" : photo.trim();
+
+        this.requestList = new RequestList(this.id, true);
+    }
+
     public Book(String id, String title, String author, String isbn, String owner,
                 String status, String comment, String condition, String photo) {
 

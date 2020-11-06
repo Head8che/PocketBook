@@ -129,7 +129,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .load(bookOwner.getProfilePicture())
                 .circleCrop()
                 .into(userProfilePicture);
-        
+        Book mockBook = new Book("0000000", "testTitle", "testAuthor", "074754624X", "jane@gmail.com", "AVAILABLE", "this is a test", "GOOD", "");
+        mockBook.pushNewBookToFirebase();
         //get the username of the book's owner from firestore and set it in its field
         FirebaseFirestore.getInstance().collection("users").document(book.getOwner()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

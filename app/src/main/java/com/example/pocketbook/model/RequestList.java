@@ -32,18 +32,23 @@ public class RequestList implements Serializable {
     private LinkedHashMap<String, Request> requestList;
     private String bookId;
 
-    /* Constructor only for testing */
-    public RequestList(String bookId, boolean testing) {
-        this.requestList = new LinkedHashMap<String, Request>();
-        this.bookId = bookId;
-    }
-
+    /* Default Constructor */
     public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
         this.bookId = bookId;
         if ((this.bookId != null) && (this.bookId != "") ) {this.getData();}
     }
 
+    /* Constructor only for testing */
+    public RequestList(String bookId, boolean testing) {
+        this.requestList = new LinkedHashMap<String, Request>();
+        this.bookId = bookId;
+    }
+
+    /**
+     * Retrieves the data about the book
+     * using the bookId from Firebase
+     */
     public void getData(){
         FirebaseFirestore.getInstance().collection("catalogue").document(bookId)
                 .collection("requests").get()
@@ -62,6 +67,11 @@ public class RequestList implements Serializable {
                 });
     }
 
+    /**
+     * Helper functon to return the request
+     * @param position : position of request in the ArrayList
+     * @return
+     */
     public Request getRequestAtPosition(int position) {
         List<String> keys = new ArrayList<String>(requestList.keySet());
         String positionalRequestID = keys.get(position);
@@ -179,6 +189,13 @@ public class RequestList implements Serializable {
                 });
     }
 
+    /**
+     * Decline a request for the Book
+     * @param request : Request made by another user
+     * @return
+     *      true if succeeded
+     *      false otherwise
+     */
     public boolean declineRequest(Request request) {
         if (removeRequest(request)) {
             /* TODO: notify requester of decline */
@@ -190,6 +207,14 @@ public class RequestList implements Serializable {
         return false;
     }
 
+    /**
+     * Allows a request made on a book to be accepted
+     * and declining all other requests made on the Book
+     * @param request : request made for the book
+     * @return
+     *      true if successful
+     *      false otherwise
+     */
     public boolean acceptRequest(Request request) {
         /* TODO: update requester's acceptedBooks (firebase) */
         /* TODO: update requestee's (currentUser) acceptedBooks (local & firebase) */

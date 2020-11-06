@@ -97,7 +97,7 @@ public class RequestList implements Serializable {
         if (containsRequest(requestID)) {  // if request is already in list
             return false;
         }
-        requestList.put(requestID, request);
+        this.requestList.put(requestID, request);
         return true;
     }
 

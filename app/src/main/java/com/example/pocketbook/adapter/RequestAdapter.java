@@ -17,6 +17,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -95,8 +96,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
-                                mRequester = new User(document.getString("firstName"),document.getString("lastName"),document.getString("email")
-                                ,document.getString("username"),document.getString("password"),document.getString("photo"));
+                                mRequester = FirebaseIntegrity.getUserFromFirestore(document);
+//                                mRequester = new User(document.getString("firstName"),document.getString("lastName"),document.getString("email")
+//                                ,document.getString("username"),document.getString("password"),document.getString("photo"));
                                 username.setText(mRequester.getUsername());
                                 GlideApp.with(Objects.requireNonNull(itemView.getContext()))
                                         .load(mRequester.getProfilePicture())

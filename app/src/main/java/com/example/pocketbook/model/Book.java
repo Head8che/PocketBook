@@ -206,6 +206,10 @@ public class Book implements Serializable {
         setConditionFirebase(condition);
     }
     public void setStatus(String status) {
+        String statusUpper = status.toUpperCase();
+
+        if (!(statusUpper.equals("AVAILABLE")) && !(statusUpper.equals("REQUESTED"))
+        && !(statusUpper.equals("ACCEPTED")) && !(statusUpper.equals("BORROWED")))
         setStatusLocal(status);
         setStatusFirebase(status);
     }

@@ -149,7 +149,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     return;
                 }
 
-                user = new User(first_name, last_name, user_name);
+                user = new User(first_name, last_name, user_name, null, null, null);
                 current_user.setFirstName(first_name);
                 current_user.setLastName(last_name);
                 current_user.setUsername(user_name);

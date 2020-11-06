@@ -1,9 +1,10 @@
 package com.example.pocketbook.activity;
 
 
+import android.util.Log;
+import android.app.Activity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,12 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
-import com.example.pocketbook.fragment.AddFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
+import com.example.pocketbook.fragment.ViewMyBookFragment;
+import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +42,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Home Page Screen
+ */
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG ="MainActivity";
     private FirebaseFirestore mFirestore;
@@ -53,10 +58,10 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView image;
     private ArrayList<String> pathArray;
     private int array_position;
-    private FirebaseUser currentUser;
     String email;
-    private User user;
     public int check = 0;
+    private User currentUser;
+    private BottomNavigationView bottomNav;
 
 
     @Override
@@ -64,24 +69,44 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("CURRENT_USER");
-//        Toast.makeText(this,user.getFirstName(),Toast.LENGTH_SHORT).show();
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+        currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
+//        Toast.makeText(this,currentUser.getFirstName(),Toast.LENGTH_SHORT).show();
+        bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                HomeFragment.newInstance(user, new BookList())).commit();
+                HomeFragment.newInstance(currentUser, new BookList())).commit();
     }
 
-    @Override //temporary until we find a way to make the back button work properly
+    @Override
     public void onBackPressed() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                HomeFragment.newInstance(user, new BookList())).commit();
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home) {
+                bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                        HomeFragment.newInstance(currentUser, new BookList())).commit();
+                return;
+            }
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
     }
 
+    /**
+     * Greeting message displayed on the screen open successful logging in.
+     * @param message
+     */
     private void toastMessage(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Bottom navigation bar options
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener NavListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 @Override
@@ -89,13 +114,15 @@ public class HomeActivity extends AppCompatActivity {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()){
                         case R.id.bottom_nav_home:
-                            selectedFragment = HomeFragment.newInstance(user, new BookList());
+                            selectedFragment = HomeFragment.newInstance(currentUser, new BookList());
                             break;
                         case R.id.bottom_nav_search:
-                            selectedFragment = SearchFragment.newInstance(user, new BookList());
+                            selectedFragment = SearchFragment.newInstance(currentUser, new BookList());
                             break;
                         case R.id.bottom_nav_add:
-                            selectedFragment = AddFragment.newInstance(user, new BookList());
+                            Intent intent = new Intent(getBaseContext(), AddBookActivity.class);
+                            intent.putExtra("HA_USER", currentUser);
+                            startActivityForResult(intent, 1);
                             break;
                         case R.id.bottom_nav_scan:
                             selectedFragment = new ScanFragment();
@@ -104,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
                         // case R.id.bottom_nav_profile:
                         //     mFirestore = FirebaseFirestore.getInstance();
                         //     mFirestore.collection("catalogue")
-                        //             .whereEqualTo("owner",user.getEmail())
+                        //             .whereEqualTo("owner",currentUser.getEmail())
                         //             .get()
                         //             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         //                 @Override
@@ -129,35 +156,61 @@ public class HomeActivity extends AppCompatActivity {
                         //     break;
 
                     }
-                    if (item.getItemId() ==  R.id.bottom_nav_profile){
+                    if (item.getItemId() ==  R.id.bottom_nav_profile) {
+                        Fragment profileFragment = ProfileFragment.newInstance(currentUser);
+                        Fragment ownerFragment = OwnerFragment.newInstance(currentUser);
+
                         mFirestore = FirebaseFirestore.getInstance();
                         mFirestore.collection("catalogue")
-                                .whereEqualTo("owner",user.getEmail())
+                                .whereEqualTo("owner",currentUser.getEmail())
                                 .get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                if (document.exists()) {
-                                                    check = 1;
-                                                }
+                                            if (task.getResult().isEmpty()) {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, profileFragment).commit();
+                                            } else {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, ownerFragment).commit();
                                             }
                                         }
                                     }
                                 });
-                        if (check == 0){
-                            selectedFragment = ProfileFragment.newInstance(user);
-                        }
-                        else {
-                            selectedFragment = OwnerFragment.newInstance(user);
-//
-                        }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,selectedFragment).commit();
+                    if ((selectedFragment != null) && (item.getItemId() !=  R.id.bottom_nav_profile)) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();
+                    }
                     return true;
                 }
             };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                Book book = (Book) data.getSerializableExtra("ABA_BOOK");
+//            Book book = (Book) Objects.requireNonNull(data.getExtras()).getSerializable("ABA_BOOK");
+                BookList bookList = new BookList();
+                bookList.addBook(book);
+
+                ViewMyBookFragment nextFrag = ViewMyBookFragment.newInstance(currentUser, book, bookList);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("VMBF_USER", currentUser);
+                bundle.putSerializable("VMBF_BOOK", book);
+                bundle.putSerializable("VMBF_CATALOGUE", bookList);
+                nextFrag.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
+            }
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

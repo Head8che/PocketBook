@@ -105,10 +105,15 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         }
                     });
             date.setText(request.getRequestDate());
+            if (mBook.getStatus().equals("ACCEPTED")){
+                accept.setText("Accepted");
+                accept.setClickable(false);
+            }
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mBook.acceptRequest(request);
+                    notifyDataSetChanged();
                     accept.setText("Accepted");
                     accept.setClickable(false);
                 }

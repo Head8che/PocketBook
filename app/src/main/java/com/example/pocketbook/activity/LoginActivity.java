@@ -29,7 +29,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Locale;
 import java.util.Objects;
 
-/** Login **/
+/**
+ * A login screen that allows users to login using (email/password)
+ */
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button signUp, login, forgotPass;
@@ -78,7 +80,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * ALlows the user to sign in using their username and password
+     * @param email
+     * @param password
+     */
     public void Register(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

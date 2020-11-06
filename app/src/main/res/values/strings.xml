@@ -43,6 +43,7 @@
     <string name="keep_editing">KEEP EDITING</string>
     <string name="discard">DISCARD</string>
     <string name="editBookPageTitle">Edit Book</string>
+    <string name="addBookPageTitle">Add Book</string>
 
     <string name="edit_profile">Edit Profile</string>
     <string name="suggested_books">Suggested Books</string>
@@ -57,10 +58,10 @@
     <string name="firstlastname">FirstLastName</string>
     <string name="profile_username">UserName</string>
 
-    <string name="greatCondition">Great</string>
-    <string name="goodCondition">Good</string>
-    <string name="fairCondition">Fair</string>
-    <string name="acceptableCondition">Acceptable</string>
+    <string name="greatCondition">GREAT</string>
+    <string name="goodCondition">GOOD</string>
+    <string name="fairCondition">FAIR</string>
+    <string name="acceptableCondition">ACCEPTABLE</string>
 
     <string name="bookPhotoDialogTitle">Change Book Photo</string>
     <string name="takePhoto">Take Photo</string>
@@ -72,5 +73,10 @@
     <string name="owner">Owner</string>
     <string name="borrower">Borrower</string>
     <string name="addBookFragmentTitle">Add New Book</string>
+    <string name="new_to_pocketbook_sign_up">New to Pocketbook? Sign Up</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="password">🔒 Password</string>
+    <string name="pocketbook">Pocketbook</string>
 
 </resources>

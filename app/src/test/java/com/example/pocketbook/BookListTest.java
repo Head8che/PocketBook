@@ -47,19 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class BookListTest {
 
-    private static final String TAG = "DEBUG";
-    private FirebaseFirestore mockedDatabaseReference;
-
-    @Before
-    public void before() {
-//        FirebaseApp.initializeApp();
-//
-//        FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
-//        Mockito.when(FirebaseFirestore.getInstance()).thenReturn(mockFirestore);
-//
-//        BookList interactor = new BookList();
-    }
-
     /**
      * Create an empty mock booklist and return
      * @return
@@ -101,18 +88,6 @@ public class BookListTest {
         assertEquals(1, bookList.getSize());
         assertTrue(bookList.containsBook(book));
 
-        // check if it exists in Firebase
-//        FirebaseApp.initializeApp(Context);
-//        FirebaseFirestore.getInstance().collection("books").document(book.getId())
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                assertTrue(task.isSuccessful() && task.getResult().exists());
-//
-//                // clear mockBook data from list and Firebase (in onComplete b/c async)
-//                bookList.clear();
-//            }
-//        });
     }
 
     /**
@@ -151,14 +126,6 @@ public class BookListTest {
         bookList.removeBook(book);
         assertEquals(0, bookList.getBookList().size());
 
-//        FirebaseFirestore.getInstance().collection("books").document(book.getId())
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                // make sure it doesn't exist in Firebase
-//                assertFalse(task.isSuccessful());
-//            }
-//        });
     }
 
     /**

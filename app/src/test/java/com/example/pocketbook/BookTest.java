@@ -70,4 +70,18 @@ public class BookTest {
         assertEquals("123456789.jpg", book.getPhoto());
     }
 
+    @Test
+    void testStatus() {
+        Book book = mockBook();
+
+        assertTrue(book.setStatusLocal("AVAILABLE"));
+        assertTrue(book.setStatusLocal("REQUESTED"));
+        assertTrue(book.setStatusLocal("ACCEPTED"));
+        assertTrue(book.setStatusLocal("BORROWED"));
+
+        assertFalse(book.setStatusLocal("badChoice1"));
+        assertFalse(book.setStatusLocal("oiweniewewdn"));
+
+    }
+
 }

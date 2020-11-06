@@ -1,16 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.HomeActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/homeFragmentToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="5dp"
+        app:title="">
+
+        <TextView
+            android:id="@+id/homeFragmentPageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:letterSpacing="0.02"
+            android:minHeight="?actionBarSize"
+            android:padding="@dimen/appbar_padding"
+            android:text="@string/pocketbook"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textColor="@color/textBlack"
+            android:textSize="18sp" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/notificationBtn"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="end"-->
+        <!--            android:minHeight="?actionBarSize"-->
+        <!--            android:padding="@dimen/appbar_padding"-->
+        <!--            android:textSize="18sp"-->
+        <!--            android:text="@string/save"-->
+        <!--            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+        <!--            android:textColor="@color/colorAccent" />-->
+
+    </androidx.appcompat.widget.Toolbar>
+
+<!--    <TextView-->
+<!--        android:id="@+id/homeFragmentCatalogueTitle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:letterSpacing="0.02"-->
+<!--        android:paddingStart="24dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="Catalogue"-->
+<!--        android:textColor="@color/textBlack"-->
+<!--        android:textSize="24sp" />-->
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_books"
@@ -18,4 +67,4 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-</RelativeLayout>
+</LinearLayout>

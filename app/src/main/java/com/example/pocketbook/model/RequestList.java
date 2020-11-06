@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,8 +187,14 @@ public class RequestList implements Serializable {
     public boolean acceptRequest(Request request) {
         /* TODO: update requester's acceptedBooks (firebase) */
         /* TODO: update requestee's (currentUser) acceptedBooks (local & firebase) */
-        /* TODO: decline all other requesters in local requestList */
-        /* TODO: empty Firebase requestList */
+        //decline all other requests
+        Iterator it = requestList.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Request otherRequest = (Request)pair.getValue();
+            if (request.getRequester() != otherRequest.getRequester())
+                declineRequest(otherRequest);
+        }
         return false;
     }
 

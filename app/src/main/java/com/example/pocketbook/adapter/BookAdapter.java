@@ -1,7 +1,10 @@
 package com.example.pocketbook.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +27,7 @@ import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -50,7 +55,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Book book = list.getBookAtPosition(position);
-        holder.bind(book);
+        holder.bind(book, activity.getBaseContext());
 
         /* DETERMINE WHICH PAGE SHOULD BE SELECTED, BASED ON IF USER IS OWNER OF BOOK */
 
@@ -89,25 +94,50 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        //        TextView bookTitle;
-//        TextView bookAuthor;
+                TextView bookTitle;
+        TextView bookAuthor;
         ImageView bookCoverImageView;
+        ImageView statusImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            bookTitle = itemView.findViewById(R.id.view_title);
-//            bookAuthor = itemView.findViewById(R.id.view_author);
+            bookTitle = itemView.findViewById(R.id.itemBookTitle);
+            bookAuthor = itemView.findViewById(R.id.itemBookAuthor);
             bookCoverImageView = itemView.findViewById(R.id.itemBookBookCoverImageView);
+            statusImageView = itemView.findViewById(R.id.itemBookStatus);
+
         }
 
-        public void bind(final Book book){
+        public void bind(final Book book, Context context){
 
-//            bookTitle.setText(book.getTitle());
-//            bookAuthor.setText(book.getAuthor());
+            bookTitle.setText(book.getTitle());
+            bookAuthor.setText(book.getAuthor());
 
             GlideApp.with(Objects.requireNonNull(itemView.getContext()))
                     .load(book.getBookCover())
                     .into(bookCoverImageView);
+
+            switch(book.getStatus().toUpperCase()) {
+                case "REQUESTED":
+                    statusImageView.setImageResource(R.drawable.ic_requested);
+                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorRequested),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+                case "ACCEPTED":
+                    statusImageView.setImageResource(R.drawable.ic_accepted);
+                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccepted),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+                case "BORROWED":
+                    statusImageView.setImageResource(R.drawable.ic_borrowed);
+                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorBorrowed),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+                default:
+                    statusImageView.setImageResource(R.drawable.ic_available);
+                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAvailable),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+            }
         }
     }
 }

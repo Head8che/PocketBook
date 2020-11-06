@@ -1,27 +1,24 @@
 package com.example.pocketbook.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,16 +26,20 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * A {@link RecyclerView.Adapter<RequestAdapter.ViewHolder>} subclass.
+ */
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>{
 
     private Book mBook;
     private RequestList mRequestList;
-    private Book tempBook;
     private User mRequester;
-    private User mCurrentUser;
-    private String username;
 
-    public RequestAdapter(Book mBook, User mCurrentUser) {
+    /**
+     * constructor for the RequestAdapter
+     * @param mBook: the book for which the requests are being viewed
+     */
+    public RequestAdapter(Book mBook) {
         this.mBook = mBook;
         this.mRequestList = mBook.getRequestList();
     }
@@ -56,12 +57,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         Request request = mRequestList.getRequestAtPosition(position);
         holder.bind(request);
-        //Log.d("testtttttttttttttt2222",user.getUsername());
-
     }
-
-
-
+    
     @Override
     public int getItemCount() {
         return mRequestList.getSize();
@@ -78,6 +75,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            //get the views' ids
             username = itemView.findViewById(R.id.itemRequestUsernameTextView);
             date = itemView.findViewById(R.id.itemRequestDateTextView);
             userProfile = itemView.findViewById(R.id.itemRequestProfileImageView);
@@ -87,6 +85,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
 
         public void bind(Request request){
+
+            //get the requester's info from Firestore to display it to the owner
             String requesterEmail = request.getRequester();
             FirebaseFirestore.getInstance().collection("users").document(requesterEmail)
                     .get()
@@ -105,15 +105,27 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         }
                     });
             date.setText(request.getRequestDate());
+
+            //if the user already accepted a request, they can't accept or decline that request
+            if (mBook.getStatus().equals("ACCEPTED")){
+                accept.setText("Accepted");
+                accept.setClickable(false);
+                decline.setClickable(false);
+            }
+
+            //when the user taps on the accept button for a request, the request is accepted and they can't decline that request
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mBook.acceptRequest(request);
+                    notifyDataSetChanged();
                     accept.setText("Accepted");
                     accept.setClickable(false);
+                    decline.setClickable(false);
                 }
             });
 
+            //when the user taps on the decline button for a request, that request is declined
             decline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,7 +133,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         notifyDataSetChanged();
                 }
             });
-
         }
     }
 }

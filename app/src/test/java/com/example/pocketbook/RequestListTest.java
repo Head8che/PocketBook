@@ -21,6 +21,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 
@@ -62,13 +66,20 @@ public class RequestListTest {
     private User mockBorrower() {
 
         return new User("Jake", "Doe", "jake@gmail.com",
-                "jakeBorrower", "123456", "noPhoto");
+                "jakeBorrower", "123456", null);
     }
 
+    private User anotherMockBorrower() {
+        return new User("James", "Dean", "james@gmail.com",
+                "jamesDean", "123456", null);
+    }
 
+    /**
+     * Checks that the request has been made
+     * for the book specified
+     */
     @Test
-    public void testRequestBook() {
-
+    public void testAddRequest() {
         // get a random mockBook
         Book bookToRequest = mockBook();
         // create an owner for this book
@@ -87,28 +98,114 @@ public class RequestListTest {
         assertEquals(1, requestList.getSize());
 
     }
-//
-//    @Test
-//    void viewRequestedBooks() {
-//
-//    }
-//
-//    @Test
-//    void newRequestNotification() {
-//
-//    }
-//
-//    @Test
-//    void viewAllRequestsForBook() {
-//        // get a random mockBook
-//        Book bookToRequest = mockBook();
-//        // create an owner for this book
-//        String owner = mockOwner().getEmail();
-//        // user wants to borrow this book
-//        String borrower = mockBorrower().getEmail();
-//        // request for it
-//        Request requestBook = new Request(borrower, owner, bookToRequest);
-//    }
-//
+
+    /**
+     * Checks that the onwer can see
+     * the requests made for their book
+     * represented by the requester's emails
+     */
+    @Test
+    public void viewAllRequestsForMyBook() {
+        // get a random mockBook
+        Book bookToRequest = mockBook();
+        // create an owner for this book
+        String owner = mockOwner().getEmail();
+        // users that wants to borrow this book
+        String borrower = mockBorrower().getEmail();
+        String anotherBorrower = anotherMockBorrower().getEmail();
+
+        // request for it
+        Request request = new Request(borrower, owner, bookToRequest);
+        Request anotherRequest = new Request(anotherBorrower, owner, bookToRequest);
+
+        // add to requestList
+        RequestList requestList = bookToRequest.getRequestList();
+        requestList.addRequestToListLocal(request);
+        requestList.addRequestToListLocal(anotherRequest);
+        
+        // get the size list of requests for this book
+        assertEquals(2, requestList.getSize());
+        Map<String, Request> requestMap = (Map<String, Request>) requestList.getRequestList();
+
+        ArrayList<String> requesters = new ArrayList<String>(requestMap.keySet());
+        assertEquals(borrower, requesters.get(0));
+        assertEquals(anotherBorrower, requesters.get(1));
+
+    }
+
+    /**
+     * Checks that a request can be deleted
+     */
+    @Test
+    public void testDeleteRequest() {
+        // get a random mockBook
+        Book bookToRequest = mockBook();
+        // create an owner for this book
+        String owner = mockOwner().getEmail();
+        // users that wants to borrow this book
+        String borrower = mockBorrower().getEmail();
+
+        // request for it
+        Request request = new Request(borrower, owner, bookToRequest);
+        // add to requestList
+        RequestList requestList = bookToRequest.getRequestList();
+        requestList.addRequestToListLocal(request);
+        assertEquals(1, requestList.getSize());
+
+        // remove the request
+        assertTrue(requestList.removeRequestFromListLocal(request));
+        // check the decremented size
+        assertEquals(0, requestList.getSize());
+    }
+
+    /**
+     * Tests that a request has been accepted and removed
+     * and all other requests removed
+     */
+    @Test
+    public void testAcceptRequest() {
+        // get a random mockBook
+        Book bookToRequest = mockBook();
+        // create an owner for this book
+        String owner = mockOwner().getEmail();
+        // users that wants to borrow this book
+        String borrower = mockBorrower().getEmail();
+
+        // request for it
+        Request request = new Request(borrower, owner, bookToRequest);
+        // add to requestList
+        RequestList requestList = bookToRequest.getRequestList();
+        requestList.addRequestToListLocal(request);
+
+        // accept the request
+        assertTrue(requestList.acceptRequest(request));
+        assertEquals(0, requestList.getSize());
+    }
+
+    /**
+     * Checks if a specified request or borrower
+     * is in the list of requests
+     */
+    @Test
+    public void testContainsRequest() {
+        // get a random mockBook
+        Book bookToRequest = mockBook();
+        // create an owner for this book
+        String owner = mockOwner().getEmail();
+        // users that wants to borrow this book
+        String borrower = mockBorrower().getEmail();
+        String anotherBorrower = anotherMockBorrower().getEmail();
+
+        // request for it
+        Request request = new Request(borrower, owner, bookToRequest);
+        // add to requestList
+        RequestList requestList = bookToRequest.getRequestList();
+        requestList.addRequestToListLocal(request);
+
+        assertTrue(requestList.containsRequest(request));
+        assertFalse(requestList.containsRequest(anotherBorrower));
+    }
+
+
 
 }

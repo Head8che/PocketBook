@@ -193,13 +193,17 @@ public class RequestList implements Serializable {
     public boolean acceptRequest(Request request) {
         /* TODO: update requester's acceptedBooks (firebase) */
         /* TODO: update requestee's (currentUser) acceptedBooks (local & firebase) */
-        //decline all other requests
         Iterator it = requestList.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             Request otherRequest = (Request)pair.getValue();
+            // decline all other requests
             if (request.getRequester() != otherRequest.getRequester())
                 declineRequest(otherRequest);
+            else {
+                removeRequestFromListLocal(request); // TODO: also remove from firebase
+                return true;
+            }
         }
         return false;
     }

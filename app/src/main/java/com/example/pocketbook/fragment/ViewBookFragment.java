@@ -159,9 +159,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         //boolean to track if a book is available for being requested
         boolean available = false;
 
-        Log.d("booooooooooool",book.getStatus().toUpperCase());
-        Log.d("booooooooooool", currentUser.getEmail());
-
         
         switch(book.getStatus().toUpperCase()) {
 

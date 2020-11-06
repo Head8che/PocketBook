@@ -111,8 +111,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             //if the user already accepted a request, they can't accept or decline that request
             if (mBook.getStatus().equals("ACCEPTED")){
                 accept.setText("Accepted");
-                accept.setClickable(false);
-                decline.setClickable(false);
+                accept.setEnabled(false);
+                decline.setEnabled(false);
             }
 
             //when the user taps on the accept button for a request, the request is accepted and they can't decline that request
@@ -122,8 +122,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     mBook.acceptRequest(request);
                     notifyDataSetChanged();
                     accept.setText("Accepted");
-                    accept.setClickable(false);
-                    decline.setClickable(false);
+                    accept.setEnabled(false);
+                    decline.setEnabled(false);
                 }
             });
 

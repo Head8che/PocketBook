@@ -1,6 +1,7 @@
 package com.example.pocketbook.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,7 +157,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
         //boolean to track if a book is available for being requested
         boolean available = false;
-
+        
         switch(book.getStatus()) {
 
             //if the book is borrowed or accepted by another user, it is not available for requesting

@@ -20,6 +20,7 @@ import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +34,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private User currentUser;
     private User bookOwner;
     private FragmentActivity activity;
-    private FirebaseAuth mAuth;
 
     public BookAdapter(User currentUser, BookList list, FragmentActivity activity) {
         this.list = list;
@@ -58,8 +58,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth = FirebaseAuth.getInstance();
-                if (book.getOwner().equals(mAuth.getCurrentUser().getEmail())) {
+                if (book.getOwner().equals(currentUser.getEmail())) {
                     Log.e("OWNERIN", book.getOwner());
                     ViewMyBookFragment nextFrag = ViewMyBookFragment.newInstance(currentUser, book, list);
                     Bundle bundle = new Bundle();
@@ -69,25 +68,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     nextFrag.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
                 } else {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("BA_CURRENTUSER", currentUser);
-//                    bundle.putSerializable("BA_BOOK", book);
                     FirebaseFirestore.getInstance().collection("users").document(book.getOwner())
                             .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
-                            bookOwner = new User(document.getString("firstName"),document.getString("lastName"),document.getString("email")
-                                    ,document.getString("username"),document.getString("password"),document.getString("photo"));
+                            bookOwner = FirebaseIntegrity.getUserFromFirestore(document);
                             ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser,bookOwner, book);
                             activity.getSupportFragmentManager().beginTransaction().replace(activity.findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
                         }
                     });
-//                    bundle.putSerializable("BA_BOOKOWNER",bookOwner);
-//
-//                    nextFrag.setArguments(bundle);
-
-                    //activity.getFragmentManager().beginTransaction().replace(R.id., nextFrag, "ViewBookFragment").addToBackStack(null).commit();
                 }
                 
             }

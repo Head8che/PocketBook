@@ -42,6 +42,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Home Page Screen
+ */
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG ="MainActivity";
     private FirebaseFirestore mFirestore;
@@ -74,16 +77,36 @@ public class HomeActivity extends AppCompatActivity {
                 HomeFragment.newInstance(currentUser, new BookList())).commit();
     }
 
-    @Override //temporary until we find a way to make the back button work properly
+    @Override
     public void onBackPressed() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                HomeFragment.newInstance(currentUser, new BookList())).commit();
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home) {
+                bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                        HomeFragment.newInstance(currentUser, new BookList())).commit();
+                return;
+            }
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
     }
 
+    /**
+     * Greeting message displayed on the screen open successful logging in.
+     * @param message
+     */
     private void toastMessage(String message) {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Bottom navigation bar options
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener NavListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 @Override
@@ -133,7 +156,10 @@ public class HomeActivity extends AppCompatActivity {
                         //     break;
 
                     }
-                    if (item.getItemId() ==  R.id.bottom_nav_profile){
+                    if (item.getItemId() ==  R.id.bottom_nav_profile) {
+                        Fragment profileFragment = ProfileFragment.newInstance(currentUser);
+                        Fragment ownerFragment = OwnerFragment.newInstance(currentUser);
+
                         mFirestore = FirebaseFirestore.getInstance();
                         mFirestore.collection("catalogue")
                                 .whereEqualTo("owner",currentUser.getEmail())
@@ -142,23 +168,18 @@ public class HomeActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                if (document.exists()) {
-                                                    check = 1;
-                                                }
+                                            if (task.getResult().isEmpty()) {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, profileFragment).commit();
+                                            } else {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, ownerFragment).commit();
                                             }
                                         }
                                     }
                                 });
-                        if (check == 0){
-                            selectedFragment = ProfileFragment.newInstance(currentUser);
-                        }
-                        else {
-                            selectedFragment = OwnerFragment.newInstance(currentUser);
-//
-                        }
                     }
-                    if (selectedFragment != null) {
+                    if ((selectedFragment != null) && (item.getItemId() !=  R.id.bottom_nav_profile)) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();
                     }
                     return true;

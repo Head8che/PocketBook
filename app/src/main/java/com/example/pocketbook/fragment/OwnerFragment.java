@@ -28,6 +28,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
+/**
+ * Owner Profile Page fragment that contains the user Profile (Books/Info)
+ */
 public class OwnerFragment extends Fragment {
 
     private static final int numColumns = 2;
@@ -43,6 +46,11 @@ public class OwnerFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
+    /**
+     * Owner Profile fragment instance that bundles the user information to be accessible/displayed
+     * @param user
+     * @return
+     */
     public static OwnerFragment newInstance(User user) {
         OwnerFragment ownerFragment = new OwnerFragment();
         ProfileFragment profileFragment = new ProfileFragment();
@@ -52,6 +60,10 @@ public class OwnerFragment extends Fragment {
         return ownerFragment;
     }
 
+    /**
+     * Obtains and create the information/data required for this screen.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +78,13 @@ public class OwnerFragment extends Fragment {
         mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 
     }
-
+    /**
+     * Inflates the layout/container in the respectful fields and fills the fields that require the onwer informationto be displayed
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override

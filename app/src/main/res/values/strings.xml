@@ -73,5 +73,10 @@
     <string name="owner">Owner</string>
     <string name="borrower">Borrower</string>
     <string name="addBookFragmentTitle">Add New Book</string>
+    <string name="new_to_pocketbook_sign_up">New to Pocketbook? Sign Up</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="password">🔒 Password</string>
+    <string name="pocketbook">Pocketbook</string>
 
 </resources>

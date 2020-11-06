@@ -43,35 +43,52 @@
                     android:layout_marginStart="10dp"
                     android:src="@color/colorAccent" />
 
+                <TextView
+                    android:id="@+id/viewBookUsernameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Username"
+                    android:textColor="@color/colorTitle"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
                 <ImageView
                     android:id="@+id/viewBookBookStatusImageView"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_gravity="end|bottom"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="@dimen/large_book_width"
+                    android:layout_gravity="end|top"
+                    android:layout_marginEnd="20dp"
                     android:contentDescription="book_status_image"
                     android:src="@drawable/ic_available"
                     app:tint="@color/colorAvailable" />
-            </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="@dimen/large_book_width"
-                android:layout_height="@dimen/large_book_height"
-                android:layout_gravity="center"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="6dp"
-                app:cardUseCompatPadding="true">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="@dimen/large_book_width"
+                    android:layout_height="@dimen/large_book_height"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="6dp"
+                    app:cardUseCompatPadding="true">
 
-                <ImageView
-                    android:id="@+id/bookCover"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/book_cover_image"
-                    android:src="@drawable/ic_scan" />
+                    <ImageView
+                        android:id="@+id/bookCover"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/book_cover_image"
+                        android:src="@drawable/ic_scan" />
 
-            </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/viewBookTitle"

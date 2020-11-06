@@ -34,7 +34,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     private Book mBook;
     private RequestList mRequestList;
     private User mRequester;
-    private String username;
 
     /**
      * constructor for the RequestAdapter
@@ -76,6 +75,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            //get the views' ids
             username = itemView.findViewById(R.id.itemRequestUsernameTextView);
             date = itemView.findViewById(R.id.itemRequestDateTextView);
             userProfile = itemView.findViewById(R.id.itemRequestProfileImageView);
@@ -85,6 +85,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
 
         public void bind(Request request){
+
+            //get the requester's info from Firestore to display it to the owner
             String requesterEmail = request.getRequester();
             FirebaseFirestore.getInstance().collection("users").document(requesterEmail)
                     .get()
@@ -103,11 +105,15 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         }
                     });
             date.setText(request.getRequestDate());
+
+            //if the user already accepted a request, they can't accept or decline that request
             if (mBook.getStatus().equals("ACCEPTED")){
                 accept.setText("Accepted");
                 accept.setClickable(false);
+                decline.setClickable(false);
             }
 
+            //when the user taps on the accept button for a request, the request is accepted and they can't decline that request
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -115,9 +121,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     notifyDataSetChanged();
                     accept.setText("Accepted");
                     accept.setClickable(false);
+                    decline.setClickable(false);
                 }
             });
 
+            //when the user taps on the decline button for a request, that request is declined
             decline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -125,7 +133,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         notifyDataSetChanged();
                 }
             });
-
         }
     }
 }

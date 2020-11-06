@@ -13,11 +13,9 @@ public class Request implements Serializable {
     private String requestedBook;
     private String requestDate;
     private Book requestedBookObject;
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-    private static DateFormat df = new SimpleDateFormat("MMM dd, yyyy",Locale.ENGLISH);
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
     public Request(){
-
     }
     public Request(String requester, String requestee, String requestedBook) {
         this.requester = requester.trim().toLowerCase();  // lowercase email

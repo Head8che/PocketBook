@@ -18,6 +18,11 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -42,6 +47,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     private TextView commentField;
     private TextView isbnField;
     private TextView conditionField;
+    private TextView usernameField;
     private Button requestButton;
 
     /**
@@ -92,6 +98,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         commentField = view.findViewById(R.id.viewBookComment);
         requestButton = view.findViewById(R.id.viewBookRequestBtn);
         userProfilePicture = view.findViewById(R.id.viewBookUserProfile);
+        usernameField = view.findViewById(R.id.viewBookUsernameTextView);
         bookCoverImageView = view.findViewById(R.id.bookCover);
         bookStatusImage = (ImageView) view.findViewById(R.id.viewBookBookStatusImageView);
 
@@ -122,14 +129,28 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .load(bookOwner.getProfilePicture())
                 .circleCrop()
                 .into(userProfilePicture);
+        
+        //get the username of the book's owner from firestore and set it in its field
+        FirebaseFirestore.getInstance().collection("users").document(book.getOwner()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        usernameField.setText(task.getResult().get("username").toString());
+                    }
+                });
+
+        //the book is available for requesting if it has no requests
+        if (book.getRequestList().getSize()==0){
+            book.setStatus("AVAILABLE");
+        }
 
         //boolean to track if a book is available for being requested
         boolean available = false;
 
         switch(book.getStatus()) {
+
             //if the book is borrowed or accepted by another user, it is not available for requesting
             case "BORROWED":
-            case "ACCEPTED":
                 requestButton.setClickable(false);
                 requestButton.setText("Not Available");
                 requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
@@ -138,13 +159,22 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 available = false;
                 break;
 
+            case "ACCEPTED":
+                requestButton.setClickable(false);
+                requestButton.setText("Not Available");
+                requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
+                bookStatusImage.setImageResource(R.drawable.ic_accepted);
+                bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccepted),android.graphics.PorterDuff.Mode.SRC_IN);
+                available = false;
+                break;
+
             case "REQUESTED":
                 //if the book has been requested by this user before, it is not available for requesting again
                 if (book.getRequestList().containsRequest(currentUser.getEmail())){
                     requestButton.setText("Already Requested!");
                     requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
-                    bookStatusImage.setImageResource(R.drawable.ic_borrowed);
-                    bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
+                    bookStatusImage.setImageResource(R.drawable.ic_requested);
+                    bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorRequested),android.graphics.PorterDuff.Mode.SRC_IN);
                     available = false;
                 }
                 //if the book has no requests, it is available for requesting

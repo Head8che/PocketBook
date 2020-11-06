@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
     private BookList catalogue;
 
     private ScrollUpdate scrollUpdate;
+
     /**
      * Home Page fragment instance that bundles the user/catalogue to be displayed
      * @param user
@@ -57,6 +58,7 @@ public class HomeFragment extends Fragment {
         homeFragment.setArguments(args);
         return homeFragment;
     }
+
     /**
      * Obtains and create the information/data required for this screen.
      * @param savedInstanceState
@@ -77,6 +79,7 @@ public class HomeFragment extends Fragment {
         mQuery = mFirestore.collection("catalogue")
                 .whereNotEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
     }
+
     /**
      * Inflates the layout/container with the following (Layout and Books)
      * @param inflater

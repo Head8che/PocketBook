@@ -77,7 +77,8 @@ public class HomeActivity extends AppCompatActivity {
                 HomeFragment.newInstance(currentUser, new BookList())).commit();
     }
 
-    @Override
+
+    @Override //temporary until we find a way to make the back button work properly
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();

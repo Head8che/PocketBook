@@ -60,7 +60,6 @@ public class User implements Serializable {
         this.username = username.trim();
         this.password = password.trim();
         this.photo = ((photo == null) || (photo.trim().equals(""))) ? null : photo.trim();
-
         this.ownedBooks = new ArrayList<String>();
         this.borrowedBooks = new ArrayList<String>();
         this.acceptedBooks = new ArrayList<String>();
@@ -213,6 +212,7 @@ public class User implements Serializable {
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? null : photo.trim();
     }
+
 
     public void setFirstNameLocal(String firstName) { this.firstName = firstName; }
     public void setLastNameLocal(String lastName) { this.lastName = lastName; }

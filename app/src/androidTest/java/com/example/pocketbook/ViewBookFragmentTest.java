@@ -17,6 +17,7 @@ import com.example.pocketbook.activity.AddBookActivity;
 import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.robotium.solo.Solo;
@@ -53,10 +54,12 @@ public class ViewBookFragmentTest {
                 }
             };
 
+    /**
+     * runs before each test and creates a solo instance
+     */
     @Before
     public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
-
         // Asserts that the current activity is HomeActivity. Otherwise, show “Wrong Activity”
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.bottom_nav_home));  // click on home button
@@ -64,14 +67,12 @@ public class ViewBookFragmentTest {
         mockOwner.setNewUserFirebase();
         mockBook = new Book("0", "mockTitle", "mockAuthor", "0000000000000", "aaa@test.com", "AVAILABLE", "this is a test", "GOOD", "");
         mockBook.pushNewBookToFirebase();
-        solo.clickInRecyclerView(0);
-
     }
 
     @After
     public void removeMockFromFirebase() {
         FirebaseIntegrity.removeAuthorFromFirestore("mockAuthor");
-        FirebaseIntegrity.removeUserFromFirebase("aaa@test.com");
+//        FirebaseIntegrity.removeUserFromFirebase("aaa@test.com");
     }
 
     @Test
@@ -82,7 +83,7 @@ public class ViewBookFragmentTest {
 
     @Test
     public void testDisplayInfo(){
-
+        solo.clickInRecyclerView(0);
         TextView username = (TextView) solo.getView(R.id.viewBookUsernameTextView);
         TextView isbn = (TextView) solo.getView(R.id.viewBookISBN);
         TextView comment = (TextView) solo.getView(R.id.viewBookComment);
@@ -101,16 +102,18 @@ public class ViewBookFragmentTest {
 
     @Test
     public void testRequestBook(){
-
-        Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
-
-        solo.clickOnView(requestBtn);
-
-        assertTrue(mockBook.getRequestList().containsRequest("mock@mock.com"));
-        assertTrue(solo.waitForText("mockRequester.getUsername()", 1, 2000))
         solo.clickInRecyclerView(0);
+        Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
+        solo.clickOnView(requestBtn);
+        assertTrue(solo.waitForText("You have requested mockTitle!"));
+    }
 
-        assertFalse(requestBtn.isClickable());
+    @Test
+    public void testRequestRquestedBook(){
+        mockBook.addRequest(new Request("mock@mock.com","aaa@test.com",mockBook));
+        solo.sleep(2000);
+        solo.clickInRecyclerView(0);
+        Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
 
     }
 

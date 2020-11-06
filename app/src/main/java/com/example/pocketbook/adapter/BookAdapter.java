@@ -119,11 +119,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     .into(bookCoverImageView);
 
             switch(book.getStatus().toUpperCase()) {
-//                case "REQUESTED":
-//                    statusImageView.setImageResource(R.drawable.ic_requested);
-//                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorRequested),
-//                            android.graphics.PorterDuff.Mode.SRC_IN);
-//                    break;
+                case "REQUESTED":
+                        statusImageView.setImageResource(R.drawable.ic_requested);
+                        statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorRequested),
+                                android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
                 case "ACCEPTED":
                     statusImageView.setImageResource(R.drawable.ic_accepted);
                     statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccepted),

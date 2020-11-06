@@ -2,18 +2,23 @@ package com.example.pocketbook.activity;
 
 import android.os.SystemClock;
 import android.view.View;
+
 import androidx.test.rule.ActivityTestRule;
+
 import com.example.pocketbook.R;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 
-public class SignUpActivityUITestOne {
+
+public class SignUpActivityTest {
 
     @Rule
     public ActivityTestRule<SignUpActivity> Activity = new ActivityTestRule<SignUpActivity>(SignUpActivity.class);

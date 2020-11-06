@@ -25,13 +25,13 @@ public class UserTest {
 
     @Test
     public void setUsernameTest() {
-        User user = new User("Taylor","Smith","taylorsmith@gmail.com","Taytay","taylor123");
+        User user = new User("Taylor","Smith","taylorsmith@gmail.com","Taytay","taylor123", null);
         assertEquals(user.getUsername(), "Taytay");
     }
 
     @Test
     public void setPasswordTest() {
-        User user = new User("Taylor","Smith","taylorsmith@gmail.com","TaylorSmith","taylor123");
+        User user = new User("Taylor","Smith","taylorsmith@gmail.com","TaylorSmith","taylor123", null);
         assertEquals(user.getPassword(), "taylor123");
     }
 

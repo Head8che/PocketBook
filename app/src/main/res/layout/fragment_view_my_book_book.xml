@@ -68,7 +68,8 @@
             <TextView
                 android:id="@+id/viewMyBookBookTitleTextView"
                 android:layout_marginTop="12dp"
-                android:textSize="32sp"
+                android:textSize="24sp"
+                android:textColor="@color/textBlack"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +78,7 @@
             <TextView
                 android:id="@+id/viewMyBookAuthorTextView"
                 android:layout_marginTop="4sp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

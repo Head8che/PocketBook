@@ -41,7 +41,7 @@ public class RequestList implements Serializable {
     public RequestList(String bookId) {
         this.requestList = new LinkedHashMap<String, Request>();
         this.bookId = bookId;
-        if (this.bookId != null) {this.getData();}
+        if ((this.bookId != null) && (this.bookId != "") ) {this.getData();}
     }
 
     public void getData(){
@@ -193,8 +193,7 @@ public class RequestList implements Serializable {
     public boolean acceptRequest(Request request) {
         /* TODO: update requester's acceptedBooks (firebase) */
         /* TODO: update requestee's (currentUser) acceptedBooks (local & firebase) */
-        /* TODO: decline all other requesters in local requestList */
-        /* TODO: empty Firebase requestList */
+        //decline all other requests
         Iterator it = requestList.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();

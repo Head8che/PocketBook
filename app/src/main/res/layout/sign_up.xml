@@ -133,7 +133,7 @@
         android:layout_width="273dp"
         android:layout_height="54dp"
         android:layout_marginStart="16dp"
-        android:text="Click here to add your profile picture."
+        android:text="@string/click_here_to_add_your_profile_picture"
         android:textColor="#FFFFFF"
         android:background="@color/textBlack"
         app:layout_constraintBottom_toBottomOf="@+id/userImage"

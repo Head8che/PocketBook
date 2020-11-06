@@ -10,8 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.pocketbook.R;
-import com.example.pocketbook.fragment.ProfileFragment;
-import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,9 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -32,7 +27,7 @@ import java.util.Objects;
 /**
  * A login screen that allows users to login using (email/password)
  */
-public class LoginActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button signUp, login, forgotPass;
     private EditText userEmail, userPassword;
@@ -107,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                         if (document.exists()) {
                                             current_user = FirebaseIntegrity.getUserFromFirestore(document);
                                             Log.e(TAG, "DocumentSnapshot data: " + document.getData());
-                                            Toast.makeText(LoginActivity.this, String.format(Locale.CANADA,
+                                            Toast.makeText(LogInActivity.this, String.format(Locale.CANADA,
                                                     "Welcome to Pocketbook, %s.",current_user.getFirstName()),
                                                     Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -126,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Failed to Login.",
+                            Toast.makeText(LogInActivity.this, "Failed to Login.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -29,29 +29,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginLeft="5dp"
-        android:text="Title"
-        android:layout_toRightOf="@id/book_card"/>
+        android:layout_marginStart="5dp"
+        android:text="@string/title"
+        android:layout_toEndOf="@id/book_card"/>
 
     <TextView
         android:id="@+id/item_book_owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/item_book_description"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="25dp"
-        android:layout_toRightOf="@id/book_card"
-        android:text="Owned by You" />
+        android:layout_toEndOf="@id/book_card"
+        android:text="@string/owned_by_you" />
 
     <TextView
         android:id="@+id/item_book_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="12dp"
-        android:layout_toRightOf="@id/book_card"
+        android:layout_toEndOf="@id/book_card"
         android:layout_below="@id/item_book_title"
-        android:text="Long description"
+        android:text="@string/long_description"
         android:maxLength="70"/>
 
     <TextView
@@ -59,10 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
-        android:layout_marginLeft="54dp"
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/item_book_title"
-        android:layout_toRightOf="@id/book_card"
-        android:text="Status" />
+        android:text="@string/status" />
 
 </RelativeLayout>

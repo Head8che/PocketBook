@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/book_card"
-    android:layout_width="@dimen/medium_book_width"
-    android:layout_height="@dimen/medium_book_height"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="5dp"
-    android:layout_margin="20dp">
+    android:layout_width="174dp"
+    android:layout_height="295dp"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!--        <ImageView-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content" />-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itemBookCard"
+        android:layout_width="@dimen/medium_book_width"
+        android:layout_height="@dimen/medium_book_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
 
         <ImageView
             android:id="@+id/itemBookBookCoverImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
             android:contentDescription="@string/book_cover_image"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_scan" />
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/view_title"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_above="@+id/view_author"-->
-        <!--            android:layout_marginBottom="0dp"-->
-        <!--            android:gravity="center"-->
-        <!--            android:text="Book title"-->
-        <!--            android:textSize="15sp" />-->
+    </androidx.cardview.widget.CardView>
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/view_author"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_alignParentBottom="true"-->
-        <!--            android:layout_marginEnd="0dp"-->
-        <!--            android:gravity="center"-->
-        <!--            android:text="Book author"-->
-        <!--            android:textSize="15sp" />-->
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/itemBookTitle"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemBookCard"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:height="20dp"
+        android:singleLine="true"
+        android:gravity="start"
+        android:text="Book title that is really long"
+        android:textColor="@color/textBlack"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
-</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/itemBookAuthor"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/itemBookTitle"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="0dp"
+        android:singleLine="true"
+        android:height="20dp"
+        android:gravity="start"
+        android:text="Book author"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/itemBookStatus"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/itemBookCard"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@id/itemBookTitle"
+        android:contentDescription="@string/book_cover_image"
+        android:paddingTop="6dp"
+        android:src="@drawable/ic_available"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemBookAuthor"
+        app:layout_constraintTop_toBottomOf="@+id/itemBookCard"
+        app:tint="@color/colorAvailable" />
+
+</RelativeLayout>

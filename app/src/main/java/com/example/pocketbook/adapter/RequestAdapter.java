@@ -97,8 +97,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 mRequester = FirebaseIntegrity.getUserFromFirestore(document);
-//                                mRequester = new User(document.getString("firstName"),document.getString("lastName"),document.getString("email")
-//                                ,document.getString("username"),document.getString("password"),document.getString("photo"));
                                 username.setText(mRequester.getUsername());
                                 GlideApp.with(Objects.requireNonNull(itemView.getContext()))
                                         .load(mRequester.getProfilePicture())

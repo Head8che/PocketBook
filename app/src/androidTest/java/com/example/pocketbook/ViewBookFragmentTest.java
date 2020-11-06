@@ -106,6 +106,7 @@ public class ViewBookFragmentTest {
         Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
         solo.clickOnView(requestBtn);
         assertTrue(solo.waitForText("You have requested mockTitle!"));
+        assertEquals(1,mockBook.getRequestList().getSize());
     }
 
     @Test
@@ -114,6 +115,7 @@ public class ViewBookFragmentTest {
         solo.sleep(2000);
         solo.clickInRecyclerView(0);
         Button requestBtn = (Button) solo.getView(R.id.viewBookRequestBtn);
+        assertFalse(requestBtn.isClickable());
 
     }
 

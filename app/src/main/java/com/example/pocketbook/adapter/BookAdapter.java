@@ -118,22 +118,39 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     .load(book.getBookCover())
                     .into(bookCoverImageView);
 
+
+            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();//the current's user email
             switch(book.getStatus().toUpperCase()) {
-                case "REQUESTED":
-                        statusImageView.setImageResource(R.drawable.ic_requested);
-                        statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorRequested),
-                                android.graphics.PorterDuff.Mode.SRC_IN);
-                    break;
-                case "ACCEPTED":
-                    statusImageView.setImageResource(R.drawable.ic_accepted);
-                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccepted),
-                            android.graphics.PorterDuff.Mode.SRC_IN);
-                    break;
+
+                //if the book is borrowed or accepted by another user, it is not available for requesting
                 case "BORROWED":
                     statusImageView.setImageResource(R.drawable.ic_borrowed);
                     statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorBorrowed),
                             android.graphics.PorterDuff.Mode.SRC_IN);
                     break;
+
+                case "ACCEPTED":
+                    statusImageView.setImageResource(R.drawable.ic_accepted);
+                    statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccepted),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+                    break;
+
+                case "REQUESTED":
+                    //if the book has been requested by this user before, it is not available for requesting again
+                    if (book.getRequestList().containsRequest(email)){
+                        statusImageView.setImageResource(R.drawable.ic_requested);
+                        statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorRequested),
+                                android.graphics.PorterDuff.Mode.SRC_IN);
+                    }
+                    //if the book has no requests or hasn't been requested by the user yet, it is available for requesting
+                    else {
+                        statusImageView.setImageResource(R.drawable.ic_available);
+                        statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAvailable),
+                                android.graphics.PorterDuff.Mode.SRC_IN);
+                    }
+                    break;
+
+                //default case when the book is available
                 default:
                     statusImageView.setImageResource(R.drawable.ic_available);
                     statusImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAvailable),

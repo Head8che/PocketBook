@@ -109,7 +109,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         StorageReference userProfilePicture = current_user.getProfilePicture();
 
-
         GlideApp.with(this)
                 .load(userProfilePicture)
                 .circleCrop()
@@ -177,7 +176,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,7 +200,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void updateUI(User current_user) {
         String KeyID = mDatabase.push().getKey();

@@ -59,7 +59,6 @@ public class ProfileFragment extends Fragment {
     private User currentUser;
     private ScrollUpdate scrollUpdate;
 
-
     /**
      * Profile fragment instance that bundles the user information to be accessible/displayed
      * @param user

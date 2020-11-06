@@ -78,7 +78,6 @@ public class OwnerFragment extends Fragment {
         mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 
     }
-
     /**
      * Inflates the layout/container in the respectful fields and fills the fields that require the onwer informationto be displayed
      * @param inflater

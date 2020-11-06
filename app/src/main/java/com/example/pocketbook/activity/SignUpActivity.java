@@ -44,7 +44,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     EditText FirstName, LastName, Email, Username, Password;
     String firstName, lastName, email, username, password, profileImageUrl;
-
     private FirebaseDatabase database;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;

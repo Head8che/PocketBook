@@ -28,10 +28,13 @@
         android:id="@+id/item_book_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:layout_marginTop="12dp"
         android:layout_marginStart="5dp"
         android:text="@string/title"
-        android:layout_toEndOf="@id/book_card"/>
+        android:layout_toEndOf="@id/book_card"
+        android:textStyle="bold"
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/item_book_owner"
@@ -58,9 +61,11 @@
         android:id="@+id/item_book_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/item_book_title"
-        android:text="@string/status" />
+        android:layout_alignTop="@+id/book_card"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="122dp"
+        android:layout_toEndOf="@+id/book_card"
+        android:text="@string/status"
+        android:textSize="15sp"/>
 
 </RelativeLayout>

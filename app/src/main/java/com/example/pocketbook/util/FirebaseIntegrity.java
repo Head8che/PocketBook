@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -59,6 +61,10 @@ public class FirebaseIntegrity {
         String condition = document.getString("condition");
         String photo = document.getString("photo");
         return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
+
+        // TODO: does id exist in Firebase?
+        // TODO: does owner exist in FirebaseAuth and in Firestore?
+        // TODO: does photo exist in Firebase?
     }
 
     public static User getUserFromFirestore(DocumentSnapshot document) {
@@ -68,7 +74,16 @@ public class FirebaseIntegrity {
         String username = document.getString("username");
         String password = document.getString("password");
         String photo = document.getString("photo");
-        return new User(firstName, lastName, email, username, password, photo);
+//        ArrayList<String> ownedBooks = document.get(ownedBooks);
+//        ArrayList<String> requestedBooks = document.get(requestedBooks);
+//        ArrayList<String> acceptedBooks = document.get(acceptedBooks);
+//        ArrayList<String> borrowedBooks = document.get(borrowedBooks);
+        return new User(firstName, lastName, email, username, password, photo
+                /*, ownedBooks, requestedBooks, acceptedBooks, borrowedBooks */);
+
+        // TODO: does email exist in FirebaseAuth and in Firestore?
+        // TODO: does photo exist in Firebase?
+        // TODO: does each bookID in list exist in Firebase?
     }
 
     public static void updateCatalogueKeywords() {
@@ -151,4 +166,155 @@ public class FirebaseIntegrity {
                     }
                 });
     }
+
+    public static void createTempFromCatalogue() {
+        CollectionReference catalogueRef = FirebaseFirestore.getInstance().collection("catalogue");
+        catalogueRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    Log.e("DOC", document.getId());
+                                    FirebaseFirestore.getInstance().collection("temp").document(document.getId())
+                                            .set(document.getData());
+                                }
+                            }
+                        }
+                    }
+                });
+
+        CollectionReference tempRef = FirebaseFirestore.getInstance().collection("catalogue");
+        tempRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+                                    Log.e("DOC", document.getId());
+                                    String bookID = document.getId();
+                                    FirebaseFirestore.getInstance().collection("catalogue")
+                                            .document(document.getId()).collection("requests")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (DocumentSnapshot document : task.getResult()) {
+                                                            if (document.exists()) {
+                                                                Log.e("DOC", document.getId());
+                                                                FirebaseFirestore.getInstance().collection("temp").document(bookID)
+                                                                        .collection("requests")
+                                                                        .document(document.getId())
+                                                                        .set(document.getData())
+                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+                                                                                Log.d("TAG", "Deep write!");
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.w("TAG", "Error deep writing document", e);
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    public static void deleteCollectionDocumentsFirebase(String collection) {
+        // if you also want to delete sub-collection documents, the sub-collection docs MUST
+        // be deleted first; deleting sub-collection docs does not work on deleted collections
+
+    }
+
+    public static void deleteCollectionSubcollectionFirebase(String collection, String subcollection) {
+        // delete all instances of a subcollection in a collection
+    }
+
+    /* TODO: have copy... call Parser to only copy valid stuff */
+    public static void copyCollectionDocumentsFirebase(String srcCollection, String destCollection) {
+        // if you also want to copy sub-collection documents, the sub-collection docs MUST
+        // be copied first; deleting sub-collection docs does not work on copied collections
+
+    }
+
+    public static void copyCollectionSubcollectionFirebase(String srcCollection, String subcollection, String destCollection) {
+        // copy all instances of a subcollection in a collection
+    }
+
+    /*
+    ALWAYS DELETE SUBCOLLECTIONS BEFORE DELETING COLLECTIONS!
+
+     HIGH LEVEL OPERATIONS BROKEN DOWN INTO RELEVANT METHODS:
+
+     deleteVirtualDocumentsFromCatalogue()
+     - copyCollectionDocumentsFirebase("catalogue", "temp")  // copy books
+     - copyCollectionSubcollectionFirebase("catalogue", "requests", "temp")  // copy book requests
+     - deleteCollectionSubcollectionFirebase("catalogue", "requests")  // delete book requests
+     - deleteCollectionDocumentsFirebase("catalogue")  // delete books
+     - copyCollectionDocumentsFirebase("temp", "catalogue")  // copy vaild books back
+     - copyCollectionSubcollectionFirebase("temp", "requests", "catalogue")  // copy valid requests
+     - deleteCollectionSubcollectionFirebase("temp", "requests")  // delete book requests
+     - deleteCollectionDocumentsFirebase("temp")  // delete books
+
+     changeUserEmail("from@email.com", "to@email.com")
+     - createAuthUserFirebase("to@email.com", userPasswordFromFirestore)
+     - copyUserDocumentFirebase("from@email.com", "to@email.com")
+     - copyUserDocumentSubcollectionFirebase("from@email.com", "notifications", "to@email.com")
+     - deleteUserDocumentSubcollectionFirebase("from@email.com", "notifications")
+     - deleteUserDocumentFirebase("from@email.com")
+     - deleteAuthUserFirebase("from@email.com")
+
+     changeUserPassword("user@email.com", "newPassword") // alternative to sending emails
+     - changeUserPasswordFieldFirebase("user@email.com", "newPassword")
+     - copyUserDocumentFirebase("user@email.com", "randomlyGeneratedTemp@email.com")
+     - copyUserDocumentSubcollectionFirebase("user@email.com", "notifications", "randomlyGeneratedTemp@email.com")
+     - deleteUserDocumentSubcollectionFirebase("user@email.com", "notifications")
+     - deleteUserDocumentFirebase("user@email.com")
+     - deleteAuthUserFirebase("user@email.com")
+     - createAuthUserFirebase("user@email.com", newUserPasswordFromFirestore)
+     - copyUserDocumentFirebase("randomlyGeneratedTemp@email.com", "user@email.com")  // copy vaild books back
+     - copyUserDocumentSubcollectionFirebase("randomlyGeneratedTemp@email.com", "notifications", "user@email.com")
+     - deleteUserDocumentSubcollectionFirebase("randomlyGeneratedTemp@email.com", "notifications")  // delete book requests
+     - deleteUserDocumentFirebase("randomlyGeneratedTemp@email.com")  // delete books
+
+     ? Add API Book to Firebase User ? Add API Book to Firebase (random user) ? Add in loop for multiple random books ?
+     - randomly get real book ISBN
+     - download book data & download image from URL
+     - parse book to user (or random user)
+     - pushNewBookToFirebase();
+
+     addRandomBooksToRandomUsers(count)  // count is the number of books to add; should NOT work if no users exist
+     addRandomUsers(count)  // first part of email should be name from API, pw should be 123456;
+                            // first check if email exists in Firebase, then auth create, then Firestore
+     addRandomBooksToUser(count, user)
+     addBookToUser(isbn, user)  // if API works properly
+     makeRandomUserRequestsToRandomBooks(count)  // if user has already requested book, request should fail
+     makeRandomRequestsToBook(count, isbn)  // book has to exist in Firebase;
+                                            // count other users request book; if count > # of users, create count requests then stop
+
+     Notes
+     - copyDocument for user should only work if auth account exists (SCRATCH THAT; need temp docs w/o email)
+
+     Stuff from other places
+     - book.pushNewBookToFirebase() --> FI.pNBTF(book)
+     - currentBookCover = FirebaseStorage.getInstance().getReference()
+                .child("default_images").child("no_book_cover_light.png") --> FI.getDefaultBookCover();
+     - StorageReference childRef = storageRef.child(userName+".jpg") --> FI.uploadImage();
+     ...
+
+     */
+
 }

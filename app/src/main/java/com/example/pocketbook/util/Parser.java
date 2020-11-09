@@ -1,7 +1,9 @@
 package com.example.pocketbook.util;
 
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,16 +13,6 @@ import java.util.List;
  */
 public class Parser {
 
-    private static int performFirebaseChecks = 1;
-
-    public static void turnOffFirebaseChecks() {
-        performFirebaseChecks = 0;
-    }
-
-    public static void turnOnFirebaseChecks() {
-        performFirebaseChecks = 1;
-    }
-
     /////////////////////////////////////////  BOOK PARSER /////////////////////////////////////////
 
     private static List<String> conditions = Arrays.asList("GREAT",
@@ -28,6 +20,63 @@ public class Parser {
 
     private static List<String> statuses = Arrays.asList("AVAILABLE",
             "REQUESTED", "ACCEPTED", "BORROWED");
+
+    /**
+     * This returns a valid Book object if arguments are valid, null otherwise
+     * @param id empty string new book id
+     * @param title book title
+     * @param author book author
+     * @param isbn book isbn
+     * @param owner app user that owns the book
+     * @param status book status; can be "AVAILABLE", "REQUESTED", "ACCEPTED" or "BORROWED"
+     * @param comment app user's optional comments about the book
+     * @param condition book condition; can be "GREAT", "GOOD", "FAIR" or "ACCEPTABLE"
+     * @param photo name of app user's optional photo for the book
+     * @return
+     *      valid Book object if arguments are valid
+     *      null otherwise
+     */
+    public static Book parseNewBook(String id, String title, String author, String isbn,
+                                    String owner, String status, String comment,
+                                    String condition, String photo) {
+
+        // return null if non-optional fields are null
+        if ((title == null) || (author == null) || (isbn == null)
+                || (owner == null) || (status == null) || (condition == null)) {
+            return null;
+        }
+
+        // trim all values
+        id = (id == null) ? "" : id.trim();  // replace null, in the case of a new book
+        title = title.trim();
+        author = author.trim();
+        isbn = isbn.trim();
+        owner = owner.trim();
+        status = status.trim().toUpperCase();
+        comment = (comment == null) ? "" : comment.trim();  // replace null with empty string
+        condition = condition.trim().toUpperCase();
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
+
+        // if all fields (other than isbn) are valid
+        if (isValidNewBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
+
+            // try to convert isbn to isbn13
+            isbn = convertToIsbn13(isbn);
+
+            // return null if isbn conversion is invalid
+            if (isbn == null) {
+                return null;
+            }
+
+            // return a new Book object if all fields are valid
+            return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
+        }
+
+        // return null if not all fields are valid
+        return null;
+    }
 
     /**
      * This returns a valid Book object if arguments are valid, null otherwise
@@ -48,25 +97,26 @@ public class Parser {
                                  String status, String comment, String condition, String photo) {
 
         // return null if non-optional fields are null
-        if ((title == null) || (author == null) || (isbn == null)
+        if ((id == null) || (title == null) || (author == null) || (isbn == null)
                 || (owner == null) || (status == null) || (condition == null)) {
             return null;
         }
 
         // trim all values
-        id = (id == null) ? "" : id.trim();  // replace null, in the case of a new book
+        id = id.trim();
         title = title.trim();
         author = author.trim();
         isbn = isbn.trim();
         owner = owner.trim();
         status = status.trim().toUpperCase();
-        comment = (comment == null) ? "" : comment.trim();  // replace null with ""
+        comment = (comment == null) ? "" : comment.trim();  // replace null with empty string
         condition = condition.trim().toUpperCase();
-        photo = (photo == null) ? "" : photo.trim();  // replace null with ""
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
 
         // if all fields (other than isbn) are valid
-        if (isValidId(id) && isValidTitle(title) && isValidAuthor(author) && isValidOwner(owner)
-                && isValidStatus(status) && isValidCondition(condition) && isValidPhoto(photo)) {
+        if (isValidBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
 
             // try to convert isbn to isbn13
             isbn = convertToIsbn13(isbn);
@@ -85,23 +135,26 @@ public class Parser {
     }
 
     /**
+     * This checks if a new book id is valid
+     * @param id empty string that will be replaced by a real id when book is added to Firebase
+     * @return
+     *      true if empty string
+     *      false otherwise
+     */
+    public static boolean isValidNewBookId(String id) {
+        // newly created local books will have "" ids
+        return (id != null) && (id.trim().length() == 0);
+    }
+
+    /**
      * This checks if a book id is valid
      * @param id book id that was randomly generated by Firebase
      * @return
      *      true if empty string or valid id (i.e. id exists in Firebase)
      *      false otherwise
      */
-    public static boolean isValidId(String id) {
-        if (id == null) {  // newly created local books won't have ids
-            return false;
-        }
-        if (id.trim().length() == 0) {  // if id is an empty string
-            return true;
-        }
-
-        // TODO: if !empty && (id exists in Firebase, return true) [for catalogue.bookID queries] ??
-        //  if (performFirebaseChecks) return FirebaseIntegrity.isBookIdInFirebase(bookID);
-        return true;
+    public static boolean isValidBookId(String id) {
+        return ((id != null) && (id.trim().length() > 0));
     }
 
     /**
@@ -111,7 +164,7 @@ public class Parser {
      *      true if title is not null or an empty string
      *      false otherwise
      */
-    public static boolean isValidTitle(String title) {
+    public static boolean isValidBookTitle(String title) {
         return ((title != null) && (title.trim().length() > 0));
     }
 
@@ -122,7 +175,7 @@ public class Parser {
      *      true if author is not null or an empty string
      *      false otherwise
      */
-    public static boolean isValidAuthor(String author) {
+    public static boolean isValidBookAuthor(String author) {
         return ((author != null) && (author.trim().length() > 0));
     }
 
@@ -133,14 +186,8 @@ public class Parser {
      *      true if owner is not null or an empty string and is lowercase
      *      false otherwise
      */
-    public static boolean isValidOwner(String owner) {
-        if ((owner == null) || (owner.equals("")) || !(owner.equals(owner.toLowerCase()))) {
-            return false;
-        }
-        // TODO: check that owner exists in FirebaseAuth and in Firestore;
-        //  this also handles email validation
-        //  if (performFirebaseChecks) return FirebaseIntegrity.isBookOwnerInFirebase(owner);
-        return true;
+    public static boolean isValidBookOwner(String owner) {
+        return (owner != null) && (!owner.equals("")) && owner.equals(owner.toLowerCase());
     }
 
     /**
@@ -150,7 +197,7 @@ public class Parser {
      *      true if status is in ["AVAILABLE", "REQUESTED", "ACCEPTED", "BORROWED"]
      *      false otherwise
      */
-    public static boolean isValidStatus(String status) {
+    public static boolean isValidBookStatus(String status) {
         return statuses.contains(status);
     }
 
@@ -161,7 +208,7 @@ public class Parser {
      *      true if condition is in ["GREAT", "GOOD", "FAIR", "ACCEPTABLE"]
      *      false otherwise
      */
-    public static boolean isValidCondition(String condition) {
+    public static boolean isValidBookCondition(String condition) {
         return conditions.contains(condition);
     }
 
@@ -172,13 +219,11 @@ public class Parser {
      *      true if photo is an empty string or a jpg file
      *      false otherwise
      */
-    public static boolean isValidPhoto(String photo) {
+    public static boolean isValidBookPhoto(String photo) {
         if (photo == null) {
             return false;
         }
         return photo.equals("") || (photo.endsWith(".jpg") && (photo.length() > 4));
-        // TODO does photo exist in Firebase?
-        //  if (performFirebaseChecks) return FirebaseIntegrity.isBookPhotoInFirebase(owner);
     }
 
     /**
@@ -364,5 +409,232 @@ public class Parser {
 
         return null;
 
+    }
+
+    /////////////////////////////////////////  USER PARSER /////////////////////////////////////////
+
+    /**
+     * This returns a valid User object if arguments are valid, null otherwise
+     * @param firstName user first name
+     * @param lastName user last name
+     * @param email user email
+     * @param username user username
+     * @param password user password
+     * @param photo user photo
+     * @return
+     *      valid User object if arguments are valid
+     *      null otherwise
+     */
+    public static User parseNewUser(String firstName, String lastName, String email,
+                                 String username, String password, String photo) {
+        // return null if non-optional fields are null
+        if ((firstName == null) || (lastName == null) || (email == null)
+                || (username == null) || (password == null)) {
+            return null;
+        }
+
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        email = email.trim().toLowerCase();
+        username = username.trim().toUpperCase();
+        password = password.trim().toUpperCase();
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
+
+        // if all fields are valid
+        if (isValidFirstName(firstName) && isValidLastName(lastName)
+                && isValidUserEmail(email) && isValidUsername(username)
+                && isValidPassword(password) && isValidUserPhoto(photo)) {
+
+            // return a new User object if all fields are valid
+            return new User(firstName, lastName, email, username, password, photo);
+        }
+
+        // return null if not all fields are valid
+        return null;
+    }
+
+    /**
+     * This returns a valid User object if arguments are valid, null otherwise
+     * @param firstName user first name
+     * @param lastName user last name
+     * @param email user email
+     * @param username user username
+     * @param password user password
+     * @param photo user photo
+     * @param ownedBooks user list of owned books
+     * @param requestedBooks user list of requested books
+     * @param acceptedBooks user list of accepted books
+     * @param borrowedBooks user list of borrowed books
+     * @return
+     *      valid User object if arguments are valid
+     *      null otherwise
+     */
+    public static User parseUser(String firstName, String lastName, String email, String username,
+                                 String password, String photo, ArrayList<String> ownedBooks,
+                                 ArrayList<String> requestedBooks, ArrayList<String> acceptedBooks,
+                                 ArrayList<String> borrowedBooks) {
+
+        // return null if non-optional fields are null
+        if ((firstName == null) || (lastName == null) || (email == null)
+                || (username == null) || (password == null) || (ownedBooks == null)
+                || (requestedBooks == null) || (acceptedBooks == null) || (borrowedBooks == null)) {
+            return null;
+        }
+
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        email = email.trim().toLowerCase();
+        username = username.trim().toUpperCase();
+        password = password.trim().toUpperCase();
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
+
+        // if all fields are valid
+        if (isValidFirstName(firstName) && isValidLastName(lastName)
+                && isValidUserEmail(email) && isValidUsername(username)
+                && isValidPassword(password) && isValidUserPhoto(photo)
+                && isValidOwnedBooksList(ownedBooks) && isValidRequestedBooksList(requestedBooks)
+                && isValidAcceptedBooksList(acceptedBooks)
+                && isValidBorrowedBooksList(borrowedBooks)) {
+
+            // return a new User object if all fields are valid
+            return new User(firstName, lastName, email, username, password, photo,
+                    ownedBooks, requestedBooks, acceptedBooks, borrowedBooks);
+        }
+
+        // return null if not all fields are valid
+        return null;
+    }
+
+    /**
+     * This checks if a user firstName is valid
+     * @param firstName user firstName
+     * @return
+     *      true if firstName is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidFirstName(String firstName) {
+        return ((firstName != null) && (firstName.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a user lastName is valid
+     * @param lastName user lastName
+     * @return
+     *      true if lastName is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidLastName(String lastName) {
+        return ((lastName != null) && (lastName.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a user email is valid
+     * @param email app user's email
+     * @return
+     *      true if email is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidUserEmail(String email) {
+        return (email != null) && (!email.equals("")) && email.equals(email.toLowerCase());
+    }
+
+    /**
+     * This checks if a user username is valid
+     * @param username user username
+     * @return
+     *      true if username is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidUsername(String username) {
+        return ((username != null) && (username.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a user password is valid
+     * @param password user password
+     * @return
+     *      true if password is not null or less than 6 characters
+     *      false otherwise
+     */
+    public static boolean isValidPassword(String password) {
+        return ((password != null) && (password.trim().length() >= 6));
+    }
+
+    /**
+     * This checks if a photo name is valid
+     * @param photo name of app user's optional photo
+     * @return
+     *      true if photo is an empty string or a jpg file
+     *      false otherwise
+     */
+    public static boolean isValidUserPhoto(String photo) {
+        if (photo == null) {
+            return false;
+        }
+        return photo.equals("") || (photo.endsWith(".jpg") && (photo.length() > 4));
+    }
+
+    /**
+     * This checks if a user list of owned books is valid
+     * @param ownedBooks user list of owned books
+     * @return
+     *      true if every id in the list of owned books is valid
+     *      false otherwise
+     */
+    public static boolean isValidOwnedBooksList(ArrayList<String> ownedBooks) {
+        for (String id : ownedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This checks if a user list of requested books is valid
+     * @param requestedBooks user list of requested books
+     * @return
+     *      true if every id in the list of requested books is valid
+     *      false otherwise
+     */
+    public static boolean isValidRequestedBooksList(ArrayList<String> requestedBooks) {
+        for (String id : requestedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This checks if a user list of accepted books is valid
+     * @param acceptedBooks user list of accepted books
+     * @return
+     *      true if every id in the list of accepted books is valid
+     *      false otherwise
+     */
+    public static boolean isValidAcceptedBooksList(ArrayList<String> acceptedBooks) {
+        for (String id : acceptedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This checks if a user list of borrowed books is valid
+     * @param borrowedBooks user list of borrowed books
+     * @return
+     *      true if every id in the list of borrowed books is valid
+     *      false otherwise
+     */
+    public static boolean isValidBorrowedBooksList(ArrayList<String> borrowedBooks) {
+        for (String id : borrowedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

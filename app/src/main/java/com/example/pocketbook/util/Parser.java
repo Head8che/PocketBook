@@ -425,7 +425,7 @@ public class Parser {
      *      valid User object if arguments are valid
      *      null otherwise
      */
-    public static User parseNewUser(String firstName, String lastName, String email,
+    public static User parseUser(String firstName, String lastName, String email,
                                  String username, String password, String photo) {
         // return null if non-optional fields are null
         if ((firstName == null) || (lastName == null) || (email == null)
@@ -447,58 +447,6 @@ public class Parser {
 
             // return a new User object if all fields are valid
             return new User(firstName, lastName, email, username, password, photo);
-        }
-
-        // return null if not all fields are valid
-        return null;
-    }
-
-    /**
-     * This returns a valid User object if arguments are valid, null otherwise
-     * @param firstName user first name
-     * @param lastName user last name
-     * @param email user email
-     * @param username user username
-     * @param password user password
-     * @param photo user photo
-     * @param ownedBooks user list of owned books
-     * @param requestedBooks user list of requested books
-     * @param acceptedBooks user list of accepted books
-     * @param borrowedBooks user list of borrowed books
-     * @return
-     *      valid User object if arguments are valid
-     *      null otherwise
-     */
-    public static User parseUser(String firstName, String lastName, String email, String username,
-                                 String password, String photo, ArrayList<String> ownedBooks,
-                                 ArrayList<String> requestedBooks, ArrayList<String> acceptedBooks,
-                                 ArrayList<String> borrowedBooks) {
-
-        // return null if non-optional fields are null
-        if ((firstName == null) || (lastName == null) || (email == null)
-                || (username == null) || (password == null) || (ownedBooks == null)
-                || (requestedBooks == null) || (acceptedBooks == null) || (borrowedBooks == null)) {
-            return null;
-        }
-
-        firstName = firstName.trim();
-        lastName = lastName.trim();
-        email = email.trim().toLowerCase();
-        username = username.trim().toUpperCase();
-        password = password.trim().toUpperCase();
-        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
-
-        // if all fields are valid
-        if (isValidFirstName(firstName) && isValidLastName(lastName)
-                && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)
-                && isValidOwnedBooksList(ownedBooks) && isValidRequestedBooksList(requestedBooks)
-                && isValidAcceptedBooksList(acceptedBooks)
-                && isValidBorrowedBooksList(borrowedBooks)) {
-
-            // return a new User object if all fields are valid
-            return new User(firstName, lastName, email, username, password, photo,
-                    ownedBooks, requestedBooks, acceptedBooks, borrowedBooks);
         }
 
         // return null if not all fields are valid

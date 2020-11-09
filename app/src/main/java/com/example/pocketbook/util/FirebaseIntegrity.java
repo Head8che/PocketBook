@@ -17,38 +17,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class FirebaseIntegrity {
-    // generate data that conforms to valid schema
-    public void generateData() {
-        /* GENERATE USERS (FIREBASE AUTH) */
-
-        /* GENERATE USERS (FIRESTORE COLLECTIONS) */
-
-        /* GENERATE BOOKS */
-        ArrayList<String> book1 = new ArrayList<String>();
-        book1.add("vBogJAw5sXKD4taOINlZ");   // id
-        book1.add("To Kill a Mockingbird");  // title
-        book1.add("Harper Lee");             // author
-        book1.add("9780446310789");          // isbn
-        book1.add("jane@gmail.com");         // owner
-        book1.add("");                       //
-        book1.add("");
-        book1.add("");
-
-        // verify that jane@gmail exists in FirebaseAuth & has a collection
-        // in users (in Firestore) that matches the users schema
-
-        ArrayList<String> book2 = new ArrayList<String>();
-
-    }
-
-    // removes data that does not conform to valid schema
-    public void cleanFirebase() {
-
-    }
 
     public static Book getBookFromFirestore(DocumentSnapshot document) {
         String id = document.getString("id");
@@ -60,11 +31,22 @@ public class FirebaseIntegrity {
         String comment = document.getString("comment");
         String condition = document.getString("condition");
         String photo = document.getString("photo");
-        return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
+
+        Book book = Parser.parseBook(id, title, author, isbn, owner,
+                status, comment, condition, photo);
+
+        if (book == null) {
+            // TODO: delete Parser-invalid books from Firebase
+        }
 
         // TODO: does id exist in Firebase?
         // TODO: does owner exist in FirebaseAuth and in Firestore?
         // TODO: does photo exist in Firebase?
+        // TODO: if any of the above checks fail, delete book
+
+        return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
+
+//        return book;  // returning book currently breaks code b/c invalid data isn't deleted
     }
 
     public static User getUserFromFirestore(DocumentSnapshot document) {
@@ -314,6 +296,63 @@ public class FirebaseIntegrity {
                 .child("default_images").child("no_book_cover_light.png") --> FI.getDefaultBookCover();
      - StorageReference childRef = storageRef.child(userName+".jpg") --> FI.uploadImage();
      ...
+
+     Listener Chain should be:
+      HomeFragment --> ViewBookFragment
+      (ProfileFragment tabs have different queries so they should have their own listeners)
+      OwnerFragment --> ViewMyBookFragment --> ViewMyBookRequestsFragment
+                                               & ViewMyBookBookFragment
+                                                          --> EditBookActivity (do new activities
+                                                                                need new listeners?)
+      BorrowerFragment --> ViewBookFragment
+      (SearchFragment tabs have different queries so they should have their own listeners)
+      SearchAllFragment --> ViewBookFragment
+      SearchAvailableFragment --> ViewBookFragment
+
+     BUGS W/IN APP CURRENTLY
+     - Search Frag is not tabbed and items are not clickable
+     - ViewBook toolbar scrolls up
+     - AddBookActivity toolbar scroll up on field click (EditBookActivity doesn't [check manifest])
+     - ProfileFragment has scroll for top Edit section AND for books section below
+
+     - Home Frag (and ViewBook from Home Frag)
+       does not have live listener (scroll update is not live):
+      - TEST:
+       - go to Home Frag in app (books are loaded)
+       - change a book's title in Firebase
+       - FAIL: book in Home Frag does not update title
+       - SUCCESS: book in Home frag does update title
+
+     - Profile Frag does not have live listener (scroll update is not live):
+      - TEST:
+       - go to Profile Frag in app (books are loaded)
+       - change a book's title in Firebase
+       - FAIL: book in Profile Frag does not update title
+       - SUCCESS: book in Home frag does update title
+
+     ViewMyBookBook Frag does update, but the listener should be in ProfileFrag not ViewMyBook...
+
+     - App crashes after Profile Frag is returned to from
+       ViewMyBookBook Frag and Firebase change is made:
+      - TEST:
+       - go to Profile Frag in app (books are loaded)
+       - click on a book (go to ViewMyBookBook Frag)
+       - go back to Profile Frag in app (books are loaded)
+       - change a book's title in Firebase
+       - FAIL: app crashes with error: <Fragment ViewMyBookBookFragment{1fa3b0b}
+                                        (89fefd17-d5ce-40d2-a688-52fd14533add)}
+                                        not associated with a fragment manager.>
+       - SUCCESS: app does not crash
+
+     - Book Search keywords do not update after EditBookActivity (check AddBookActivity too):
+      - TEST:
+       - go to Profile Frag in app (books are loaded)
+       - click on a book (go to ViewMyBookBook Frag)
+       - click on edit (go to EditBookActivity)
+       - edit the book's title and save the changes
+       - FAIL: Book keywords are not updated in Firebase
+       - SUCCESS: Book keywords are updated in Firebase
+       BONUS: changes should persist to ViewMyBookBook Frag onBackPressed and Profile Frag too
 
      */
 

@@ -528,33 +528,6 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseNewUser() {
-        String firstName = "Joey";
-        String lastName = "Monday";
-        String email = "joey@monday.com";  // locally valid email, not in Firebase
-        String username = "joemon";
-        String password = "123456";
-        String photo = "";
-
-        // assert that Parser returns a User i.e. assert that input was valid
-        assertThat(Parser.parseNewUser(firstName, lastName, email, username,
-                password, photo), instanceOf(User.class));
-
-        photo = "photo.jpg";  // valid photo condition
-        // assert that Parser returns a User i.e. assert that input was valid
-        assertThat(Parser.parseNewUser(firstName, lastName, email, username,
-                password, photo), instanceOf(User.class));
-
-        username = "";
-        // assert that Parser fails with bad data
-        assertNull(Parser.parseNewUser(firstName, lastName, email, username,
-                password, photo));
-
-        // Parser.ParseNewUser(...) is based on the other Parser User methods,
-        // which have been tested, so further argument testing would be redundant.
-    }
-
-    @Test
     public void testParseUser() {
         String firstName = "Joey";
         String lastName = "Monday";
@@ -563,24 +536,19 @@ public class ParserTest {
         String password = "123456";
         String photo = "";
 
-        ArrayList<String> ownedBooks = new ArrayList<String>();
-        ArrayList<String> requestedBooks = new ArrayList<String>();
-        ArrayList<String> acceptedBooks = new ArrayList<String>();
-        ArrayList<String> borrowedBooks = new ArrayList<String>();
-
         // assert that Parser returns a User i.e. assert that input was valid
-        assertThat(Parser.parseUser(firstName, lastName, email, username, password, photo,
-                ownedBooks, requestedBooks, acceptedBooks, borrowedBooks), instanceOf(User.class));
+        assertThat(Parser.parseUser(firstName, lastName, email, username,
+                password, photo), instanceOf(User.class));
 
-        ownedBooks.add("id12345");  // valid book list condition
+        photo = "photo.jpg";  // valid photo condition
         // assert that Parser returns a User i.e. assert that input was valid
-        assertThat(Parser.parseUser(firstName, lastName, email, username, password, photo,
-                ownedBooks, requestedBooks, acceptedBooks, borrowedBooks), instanceOf(User.class));
+        assertThat(Parser.parseUser(firstName, lastName, email, username,
+                password, photo), instanceOf(User.class));
 
-        borrowedBooks.add("");
+        username = "";
         // assert that Parser fails with bad data
-        assertNull(Parser.parseUser(firstName, lastName, email, username, password, photo,
-                ownedBooks, requestedBooks, acceptedBooks, borrowedBooks));
+        assertNull(Parser.parseUser(firstName, lastName, email, username,
+                password, photo));
 
         // Parser.ParseUser(...) is based on the other Parser User methods,
         // which have been tested, so further argument testing would be redundant.

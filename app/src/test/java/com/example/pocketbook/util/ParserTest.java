@@ -457,8 +457,8 @@ public class ParserTest {
 
     @Test
     public void testIsValidOwnedBooksList() {
-        ArrayList<String> ownedBooks = new ArrayList<String>();
-        // assertFalse(Parser.isValidOwnedBooksList(null));  // cannot be null; null crashes app
+        ArrayList<String> ownedBooks = new ArrayList<>();
+        assertFalse(Parser.isValidOwnedBooksList(null));  // cannot be null
 
         ownedBooks.add("");  // invalid ownedBooks with empty bookID
         assertFalse(Parser.isValidOwnedBooksList(ownedBooks));
@@ -475,8 +475,8 @@ public class ParserTest {
 
     @Test
     public void testIsValidRequestedBooksList() {
-        ArrayList<String> requestedBooks = new ArrayList<String>();
-        // assertFalse(Parser.isValidRequestedBooksList(null));  // cannot be null; null crashes app
+        ArrayList<String> requestedBooks = new ArrayList<>();
+        assertFalse(Parser.isValidRequestedBooksList(null));  // cannot be null
 
         requestedBooks.add("");  // invalid requestedBooks with empty bookID
         assertFalse(Parser.isValidRequestedBooksList(requestedBooks));
@@ -493,8 +493,8 @@ public class ParserTest {
 
     @Test
     public void testIsValidAcceptedBooksList() {
-        ArrayList<String> acceptedBooks = new ArrayList<String>();
-        // assertFalse(Parser.isValidAcceptedBooksList(null));  // cannot be null; null crashes app
+        ArrayList<String> acceptedBooks = new ArrayList<>();
+        assertFalse(Parser.isValidAcceptedBooksList(null));  // cannot be null
 
         acceptedBooks.add("");  // invalid acceptedBooks with empty bookID
         assertFalse(Parser.isValidAcceptedBooksList(acceptedBooks));
@@ -511,8 +511,8 @@ public class ParserTest {
 
     @Test
     public void testIsValidBorrowedBooksList() {
-        ArrayList<String> borrowedBooks = new ArrayList<String>();
-        // assertFalse(Parser.isValidBorrowedBooksList(null));  // cannot be null; null crashes app
+        ArrayList<String> borrowedBooks = new ArrayList<>();
+        assertFalse(Parser.isValidBorrowedBooksList(null));  // cannot be null
 
         borrowedBooks.add("");  // invalid borrowedBooks with empty bookID
         assertFalse(Parser.isValidBorrowedBooksList(borrowedBooks));

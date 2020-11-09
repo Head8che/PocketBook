@@ -582,6 +582,10 @@ public class Parser {
      *      false otherwise
      */
     public static boolean isValidOwnedBooksList(ArrayList<String> ownedBooks) {
+        if (ownedBooks == null) {
+            return false;
+        }
+
         for (String id : ownedBooks) {
             if (!isValidBookId(id) || (id.equals(""))) {
                 return false;
@@ -598,6 +602,10 @@ public class Parser {
      *      false otherwise
      */
     public static boolean isValidRequestedBooksList(ArrayList<String> requestedBooks) {
+        if (requestedBooks == null) {
+            return false;
+        }
+
         for (String id : requestedBooks) {
             if (!isValidBookId(id) || (id.equals(""))) {
                 return false;
@@ -614,6 +622,10 @@ public class Parser {
      *      false otherwise
      */
     public static boolean isValidAcceptedBooksList(ArrayList<String> acceptedBooks) {
+        if (acceptedBooks == null) {
+            return false;
+        }
+
         for (String id : acceptedBooks) {
             if (!isValidBookId(id) || (id.equals(""))) {
                 return false;
@@ -630,6 +642,10 @@ public class Parser {
      *      false otherwise
      */
     public static boolean isValidBorrowedBooksList(ArrayList<String> borrowedBooks) {
+        if (borrowedBooks == null) {
+            return false;
+        }
+
         for (String id : borrowedBooks) {
             if (!isValidBookId(id) || (id.equals(""))) {
                 return false;

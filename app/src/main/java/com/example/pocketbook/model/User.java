@@ -32,10 +32,6 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String photo;
-    private ArrayList<String> ownedBooks;
-    private ArrayList<String> borrowedBooks;
-    private ArrayList<String> acceptedBooks;
-    private ArrayList<String> requestedBooks;
 //    private NotificationList notificationList;
 
     /**
@@ -61,49 +57,12 @@ public class User implements Serializable {
         this.password = (password == null) ? "" : password.trim();
         this.photo = (photo == null) ? "" : photo.trim();
 
-        this.ownedBooks = new ArrayList<String>();
-        this.borrowedBooks = new ArrayList<String>();
-        this.acceptedBooks = new ArrayList<String>();
-        this.requestedBooks = new ArrayList<String>();
-
 //        this.notificationList = new NotificationList();
     }
 
     public String getFirstName() { return this.firstName; }
     public String getLastName() { return this.lastName; }
     public String getEmail() { return this.email; }
-
-    /**
-     *  Returns a List of books owned
-     * @return
-     */
-    public ArrayList<String> getOwnedBooks() {
-        return ownedBooks;
-    }
-
-    /**
-     * Returns a List of books borrowed
-     * @return
-     */
-    public ArrayList<String> getBorrowedBooks() {
-        return borrowedBooks;
-    }
-
-    /**
-     * Returns a List of accepted books
-     * @return
-     */
-    public ArrayList<String> getAcceptedBooks() {
-        return acceptedBooks;
-    }
-
-    /**
-     * Returns a List of requested books
-     * @return
-     */
-    public ArrayList<String> getRequestedBooks() {
-        return requestedBooks;
-    }
 
 //    public NotificationList getNotificationList() {
 //        return notificationList;

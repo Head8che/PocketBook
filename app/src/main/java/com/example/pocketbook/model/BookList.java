@@ -35,13 +35,19 @@ public class BookList implements Serializable {
     /**
      * Getter method for bookList
      * @return
-     *      bookList as List<Book>
+     *      bookList as Map<Book>
      */
     /* TODO: EXTEND */
     public Map<String, Book> getBookList() {
         return bookList;
     }
 
+    /**
+     * Getter method for book
+     * @param id
+     * @return
+     *      book as Book
+     */
     /* TODO: EXTEND */
     public Book getBook(String id) {
         return bookList.get(id);

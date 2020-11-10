@@ -133,19 +133,81 @@ public class Book implements Serializable {
     }
 
 
-    /* Getter Functions */
+    /**
+     * Getter method for Id
+     * @return
+     *      id as String
+     */
     public String getId() { return this.id; }
+
+    /**
+     * Getter method for Title
+     * @return
+     *      title as String
+     */
     public String getTitle() { return this.title; }
+
+    /**
+     * Getter method for Author
+     * @return
+     *      author as String
+     */
     public String getAuthor() { return this.author; }
+
+    /**
+     * Getter method for ISBN
+     * @return
+     *      isbn as String
+     */
     public String getISBN() { return this.isbn; }
+
+    /**
+     * Getter method for Owner
+     * @return
+     *      owner as String
+     */
     public String getOwner() { return this.owner; }
+
+    /**
+     * Getter method for Comment
+     * @return
+     *      comment as String
+     */
     public String getComment() { return this.comment; }
+
+    /**
+     * Getter method for Condition
+     * @return
+     *      condition as String
+     */
     public String getCondition() { return this.condition; }
+
+    /**
+     * Getter method for Status
+     * @return
+     *      status as String
+     */
     public String getStatus() { return this.status; }
+
+    /**
+     * Getter method for Photo
+     * @return
+     *      photo as String
+     */
     public String getPhoto() { return this.photo; }
 
+    /**
+     * Getter method for RequestList
+     * @return
+     *      requestList as RequestList
+     */
     public RequestList getRequestList() { return this.requestList; }
 
+    /**
+     * Getter method for BookCover
+     * @return
+     *      StorageReference to image
+     */
     public StorageReference getBookCover() {
         if (this.photo == null || this.photo.equals("") || !(this.photo.endsWith(".jpg"))) {
             return FirebaseStorage.getInstance().getReference()

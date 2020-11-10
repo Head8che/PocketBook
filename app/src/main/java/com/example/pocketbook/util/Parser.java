@@ -1,239 +1,604 @@
 package com.example.pocketbook.util;
 
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.User;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Parser class to validate all text
- *  before adding it to Firestore
+ * Parser class ensures the validity of the
+ * objects and text within the app
  */
 public class Parser {
 
-    private String title;
-    private String author;
-    private String isbn;
-    private String status;
-    private String comment;
-    private String ownerEmail;
-    private String photo;
-    private String condition;
+    /////////////////////////////////////////  BOOK PARSER /////////////////////////////////////////
 
-    private String[] conditions;
-    private String[] statuses;
-    private String[] parsedArguments;
+    private static List<String> conditions = Arrays.asList("GREAT",
+            "GOOD", "FAIR", "ACCEPTABLE");
 
+    private static List<String> statuses = Arrays.asList("AVAILABLE",
+            "REQUESTED", "ACCEPTED", "BORROWED");
 
+    /**
+     * This returns a valid Book object if arguments are valid, null otherwise
+     * @param id empty string new book id
+     * @param title book title
+     * @param author book author
+     * @param isbn book isbn
+     * @param owner app user that owns the book
+     * @param status book status; can be "AVAILABLE", "REQUESTED", "ACCEPTED" or "BORROWED"
+     * @param comment app user's optional comments about the book
+     * @param condition book condition; can be "GREAT", "GOOD", "FAIR" or "ACCEPTABLE"
+     * @param photo name of app user's optional photo for the book
+     * @return
+     *      valid Book object if arguments are valid
+     *      null otherwise
+     */
+    public static Book parseNewBook(String id, String title, String author, String isbn,
+                                    String owner, String status, String comment,
+                                    String condition, String photo) {
 
-    public Parser(String title, String author, String isbn, String ownerEmail, String status,
-                    String comment, String photo, String condition) {
-
-        // initialize the permitted values for conditions and statuses
-        setConditions();
-        setStatuses();
+        // return null if non-optional fields are null
+        if ((title == null) || (author == null) || (isbn == null)
+                || (owner == null) || (status == null) || (condition == null)) {
+            return null;
+        }
 
         // trim all values
-        this.title = title.trim();
-        this.author = author.trim();
-        this.isbn = isbn.trim();
-        this.status = status.trim();
-        this.ownerEmail = ownerEmail.trim();
-        this.condition = condition; // set my drop down menu options
-        this.comment = comment; // can be null
-        this.photo = photo; // can be null
-    }
+        id = (id == null) ? "" : id.trim();  // replace null, in the case of a new book
+        title = title.trim();
+        author = author.trim();
+        isbn = isbn.trim();
+        owner = owner.trim();
+        status = status.trim().toUpperCase();
+        comment = (comment == null) ? "" : comment.trim();  // replace null with empty string
+        condition = condition.trim().toUpperCase();
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
 
+        // if all fields (other than isbn) are valid
+        if (isValidNewBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
 
-    /**
-     * Statuses Initializer
-     */
-    private void setStatuses() {
-        this.statuses = new String[]
-                {
-                        "AVAILABLE",
-                        "REQUESTED",
-                        "BORROWED",
-                        "ACCEPTED"
-                };
-    }
+            // try to convert isbn to isbn13
+            isbn = convertToIsbn13(isbn);
 
-    /**
-     * Conditions Initializer
-     */
-    private void setConditions() {
-        this.conditions = new String[]
-                {
-                        "BRAND NEW",
-                        "LIKE NEW",
-                        "VERY GOOD",
-                        "GOOD",
-                        "ACCEPTABLE"
-                };
-
-    }
-
-    /**
-     * Checks if the status specified is in the list of statuses
-     * @return
-     *      true if status is in statuses
-     *      false otherwise
-     */
-    private boolean checkStatus() {
-        for (String s : statuses) {
-            if (status.equals(s)) {
-                return true;
+            // return null if isbn conversion is invalid
+            if (isbn == null) {
+                return null;
             }
+
+            // return a new Book object if all fields are valid
+            return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
         }
-        return false;
+
+        // return null if not all fields are valid
+        return null;
     }
 
     /**
-     * Checks if the condition specified is in the list of conditions
+     * This returns a valid Book object if arguments are valid, null otherwise
+     * @param id book id that was randomly generated by Firebase
+     * @param title book title
+     * @param author book author
+     * @param isbn book isbn
+     * @param owner app user that owns the book
+     * @param status book status; can be "AVAILABLE", "REQUESTED", "ACCEPTED" or "BORROWED"
+     * @param comment app user's optional comments about the book
+     * @param condition book condition; can be "GREAT", "GOOD", "FAIR" or "ACCEPTABLE"
+     * @param photo name of app user's optional photo for the book
      * @return
-     *      true if condition is in conditions
-     *      false otherwise
+     *      valid Book object if arguments are valid
+     *      null otherwise
      */
-    private boolean checkCondition() {
-        for (String s : conditions) {
-            if (condition.equals(s)) {
-                return true;
+    public static Book parseBook(String id, String title, String author, String isbn, String owner,
+                                 String status, String comment, String condition, String photo) {
+
+        // return null if non-optional fields are null
+        if ((id == null) || (title == null) || (author == null) || (isbn == null)
+                || (owner == null) || (status == null) || (condition == null)) {
+            return null;
+        }
+
+        // trim all values
+        id = id.trim();
+        title = title.trim();
+        author = author.trim();
+        isbn = isbn.trim();
+        owner = owner.trim();
+        status = status.trim().toUpperCase();
+        comment = (comment == null) ? "" : comment.trim();  // replace null with empty string
+        condition = condition.trim().toUpperCase();
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
+
+        // if all fields (other than isbn) are valid
+        if (isValidBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
+
+            // try to convert isbn to isbn13
+            isbn = convertToIsbn13(isbn);
+
+            // return null if isbn conversion is invalid
+            if (isbn == null) {
+                return null;
             }
+
+            // return a new Book object if all fields are valid
+            return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
         }
-        return false;
+
+        // return null if not all fields are valid
+        return null;
     }
 
     /**
-     * Check that the fields are not empty
+     * This checks if a new book id is valid
+     * @param id empty string that will be replaced by a real id when book is added to Firebase
      * @return
-     *      true if length of title and author > 0
+     *      true if empty string
      *      false otherwise
      */
-    public boolean checkTitleAndAuthor() {
-        return title.length() > 0 && author.length() > 0;
+    public static boolean isValidNewBookId(String id) {
+        // newly created local books will have "" ids
+        return (id != null) && (id.trim().length() == 0);
     }
 
     /**
-     * Only accept string with digits
-     * if it is a valid isbn
-     *
-     * Resource :
-     *  https://www.geeksforgeeks.org/program-check-isbn/#:~:text=To%20verify%20an%20ISBN%2C%20calculate,code%20is%20a%20valid%20ISBN.
-     *
+     * This checks if a book id is valid
+     * @param id book id that was randomly generated by Firebase
      * @return
-     *      true if passes through all checks
+     *      true if empty string or valid id (i.e. id exists in Firebase)
      *      false otherwise
      */
-    public boolean checkIsbn() {
-        // length must be 10
-        int n = isbn.length();
-        if (n != 10)
+    public static boolean isValidBookId(String id) {
+        return ((id != null) && (id.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a book title is valid
+     * @param title book title
+     * @return
+     *      true if title is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidBookTitle(String title) {
+        return ((title != null) && (title.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a book author is valid
+     * @param author book author
+     * @return
+     *      true if author is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidBookAuthor(String author) {
+        return ((author != null) && (author.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a book owner is valid
+     * @param owner app user that owns the book
+     * @return
+     *      true if owner is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidBookOwner(String owner) {
+        return (owner != null) && (!owner.equals("")) && owner.equals(owner.toLowerCase());
+    }
+
+    /**
+     * This checks if the status specified is in the list of statuses
+     * @param status book status
+     * @return
+     *      true if status is in ["AVAILABLE", "REQUESTED", "ACCEPTED", "BORROWED"]
+     *      false otherwise
+     */
+    public static boolean isValidBookStatus(String status) {
+        return statuses.contains(status);
+    }
+
+    /**
+     * This checks if the condition specified is in the list of conditions
+     * @param condition book condition
+     * @return
+     *      true if condition is in ["GREAT", "GOOD", "FAIR", "ACCEPTABLE"]
+     *      false otherwise
+     */
+    public static boolean isValidBookCondition(String condition) {
+        return conditions.contains(condition);
+    }
+
+    /**
+     * This checks if a photo name is valid
+     * @param photo name of app user's optional photo for the book
+     * @return
+     *      true if photo is an empty string or a jpg file
+     *      false otherwise
+     */
+    public static boolean isValidBookPhoto(String photo) {
+        if (photo == null) {
             return false;
+        }
+        return photo.equals("") || (photo.endsWith(".jpg") && (photo.length() > 4));
+    }
 
-        // Computing weighted sum of first 9 digits
+    /**
+     * This checks if a string is not a number
+     * @param text string to be converted to number
+     * @return
+     *      false if input is a number
+     *      true otherwise
+     */
+    public static boolean isNotDigit(String text) {
+        try {
+            Long.parseLong(text);
+            return false;
+        } catch (NumberFormatException ex) {
+            return true;
+        }
+    }
+
+    /**
+     * This checks if an isbn is valid isbn10
+     * @param isbn book isbn
+     * @return
+     *      true if isbn is valid isbn10
+     *      false otherwise
+     */
+    public static boolean isValidIsbn10(String isbn) {
+        if (isbn == null) {
+            return false;
+        }
+
+        // remove spaces and dashes from isbn
+        isbn = isbn.replace("-", "")
+                .replace(" ", "").toUpperCase();
+
+        int isbnLength = isbn.length();
+
+        if (isbnLength != 10) {  // isbn10 has to be 10 digits
+            return false;
+        }
+
+        String lastCharacter = Character.toString(isbn.charAt(isbnLength - 1));
+        boolean lastCharacterIsX = lastCharacter.equals("X");
+        String isbnWithoutLastCharacter = isbn.substring(0, isbnLength - 1);
+
+        // return false if the first 9 isbn digits are not numbers
+        // OR if the last character is not a digit and is not 'X'
+        if (isNotDigit(isbnWithoutLastCharacter) ||
+                ((isNotDigit(lastCharacter)) && !(lastCharacterIsX))) {
+            return false;
+        }
+
+        // compute the weighted sum of the first 9 isbn digits
         int sum = 0;
-        for (int i = 0; i < 9; i++)
-        {
-            int digit = isbn.charAt(i) - '0';
-            if (0 > digit || 9 < digit)
-                return false;
-            sum += (digit * (10 - i));
+        for (int index = 0; index < 9; index++) {
+            int digit = isbn.charAt(index) - '0';
+            sum += (digit * (10 - index));
         }
 
-        // Checking last digit.
-        char last = isbn.charAt(9);
-        if (last != 'X' && (last < '0' ||
-                last > '9'))
+        // if the last character is 'X', add 10 to sum, else add its value
+        sum += (lastCharacterIsX ? 10 : (isbn.charAt(isbnLength - 1) - '0'));
+
+        return (sum % 11 == 0);  // return whether weighted sum is divisible by 11
+    }
+
+    /**
+     * This gets the checkBit of the valid first 12 digits of an isbn13
+     * @param isbn book isbn
+     * @return
+     *      valid checkBit if computation was successful
+     *      null otherwise
+     */
+    public static String getIsbn13CheckBit(String isbn) {
+        if (isbn == null) {
+            return null;
+        }
+
+        // remove spaces and dashes from isbn
+        isbn = isbn.replace("-", "")
+                .replace(" ", "").toUpperCase();
+        int isbnLength = isbn.length();
+
+        // return null if isbn digits are not numbers
+        if (isNotDigit(isbn)) {
+            return null;
+        }
+
+        if ((isbnLength < 12) ||                          // if isbn isn't starting digits of isbn13
+                !(isbn.substring(0, 3).equals("978"))) {  // if first 3 digits of isbn are incorrect
+            return null;
+        }
+
+        int odd = 0;
+        int even = 0;
+        int checkBit;
+
+        // convert isbn string into array of integers
+        int[] isbnIntArray = isbn.chars().map(strDigit -> strDigit - '0').toArray();
+
+        // perform the isbn13 checkBit computation
+        for (int index = 0; index < 6; index++) {
+            even += isbnIntArray[2 * index];
+            odd += isbnIntArray[(2 * index) + 1] * 3;
+        }
+        int isbnModulo = (even + odd) % 10;
+        checkBit = (isbnModulo == 0) ? 0 : (10 - isbnModulo);
+
+        // return the checkBit
+        return String.valueOf(checkBit);
+    }
+
+    /**
+     * This checks if an isbn is valid isbn13
+     * @param isbn book isbn
+     * @return
+     *      true if isbn is valid isbn13
+     *      false otherwise
+     */
+    public static boolean isValidIsbn13(String isbn) {
+        if (isbn == null) {
             return false;
+        }
 
-        // If last digit is 'X', add 10
-        // to sum, else add its value
-        sum += ((last == 'X') ? 10 : (last - '0'));
+        // remove spaces and dashes from isbn
+        isbn = isbn.replace("-", "")
+                .replace(" ", "").toUpperCase();
 
-        // Return true if weighted sum
-        // of digits is divisible by 11.
-        return (sum % 11 == 0);
+        int isbnLength = isbn.length();
+
+        if (isbnLength != 13) {  // isbn13 has to be 13 digits
+            return false;
+        }
+
+        // return false if isbn13 digits are not numbers
+        if (isNotDigit(isbn)) {
+            return false;
+        }
+
+        String lastCharacter = Character.toString(isbn.charAt(isbnLength - 1));
+        String checkBit = getIsbn13CheckBit(isbn);
+
+        // input isbn13 is valid if computed checkBit is equal to its last character
+        return (lastCharacter.equals(checkBit));
     }
 
     /**
-     * If the comment is null,
-     * set the comment to be empty
-     */
-    public void setEmptyComment() {
-        comment = "";
-    }
-
-    /**
-     * All email should be lowercase
-     */
-    public void setLowerEmail() {
-        ownerEmail.toLowerCase();
-    }
-
-    /**
-     * If no photo is specified,
-     * set it to an empty string
-     */
-    public void setEmptyPhoto() {
-        photo = "";
-    }
-
-    /**
-     * Add to a string Array
-     * @param arg
+     * This converts isbn10 or isbn13 to valid isbn13, if possible
+     * @param isbn book isbn
      * @return
+     *      valid isbn13 if conversion was successful
+     *      null otherwise
      */
-    public String[] _addArgument(String arg) {
-        // create a new array with increased length
-        int oldLength = parsedArguments.length;
-        String[] newArray = new String[oldLength + 1];
-        // copy parsedArguments to newArray
-        if (newArray.length >= 0)
-            System.arraycopy(parsedArguments, 0, newArray, 0, newArray.length);
+    public static String convertToIsbn13(String isbn) {
+        if (isbn == null) {
+            return null;
+        }
 
-        // add new element to newArray
-        newArray[oldLength] = arg;
+        // remove spaces and dashes from isbn
+        isbn = isbn.replace("-", "")
+                .replace(" ", "").toUpperCase();
 
-        return newArray;
+        int isbnLength = isbn.length();
+
+        if ((isbnLength != 10) && (isbnLength != 13)) {  // if input is not isbn10 or isbn13
+            return null;
+        }
+
+        if ((isbnLength == 13) && isValidIsbn13(isbn)) {  // return valid isbn13 on isbn13 input
+            return isbn;
+        }
+
+        // convert isbn10 to isbn13 if isbn10 is valid
+        if ((isbnLength == 10) && isValidIsbn10(isbn)) {
+            String isbnWithoutLastCharacter = isbn.substring(0, isbnLength - 1);
+            isbn = "978" + isbnWithoutLastCharacter;
+            String checkBit = getIsbn13CheckBit(isbn);
+
+            if (checkBit != null) {
+                isbn += checkBit;
+                return isbn;
+            }
+            return null;
+        }
+
+        return null;
+
     }
 
-    /**
-     *
-     */
-    public void checkAttributes() {
-        // minimum check
-        if (checkTitleAndAuthor() &&
-                checkIsbn()) {
-            // add to parsedArguments
-            parsedArguments = _addArgument(title);
-            parsedArguments = _addArgument(author);
-            parsedArguments = _addArgument(isbn);
-        }
-        // check the condition
-        if (checkCondition()) {
-            parsedArguments = _addArgument(condition);
-        }
-        else {
-            condition = "N/A";
-            parsedArguments = _addArgument(condition);
-        }
-        // check the status
-        if (checkStatus()) {
-            parsedArguments = _addArgument(status);
-        }
-        // check for photo
-        if (photo.equals(null)) {
-            setEmptyPhoto();
-            parsedArguments = _addArgument(photo);
-        }
-        // check for comment
-        if (comment.equals(null)) {
-            setEmptyComment();
-            parsedArguments = _addArgument(comment);
-        }
-    }
+    /////////////////////////////////////////  USER PARSER /////////////////////////////////////////
 
     /**
-     * Returns the attributes after parsing
+     * This returns a valid User object if arguments are valid, null otherwise
+     * @param firstName user first name
+     * @param lastName user last name
+     * @param email user email
+     * @param username user username
+     * @param password user password
+     * @param photo user photo
      * @return
-     *      String array of parsed attributes
+     *      valid User object if arguments are valid
+     *      null otherwise
      */
-    public String[] returnParsedArguments() {
-        return parsedArguments;
+    public static User parseUser(String firstName, String lastName, String email,
+                                 String username, String password, String photo) {
+        // return null if non-optional fields are null
+        if ((firstName == null) || (lastName == null) || (email == null)
+                || (username == null) || (password == null)) {
+            return null;
+        }
+
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+        email = email.trim().toLowerCase();
+        username = username.trim().toUpperCase();
+        password = password.trim().toUpperCase();
+        photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
+
+        // if all fields are valid
+        if (isValidFirstName(firstName) && isValidLastName(lastName)
+                && isValidUserEmail(email) && isValidUsername(username)
+                && isValidPassword(password) && isValidUserPhoto(photo)) {
+
+            // return a new User object if all fields are valid
+            return new User(firstName, lastName, email, username, password, photo);
+        }
+
+        // return null if not all fields are valid
+        return null;
+    }
+
+    /**
+     * This checks if a user firstName is valid
+     * @param firstName user firstName
+     * @return
+     *      true if firstName is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidFirstName(String firstName) {
+        return ((firstName != null) && (firstName.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a user lastName is valid
+     * @param lastName user lastName
+     * @return
+     *      true if lastName is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidLastName(String lastName) {
+        return ((lastName != null) && (lastName.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a user email is valid
+     * @param email app user's email
+     * @return
+     *      true if email is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidUserEmail(String email) {
+        return (email != null) && (!email.equals("")) && email.equals(email.toLowerCase());
+    }
+
+    /**
+     * This checks if a user username is valid
+     * @param username user username
+     * @return
+     *      true if username is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidUsername(String username) {
+        return ((username != null) && (username.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a user password is valid
+     * @param password user password
+     * @return
+     *      true if password is not null or less than 6 characters
+     *      false otherwise
+     */
+    public static boolean isValidPassword(String password) {
+        return ((password != null) && (password.trim().length() >= 6));
+    }
+
+    /**
+     * This checks if a photo name is valid
+     * @param photo name of app user's optional photo
+     * @return
+     *      true if photo is an empty string or a jpg file
+     *      false otherwise
+     */
+    public static boolean isValidUserPhoto(String photo) {
+        if (photo == null) {
+            return false;
+        }
+        return photo.equals("") || (photo.endsWith(".jpg") && (photo.length() > 4));
+    }
+
+    /**
+     * This checks if a user list of owned books is valid
+     * @param ownedBooks user list of owned books
+     * @return
+     *      true if every id in the list of owned books is valid
+     *      false otherwise
+     */
+    public static boolean isValidOwnedBooksList(ArrayList<String> ownedBooks) {
+        if (ownedBooks == null) {
+            return false;
+        }
+
+        for (String id : ownedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This checks if a user list of requested books is valid
+     * @param requestedBooks user list of requested books
+     * @return
+     *      true if every id in the list of requested books is valid
+     *      false otherwise
+     */
+    public static boolean isValidRequestedBooksList(ArrayList<String> requestedBooks) {
+        if (requestedBooks == null) {
+            return false;
+        }
+
+        for (String id : requestedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This checks if a user list of accepted books is valid
+     * @param acceptedBooks user list of accepted books
+     * @return
+     *      true if every id in the list of accepted books is valid
+     *      false otherwise
+     */
+    public static boolean isValidAcceptedBooksList(ArrayList<String> acceptedBooks) {
+        if (acceptedBooks == null) {
+            return false;
+        }
+
+        for (String id : acceptedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This checks if a user list of borrowed books is valid
+     * @param borrowedBooks user list of borrowed books
+     * @return
+     *      true if every id in the list of borrowed books is valid
+     *      false otherwise
+     */
+    public static boolean isValidBorrowedBooksList(ArrayList<String> borrowedBooks) {
+        if (borrowedBooks == null) {
+            return false;
+        }
+
+        for (String id : borrowedBooks) {
+            if (!isValidBookId(id) || (id.equals(""))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

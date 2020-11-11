@@ -1,11 +1,22 @@
 package com.example.pocketbook.util;
 
+import android.util.Log;
+
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
+import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+
+// TODO: for Request and Notification set date format to have milliseconds (for sorting),
+//  but have the classes' get...Date() methods return a hour-minute formatted string
 
 /**
  * Parser class ensures the validity of the
@@ -20,6 +31,9 @@ public class Parser {
 
     private static List<String> statuses = Arrays.asList("AVAILABLE",
             "REQUESTED", "ACCEPTED", "BORROWED");
+
+    private static List<String> notificationTypes = Arrays.asList("BOOK_REQUESTED",
+            "REQUEST_ACCEPTED", "REQUEST_DECLINED", "RETURN_REQUESTED", "LOCATION_SPECIFIED");
 
     /**
      * This returns a valid Book object if arguments are valid, null otherwise
@@ -135,6 +149,98 @@ public class Parser {
     }
 
     /**
+     * This checks whether or not a book HashMap object contains valid Book data
+     * @param bookMapObject a HashMap object containing Book data
+     * @return
+     *      true if the book HashMap object contains valid Book data
+     *      false otherwise
+     */
+    public static boolean isValidBook(HashMap<String, Object> bookMapObject) {
+        // get all values
+        String id = (String) bookMapObject.get("id");
+        String title = (String) bookMapObject.get("title");
+        String author = (String) bookMapObject.get("author");
+        String isbn = (String) bookMapObject.get("isbn");
+        String owner = (String) bookMapObject.get("owner");
+        String status = (String) bookMapObject.get("status");
+        String comment = (String) bookMapObject.get("comment");
+        String condition = (String) bookMapObject.get("condition");
+        String photo = (String) bookMapObject.get("photo");
+
+        // if all fields (other than isbn) are valid
+        if (isValidBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status) && (comment != null)
+                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
+
+            // try to convert isbn to isbn13
+            isbn = convertToIsbn13(isbn);
+
+            // return whether or not all fields are valid
+            return (isbn != null);
+        }
+
+        Log.e("PARSER_VALID_BOOK", id + " is not valid!"
+                + " " + "id:" + isValidBookId(id)
+                + " " + "title:" + isValidBookTitle(title)
+                + " " + "author:" + isValidBookAuthor(author)
+                + " " + "owner:" + isValidBookOwner(owner)
+                + " " + "status:" + isValidBookStatus(status)
+                + " " + "comment:" + (comment != null)
+                + " " + "condition:" + isValidBookCondition(condition)
+                + " " + "photo:" + isValidBookPhoto(photo)
+        );
+
+        // return false if not all fields are valid
+        return false;
+    }
+
+    /**
+     * This checks whether or not a book object contains valid Book data
+     * @param bookObject a book object containing Book data
+     * @return
+     *      true if the book object contains valid Book data
+     *      false otherwise
+     */
+    public static boolean isValidBook(Book bookObject) {
+        // get all values
+        String id = bookObject.getId();
+        String title = bookObject.getTitle();
+        String author = bookObject.getAuthor();
+        String isbn = bookObject.getISBN();
+        String owner = bookObject.getOwner();
+        String status = bookObject.getStatus();
+        String comment = bookObject.getComment();
+        String condition = bookObject.getCondition();
+        String photo = bookObject.getPhoto();
+
+        // if all fields (other than isbn) are valid
+        if (isValidBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status) && (comment != null)
+                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
+
+            // try to convert isbn to isbn13
+            isbn = convertToIsbn13(isbn);
+
+            // return whether or not all fields are valid
+            return (isbn != null);
+        }
+
+        Log.e("PARSER_VALID_BOOK", id + " is not valid!"
+                + " " + "id:" + isValidBookId(id)
+                + " " + "title:" + isValidBookTitle(title)
+                + " " + "author:" + isValidBookAuthor(author)
+                + " " + "owner:" + isValidBookOwner(owner)
+                + " " + "status:" + isValidBookStatus(status)
+                + " " + "comment:" + (comment != null)
+                + " " + "condition:" + isValidBookCondition(condition)
+                + " " + "photo:" + isValidBookPhoto(photo)
+        );
+
+        // return false if not all fields are valid
+        return false;
+    }
+
+    /**
      * This checks if a new book id is valid
      * @param id empty string that will be replaced by a real id when book is added to Firebase
      * @return
@@ -150,7 +256,7 @@ public class Parser {
      * This checks if a book id is valid
      * @param id book id that was randomly generated by Firebase
      * @return
-     *      true if empty string or valid id (i.e. id exists in Firebase)
+     *      true if empty string or valid id
      *      false otherwise
      */
     public static boolean isValidBookId(String id) {
@@ -454,6 +560,45 @@ public class Parser {
     }
 
     /**
+     * This checks whether or not a user HashMap object contains valid User data
+     * @param userMapObject a HashMap object containing User data
+     * @return
+     *      true if the user HashMap object contains valid User data
+     *      false otherwise
+     */
+    public static boolean isValidUser(HashMap<String, Object> userMapObject) {
+        // get all values
+        String firstName = (String) userMapObject.get("firstName");
+        String lastName = (String) userMapObject.get("lastName");
+        String email = (String) userMapObject.get("email");
+        String username = (String) userMapObject.get("username");
+        String password = (String) userMapObject.get("password");
+        String photo = (String) userMapObject.get("photo");
+
+        // if all fields (other than isbn) are valid
+        if (isValidFirstName(firstName) && isValidLastName(lastName)
+                && isValidUserEmail(email) && isValidUsername(username)
+                && isValidPassword(password) && isValidUserPhoto(photo)) {
+
+            // return whether or not all fields are valid
+            return true;
+
+        }
+
+        Log.e("PARSER_VALID_USER", email + " is not valid!"
+                + " " + "firstName:" + isValidFirstName(firstName)
+                + " " + "lastName:" + isValidLastName(lastName)
+                + " " + "email:" + isValidUserEmail(email)
+                + " " + "username:" + isValidUsername(username)
+                + " " + "password:" + isValidPassword(password)
+                + " " + "photo:" + isValidUserPhoto(photo)
+        );
+
+        // return null if not all fields are valid
+        return false;
+    }
+
+    /**
      * This checks if a user firstName is valid
      * @param firstName user firstName
      * @return
@@ -601,4 +746,349 @@ public class Parser {
         }
         return true;
     }
+
+    ////////////////////////////////////////  REQUEST PARSER ///////////////////////////////////////
+
+    /**
+     * This returns a valid Request object if arguments are valid, null otherwise
+     * @param requester requester email
+     * @param requestee requestee email
+     * @param requestedBook requested book id
+     * @return
+     *      valid Request object if arguments are valid
+     *      null otherwise
+     */
+    public static Request parseRequest(String requester, String requestee, String requestedBook) {
+        // return null if fields are null
+        if ((requester == null) || (requestee == null) || (requestedBook == null)) {
+            return null;
+        }
+
+        // trim all values
+        requester = requester.trim();
+        requestee = requestee.trim();
+        requestedBook = requestedBook.trim();
+
+        // if all fields are valid
+        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
+                && isValidRequestedBook(requestedBook)) {
+
+            Request requestObject = new Request(requester, requestee, requestedBook);
+
+            if (isValidRequestDate(requestObject.getRequestDate())) {
+
+                // return a new Request object if all fields are valid
+                return requestObject;
+            }
+        }
+
+        // return null if not all fields are valid
+        return null;
+
+    }
+
+    /**
+     * This returns a valid Request object if arguments are valid, null otherwise
+     * @param requester requester email
+     * @param requestee requestee email
+     * @param requestedBookObject requested book object
+     * @return
+     *      valid Request object if arguments are valid
+     *      null otherwise
+     */
+    public static Request parseRequest(String requester, String requestee,
+                                       Book requestedBookObject) {
+        // return null if fields are null
+        if ((requester == null) || (requestee == null) || (requestedBookObject == null)) {
+            return null;
+        }
+
+        // trim all values
+        requester = requester.trim();
+        requestee = requestee.trim();
+
+        // if all fields are valid
+        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
+                && isValidRequestedBookObject(requestedBookObject)) {
+
+            Request requestObject = new Request(requester, requestee, requestedBookObject);
+
+            if (isValidRequestDate(requestObject.getRequestDate())) {
+
+                // return a new Request object if all fields are valid
+                return requestObject;
+            }
+        }
+
+        // return null if not all fields are valid
+        return null;
+
+    }
+
+    /**
+     * This checks whether or not a request HashMap object contains valid Request data
+     * @param requestMapObject a HashMap object containing Request data
+     * @return
+     *      true if the request HashMap object contains valid Request data
+     *      false otherwise
+     */
+    public static boolean isValidRequest(HashMap<String, Object> requestMapObject) {
+        // get all values
+        String requester = (String) requestMapObject.get("requester");
+        String requestee = (String) requestMapObject.get("requestee");
+        String requestedBook = (String) requestMapObject.get("requestedBook");
+        String requestDate = (String) requestMapObject.get("requestDate");
+
+        // if all fields are valid
+        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
+                && isValidRequestedBook(requestedBook) && isValidRequestDate(requestDate)) {
+
+            // return whether or not all fields are valid
+            return true;
+
+        }
+
+        Log.e("PARSER_VALID_REQUEST", requester + " is not valid!"
+                + " " + "requester:" + isValidBookRequester(requester)
+                + " " + "requestee:" + isValidBookRequestee(requestee)
+                + " " + "requestedBook:" + isValidRequestedBook(requestedBook)
+                + " " + "requestDate:" + isValidRequestDate(requestDate)
+        );
+
+        // return null if not all fields are valid
+        return false;
+    }
+
+    /**
+     * This checks if a requester email is valid
+     * @param requester requester's email
+     * @return
+     *      true if requester email is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidBookRequester(String requester) {
+        return (requester != null) && (!requester.equals(""))
+                && requester.equals(requester.toLowerCase());
+    }
+
+    /**
+     * This checks if a requestee email is valid
+     * @param requestee requestee's email
+     * @return
+     *      true if requestee email is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidBookRequestee(String requestee) {
+        return (requestee != null) && (!requestee.equals(""))
+                && requestee.equals(requestee.toLowerCase());
+    }
+
+    /**
+     * This checks if a requested book id is valid
+     * @param requestedBook book id that was randomly generated by Firebase
+     * @return
+     *      true if empty string or valid id
+     *      false otherwise
+     */
+    public static boolean isValidRequestedBook(String requestedBook) {
+        return ((requestedBook != null) && (requestedBook.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a requested book object is valid
+     * @param requestedBookObject requested book object
+     * @return
+     *      true if requested book object is valid
+     *      false otherwise
+     */
+    public static boolean isValidRequestedBookObject(Book requestedBookObject) {
+        return isValidBook(requestedBookObject);
+    }
+
+    /**
+     * This checks if a request date is valid
+     * @param requestDate date that a request was made
+     * @return
+     *      true if request date is valid
+     *      false otherwise
+     */
+    public static boolean isValidRequestDate(String requestDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm",
+                Locale.CANADA);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(requestDate);
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+
+    /////////////////////////////////////  NOTIFICATION PARSER /////////////////////////////////////
+
+    /**
+     * This returns a valid Notification object if arguments are valid, null otherwise
+     * @param message notification message
+     * @param sender sender's email
+     * @param receiver receiver's email
+     * @param relatedBook book id that was randomly generated by Firebase
+     * @param seen true or false, depending on whether or not the notification has been seen
+     * @param type notification type
+     * @return
+     *      valid Notification object if arguments are valid
+     *      null otherwise
+     */
+    public static Notification parseNotification(String message, String sender, String receiver,
+                                                 String relatedBook, boolean seen, String type) {
+
+        // return null if fields are null
+        if ((message == null) || (sender == null) || (receiver == null)
+                || (relatedBook == null) || (type == null)) {
+            return null;
+        }
+
+        // trim all values
+        message = message.trim();
+        sender = sender.trim();
+        receiver = receiver.trim();
+        relatedBook = relatedBook.trim();
+        type = type.trim();
+
+        // if all fields are valid
+        if (isValidNotificationMessage(message) && isValidNotificationSender(sender)
+                && isValidNotificationReceiver(receiver)
+                && isValidRelatedBook(relatedBook)
+                && isValidNotificationType(type)) {
+
+            Notification notificationObject = new Notification(message, sender, receiver,
+                    relatedBook, seen, type);
+
+            if (isValidNotificationDate(notificationObject.getNotificationDate())) {
+
+                // return a new Notification object if all fields are valid
+                return notificationObject;
+            }
+        }
+
+        // return null if not all fields are valid
+        return null;
+    }
+
+    /**
+     * This checks whether or not a notification HashMap object contains valid Notification data
+     * @param notificationMapObject a HashMap object containing Notification data
+     * @return
+     *      true if the notification HashMap object contains valid Notification data
+     *      false otherwise
+     */
+    public static boolean isValidNotification(HashMap<String, Object> notificationMapObject) {
+        // get all values
+        String message = (String) notificationMapObject.get("message");
+        String sender = (String) notificationMapObject.get("sender");
+        String receiver = (String) notificationMapObject.get("receiver");
+        String relatedBook = (String) notificationMapObject.get("relatedBook");
+        String type = (String) notificationMapObject.get("type");
+        String notificationDate = (String) notificationMapObject.get("notificationDate");
+
+        // if all fields are valid
+        if (isValidNotificationMessage(message) && isValidNotificationSender(sender)
+                && isValidNotificationReceiver(receiver)
+                && isValidRelatedBook(relatedBook)
+                && isValidNotificationType(type)) {
+
+            // return whether or not all fields are valid
+            return true;
+
+        }
+
+        Log.e("PARSER_VALID_NOTIFICATION", message + " is not valid!"
+                + " " + "message:" + isValidNotificationMessage(message)
+                + " " + "sender:" + isValidNotificationSender(sender)
+                + " " + "relatedBook:" + isValidRelatedBook(relatedBook)
+                + " " + "notificationDate:" + isValidNotificationDate(notificationDate)
+        );
+
+        // return null if not all fields are valid
+        return false;
+    }
+
+    /**
+     * This checks if a notification message is valid
+     * @param message notification message
+     * @return
+     *      true if message is not null or an empty string
+     *      false otherwise
+     */
+    public static boolean isValidNotificationMessage(String message) {
+        return ((message != null) && (message.trim().length() > 0));
+    }
+
+    /**
+     * This checks if a sender email is valid
+     * @param sender sender's email
+     * @return
+     *      true if sender email is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidNotificationSender(String sender) {
+        return (sender != null) && (!sender.equals(""))
+                && sender.equals(sender.toLowerCase());
+    }
+
+    /**
+     * This checks if a receiver email is valid
+     * @param receiver receiver's email
+     * @return
+     *      true if receiver email is not null or an empty string and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidNotificationReceiver(String receiver) {
+        return (receiver != null) && (!receiver.equals(""))
+                && receiver.equals(receiver.toLowerCase());
+    }
+
+    /**
+     * This checks if a related book id is valid
+     * @param relatedBook book id that was randomly generated by Firebase
+     * @return
+     *      true if empty string or valid id
+     *      false otherwise
+     */
+    public static boolean isValidRelatedBook(String relatedBook) {
+        return ((relatedBook != null) && (relatedBook.trim().length() > 0));
+    }
+
+    /**
+     * This checks if the notification type specified is in the list of notification types
+     * @param type notification type
+     * @return
+     *      true if type is in ["BOOK_REQUESTED", "REQUEST_ACCEPTED", "REQUEST_DECLINED",
+     *             "RETURN_REQUESTED", "LOCATION_SPECIFIED"]
+     *      false otherwise
+     */
+    public static boolean isValidNotificationType(String type) {
+        return notificationTypes.contains(type);
+    }
+
+    /**
+     * This checks if a notification date is valid
+     * @param notificationDate date that a notification was made
+     * @return
+     *      true if notification date is valid
+     *      false otherwise
+     */
+    public static boolean isValidNotificationDate(String notificationDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm",
+                Locale.CANADA);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(notificationDate);
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+
+    // TODO: EXCHANGE PARSER
+    // TODO: LOCATION PARSER
 }

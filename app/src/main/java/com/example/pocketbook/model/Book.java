@@ -213,7 +213,6 @@ public class Book implements Serializable {
             return FirebaseStorage.getInstance().getReference()
                     .child("default_images").child("no_book_cover_light.png");
         }
-        Log.e("RETURN_BOOK_COVER", this.photo);
         return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
     }
 
@@ -432,7 +431,7 @@ public class Book implements Serializable {
                     public void onSuccess(Void aVoid) {
                         Log.d("NEW_BOOK", "Book data successfully written!");
                         Log.d("DESCRIPTION : ", id + title + author + isbn + owner + status + comment + condition);
-                        FirebaseIntegrity.createKeywordsForBook(thisBook);
+//                        FirebaseIntegrity.createKeywordsForBook(thisBook);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

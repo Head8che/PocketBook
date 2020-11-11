@@ -66,7 +66,8 @@ public class AddBookActivityTest {
      */
     @After
     public void removeMockFromFirebase() {
-        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
+        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
+                "author", "M0cK^U+H0R");
     }
 
     /**

@@ -54,7 +54,7 @@ public class EditProfileActivityTest {
 
     @After
     public void removeUserFromFirestore() {
-        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
+//        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
     }
 
     @Test

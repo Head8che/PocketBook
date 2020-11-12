@@ -28,14 +28,17 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.ScrollUpdate;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
@@ -58,6 +61,9 @@ public class ProfileFragment extends Fragment {
     private static final String USERS = "users";
     private User currentUser;
     private ScrollUpdate scrollUpdate;
+
+    FirestoreRecyclerOptions<Book> options;
+    ListenerRegistration listenerRegistration;
 
     /**
      * Profile fragment instance that bundles the user information to be accessible/displayed
@@ -86,8 +92,54 @@ public class ProfileFragment extends Fragment {
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
+
         // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").limit(LIMIT);
+        mQuery = mFirestore.collection("catalogue")
+                .whereNotEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
+
+        EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
+            if (snapshots != null) {
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    if (error != null) {
+                        Log.e("SCROLL_UPDATE_ERROR", "Listen failed.", error);
+                        return;
+                    }
+
+                    DocumentSnapshot document = dc.getDocument();
+
+                    Book book = FirebaseIntegrity.getBookFromFirestore(document);
+
+                    if (book != null) {
+
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Log.d("SCROLL_UPDATE", "New doc: " + document);
+
+                                mAdapter.notifyDataSetChanged();
+                                break;
+
+                            case MODIFIED:
+                                Log.d("SCROLL_UPDATE", "Modified doc: " + document);
+
+                                mAdapter.notifyDataSetChanged();
+                                break;
+
+                            case REMOVED:
+                                Log.d("SCROLL_UPDATE", "Removed doc: " + document);
+
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                }
+            }
+        };
+
+        listenerRegistration = mQuery.addSnapshotListener(dataListener);
 
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
@@ -142,7 +194,10 @@ public class ProfileFragment extends Fragment {
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         StorageReference userProfilePicture = currentUser.getProfilePicture();
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
-        mAdapter = new BookAdapter(currentUser, ownedBooks, getActivity());
+        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
+        mAdapter = new BookAdapter(options, currentUser, ownedBooks, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
 
@@ -164,8 +219,8 @@ public class ProfileFragment extends Fragment {
 
         editProfile = v.findViewById(R.id.edit_profile_button);
 
-        scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
-        scrollUpdate.load();
+//        scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
+//        scrollUpdate.load();
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +231,24 @@ public class ProfileFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listenerRegistration.remove();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
     }
 
 }

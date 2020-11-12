@@ -1,8 +1,10 @@
 package com.example.pocketbook.util;
 
+import android.util.Log;
 import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,10 +13,15 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 public class ScrollUpdate {
     private final int  LIMIT = 10;
@@ -25,8 +32,8 @@ public class ScrollUpdate {
     private BookAdapter mAdapter;
 
     private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
+    private boolean isScrolling;
+    private boolean isLastItemReached;
 
     public ScrollUpdate(BookList catalogue, Query query,
                         BookAdapter adapter, RecyclerView recycler){
@@ -40,65 +47,79 @@ public class ScrollUpdate {
 
     public void load(){
         mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        Book book = FirebaseIntegrity.getBookFromFirestore(document);
-                        catalogue.addBookToListLocal(book);
-                    }
-                    mAdapter.notifyDataSetChanged();
 
-                    if(task.getResult().size() > LIMIT ) {
-                        lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                    // if collection has documents
+                    if (!Objects.requireNonNull(task.getResult()).isEmpty()) {
 
-                        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                                super.onScrollStateChanged(recyclerView, newState);
-                                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                    isScrolling = true;
-                                }
+                        for (DocumentSnapshot document : task.getResult()) {
+                            Book book = FirebaseIntegrity.getBookFromFirestore(document);
+
+                            if (book != null) {
+                                catalogue.addBookToListLocal(book);
                             }
+                        }
+                        mAdapter.notifyDataSetChanged();
 
-                            @Override
-                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
+                        if (task.getResult().size() > LIMIT) {
+                            lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
 
-                                GridLayoutManager gridLayoutManager = ((GridLayoutManager) recyclerView.getLayoutManager());
-                                assert gridLayoutManager != null;
-                                int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
-                                int visibleItemCount = gridLayoutManager.getChildCount();
-                                int totalItemCount = gridLayoutManager.getItemCount();
-
-                                if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
-                                    isScrolling = false;
-
-                                    if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
-
-                                        Query nextQuery = mFirestore.collection("catalogue").startAfter(lastVisible).limit(LIMIT);
-                                        nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> t) {
-                                                if (t.isSuccessful()) {
-                                                    for (DocumentSnapshot d : t.getResult()) {
-                                                        Book book = FirebaseIntegrity.getBookFromFirestore(d);
-                                                        catalogue.addBookToListLocal(book);
-                                                    }
-                                                    mAdapter.notifyDataSetChanged();
-                                                    lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);
-
-                                                    if (t.getResult().size() < LIMIT) {
-                                                        isLastItemReached = true;
-                                                    }
-                                                }
-                                            }
-                                        });
+                            RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                    super.onScrollStateChanged(recyclerView, newState);
+                                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                                        isScrolling = true;
                                     }
                                 }
-                            }
-                        };
-                        mBooksRecycler.addOnScrollListener(onScrollListener);
+
+                                @Override
+                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
+
+                                    GridLayoutManager gridLayoutManager = ((GridLayoutManager) recyclerView.getLayoutManager());
+                                    assert gridLayoutManager != null;
+                                    int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition();
+                                    int visibleItemCount = gridLayoutManager.getChildCount();
+                                    int totalItemCount = gridLayoutManager.getItemCount();
+
+                                    if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+                                        isScrolling = false;
+
+                                        if ((task.getResult().size() - 1) < (totalItemCount - 1)) {
+
+                                            Query nextQuery = mFirestore.collection("catalogue").startAfter(lastVisible).limit(LIMIT);
+                                            nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> t) {
+                                                    if (t.isSuccessful()) {
+                                                        // if collection has documents
+                                                        if (!Objects.requireNonNull(t.getResult()).isEmpty()) {
+                                                            for (DocumentSnapshot d : t.getResult()) {
+                                                                Book book = FirebaseIntegrity.getBookFromFirestore(d);
+                                                                if (book != null) {
+                                                                    catalogue.addBookToListLocal(book);
+                                                                }
+                                                            }
+                                                        }
+                                                        mAdapter.notifyDataSetChanged();
+                                                        lastVisible = t.getResult().getDocuments().get(t.getResult().size() - 1);
+
+                                                        if (t.getResult().size() < LIMIT) {
+                                                            isLastItemReached = true;
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            };
+                            mBooksRecycler.addOnScrollListener(onScrollListener);
+                        }
                     }
                 }
             }

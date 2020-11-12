@@ -76,7 +76,7 @@ public class HomeActivityTest {
      */
     @After
     public void removeMockFromFirebase() {
-        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
+//        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
     }
 
     @Test

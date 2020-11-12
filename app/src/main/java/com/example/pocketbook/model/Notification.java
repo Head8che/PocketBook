@@ -31,12 +31,11 @@ public class Notification implements Serializable {
 
     /* Default Constructor */
     public Notification(String message, String sender, String receiver, String relatedBook,
-                        String seen, String type){
+                        boolean seen, String type){
         this.message = message.trim();
         this.sender = sender.trim().toLowerCase();  // lowercase email
         this.receiver = receiver.trim().toLowerCase();  // lowercase email
         this.relatedBook = relatedBook.trim();
-        this.seen = seen.trim().toLowerCase();  // lowercase for "true" or "false"
         this.type = type.trim().toUpperCase();  /* one of ["BOOK_REQUESTED", "REQUEST_ACCEPTED",
                                                            "REQUEST_DECLINED", "RETURN_REQUESTED",
                                                            "LOCATION_SPECIFIED"] */
@@ -50,6 +49,8 @@ public class Notification implements Serializable {
     public String getSeen() { return this.seen; }
     public String getType() { return this.type; }
     public String getNotificationDate() {  return this.notificationDate;  }
+
+    // TODO: seen should have a setter
 
     /**
      * Adds a notification to Firebase

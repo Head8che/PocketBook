@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ViewMyBookPagerAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -28,18 +27,16 @@ public class ViewMyBookFragment extends Fragment {
 
     private Book book;
     private User currentUser;
-    private BookList catalogue;
 
     public ViewMyBookFragment() {
         // Required empty public constructor
     }
 
-    public static ViewMyBookFragment newInstance(User user, Book book,BookList catalogue) {
+    public static ViewMyBookFragment newInstance(User user, Book book) {
         ViewMyBookFragment fragment = new ViewMyBookFragment();
         Bundle args = new Bundle();
         args.putSerializable("VMBF_USER", user);
         args.putSerializable("VMBF_BOOK", book);
-        args.putSerializable("VMBF_CATALOGUE", catalogue);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,7 +47,6 @@ public class ViewMyBookFragment extends Fragment {
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
             this.book = (Book) getArguments().getSerializable("VMBF_BOOK");
-            this.catalogue = (BookList) getArguments().getSerializable("VMBF_CATALOGUE");
         }
     }
 
@@ -85,7 +81,7 @@ public class ViewMyBookFragment extends Fragment {
         });
 
         ViewMyBookPagerAdapter viewMyBookPagerAdapter =
-                new ViewMyBookPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), book, catalogue);
+                new ViewMyBookPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), book/*, catalogue*/);
 
         viewPager.setAdapter(viewMyBookPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -118,7 +114,7 @@ public class ViewMyBookFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
                         dialog.dismiss();
-                        catalogue.removeBook(book);
+//                        catalogue.removeBook(book);
                         Objects.requireNonNull(getActivity()).onBackPressed();
                     }
 

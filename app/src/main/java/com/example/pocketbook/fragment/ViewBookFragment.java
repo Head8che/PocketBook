@@ -172,7 +172,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             conditionField.setVisibility(View.GONE);
         }
         GlideApp.with(Objects.requireNonNull(getContext()))
-                .load(book.getBookCover())
+                .load(FirebaseIntegrity.getBookCover(book))
                 .into(bookCoverImageView);
 
         //get the profile picture of the book's owner and set it in its field

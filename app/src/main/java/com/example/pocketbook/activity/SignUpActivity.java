@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -172,14 +173,14 @@ public class SignUpActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                                 profileImageUrl = username+".jpg";
                                 user = new User(firstName,lastName,email,username,password,profileImageUrl);
-                                user.setNewUserFirebase();
+                                FirebaseIntegrity.pushNewUserToFirebase(user);
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             } else{
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!",
                                         Toast.LENGTH_SHORT).show();
                                 user = new User(firstName,lastName,email,username,password, null);
-                                user.setNewUserFirebase();
+                                FirebaseIntegrity.pushNewUserToFirebase(user);
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
                             }

@@ -28,7 +28,6 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -151,8 +150,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 user = new User(first_name, last_name, user_name, null, null, null);
                 current_user.setFirstName(first_name);
+                // TODO: add Firebase
                 current_user.setLastName(last_name);
+                // TODO: add Firebase
                 current_user.setUsername(user_name);
+                // TODO: add Firebase
                 Log.d("Current User", current_user.getFirstName());
 
                 DocumentReference docRef = FirebaseFirestore.getInstance()

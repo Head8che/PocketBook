@@ -1,37 +1,8 @@
 package com.example.pocketbook.model;
 
-
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
-import com.example.pocketbook.activity.EditBookActivity;
-import com.example.pocketbook.model.RequestList;
-import com.example.pocketbook.util.FirebaseIntegrity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import com.example.pocketbook.util.Parser;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
-
-/*
-    TODO: handle setPhoto() & uploading image to FirebaseStorage and overwriting old image;
-          will likely be similar to how SignUpActivity sets images.
-*/
 
 public class Book implements Serializable {
     private String id;
@@ -44,7 +15,6 @@ public class Book implements Serializable {
     private String condition;
     private String photo;
     private ArrayList<String> requesters;
-    private RequestList requestList;
 
 
     /**
@@ -90,8 +60,6 @@ public class Book implements Serializable {
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? "" : photo.trim();
 
-        this.requestList = new RequestList(this.id);
-
         this.requesters = new ArrayList<>();
     }
 
@@ -118,8 +86,6 @@ public class Book implements Serializable {
                                                                      "FAIR", "ACCEPTABLE"] */
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? "" : photo.trim();
-
-        this.requestList = new RequestList(this.id);
 
         this.requesters = requesters;
     }
@@ -161,7 +127,7 @@ public class Book implements Serializable {
         this.photo = ((photo == null) || (photo.trim().equals("")))
                 ? "" : photo.trim();
 
-        this.requestList = new RequestList(this.id, true);
+//        this.requestList = new RequestList(this.id, true);
     }
 
 
@@ -233,253 +199,82 @@ public class Book implements Serializable {
      * @return
      *      requestList as RequestList
      */
-    public RequestList getRequestList() { return this.requestList; }
+//    public RequestList getRequestList() { return this.requestList; }
 
     public ArrayList<String> getRequesters() {
         return this.requesters;
     }
 
-    /**
-     * Getter method for BookCover
-     * @return
-     *      StorageReference to image
-     */
-    public StorageReference getBookCover() {
-        if (this.photo == null || this.photo.equals("") || !(this.photo.endsWith(".jpg"))) {
-            return FirebaseStorage.getInstance().getReference()
-                    .child("default_images").child("no_book_cover_light.png");
+    public boolean setId(String id) {
+        id = id.trim();
+        if (Parser.isValidBookId(id)) {
+            this.id = id;
+            return true;
         }
-        return FirebaseStorage.getInstance().getReference().child("book_covers").child(this.photo);
-    }
-
-    /**
-     * Sets the cover of the book as an image
-     * if the url is a local file
-     * @param localURL : url of the book
-     */
-    public void setBookCover(String localURL) {
-        if(localURL != null) {
-
-            String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
-
-            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(photoName);
-
-            if (localURL.equals("REMOVE")) {
-                childRef.delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("REMOVE_BOOK_COVER", "Book data successfully written!");
-                                setPhoto("");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.e("REMOVE_BOOK_COVER", "Error writing book data!");
-                            }
-                        });
-                return;
-            }
-
-            //uploading the image
-            UploadTask uploadTask = childRef.putFile(Uri.fromFile(new File(localURL)));
-
-            Log.e("SET_BOOK_COVER", "After parse!");
-
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Log.e("SET_BOOK_COVER", "Successful upload!");
-                    setPhoto(photoName);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("SET_BOOK_COVER", "Failed upload!");
-                }
-            });
-        }
-    }
-
-    /**
-     * Sets the cover of the book
-     * if the argument is a bimap file
-     * @param bitmap : photo of book
-     */
-    public void setBookCoverBitmap(Bitmap bitmap) {
-
-        String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
-
-        if(bitmap != null) {
-
-            StorageReference childRef = FirebaseStorage.getInstance().getReference().child("book_covers").child(photoName);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
-
-            Book thisBook = this;
-
-            //uploading the image
-            UploadTask uploadTask = childRef.putBytes(data);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Log.e("SET_BOOK_COVER", "Successful upload!");
-                    thisBook.setPhoto(photoName);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.e("SET_BOOK_COVER", "Failed upload!");
-                }
-            });
-        }
+        return false;
     }
 
     /* Setter Functions for Local and Firebase */
-    public void setTitle(String title) {
-        setTitleLocal(title);
-//        setTitleFirebase(title);
+    public boolean setTitle(String title) {
+        title = title.trim();
+        if (Parser.isValidBookTitle(title)) {
+            this.title = title;
+            return true;
+        }
+        return false;
     }
-    public void setAuthor(String author) {
-        setAuthorLocal(author);
-//        setAuthorFirebase(author);
+    public boolean setAuthor(String author) {
+        author = author.trim();
+        if (Parser.isValidBookAuthor(author)) {
+            this.author = author;
+            return true;
+        }
+        return false;
     }
-    public void setIsbn(String isbn) {
-        setIsbnLocal(isbn);
-//        setIsbnFirebase(isbn);
+    public boolean setIsbn(String isbn) {
+        isbn = isbn.trim();
+        if (Parser.isValidBookIsbn(isbn)) {
+            this.isbn = isbn;
+            return true;
+        }
+        return false;
     }
-    public void setComment(String comment) {
-        setCommentLocal(comment);
-//        setCommentFirebase(comment);
+    public boolean setComment(String comment) {
+        if (Parser.isValidBookComment(comment)) {
+            this.comment = comment.trim();
+            return true;
+        }
+        return false;
     }
-    public void setCondition(String condition) {
-        setConditionLocal(condition);
-//        setConditionFirebase(condition);
+    public boolean setCondition(String condition) {
+        condition = condition.trim().toUpperCase();
+        if (Parser.isValidBookCondition(condition)) {
+            this.condition = condition;
+            return true;
+        }
+        return false;
     }
     public boolean setStatus(String status) {
-        String statusUpper = status.toUpperCase();
-
-        if (!(statusUpper.equals("AVAILABLE")) && !(statusUpper.equals("REQUESTED"))
-        && !(statusUpper.equals("ACCEPTED")) && !(statusUpper.equals("BORROWED"))) {
-            return false;
+        status = status.trim().toUpperCase();
+        if (Parser.isValidBookStatus(status)) {
+            this.status = status;
+            return true;
         }
-        setStatusLocal(status);
-//        setStatusFirebase(status);
-
-        return true;
+        return false;
     }
-//    public void setRequesters(ArrayList<String> requesters) {
-//        this.requesters = requesters;
-//    }
-
-    public void setPhoto(String photo) {
-        setPhotoLocal(photo);
-//        setPhotoFirebase(photo);
-    }
-
-    /* Setter Function Attributes
-     */
-    public void setTitleLocal(String title) { this.title = title.trim(); }
-    public void setAuthorLocal(String author) { this.author = author.trim(); }
-    public void setIsbnLocal(String isbn) { this.isbn = isbn.trim(); }
-    public void setCommentLocal(String comment) {
-        this.comment = ((comment == null) || (comment.trim().equals("")))
-                ? "" : comment.trim();
-    }
-    public void setConditionLocal(String condition) {
-        this.condition = ((condition == null) || (condition.trim().equals("")))
-                ? "" : condition.trim().toUpperCase();
-    }
-    public boolean setStatusLocal(String status) {
-        String statusUpper = status.toUpperCase();
-
-        if (!(statusUpper.equals("AVAILABLE")) && !(statusUpper.equals("REQUESTED"))
-                && !(statusUpper.equals("ACCEPTED")) && !(statusUpper.equals("BORROWED"))) {
-            return false;
+    public boolean setRequesters(ArrayList<String> requesters) {
+        if (Parser.isValidRequesters(requesters)) {
+            this.requesters = requesters;
         }
-        this.status = status.trim().toUpperCase();
-        return true;
+        return false;
     }
-
-    public void setPhotoLocal(String photo) {
-        this.photo = ((photo == null) || (photo.trim().equals("")))
-            ? "" : photo.trim();
-    }
-
-//    public void setTitleFirebase(String title) { setBookDataFirebase("title", title); }
-//    public void setAuthorFirebase(String author) { setBookDataFirebase("author", author); }
-//    public void setIsbnFirebase(String isbn) { setBookDataFirebase("isbn", isbn); }
-//    public void setCommentFirebase(String comment) {
-//        setBookDataFirebase("comment", (this.comment == null) ? "" : this.comment);
-//    }
-//    public void setConditionFirebase(String condition) {
-//        setBookDataFirebase("condition", (this.condition == null) ? "" : this.condition);
-//    }
-//    public void setStatusFirebase(String status) {
-//        setBookDataFirebase("status", (this.status == null) ? "" : this.status);
-//    }
-//    public void setPhotoFirebase(String status) {
-//        setBookDataFirebase("photo", (this.photo == null) ? "" : this.photo);
-//    }
-//
-//    public void setBookDataFirebase(String bookFieldName, String bookFieldValue) {
-//        FirebaseFirestore.getInstance().collection("catalogue").document(this.id)
-//                .update(bookFieldName, bookFieldValue)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("SET_BOOK", "Book data successfully written!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.e("SET_BOOK", "Error writing book data!", e);
-//                    }
-//                });
-//    }
-
-    /*
-    Pushes a new Book to Firebase
-     */
-    public void pushNewBookToFirebase() {
-
-        DocumentReference bookDoc = FirebaseFirestore.getInstance().collection("books").document();
-        this.id = bookDoc.getId();
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("id", this.id);
-        docData.put("title", this.title);
-        docData.put("author", this.author);
-        docData.put("isbn", this.isbn);
-        docData.put("owner", this.owner);
-        docData.put("status", this.status);
-        docData.put("comment", (this.comment == null) ? "" : this.comment);
-        docData.put("condition", (this.condition == null) ? "" : this.condition);
-        docData.put("photo", (this.photo == null) ? "" : this.photo);
-
-        Book thisBook = this;
-
-        FirebaseFirestore.getInstance().collection("catalogue").document(this.id)
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("NEW_BOOK", "Book data successfully written!");
-                        Log.d("DESCRIPTION : ", id + title + author + isbn + owner + status + comment + condition);
-//                        FirebaseIntegrity.createKeywordsForBook(thisBook);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("NEW_BOOK", "Error writing book data!", e);
-                    }
-                });
-
+    public boolean setPhoto(String photo) {
+        photo = photo.trim();
+        if (Parser.isValidBookPhoto(photo)) {
+            this.photo = photo;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -493,7 +288,8 @@ public class Book implements Serializable {
         if (!this.status.equals("REQUESTED")) {
             this.setStatus("REQUESTED");
         }
-        return requestList.addRequest(request);
+        return true;
+//        return requestList.addRequest(request);
     }
 
     /**
@@ -504,14 +300,15 @@ public class Book implements Serializable {
      */
     public boolean acceptRequest(Request request) {
         this.setStatus("ACCEPTED");
-        return requestList.acceptRequest(request);
+//        return requestList.acceptRequest(request);
+        return true;
     }
 
     /**
      * Declines a request made to the book
      */
-    public boolean declineRequest(Request request) {
-        return requestList.declineRequest(request);
-    }
+//    public boolean declineRequest(Request request) {
+//        return requestList.declineRequest(request);
+//    }
 
 }

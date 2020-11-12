@@ -21,9 +21,7 @@ import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.Request;
-import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -40,13 +38,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAdapter.RequestHolder> {
     private Book mBook;
-    private RequestList mRequestList;
     private User mRequester;
 
     public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Book mBook) {
         super(options);
         this.mBook = mBook;
-        this.mRequestList = mBook.getRequestList();
     }
 
     static class RequestHolder extends RecyclerView.ViewHolder {
@@ -122,8 +118,8 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mBook.declineRequest(request))
-                    notifyDataSetChanged();
+//                if(mBook.declineRequest(request))
+//                    notifyDataSetChanged();
             }
         });
 

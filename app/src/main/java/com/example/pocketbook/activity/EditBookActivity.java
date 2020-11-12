@@ -30,6 +30,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.StorageReference;
@@ -87,7 +88,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         book = (Book) intent.getSerializableExtra("VMBBF_BOOK");
-        StorageReference bookCover = book.getBookCover();
+        StorageReference bookCover = FirebaseIntegrity.getBookCover(book);
 
         bookTitle = book.getTitle();
         bookAuthor = book.getAuthor();
@@ -233,9 +234,9 @@ public class EditBookActivity extends AppCompatActivity {
                         }
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
-                                book.setBookCoverBitmap(currentPhoto);
+                                FirebaseIntegrity.setBookCoverBitmap(book, currentPhoto);
                             } else {
-                                book.setBookCover(currentPhotoPath);
+                                FirebaseIntegrity.setBookCover(book, currentPhotoPath);
                             }
                         }
                     }
@@ -432,7 +433,7 @@ public class EditBookActivity extends AppCompatActivity {
                 book.setPhoto("");
                 alertDialog.dismiss();
                 GlideApp.with(Objects.requireNonNull(getApplicationContext()))
-                        .load(book.getBookCover())
+                        .load(FirebaseIntegrity.getBookCover(book))
                         .into(layoutBookCover);
                 book.setPhoto(removedPhoto);
                 currentPhotoPath = "REMOVE";

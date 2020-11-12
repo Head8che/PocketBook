@@ -25,15 +25,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,7 +43,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Allows the user to add a new book to be placed/available on PocketBook
@@ -207,13 +203,13 @@ public class AddBookActivity extends AppCompatActivity {
                         // if all booleans are good, pushNewBook
                         Book book = new Book(null, title, author, isbn, currentUser.getEmail(),
                                 "AVAILABLE", comment, condition, null);
-                        book.pushNewBookToFirebase();
+                        FirebaseIntegrity.pushNewBookToFirebase(book);
                         SystemClock.sleep(300);
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
-                                book.setBookCoverBitmap(currentPhoto);
+                                FirebaseIntegrity.setBookCoverBitmap(book, currentPhoto);
                             } else {
-                                book.setBookCover(currentPhotoPath);
+                                FirebaseIntegrity.setBookCover(book, currentPhotoPath);
                             }
                         }
 

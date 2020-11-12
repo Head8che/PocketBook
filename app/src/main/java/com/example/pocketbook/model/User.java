@@ -1,20 +1,9 @@
 package com.example.pocketbook.model;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.pocketbook.util.Parser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
     TODO: handle setPhoto() & uploading image to FirebaseStorage and overwriting old image;
@@ -32,7 +21,6 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String photo;
-//    private NotificationList notificationList;
 
     /**
      * Empty User Constructor for the firestore to automatically create new objects
@@ -56,17 +44,11 @@ public class User implements Serializable {
         this.username = (username == null) ? "" : username.trim();
         this.password = (password == null) ? "" : password.trim();
         this.photo = (photo == null) ? "" : photo.trim();
-
-//        this.notificationList = new NotificationList();
     }
 
     public String getFirstName() { return this.firstName; }
     public String getLastName() { return this.lastName; }
     public String getEmail() { return this.email; }
-
-//    public NotificationList getNotificationList() {
-//        return notificationList;
-//    }
 
     /**
      * gets username
@@ -99,41 +81,62 @@ public class User implements Serializable {
      * sets Firstname
      * @param firstName
      */
-    public void setFirstName(String firstName) {
-        setFirstNameLocal(firstName);
-        setFirstNameFirebase(firstName);
+    public boolean setFirstName(String firstName) {
+        firstName = firstName.trim();
+        if (Parser.isValidFirstName(firstName)) {
+            this.firstName = firstName;
+            return true;
+        }
+        return false;
     }
     /**
      * sets Lastname
      * @param lastName
      */
-    public void setLastName(String lastName) {
-        setLastNameLocal(lastName);
-        setLastNameFirebase(lastName);
+    public boolean setLastName(String lastName) {
+        lastName = lastName.trim();
+        if (Parser.isValidLastName(lastName)) {
+            this.lastName = lastName;
+            return true;
+        }
+        return false;
     }
     /**
      * sets Email
      */
-    public void setEmail(String email) {
-        setEmailLocal(email);
-        setEmailFirebase(email);
+    public boolean setEmail(String email) {
+        email = email.trim();
+        if (Parser.isValidUserEmail(email)) {
+            this.email = email;
+            return true;
+        }
+        return false;
     }
     /**
      * sets password
      * @param password
      */
-    public void setPassword(String password) {
-        setPasswordLocal(password);
-        setPasswordFirebase(password);
+    public boolean setPassword(String password) {
+        password = password.trim();
+        if (Parser.isValidPassword(password)) {
+            this.password = password;
+            return true;
+        }
+        return false;
     }
     /**
      * sets username
      * @param username
      */
-    public void setUsername(String username) {
-        setUsernameLocal(username);
-        setUsernameFirebase(username);
+    public boolean setUsername(String username) {
+        username = username.trim();
+        if (Parser.isValidUsername(username)) {
+            this.username = username;
+            return true;
+        }
+        return false;
     }
+
 
     /*
         TODO: upload new image to FirebaseStorage and overwrite old image
@@ -142,68 +145,13 @@ public class User implements Serializable {
      * sets photo
      * @param photo
      */
-    public void setPhoto(String photo) {
-        this.photo = ((photo == null) || (photo.trim().equals("")))
-                ? null : photo.trim();
-    }
-
-    public void setFirstNameLocal(String firstName) { this.firstName = firstName; }
-    public void setLastNameLocal(String lastName) { this.lastName = lastName; }
-    public void setEmailLocal(String email) { this.email = email; }
-    public void setUsernameLocal(String username) { this.username = username; }
-    public void setPasswordLocal(String password) { this.password = password; }
-
-    public void setEmailFirebase(String title) { setUserDataFirebase("email", email); }
-    public void setFirstNameFirebase(String title) { setUserDataFirebase("firstName", firstName); }
-    public void setLastNameFirebase(String title) { setUserDataFirebase("lastName", lastName); }
-    public void setUsernameFirebase(String title) { setUserDataFirebase("username", username); }
-    public void setPasswordFirebase(String title) { setUserDataFirebase("password", password); }
-
-
-    public void setUserDataFirebase(String userFieldName, String userFieldValue) {
-        FirebaseFirestore.getInstance().collection("users").document(this.email)
-                .update(userFieldName, userFieldValue)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("SET_USER", "User data successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("SET_USER", "Error writing user data!", e);
-                    }
-                });
-    }
-
-    /**
-     * sets updated user information into the Firebase*
-     */
-    public void setNewUserFirebase() {
-        DocumentReference userDoc = FirebaseFirestore.getInstance().collection("users").document(this.email);
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("firstName", this.firstName);
-        docData.put("lastName", this.lastName);
-        docData.put("email", this.email);
-        docData.put("username", this.username);
-        docData.put("password", this.password);
-        docData.put("photo", (photo == null) ? "" : this.photo);
-
-        userDoc.set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("NEW_USER", "User data successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("NEW_USER", "Error writing user data!", e);
-                    }
-                });
+    public boolean setPhoto(String photo) {
+        photo = photo.trim();
+        if (Parser.isValidUserPhoto(photo)) {
+            this.photo = photo;
+            return true;
+        }
+        return false;
     }
 
 

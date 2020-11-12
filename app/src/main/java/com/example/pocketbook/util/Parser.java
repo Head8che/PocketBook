@@ -170,8 +170,9 @@ public class Parser {
 
         // if all fields (other than isbn) are valid
         if (isValidBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
-                && isValidBookOwner(owner) && isValidBookStatus(status) && (comment != null)
-                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookComment(comment) && isValidBookCondition(condition)
+                && isValidBookPhoto(photo)) {
 
             // try to convert isbn to isbn13
             isbn = convertToIsbn13(isbn);
@@ -186,7 +187,7 @@ public class Parser {
                 + " " + "author:" + isValidBookAuthor(author)
                 + " " + "owner:" + isValidBookOwner(owner)
                 + " " + "status:" + isValidBookStatus(status)
-                + " " + "comment:" + (comment != null)
+                + " " + "comment:" + isValidBookComment(comment)
                 + " " + "condition:" + isValidBookCondition(condition)
                 + " " + "photo:" + isValidBookPhoto(photo)
         );
@@ -202,7 +203,7 @@ public class Parser {
      *      true if the book object contains valid Book data
      *      false otherwise
      */
-    public static boolean isValidBook(Book bookObject) {
+    public static boolean isValidBookObject(Book bookObject) {
         // get all values
         String id = bookObject.getId();
         String title = bookObject.getTitle();
@@ -216,8 +217,9 @@ public class Parser {
 
         // if all fields (other than isbn) are valid
         if (isValidBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
-                && isValidBookOwner(owner) && isValidBookStatus(status) && (comment != null)
-                && isValidBookCondition(condition) && isValidBookPhoto(photo)) {
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookComment(comment) && isValidBookCondition(condition)
+                && isValidBookPhoto(photo)) {
 
             // try to convert isbn to isbn13
             isbn = convertToIsbn13(isbn);
@@ -232,7 +234,7 @@ public class Parser {
                 + " " + "author:" + isValidBookAuthor(author)
                 + " " + "owner:" + isValidBookOwner(owner)
                 + " " + "status:" + isValidBookStatus(status)
-                + " " + "comment:" + (comment != null)
+                + " " + "comment:" + isValidBookComment(comment)
                 + " " + "condition:" + isValidBookCondition(condition)
                 + " " + "photo:" + isValidBookPhoto(photo)
         );
@@ -240,6 +242,47 @@ public class Parser {
         // return false if not all fields are valid
         return false;
     }
+
+    public static boolean isValidNewBookObject(Book bookObject) {
+        // get all values
+        String id = bookObject.getId();
+        String title = bookObject.getTitle();
+        String author = bookObject.getAuthor();
+        String isbn = bookObject.getISBN();
+        String owner = bookObject.getOwner();
+        String status = bookObject.getStatus();
+        String comment = bookObject.getComment();
+        String condition = bookObject.getCondition();
+        String photo = bookObject.getPhoto();
+
+        // if all fields (other than isbn) are valid
+        if (isValidNewBookId(id) && isValidBookTitle(title) && isValidBookAuthor(author)
+                && isValidBookOwner(owner) && isValidBookStatus(status)
+                && isValidBookComment(comment) && isValidBookCondition(condition)
+                && isValidBookPhoto(photo)) {
+
+            // try to convert isbn to isbn13
+            isbn = convertToIsbn13(isbn);
+
+            // return whether or not all fields are valid
+            return (isbn != null);
+        }
+
+        Log.e("PARSER_VALID_BOOK", id + " is not valid!"
+                + " " + "id:" + isValidNewBookId(id)
+                + " " + "title:" + isValidBookTitle(title)
+                + " " + "author:" + isValidBookAuthor(author)
+                + " " + "owner:" + isValidBookOwner(owner)
+                + " " + "status:" + isValidBookStatus(status)
+                + " " + "comment:" + isValidBookComment(comment)
+                + " " + "condition:" + isValidBookCondition(condition)
+                + " " + "photo:" + isValidBookPhoto(photo)
+        );
+
+        // return false if not all fields are valid
+        return false;
+    }
+
 
     /**
      * This checks if a new book id is valid
@@ -286,6 +329,10 @@ public class Parser {
         return ((author != null) && (author.trim().length() > 0));
     }
 
+    public static boolean isValidBookIsbn(String isbn) {
+        return (isValidIsbn10(isbn) || isValidIsbn13(isbn));
+    }
+
     /**
      * This checks if a book owner is valid
      * @param owner app user that owns the book
@@ -317,6 +364,10 @@ public class Parser {
      */
     public static boolean isValidBookCondition(String condition) {
         return conditions.contains(condition);
+    }
+
+    public static boolean isValidBookComment(String comment) {
+        return (comment != null);
     }
 
     /**
@@ -516,6 +567,19 @@ public class Parser {
 
         return null;
 
+    }
+
+    public static boolean isValidRequesters(ArrayList<String> requesters) {
+        if (requesters == null) {
+            return false;
+        }
+
+        for (String requester : requesters) {
+            if (!isValidUserEmail(requester)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /////////////////////////////////////////  USER PARSER /////////////////////////////////////////
@@ -903,7 +967,7 @@ public class Parser {
      *      false otherwise
      */
     public static boolean isValidRequestedBookObject(Book requestedBookObject) {
-        return isValidBook(requestedBookObject);
+        return isValidBookObject(requestedBookObject);
     }
 
     /**

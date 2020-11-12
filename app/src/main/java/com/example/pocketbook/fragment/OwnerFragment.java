@@ -21,7 +21,6 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.ScrollUpdate;
@@ -46,7 +45,6 @@ public class OwnerFragment extends Fragment {
     private static final int LIMIT = 20;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
-    private BookList ownedBooks = new BookList();
     private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
     private TextView profileName, userName;
@@ -155,7 +153,7 @@ public class OwnerFragment extends Fragment {
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
-        mAdapter = new BookAdapter(options, currentUser, ownedBooks, getActivity());
+        mAdapter = new BookAdapter(options, currentUser,getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
 
@@ -177,7 +175,7 @@ public class OwnerFragment extends Fragment {
 
         editProfile = v.findViewById(R.id.edit_profile_button);
 
-        scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
+        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
         scrollUpdate.load();
 
         editProfile.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,7 @@
 package com.example.pocketbook.util;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -7,16 +9,26 @@ import androidx.annotation.NonNull;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class FirebaseIntegrity {
 
@@ -33,6 +45,286 @@ public class FirebaseIntegrity {
           - RETURN: onComplete --> task.isSuccessful() & task.getResult().exists()
                 & null field i.e. task.getResult().getString(INVALID_FIELD) = null
      */
+
+    ////////////////////////////// FIREBASE METHODS FOR THE BOOK MODEL /////////////////////////////
+
+    /**
+     * Getter method for BookCover
+     * @return
+     *      StorageReference to image
+     */
+    public static StorageReference getBookCover(Book book) {
+        String bookPhoto = book.getPhoto();
+
+        // return the image of a valid book photo
+        if (Parser.isValidBookPhoto(bookPhoto) && (!(bookPhoto.equals("")))) {
+            return FirebaseStorage.getInstance()
+                    .getReference().child("book_covers").child(bookPhoto);
+        }
+        // return the default image if book photo is invalid
+        return FirebaseStorage.getInstance()
+                .getReference().child("default_images").child("no_book_cover_light.png");
+    }
+
+    /**
+     * Sets the cover of the book as an image
+     * if the url is a local file
+     * @param localURL : url of the book
+     */
+    public static void setBookCover(Book book, String localURL) {
+        if(localURL != null) {
+
+            String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
+
+            StorageReference childRef = FirebaseStorage.getInstance()
+                    .getReference().child("book_covers").child(photoName);
+
+            if (localURL.equals("REMOVE")) {
+                childRef.delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("REMOVE_BOOK_COVER",
+                                        "Book data successfully written!");
+                                book.setPhoto("");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("REMOVE_BOOK_COVER", "Error writing book data!");
+                            }
+                        });
+                return;
+            }
+
+            //uploading the image
+            UploadTask uploadTask = childRef.putFile(Uri.fromFile(new File(localURL)));
+
+            Log.e("SET_BOOK_COVER", "After parse!");
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SET_BOOK_COVER", "Successful upload!");
+                    book.setPhoto(photoName);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("SET_BOOK_COVER", "Failed upload!");
+                }
+            });
+        }
+    }
+
+    /**
+     * Sets the cover of the book
+     * if the argument is a bitmap file
+     * @param bitmap : photo of book
+     */
+    public static void setBookCoverBitmap(Book book, Bitmap bitmap) {
+
+        String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
+
+        if(bitmap != null) {
+
+            StorageReference childRef = FirebaseStorage.getInstance()
+                    .getReference().child("book_covers").child(photoName);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            //uploading the image
+            UploadTask uploadTask = childRef.putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SET_BOOK_COVER", "Successful upload!");
+                    book.setPhoto(photoName);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("SET_BOOK_COVER", "Failed upload!");
+                }
+            });
+        }
+    }
+
+    public static void setTitleFirebase(Book book, String title) {
+        if (Parser.isValidBookTitle(title)) {
+            setBookDataFirebase(book, "title", title);
+        }
+    }
+    public static void setAuthorFirebase(Book book, String author) {
+        if (Parser.isValidBookAuthor(author)) {
+            setBookDataFirebase(book, "author", author);
+        }
+    }
+    public static void setIsbnFirebase(Book book, String isbn) {
+        if (Parser.isValidBookIsbn(isbn)) {
+            setBookDataFirebase(book, "isbn", Parser.convertToIsbn13(isbn));
+        }
+    }
+    public static void setCommentFirebase(Book book, String comment) {
+        if (Parser.isValidBookComment(comment)) {
+            setBookDataFirebase(book, "comment", comment);
+        }
+    }
+    public static void setConditionFirebase(Book book, String condition) {
+        if (Parser.isValidBookCondition(condition)) {
+            setBookDataFirebase(book, "condition", condition);
+        }
+    }
+    public static void setStatusFirebase(Book book, String status) {
+        if (Parser.isValidBookStatus(status)) {
+            setBookDataFirebase(book, "status", status);
+        }
+    }
+    public static void setBookPhotoFirebase(Book book, String photo) {
+        if (Parser.isValidBookPhoto(photo)) {
+            setBookDataFirebase(book, "photo", photo);
+        }
+    }
+
+    public static void setBookDataFirebase(Book book, String bookFieldName, String bookFieldValue) {
+        FirebaseFirestore.getInstance().collection("catalogue")
+                .document(book.getId())
+                .update(bookFieldName, bookFieldValue)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("SET_BOOK", "Book data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("SET_BOOK", "Error writing book data!", e);
+                    }
+                });
+    }
+
+    public static void pushNewBookToFirebase(Book newBook) {
+
+        if (Parser.isValidNewBookObject(newBook)) {
+
+            DocumentReference bookDoc = FirebaseFirestore.getInstance()
+                    .collection("books").document();
+
+            String id = bookDoc.getId();
+            newBook.setId(id);
+
+            String title = newBook.getTitle();
+            String author = newBook.getAuthor();
+            String isbn = newBook.getISBN();
+            String owner = newBook.getOwner();
+            String status = newBook.getStatus();
+            String comment = newBook.getComment();
+            String condition = newBook.getCondition();
+            String photo = newBook.getPhoto();
+            ArrayList<String> requesters = newBook.getRequesters();
+
+            HashMap<String, Object> docData = new HashMap<>();
+            docData.put("id", id);
+            docData.put("title", title);
+            docData.put("author", author);
+            docData.put("isbn", Parser.convertToIsbn13(isbn));
+            docData.put("owner", owner);
+            docData.put("status", status);
+            docData.put("comment", comment);
+            docData.put("condition", condition);
+            docData.put("photo", photo);
+            docData.put("keywords", getBookKeywords(title, author, isbn));
+
+            FirebaseIntegrity.setDocumentFromObject("catalogue", id, docData);
+
+        }
+
+    }
+
+
+    ////////////////////////////// FIREBASE METHODS FOR THE USER MODEL /////////////////////////////
+
+    public static void setEmailFirebase(User user, String email) {
+        if (Parser.isValidUserEmail(email)) {
+            setUserDataFirebase(user, "email", email);
+        }
+    }
+    public static void setFirstNameFirebase(User user, String firstName) {
+        if (Parser.isValidFirstName(firstName)) {
+            setUserDataFirebase(user, "firstName", firstName);
+        }
+    }
+    public static void setLastNameFirebase(User user, String lastName) {
+        if (Parser.isValidLastName(lastName)) {
+            setUserDataFirebase(user, "lastName", lastName);
+        }
+    }
+    public static void setUsernameFirebase(User user, String username) {
+        if (Parser.isValidUsername(username)) {
+            setUserDataFirebase(user, "username", username);
+        }
+    }
+    public static void setPasswordFirebase(User user, String password) {
+        if (Parser.isValidPassword(password)) {
+            setUserDataFirebase(user, "password", password);
+        }
+    }
+    public static void setUserPhotoFirebase(User user, String photo) {
+        if (Parser.isValidUserPhoto(photo)) {
+            setUserDataFirebase(user, "photo", photo);
+        }
+    }
+
+    public static void setUserDataFirebase(User user, String userFieldName, String userFieldValue) {
+        FirebaseFirestore.getInstance().collection("users").document(user.getEmail())
+                .update(userFieldName, userFieldValue)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("SET_USER", "User data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("SET_USER", "Error writing user data!", e);
+                    }
+                });
+    }
+
+    /**
+     * sets updated user information into the Firebase*
+     */
+    public static void pushNewUserToFirebase(User newUser) {
+
+        String firstName = newUser.getFirstName();
+        String lastName = newUser.getLastName();
+        String email = newUser.getEmail();
+        String username = newUser.getUsername();
+        String password = newUser.getPassword();
+        String photo = newUser.getPhoto();
+
+        DocumentReference userDoc = FirebaseFirestore.getInstance()
+                .collection("users").document(email);
+
+        HashMap<String, Object> docData = new HashMap<>();
+        docData.put("firstName", firstName);
+        docData.put("lastName", lastName);
+        docData.put("email", email);
+        docData.put("username", username);
+        docData.put("password", password);
+        docData.put("photo", photo);
+
+        FirebaseIntegrity.setDocumentFromObject("users", email, docData);
+    }
+
+
+
+    /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
 
     private static String CLEAN_OC_SRC_D_CHAIN = "CLEAN_OBJECT_COLLECTION_SRC_DEST_CHAIN";
     private static String CLEAN_OC_DEST_S_CHAIN = "CLEAN_OBJECT_COLLECTION_DEST_SRC_CHAIN";
@@ -357,7 +649,9 @@ public class FirebaseIntegrity {
                 .addOnCompleteListener(task -> {
                     if (!(task.isSuccessful())) {
                         Log.e("SET_DOCUMENT_FROM_OBJECT", "Error writing document!");
-                        addRequestersToBookInCollection(collectionName, docID);
+                        if (collectionName.equals("catalogue")) {
+                            addRequestersToBookInCollection(collectionName, docID);
+                        }
                     }
                 });
     }

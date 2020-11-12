@@ -211,7 +211,7 @@ public class AddBookActivity extends AppCompatActivity {
                         SystemClock.sleep(300);
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
-                                book.setBookCover(currentPhoto);
+                                book.setBookCoverBitmap(currentPhoto);
                             } else {
                                 book.setBookCover(currentPhotoPath);
                             }

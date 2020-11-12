@@ -32,7 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-//        FirebaseIntegrity.copyObjectBetweenCollectionsFirebase("test_catalogue", "Book", "tester_catalogue");
+//        FirebaseIntegrity.copyObjectBetweenCollectionsFirebase("test_catalogue", "Book", "cataloguer");
 //        FirebaseIntegrity.cleanObjectCollection("Book");
 
         /* UNCOMMENT OUT THE LINE BELOW TO ACCESS LOGIN PAGE */

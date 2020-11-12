@@ -43,6 +43,7 @@ public class Book implements Serializable {
     private String comment;
     private String condition;
     private String photo;
+    private ArrayList<String> requesters;
     private RequestList requestList;
 
 
@@ -90,6 +91,37 @@ public class Book implements Serializable {
                 ? "" : photo.trim();
 
         this.requestList = new RequestList(this.id);
+
+        this.requesters = new ArrayList<>();
+    }
+
+    public Book(String id, String title, String author, String isbn, String owner,
+                String status, String comment, String condition, String photo, ArrayList<String> requesters) {
+
+        this.id = (id == null) ? null : id.trim();
+        this.title = title.trim();
+        this.author = author.trim();
+        this.isbn = isbn.trim();
+        this.owner = owner.trim().toLowerCase();  // lowercase email
+        this.status = status.trim().toUpperCase();  /* one of ["AVAILABLE", "REQUESTED",
+                                                               "ACCEPTED", "BORROWED"] */
+
+        if (!(status.equals("AVAILABLE")) && !(status.equals("REQUESTED"))
+                && !(status.equals("ACCEPTED")) && !(status.equals("BORROWED"))) {
+            this.status = "AVAILABLE";
+        }
+
+        this.comment = ((comment == null) || (comment.trim().equals("")))
+                ? "" : comment.trim();
+        this.condition = ((condition == null) || (condition.trim().equals("")))
+                ? "" : condition.trim().toUpperCase();  /* one of ["GREAT", "GOOD",
+                                                                     "FAIR", "ACCEPTABLE"] */
+        this.photo = ((photo == null) || (photo.trim().equals("")))
+                ? "" : photo.trim();
+
+        this.requestList = new RequestList(this.id);
+
+        this.requesters = requesters;
     }
 
     /**
@@ -203,6 +235,10 @@ public class Book implements Serializable {
      */
     public RequestList getRequestList() { return this.requestList; }
 
+    public ArrayList<String> getRequesters() {
+        return this.requesters;
+    }
+
     /**
      * Getter method for BookCover
      * @return
@@ -271,7 +307,7 @@ public class Book implements Serializable {
      * if the argument is a bimap file
      * @param bitmap : photo of book
      */
-    public void setBookCover(Bitmap bitmap) {
+    public void setBookCoverBitmap(Bitmap bitmap) {
 
         String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
 
@@ -305,23 +341,23 @@ public class Book implements Serializable {
     /* Setter Functions for Local and Firebase */
     public void setTitle(String title) {
         setTitleLocal(title);
-        setTitleFirebase(title);
+//        setTitleFirebase(title);
     }
     public void setAuthor(String author) {
         setAuthorLocal(author);
-        setAuthorFirebase(author);
+//        setAuthorFirebase(author);
     }
     public void setIsbn(String isbn) {
         setIsbnLocal(isbn);
-        setIsbnFirebase(isbn);
+//        setIsbnFirebase(isbn);
     }
     public void setComment(String comment) {
         setCommentLocal(comment);
-        setCommentFirebase(comment);
+//        setCommentFirebase(comment);
     }
     public void setCondition(String condition) {
         setConditionLocal(condition);
-        setConditionFirebase(condition);
+//        setConditionFirebase(condition);
     }
     public boolean setStatus(String status) {
         String statusUpper = status.toUpperCase();
@@ -331,14 +367,17 @@ public class Book implements Serializable {
             return false;
         }
         setStatusLocal(status);
-        setStatusFirebase(status);
+//        setStatusFirebase(status);
 
         return true;
     }
+//    public void setRequesters(ArrayList<String> requesters) {
+//        this.requesters = requesters;
+//    }
 
     public void setPhoto(String photo) {
         setPhotoLocal(photo);
-        setPhotoFirebase(photo);
+//        setPhotoFirebase(photo);
     }
 
     /* Setter Function Attributes
@@ -370,38 +409,38 @@ public class Book implements Serializable {
             ? "" : photo.trim();
     }
 
-    public void setTitleFirebase(String title) { setBookDataFirebase("title", title); }
-    public void setAuthorFirebase(String author) { setBookDataFirebase("author", author); }
-    public void setIsbnFirebase(String isbn) { setBookDataFirebase("isbn", isbn); }
-    public void setCommentFirebase(String comment) {
-        setBookDataFirebase("comment", (this.comment == null) ? "" : this.comment);
-    }
-    public void setConditionFirebase(String condition) {
-        setBookDataFirebase("condition", (this.condition == null) ? "" : this.condition);
-    }
-    public void setStatusFirebase(String status) {
-        setBookDataFirebase("status", (this.status == null) ? "" : this.status);
-    }
-    public void setPhotoFirebase(String status) {
-        setBookDataFirebase("photo", (this.photo == null) ? "" : this.photo);
-    }
-
-    public void setBookDataFirebase(String bookFieldName, String bookFieldValue) {
-        FirebaseFirestore.getInstance().collection("catalogue").document(this.id)
-                .update(bookFieldName, bookFieldValue)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("SET_BOOK", "Book data successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("SET_BOOK", "Error writing book data!", e);
-                    }
-                });
-    }
+//    public void setTitleFirebase(String title) { setBookDataFirebase("title", title); }
+//    public void setAuthorFirebase(String author) { setBookDataFirebase("author", author); }
+//    public void setIsbnFirebase(String isbn) { setBookDataFirebase("isbn", isbn); }
+//    public void setCommentFirebase(String comment) {
+//        setBookDataFirebase("comment", (this.comment == null) ? "" : this.comment);
+//    }
+//    public void setConditionFirebase(String condition) {
+//        setBookDataFirebase("condition", (this.condition == null) ? "" : this.condition);
+//    }
+//    public void setStatusFirebase(String status) {
+//        setBookDataFirebase("status", (this.status == null) ? "" : this.status);
+//    }
+//    public void setPhotoFirebase(String status) {
+//        setBookDataFirebase("photo", (this.photo == null) ? "" : this.photo);
+//    }
+//
+//    public void setBookDataFirebase(String bookFieldName, String bookFieldValue) {
+//        FirebaseFirestore.getInstance().collection("catalogue").document(this.id)
+//                .update(bookFieldName, bookFieldValue)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.d("SET_BOOK", "Book data successfully written!");
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.e("SET_BOOK", "Error writing book data!", e);
+//                    }
+//                });
+//    }
 
     /*
     Pushes a new Book to Firebase

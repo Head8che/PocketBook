@@ -233,7 +233,7 @@ public class EditBookActivity extends AppCompatActivity {
                         }
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
-                                book.setBookCover(currentPhoto);
+                                book.setBookCoverBitmap(currentPhoto);
                             } else {
                                 book.setBookCover(currentPhotoPath);
                             }

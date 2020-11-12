@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,8 +13,11 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.BookList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -28,8 +32,8 @@ public class ScrollUpdate {
     private BookAdapter mAdapter;
 
     private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
+    private boolean isScrolling;
+    private boolean isLastItemReached;
 
     public ScrollUpdate(BookList catalogue, Query query,
                         BookAdapter adapter, RecyclerView recycler){
@@ -43,6 +47,7 @@ public class ScrollUpdate {
 
     public void load(){
         mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -64,7 +69,7 @@ public class ScrollUpdate {
 
                             RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
                                 @Override
-                                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                                     super.onScrollStateChanged(recyclerView, newState);
                                     if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                                         isScrolling = true;
@@ -72,7 +77,7 @@ public class ScrollUpdate {
                                 }
 
                                 @Override
-                                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                     super.onScrolled(recyclerView, dx, dy);
 
                                     GridLayoutManager gridLayoutManager = ((GridLayoutManager) recyclerView.getLayoutManager());
@@ -91,10 +96,13 @@ public class ScrollUpdate {
                                                 @Override
                                                 public void onComplete(@NonNull Task<QuerySnapshot> t) {
                                                     if (t.isSuccessful()) {
-                                                        for (DocumentSnapshot d : t.getResult()) {
-                                                            Book book = FirebaseIntegrity.getBookFromFirestore(d);
-                                                            if (book != null) {
-                                                                catalogue.addBookToListLocal(book);
+                                                        // if collection has documents
+                                                        if (!Objects.requireNonNull(t.getResult()).isEmpty()) {
+                                                            for (DocumentSnapshot d : t.getResult()) {
+                                                                Book book = FirebaseIntegrity.getBookFromFirestore(d);
+                                                                if (book != null) {
+                                                                    catalogue.addBookToListLocal(book);
+                                                                }
                                                             }
                                                         }
                                                         mAdapter.notifyDataSetChanged();

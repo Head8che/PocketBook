@@ -47,12 +47,13 @@ public class FirebaseIntegrity {
         String comment = document.getString("comment");
         String condition = document.getString("condition");
         String photo = document.getString("photo");
+        ArrayList<String> requesters = (ArrayList<String>) document.get("requesters");
 
         Log.e("SET_DOC_FIRE_FROM_OBJECT", Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo) + " " + id);
+                status, comment, condition, photo, requesters) + " " + id);
 
         return Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo);  // this assumes that Firebase books are valid
+                status, comment, condition, photo, requesters);  // this assumes that Firebase books are valid
     }
 
     public static User getUserFromFirestore(DocumentSnapshot document) {
@@ -92,6 +93,85 @@ public class FirebaseIntegrity {
         }
 
         return keywords;
+    }
+
+    public static void addRequestersToAllBooksInCollection(String collectionName) {
+        FirebaseFirestore.getInstance().collection(collectionName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        // if collection has documents
+                        if (!Objects.requireNonNull(task.getResult()).isEmpty()) {
+
+                            // for each document in collection
+                            for (DocumentSnapshot document : task.getResult()) {
+
+                                ArrayList<String> requesters = new ArrayList<>();
+
+                                FirebaseFirestore.getInstance().collection(collectionName)
+                                        .document(document.getId())
+                                        .collection("requests")
+                                        .whereEqualTo("requestedBook", document.getId())
+                                        .get()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+
+                                                // if collection has documents
+                                                if (!Objects.requireNonNull(task1.getResult()).isEmpty()) {
+
+                                                    // for each document in collection
+                                                    for (DocumentSnapshot document1 : task1.getResult()) {
+                                                        if (document1.exists()) {
+                                                            requesters.add(document1.getId());
+                                                        }
+                                                    }
+
+                                                    FirebaseFirestore.getInstance().collection(collectionName)
+                                                            .document(document.getId()).update("requesters", requesters);
+                                                } else {  // no requests
+                                                    FirebaseFirestore.getInstance().collection("catalogue")
+                                                            .document(document.getId()).update("requesters", new ArrayList<>());
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    public static void addRequestersToBookInCollection(String collectionName, String bookID) {
+        ArrayList<String> requesters = new ArrayList<>();
+
+        FirebaseFirestore.getInstance().collection(collectionName)
+                .document(bookID)
+                .collection("requests")
+                .whereEqualTo("requestedBook", bookID)
+                .get()
+                .addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+
+                        // if collection has documents
+                        if (!Objects.requireNonNull(task1.getResult()).isEmpty()) {
+
+                            // for each document in collection
+                            for (DocumentSnapshot document1 : task1.getResult()) {
+                                if (document1.exists()) {
+                                    requesters.add(document1.getId());
+                                }
+                            }
+
+                            FirebaseFirestore.getInstance().collection(collectionName)
+                                    .document(bookID).update("requesters", requesters);
+                        } else {  // no requests
+                            FirebaseFirestore.getInstance().collection(collectionName)
+                                    .document(bookID).update("requesters", new ArrayList<>());
+                        }
+                    }
+                });
+
     }
 
     public static void deleteDocumentsFromSubcollectionOnFieldValue(String collectionName,
@@ -277,6 +357,7 @@ public class FirebaseIntegrity {
                 .addOnCompleteListener(task -> {
                     if (!(task.isSuccessful())) {
                         Log.e("SET_DOCUMENT_FROM_OBJECT", "Error writing document!");
+                        addRequestersToBookInCollection(collectionName, docID);
                     }
                 });
     }

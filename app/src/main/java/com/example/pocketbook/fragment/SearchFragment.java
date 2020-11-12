@@ -196,7 +196,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
             ViewMyBookFragment mbf = ViewMyBookFragment.newInstance(currentUser, book, catalogue);
         }
          else{
-            ViewBookFragment bf = ViewBookFragment.newInstance(currentUser, currentUser, book);
+//            ViewBookFragment bf = ViewBookFragment.newInstance(currentUser, currentUser, book);
         }
 //        ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
 //        Bundle args = new Bundle();

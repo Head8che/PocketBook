@@ -20,10 +20,14 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -53,6 +57,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     private TextView usernameField;
     private Button requestButton;
 
+    ListenerRegistration listenerRegistration;
+
     /**
      * create a new instance of the ViewBookFragment
      * @param currentUser: the user currently signed in the app
@@ -80,6 +86,39 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             this.book = (Book) getArguments().getSerializable("BA_BOOK");
             this.bookOwner = (User) getArguments().getSerializable("BA_BOOKOWNER");
         }
+
+        listenerRegistration = FirebaseFirestore.getInstance()
+                .collection("catalogue")
+                .document(book.getId())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.w("VBF_LISTENER", "Listen failed.", error);
+                            return;
+                        }
+
+                        if ((document != null) && document.exists()) {
+                            book = FirebaseIntegrity.getBookFromFirestore(document);
+
+                            getParentFragmentManager()
+                                    .beginTransaction()
+                                    .detach(ViewBookFragment.this)
+                                    .attach(ViewBookFragment.this)
+                                    .commitAllowingStateLoss();
+                        } else {
+                            if ( getActivity() == null) {
+                                getParentFragmentManager().beginTransaction()
+                                        .detach(ViewBookFragment.this).commitAllowingStateLoss();
+                            } else {
+                                getActivity().getFragmentManager().popBackStack();
+                            }
+                        }
+
+
+                    }
+                });
+
     }
 
     @Nullable
@@ -142,23 +181,9 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .circleCrop()
                 .into(userProfilePicture);
 
-        //get the username of the book's owner from firestore and set it in its field
-        FirebaseFirestore.getInstance().collection("users").document(book.getOwner()).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        usernameField.setText(task.getResult().get("username").toString());
-                    }
-                });
+        usernameField.setText(bookOwner.getUsername());
 
-        //the book is available for requesting if it has no requests
-        if (book.getRequestList().getSize()==0){
-            book.setStatus("AVAILABLE");
-        }
-
-        //boolean to track if a book is available for being requested
-        boolean available = false;
-
+        Log.e("VB", "status:" + book.getStatus() + " " + "requesters:" + book.getRequesters());
         
         switch(book.getStatus().toUpperCase()) {
 
@@ -169,7 +194,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_borrowed);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
-                available = false;
                 break;
 
             case "ACCEPTED":
@@ -178,23 +202,20 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_accepted);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccepted),android.graphics.PorterDuff.Mode.SRC_IN);
-                available = false;
                 break;
 
 
             case "REQUESTED":
                 //if the book has been requested by this user before, it is not available for requesting again
-                if (book.getRequestList().containsRequest(currentUser.getEmail())){
+                if (book.getRequesters().contains(currentUser.getEmail())){
                     requestButton.setText("Already Requested!");
                     requestButton.setBackgroundColor(getResources().getColor(R.color.notAvailable));
                     bookStatusImage.setImageResource(R.drawable.ic_requested);
                     bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorRequested),android.graphics.PorterDuff.Mode.SRC_IN);
-                    available = false;
                 }
                 //if the book has no requests or hasn't been requested by the user yet, it is available for requesting
                 else {
                     book.setStatus("AVAILABLE");
-                    available =  true;
                 }
                 break;
 
@@ -202,14 +223,12 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             default:
                 bookStatusImage.setImageResource(R.drawable.ic_available);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAvailable), android.graphics.PorterDuff.Mode.SRC_IN);
-                available = true;
-                String d ="true";
         }
 
 
 
         // if the book is available for requesting, the user can tap the request button to request the book
-        if (available) {
+        if (book.getStatus().toUpperCase().equals("AVAILABLE")) {
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,6 +248,12 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             });
        }
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listenerRegistration.remove();
     }
 
 

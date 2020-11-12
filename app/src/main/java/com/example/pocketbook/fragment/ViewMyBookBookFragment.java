@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
@@ -35,6 +36,8 @@ public class ViewMyBookBookFragment extends Fragment {
 
     private Book book;
     private BookList catalogue;
+
+    ListenerRegistration listenerRegistration;
 
     public ViewMyBookBookFragment() {
         // Required empty public constructor
@@ -59,9 +62,8 @@ public class ViewMyBookBookFragment extends Fragment {
             this.catalogue = (BookList) getArguments().getSerializable("VMBPA_CATALOGUE");
         }
 
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("catalogue")
-                .document(book.getId());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
+                .document(book.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -172,5 +174,11 @@ public class ViewMyBookBookFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listenerRegistration.remove();
     }
 }

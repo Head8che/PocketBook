@@ -108,7 +108,8 @@ public class Parser {
      *      null otherwise
      */
     public static Book parseBook(String id, String title, String author, String isbn, String owner,
-                                 String status, String comment, String condition, String photo) {
+                                 String status, String comment, String condition, String photo,
+                                 ArrayList<String> requesters) {
 
         // return null if non-optional fields are null
         if ((id == null) || (title == null) || (author == null) || (isbn == null)
@@ -141,7 +142,7 @@ public class Parser {
             }
 
             // return a new Book object if all fields are valid
-            return new Book(id, title, author, isbn, owner, status, comment, condition, photo);
+            return new Book(id, title, author, isbn, owner, status, comment, condition, photo, requesters);
         }
 
         // return null if not all fields are valid

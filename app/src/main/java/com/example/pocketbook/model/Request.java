@@ -20,12 +20,21 @@ public class Request implements Serializable {
     }
 
     /* Constructor without Book object */
-    public Request(String requester, String requestee, String requestedBook) {
+    public Request(String requester, String requestee, String requestedBook, String requestDate) {
         this.requester = requester.trim().toLowerCase();  // lowercase email
         this.requestee = requestee.trim().toLowerCase();  // lowercase email
         this.requestedBook = requestedBook.trim();
-        this.requestDate = LocalDateTime.now().format(formatter).trim();
+        this.requestDate = requestDate;
         this.requestedBookObject = null;
+    }
+
+    /* Constructor with a Book object */
+    public Request(String requester, String requestee, Book requestedBookObject, String requestDate) {
+        this.requester = requester.trim().toLowerCase();  // lowercase email
+        this.requestee = requestee.trim().toLowerCase();  // lowercase email
+        this.requestedBook = requestedBookObject.getId().trim();
+        this.requestedBookObject = requestedBookObject;
+        this.requestDate = requestDate;
     }
 
     /* Constructor with a Book object */

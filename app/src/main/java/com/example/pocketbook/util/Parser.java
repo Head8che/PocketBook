@@ -823,34 +823,36 @@ public class Parser {
      *      valid Request object if arguments are valid
      *      null otherwise
      */
-    public static Request parseRequest(String requester, String requestee, String requestedBook) {
-        // return null if fields are null
-        if ((requester == null) || (requestee == null) || (requestedBook == null)) {
-            return null;
-        }
-
-        // trim all values
-        requester = requester.trim();
-        requestee = requestee.trim();
-        requestedBook = requestedBook.trim();
-
-        // if all fields are valid
-        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
-                && isValidRequestedBook(requestedBook)) {
-
-            Request requestObject = new Request(requester, requestee, requestedBook);
-
-            if (isValidRequestDate(requestObject.getRequestDate())) {
-
-                // return a new Request object if all fields are valid
-                return requestObject;
-            }
-        }
-
-        // return null if not all fields are valid
-        return null;
-
-    }
+//    public static Request parseRequest(String requester, String requestee,
+//                                       String requestedBook, String requestDate) {
+//        // return null if fields are null
+//        if ((requester == null) || (requestee == null)
+//                || (requestedBook == null) || (requestDate == null)) {
+//            return null;
+//        }
+//
+//        // trim all values
+//        requester = requester.trim();
+//        requestee = requestee.trim();
+//        requestedBook = requestedBook.trim();
+//
+//        // if all fields are valid
+//        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
+//                && isValidRequestedBook(requestedBook) && isValidRequestDate(requestDate)) {
+//
+//            Request requestObject = new Request(requester, requestee, requestedBook, requestDate);
+//
+//            if (isValidRequestDate(requestObject.getRequestDate())) {
+//
+//                // return a new Request object if all fields are valid
+//                return requestObject;
+//            }
+//        }
+//
+//        // return null if not all fields are valid
+//        return null;
+//
+//    }
 
     /**
      * This returns a valid Request object if arguments are valid, null otherwise
@@ -892,7 +894,7 @@ public class Parser {
 
     /**
      * This checks whether or not a request HashMap object contains valid Request data
-     * @param requestMapObject a HashMap object containing Request data
+//     * @param requestMapObject a HashMap object containing Request data
      * @return
      *      true if the request HashMap object contains valid Request data
      *      false otherwise
@@ -903,6 +905,60 @@ public class Parser {
         String requestee = (String) requestMapObject.get("requestee");
         String requestedBook = (String) requestMapObject.get("requestedBook");
         String requestDate = (String) requestMapObject.get("requestDate");
+
+        // if all fields are valid
+        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
+                && isValidRequestedBook(requestedBook) && isValidRequestDate(requestDate)) {
+
+            // return whether or not all fields are valid
+            return true;
+
+        }
+
+        Log.e("PARSER_VALID_REQUEST", requester + " is not valid!"
+                + " " + "requester:" + isValidBookRequester(requester)
+                + " " + "requestee:" + isValidBookRequestee(requestee)
+                + " " + "requestedBook:" + isValidRequestedBook(requestedBook)
+                + " " + "requestDate:" + isValidRequestDate(requestDate)
+        );
+
+        // return null if not all fields are valid
+        return false;
+    }
+
+    public static boolean isValidRequestObject(Request requestObject) {
+        // get all values
+        String requester = requestObject.getRequester();
+        String requestee = requestObject.getRequestee();
+        Book requestedBook = requestObject.getRequestedBookObject();
+        String requestDate = requestObject.getRequestDate();
+
+        // if all fields are valid
+        if (isValidBookRequester(requester) && isValidBookRequestee(requestee)
+                && isValidRequestedBookObject(requestedBook) && isValidRequestDate(requestDate)) {
+
+            // return whether or not all fields are valid
+            return true;
+
+        }
+
+        Log.e("PARSER_VALID_REQUEST", requester + " is not valid!"
+                + " " + "requester:" + isValidBookRequester(requester)
+                + " " + "requestee:" + isValidBookRequestee(requestee)
+                + " " + "requestedBook:" + isValidRequestedBook(requestedBook.getId())
+                + " " + "requestDate:" + isValidRequestDate(requestDate)
+        );
+
+        // return null if not all fields are valid
+        return false;
+    }
+
+    public static boolean isValidRequestWithBookIdObject(Request requestObject) {
+        // get all values
+        String requester = requestObject.getRequester();
+        String requestee = requestObject.getRequestee();
+        String requestedBook = requestObject.getRequestedBook();
+        String requestDate = requestObject.getRequestDate();
 
         // if all fields are valid
         if (isValidBookRequester(requester) && isValidBookRequestee(requestee)

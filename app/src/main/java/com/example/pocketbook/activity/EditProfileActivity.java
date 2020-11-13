@@ -106,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
         userName.setText(current_user.getUsername());
         userEmail.setText(current_user.getEmail());
 
-        StorageReference userProfilePicture = current_user.getProfilePicture();
+        StorageReference userProfilePicture = FirebaseIntegrity.getProfilePicture(current_user);
 
         GlideApp.with(this)
                 .load(userProfilePicture)

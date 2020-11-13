@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -178,7 +180,7 @@ public class FirebaseIntegrity {
             setBookDataFirebase(book, "condition", condition);
         }
     }
-    public static void setStatusFirebase(Book book, String status) {
+    public static void setBookStatusFirebase(Book book, String status) {
         if (Parser.isValidBookStatus(status)) {
             setBookDataFirebase(book, "status", status);
         }
@@ -247,6 +249,23 @@ public class FirebaseIntegrity {
 
 
     ////////////////////////////// FIREBASE METHODS FOR THE USER MODEL /////////////////////////////
+
+    /**
+     * returns default photo for no uploaded image for user
+     * @return
+     */
+    public static StorageReference getProfilePicture(User user) {
+        String userPhoto = user.getPhoto();
+
+        // return the image of a valid user photo
+        if (Parser.isValidUserPhoto(userPhoto) && (!(userPhoto.equals("")))) {
+            return FirebaseStorage.getInstance().getReference()
+                    .child("profile_pictures").child(userPhoto);
+        }
+        // return the default image if user photo is invalid
+        return FirebaseStorage.getInstance().getReference()
+                .child("default_images").child("no_profileImg.png");
+    }
 
     public static void setEmailFirebase(User user, String email) {
         if (Parser.isValidUserEmail(email)) {
@@ -320,6 +339,126 @@ public class FirebaseIntegrity {
         docData.put("photo", photo);
 
         FirebaseIntegrity.setDocumentFromObject("users", email, docData);
+    }
+
+
+    ///////////////////////////////// FIREBASE METHODS FOR REQUESTS ////////////////////////////////
+
+    public static void addBookRequest(Request request) {
+
+        if (Parser.isValidRequestObject(request)) {
+
+            String requestee = request.getRequestee();
+            String requester = request.getRequester();
+            String requestDate = request.getRequestDate();
+            Book requestedBookObject = request.getRequestedBookObject();
+
+            // if request is already in list
+            if (requestedBookObject.getRequesters().contains(requester)) {
+                return;
+            }
+
+            Map<String, Object> docData = new LinkedHashMap<>();
+            docData.put("requestee", requestee);
+            docData.put("requester", requester);
+            docData.put("requestDate", requestDate);
+            docData.put("requestedBookObject", requestedBookObject.getId());
+
+            FirebaseFirestore.getInstance().collection("catalogue")
+                    .document(requestedBookObject.getId())
+                    .collection("requests").document(requester)
+                    .set(docData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("NEW_REQUEST", "Request data successfully written!");
+                            FirebaseIntegrity.setBookStatusFirebase(requestedBookObject,
+                                    "REQUESTED");
+                            FirebaseIntegrity.updateBookRequestersInCollection(
+                                    "catalogue", requestedBookObject.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("NEW_REQUEST", "Error writing request data!");
+                        }
+                    });
+        }
+    }
+
+    public static void acceptBookRequest(Request request) {
+
+        if (Parser.isValidRequestObject(request)) {
+
+            String requestee = request.getRequestee();
+            String requester = request.getRequester();
+            String requestDate = request.getRequestDate();
+            String requestedBook = request.getRequestedBook();
+
+            // TODO: create Exchange Model to handle accepting a request
+
+//            // if request is already in list
+//            if (requestedBook.getRequesters().contains(requester)) {
+//                return;
+//            }
+//
+//            Map<String, Object> docData = new LinkedHashMap<>();
+//            docData.put("requestee", requestee);
+//            docData.put("requester", requester);
+//            docData.put("requestDate", requestDate);
+//            docData.put("requestedBook", requestedBook.getId());
+//
+//            FirebaseFirestore.getInstance().collection("catalogue")
+//                    .document(requestedBook.getId())
+//                    .collection("requests").document(requester)
+//                    .set(docData)
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d("NEW_REQUEST", "Request data successfully written!");
+//                            FirebaseIntegrity.setBookStatusFirebase(requestedBook,
+//                                    "REQUESTED");
+//                            FirebaseIntegrity.updateBookRequestersInCollection(
+//                                    "catalogue", requestedBook.getId());
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.e("NEW_REQUEST", "Error writing request data!");
+//                        }
+//                    });
+        }
+    }
+
+    public static void declineBookRequest(Request request) {
+
+        if (Parser.isValidRequestWithBookIdObject(request)) {
+
+            String requester = request.getRequester();
+            String requestedBook = request.getRequestedBook();
+
+            FirebaseFirestore.getInstance().collection("catalogue")
+                    .document(requestedBook)
+                    .collection("requests")
+                    .document(requester)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("NEW_REQUEST", "Request data successfully written!");
+                            FirebaseIntegrity.handleDeclineBookRequest(
+                                    "catalogue", requestedBook, requester);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("NEW_REQUEST", "Error writing request data!");
+                        }
+                    });
+        }
     }
 
 
@@ -434,7 +573,7 @@ public class FirebaseIntegrity {
 
     }
 
-    public static void addRequestersToBookInCollection(String collectionName, String bookID) {
+    public static void updateBookRequestersInCollection(String collectionName, String bookID) {
         ArrayList<String> requesters = new ArrayList<>();
 
         FirebaseFirestore.getInstance().collection(collectionName)
@@ -460,6 +599,43 @@ public class FirebaseIntegrity {
                         } else {  // no requests
                             FirebaseFirestore.getInstance().collection(collectionName)
                                     .document(bookID).update("requesters", new ArrayList<>());
+                        }
+                    }
+                });
+
+    }
+
+    public static void handleDeclineBookRequest(String collectionName,
+                                            String bookID, String requester) {
+
+        FirebaseFirestore.getInstance().collection(collectionName)
+                .document(bookID)
+                .get()
+                .addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+
+                        DocumentSnapshot document = task1.getResult();
+
+                        // if the document exists
+                        if ((document != null) && (document.exists())) {
+
+                            ArrayList<String> requesters =
+                                    (ArrayList<String>) document.get("requesters");
+
+                            if (requesters != null) {
+
+                                requesters.remove(requester);
+
+                                String status = (requesters.size() == 0)
+                                        ? "AVAILABLE" : "REQUESTED";
+
+                                FirebaseFirestore.getInstance()
+                                        .collection(collectionName)
+                                        .document(bookID)
+                                        .update("status", status,
+                                                "requesters", requesters);
+                            }
+
                         }
                     }
                 });
@@ -650,7 +826,7 @@ public class FirebaseIntegrity {
                     if (!(task.isSuccessful())) {
                         Log.e("SET_DOCUMENT_FROM_OBJECT", "Error writing document!");
                         if (collectionName.equals("catalogue")) {
-                            addRequestersToBookInCollection(collectionName, docID);
+                            updateBookRequestersInCollection(collectionName, docID);
                         }
                     }
                 });

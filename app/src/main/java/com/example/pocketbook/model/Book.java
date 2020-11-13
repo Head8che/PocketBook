@@ -277,38 +277,35 @@ public class Book implements Serializable {
         return false;
     }
 
-    /**
-     * Adds a request to the request list
-     * @param request
-     * @return
-     *      true if successful,
-     *      false otherwise
-     */
-    public boolean addRequest(Request request) {
-        if (!this.status.equals("REQUESTED")) {
-            this.setStatus("REQUESTED");
-        }
-        return true;
-//        return requestList.addRequest(request);
-    }
+//    /**
+//     * Adds a request to the request list
+//     * @param request
+//     * @return
+//     *      true if successful,
+//     *      false otherwise
+//     */
+//    public void addRequest(Request request) {
+//        if (!this.status.equals("REQUESTED")) {
+//            this.setStatus("REQUESTED");
+//        }
+//        return;
+//    }
 
-    /**
-     * Accepts a request made to the book
-     * @param request : request made to the owner
-     * @return
-     *      true if ACCEPTED
-     */
-    public boolean acceptRequest(Request request) {
-        this.setStatus("ACCEPTED");
-//        return requestList.acceptRequest(request);
-        return true;
-    }
+//    /**
+//     * Accepts a request made to the book
+//     * @param request : request made to the owner
+//     * @return
+//     *      true if ACCEPTED
+//     */
+//    public boolean acceptRequest(Request request) {
+//        this.setStatus("ACCEPTED");
+//        return true;
+//    }
 
-    /**
-     * Declines a request made to the book
-     */
+//    /**
+//     * Declines a request made to the book
+//     */
 //    public boolean declineRequest(Request request) {
-//        return requestList.declineRequest(request);
 //    }
 
 }

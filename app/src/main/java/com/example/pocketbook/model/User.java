@@ -67,17 +67,6 @@ public class User implements Serializable {
     public String getPhoto() { return this.photo; }
 
     /**
-     * returns default photo for no uploaded image for user
-     * @return
-     */
-    public StorageReference getProfilePicture() {
-        if (this.photo == null || this.photo.equals("") || !(this.photo.endsWith(".jpg"))) {
-            return FirebaseStorage.getInstance().getReference()
-                    .child("default_images").child("no_profileImg.png"); }
-        return FirebaseStorage.getInstance().getReference().child("profile_pictures").child(this.photo);
-    }
-
-    /**
      * sets Firstname
      * @param firstName
      */

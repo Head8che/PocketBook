@@ -88,7 +88,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                             mRequester = FirebaseIntegrity.getUserFromFirestore(document);
                             requestHolder.username.setText(mRequester.getUsername());
                             GlideApp.with(Objects.requireNonNull(requestHolder.itemView.getContext()))
-                                    .load(mRequester.getProfilePicture())
+                                    .load(FirebaseIntegrity.getProfilePicture(mRequester))
                                     .into(requestHolder.userProfile);
                         }
                     }
@@ -106,7 +106,14 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBook.acceptRequest(request);
+                // NOTE: the local acceptRequest is purely for testing; FirebaseIntegrity will
+                //  overwrite all locally set data with the appropriate Firebase data
+
+//                mBook.acceptRequest(request);
+
+                // accept a book request in Firebase
+                FirebaseIntegrity.acceptBookRequest(request);
+
                 notifyDataSetChanged();
                 requestHolder.accept.setText("Accepted");
                 requestHolder.accept.setEnabled(false);
@@ -118,8 +125,13 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(mBook.declineRequest(request))
-//                    notifyDataSetChanged();
+                // NOTE: the local declineRequest is purely for testing; FirebaseIntegrity will
+                //  overwrite all locally set data with the appropriate Firebase data
+
+//                mBook.declineRequest(request);
+
+                // decline a book request in Firebase
+                FirebaseIntegrity.declineBookRequest(request);
             }
         });
 

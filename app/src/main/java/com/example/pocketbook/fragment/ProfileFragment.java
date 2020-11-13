@@ -190,7 +190,7 @@ public class ProfileFragment extends Fragment {
         }
         View v = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
-        StorageReference userProfilePicture = currentUser.getProfilePicture();
+        StorageReference userProfilePicture = FirebaseIntegrity.getProfilePicture(currentUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)

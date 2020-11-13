@@ -58,6 +58,10 @@ public class ViewMyBookBookFragment extends Fragment {
             this.book = (Book) getArguments().getSerializable("VMBPA_BOOK");
         }
 
+        if ((book != null) && (book.getId() == null)) {
+
+        }
+
         listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
                 .document(book.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

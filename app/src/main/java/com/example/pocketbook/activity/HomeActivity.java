@@ -4,6 +4,7 @@ package com.example.pocketbook.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -34,6 +35,9 @@ public class HomeActivity extends AppCompatActivity {
     private User currentUser;
     private BottomNavigationView bottomNav;
 
+    Fragment selectedFragment;
+    String FRAG_TAG;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +47,10 @@ public class HomeActivity extends AppCompatActivity {
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                HomeFragment.newInstance(currentUser)).commit();
+        selectedFragment = HomeFragment.newInstance(currentUser);
+        FRAG_TAG = "HOME_FRAGMENT";
+        getSupportFragmentManager().beginTransaction().add(R.id.container,
+                selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
     }
 
     @Override
@@ -81,13 +87,15 @@ public class HomeActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener(){
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
+                    String CURRENT_TAG = FRAG_TAG;
                     switch (item.getItemId()){
                         case R.id.bottom_nav_home:
                             selectedFragment = HomeFragment.newInstance(currentUser);
+                            FRAG_TAG = "HOME_FRAGMENT";
                             break;
                         case R.id.bottom_nav_search:
                             selectedFragment = SearchFragment.newInstance(currentUser);
+                            FRAG_TAG = "SEARCH_FRAGMENT";
                             break;
                         case R.id.bottom_nav_add:
                             Intent intent = new Intent(getBaseContext(), AddBookActivity.class);
@@ -96,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         case R.id.bottom_nav_scan:
                             selectedFragment = new ScanFragment();
+                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
 
                     }
@@ -112,18 +121,37 @@ public class HomeActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if (task.isSuccessful()) {
                                             if (task.getResult().isEmpty()) {
-                                                getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container, profileFragment).commit();
+                                                FRAG_TAG = "PROFILE_FRAGMENT";
+                                                if (!(CURRENT_TAG.equals(FRAG_TAG))) {
+                                                    getSupportFragmentManager().beginTransaction()
+                                                            .replace(R.id.container,
+                                                                    profileFragment,
+                                                                    FRAG_TAG)
+                                                            .addToBackStack(FRAG_TAG)
+                                                            .commit();
+                                                }
                                             } else {
-                                                getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container, ownerFragment).commit();
+                                                FRAG_TAG = "OWNER_FRAGMENT";
+                                                if (!(CURRENT_TAG.equals(FRAG_TAG))) {
+                                                    getSupportFragmentManager().beginTransaction()
+                                                            .replace(R.id.container, ownerFragment,
+                                                                    FRAG_TAG)
+                                                            .addToBackStack(FRAG_TAG)
+                                                            .commit();
+                                                }
                                             }
                                         }
                                     }
                                 });
                     }
-                    if ((selectedFragment != null) && (item.getItemId() !=  R.id.bottom_nav_profile)) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();
+                    if ((selectedFragment != null)) {
+
+                        if (!(CURRENT_TAG.equals(FRAG_TAG)) && (item.getItemId() !=  R.id.bottom_nav_profile)) {
+                            // only change fragment if it is not the current fragment
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                                    selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
+                        }
+                        // TODO: Scroll up selected fragment if it is current fragment
                     }
                     return true;
                 }
@@ -145,7 +173,8 @@ public class HomeActivity extends AppCompatActivity {
                 bundle.putSerializable("VMBF_USER", currentUser);
                 bundle.putSerializable("VMBF_BOOK", book);
                 nextFrag.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(findViewById(R.id.container).getId(), nextFrag).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(findViewById(R.id.container)
+                        .getId(), nextFrag).addToBackStack(null).commit();
             }
         }
     }

@@ -81,7 +81,7 @@ public class ViewMyBookFragment extends Fragment {
         });
 
         ViewMyBookPagerAdapter viewMyBookPagerAdapter =
-                new ViewMyBookPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), book/*, catalogue*/);
+                new ViewMyBookPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), book);
 
         viewPager.setAdapter(viewMyBookPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

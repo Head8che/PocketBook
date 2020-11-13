@@ -88,7 +88,7 @@ public class FirebaseIntegrity {
                             public void onSuccess(Void aVoid) {
                                 Log.d("REMOVE_BOOK_COVER",
                                         "Book data successfully written!");
-                                book.setPhoto("");
+                                FirebaseIntegrity.setBookPhotoFirebase(book, photoName);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -109,7 +109,7 @@ public class FirebaseIntegrity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Log.e("SET_BOOK_COVER", "Successful upload!");
-                    book.setPhoto(photoName);
+                    FirebaseIntegrity.setBookPhotoFirebase(book, photoName);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -144,7 +144,7 @@ public class FirebaseIntegrity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Log.e("SET_BOOK_COVER", "Successful upload!");
-                    book.setPhoto(photoName);
+                    FirebaseIntegrity.setBookPhotoFirebase(book, photoName);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -155,27 +155,27 @@ public class FirebaseIntegrity {
         }
     }
 
-    public static void setTitleFirebase(Book book, String title) {
+    public static void setBookTitleFirebase(Book book, String title) {
         if (Parser.isValidBookTitle(title)) {
             setBookDataFirebase(book, "title", title);
         }
     }
-    public static void setAuthorFirebase(Book book, String author) {
+    public static void setBookAuthorFirebase(Book book, String author) {
         if (Parser.isValidBookAuthor(author)) {
             setBookDataFirebase(book, "author", author);
         }
     }
-    public static void setIsbnFirebase(Book book, String isbn) {
+    public static void setBookIsbnFirebase(Book book, String isbn) {
         if (Parser.isValidBookIsbn(isbn)) {
             setBookDataFirebase(book, "isbn", Parser.convertToIsbn13(isbn));
         }
     }
-    public static void setCommentFirebase(Book book, String comment) {
+    public static void setBookCommentFirebase(Book book, String comment) {
         if (Parser.isValidBookComment(comment)) {
             setBookDataFirebase(book, "comment", comment);
         }
     }
-    public static void setConditionFirebase(Book book, String condition) {
+    public static void setBookConditionFirebase(Book book, String condition) {
         if (Parser.isValidBookCondition(condition)) {
             setBookDataFirebase(book, "condition", condition);
         }
@@ -209,16 +209,11 @@ public class FirebaseIntegrity {
                 });
     }
 
-    public static void pushNewBookToFirebase(Book newBook) {
+    public static void pushNewBookToFirebaseWithURL(Book newBook, String localURL) {
 
-        if (Parser.isValidNewBookObject(newBook)) {
+        if (Parser.isValidBookObject(newBook)) {
 
-            DocumentReference bookDoc = FirebaseFirestore.getInstance()
-                    .collection("books").document();
-
-            String id = bookDoc.getId();
-            newBook.setId(id);
-
+            String id = newBook.getId();
             String title = newBook.getTitle();
             String author = newBook.getAuthor();
             String isbn = newBook.getISBN();
@@ -227,7 +222,6 @@ public class FirebaseIntegrity {
             String comment = newBook.getComment();
             String condition = newBook.getCondition();
             String photo = newBook.getPhoto();
-            ArrayList<String> requesters = newBook.getRequesters();
 
             HashMap<String, Object> docData = new HashMap<>();
             docData.put("id", id);
@@ -238,10 +232,51 @@ public class FirebaseIntegrity {
             docData.put("status", status);
             docData.put("comment", comment);
             docData.put("condition", condition);
-            docData.put("photo", photo);
             docData.put("keywords", getBookKeywords(title, author, isbn));
+            docData.put("requesters", new ArrayList<>());
+
+            if ((localURL != null) && (!localURL.equals(""))) {
+                FirebaseIntegrity.setBookCover(newBook, localURL);
+            } else {
+                docData.put("photo", photo);
+            }
 
             FirebaseIntegrity.setDocumentFromObject("catalogue", id, docData);
+
+        }
+
+    }
+
+    public static void pushNewBookToFirebaseWithBitmap(Book newBook, Bitmap bitmap) {
+
+        if (Parser.isValidBookObject(newBook)) {
+
+            String id = newBook.getId();
+            String title = newBook.getTitle();
+            String author = newBook.getAuthor();
+            String isbn = newBook.getISBN();
+            String owner = newBook.getOwner();
+            String status = newBook.getStatus();
+            String comment = newBook.getComment();
+            String condition = newBook.getCondition();
+
+            HashMap<String, Object> docData = new HashMap<>();
+            docData.put("id", id);
+            docData.put("title", title);
+            docData.put("author", author);
+            docData.put("isbn", Parser.convertToIsbn13(isbn));
+            docData.put("owner", owner);
+            docData.put("status", status);
+            docData.put("comment", comment);
+            docData.put("condition", condition);
+            docData.put("keywords", getBookKeywords(title, author, isbn));
+            docData.put("requesters", new ArrayList<>());
+
+            FirebaseIntegrity.setDocumentFromObject("catalogue", id, docData);
+
+            if (bitmap != null) {
+                FirebaseIntegrity.setBookCoverBitmap(newBook, bitmap);
+            }
 
         }
 

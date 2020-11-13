@@ -208,7 +208,7 @@ public class AddBookActivityTest {
         solo.enterText(authorField, "M0cK^U+H0R");  // add an author
 
         assertNotNull(isbnField);  // isbn field exists
-        solo.enterText(isbnField, "9781234567890");  // add an isbn
+        solo.enterText(isbnField, "9781234567897");  // add an isbn
 
         solo.clickOnView(saveBtn); // click save button
 

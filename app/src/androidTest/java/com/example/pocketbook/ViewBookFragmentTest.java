@@ -64,9 +64,9 @@ public class ViewBookFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.bottom_nav_home));  // click on home button
         mockOwner = new User("amockFirst", "amockLast", "aaa@test.com", "amockUser", "mock", "");
-        mockOwner.setNewUserFirebase();
-        mockBook = new Book("mockID", "mockTitle", "mockAuthor", "0000000000000", "aaa@test.com", "AVAILABLE", "this is a test", "GOOD", "");
-        mockBook.pushNewBookToFirebase();
+//        mockOwner.setNewUserFirebase();
+//        mockBook = new Book("mockID", "mockTitle", "mockAuthor", "0000000000000", "aaa@test.com", "AVAILABLE", "this is a test", "GOOD", "");
+//        mockBook.pushNewBookToFirebase();
     }
 
     /**

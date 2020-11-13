@@ -149,12 +149,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 user = new User(first_name, last_name, user_name, null, null, null);
-                current_user.setFirstName(first_name);
-                // TODO: add Firebase
-                current_user.setLastName(last_name);
-                // TODO: add Firebase
-                current_user.setUsername(user_name);
-                // TODO: add Firebase
+                FirebaseIntegrity.setFirstNameFirebase(current_user, first_name);
+                FirebaseIntegrity.setLastNameFirebase(current_user, last_name);
+                FirebaseIntegrity.setUsernameFirebase(current_user, user_name);
                 Log.d("Current User", current_user.getFirstName());
 
                 DocumentReference docRef = FirebaseFirestore.getInstance()

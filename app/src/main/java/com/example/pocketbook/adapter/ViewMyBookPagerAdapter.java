@@ -20,7 +20,7 @@ public class ViewMyBookPagerAdapter extends FragmentPagerAdapter {
     private int numOfTabs;
     private Book book;
 
-    public ViewMyBookPagerAdapter(FragmentManager fm, int numOfTabs, Book book/*, BookList catalogue*/) {
+    public ViewMyBookPagerAdapter(FragmentManager fm, int numOfTabs, Book book) {
         super(fm);
         this.numOfTabs = numOfTabs;
         this.book = book;

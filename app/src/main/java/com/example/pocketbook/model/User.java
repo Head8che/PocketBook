@@ -1,18 +1,9 @@
 package com.example.pocketbook.model;
 
 import com.example.pocketbook.util.Parser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+
 import java.io.Serializable;
 
-/*
-    TODO: handle setPhoto() & uploading image to FirebaseStorage and overwriting old image;
-          will likely be similar to how SignUpActivity sets images.
-*/
-
-/**
- * User model class that contains getters and setters of user information
- */
 public class User implements Serializable {
 
     private String firstName;
@@ -23,125 +14,81 @@ public class User implements Serializable {
     private String photo;
 
     /**
-     * Empty User Constructor for the firestore to automatically create new objects
+     * Empty Constructor for Firestore to auto-create new object
      */
-    public User() {} // used by firestore to automatically create new object
+    public User() {}
 
     /**
-     *  User constructor that contains the firstname/lastname/email/username/password/photo values
-     *  ownedbook/borrowedbook/acceptedboook/request books array list
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @param username
-     * @param password
-     * @param photo
+     *  User constructor
+     * @param firstName user first name
+     * @param lastName user last name
+     * @param email user email
+     * @param username user username
+     * @param password user password
+     * @param photo user photo i.e. profile picture
      */
-    public User(String firstName, String lastName, String email, String username, String password, String photo) {
-        this.firstName = (firstName == null) ? "" : firstName.trim();
-        this.lastName = (lastName == null) ? "" : lastName.trim();
-        this.email = (email == null) ? "" : email.trim();
-        this.username = (username == null) ? "" : username.trim();
-        this.password = (password == null) ? "" : password.trim();
-        this.photo = (photo == null) ? "" : photo.trim();
+    public User(String firstName, String lastName, String email, String username,
+                String password, String photo) {
+
+        // if non-optional fields are not null
+        if ((firstName != null) && (lastName != null)
+                && (email != null) && (username != null) && (password != null)) {
+
+            // trim all values
+            firstName = firstName.trim();
+            lastName = lastName.trim();
+            email = email.trim().toLowerCase();  // lowercase email
+            username = username.trim();
+            password = password.trim();
+            photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
+
+            // only sets User data if the data is valid
+            if (Parser.isValidUserData(firstName, lastName, email, username, password, photo)) {
+
+                this.firstName = firstName.trim();
+                this.lastName = lastName.trim();
+                this.email = email.trim();
+                this.username = username.trim();
+                this.password = password.trim();
+                this.photo = photo.trim();
+            }
+        }
     }
 
+    /**
+     * Getter method for firstName
+     * @return firstName as String
+     */
     public String getFirstName() { return this.firstName; }
+
+    /**
+     * Getter method for lastName
+     * @return lastName as String
+     */
     public String getLastName() { return this.lastName; }
+
+    /**
+     * Getter method for email
+     * @return email as String
+     */
     public String getEmail() { return this.email; }
 
     /**
-     * gets username
-     * @return
+     * Getter method for username
+     * @return username as String
      */
     public String getUsername() { return this.username; }
+
     /**
-     * gets password
-     * @return
+     * Getter method for password
+     * @return password as String
      */
     public String getPassword() { return this.password; }
+
     /**
-     * gets photo
-     * @return
+     * Getter method for photo
+     * @return photo as String
      */
     public String getPhoto() { return this.photo; }
-
-    /**
-     * sets Firstname
-     * @param firstName
-     */
-    public boolean setFirstName(String firstName) {
-        firstName = firstName.trim();
-        if (Parser.isValidFirstName(firstName)) {
-            this.firstName = firstName;
-            return true;
-        }
-        return false;
-    }
-    /**
-     * sets Lastname
-     * @param lastName
-     */
-    public boolean setLastName(String lastName) {
-        lastName = lastName.trim();
-        if (Parser.isValidLastName(lastName)) {
-            this.lastName = lastName;
-            return true;
-        }
-        return false;
-    }
-    /**
-     * sets Email
-     */
-    public boolean setEmail(String email) {
-        email = email.trim();
-        if (Parser.isValidUserEmail(email)) {
-            this.email = email;
-            return true;
-        }
-        return false;
-    }
-    /**
-     * sets password
-     * @param password
-     */
-    public boolean setPassword(String password) {
-        password = password.trim();
-        if (Parser.isValidPassword(password)) {
-            this.password = password;
-            return true;
-        }
-        return false;
-    }
-    /**
-     * sets username
-     * @param username
-     */
-    public boolean setUsername(String username) {
-        username = username.trim();
-        if (Parser.isValidUsername(username)) {
-            this.username = username;
-            return true;
-        }
-        return false;
-    }
-
-
-    /*
-        TODO: upload new image to FirebaseStorage and overwrite old image
-    */
-    /**
-     * sets photo
-     * @param photo
-     */
-    public boolean setPhoto(String photo) {
-        photo = photo.trim();
-        if (Parser.isValidUserPhoto(photo)) {
-            this.photo = photo;
-            return true;
-        }
-        return false;
-    }
-
 
 }

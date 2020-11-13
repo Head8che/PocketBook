@@ -231,7 +231,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             requestButton.setOnClickListener(view1 -> {
 
                 Request request = new Request(currentUser.getEmail(),
-                        bookOwner.getEmail(), book);
+                        bookOwner.getEmail(), book, null);
 
                 // NOTE: the local addRequest is purely for testing; FirebaseIntegrity will
                 //  overwrite all locally set data with the appropriate Firebase data

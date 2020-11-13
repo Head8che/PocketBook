@@ -95,6 +95,12 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                 });
         requestHolder.date.setText(request.getRequestDate());
 
+        // TODO: if request is accepted:
+        //  - change tab title from REQUESTS to ACCEPTED
+        //  - hide decline button
+        //  - set test to You Accepted Username's Request
+        //  - feat: add Cancel Accept feature to requests & cancel request to ViewBookFrag
+
         //if the user already accepted a request, they can't accept or decline that request
         if (mBook.getStatus().equals("ACCEPTED")){
             requestHolder.accept.setText("Accepted");
@@ -106,18 +112,22 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // NOTE: the local acceptRequest is purely for testing; FirebaseIntegrity will
-                //  overwrite all locally set data with the appropriate Firebase data
+                // NOTE: this local setter is purely for testing;
+                //  FirebaseIntegrity will overwrite local data with Firebase data
 
 //                mBook.acceptRequest(request);
 
-                // accept a book request in Firebase
-                FirebaseIntegrity.acceptBookRequest(request);
+                // TODO: startActivityForResult(SetLocationActivity)
+                //  once the activity returns a result:
+                //   if user sets a location, ACCEPT REQUEST; else, do nothing
 
-                notifyDataSetChanged();
-                requestHolder.accept.setText("Accepted");
-                requestHolder.accept.setEnabled(false);
-                requestHolder.decline.setEnabled(false);
+                // TODO: accept a book request in Firebase (method isn't done yet)
+//                FirebaseIntegrity.acceptBookRequest(request);
+
+//                notifyDataSetChanged();
+//                requestHolder.accept.setText("Accepted");
+//                requestHolder.accept.setEnabled(false);
+//                requestHolder.decline.setEnabled(false);
             }
         });
 

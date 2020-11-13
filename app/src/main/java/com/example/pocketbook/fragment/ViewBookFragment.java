@@ -164,7 +164,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
         // get the profile picture of the book's owner and set it in its field
         GlideApp.with(Objects.requireNonNull(getContext()))
-                .load(FirebaseIntegrity.getProfilePicture(bookOwner))
+                .load(FirebaseIntegrity.getUserProfilePicture(bookOwner))
                 .circleCrop()
                 .into(userProfilePicture);
 

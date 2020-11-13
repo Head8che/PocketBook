@@ -30,7 +30,6 @@
     <string name="comment">Comment</string>
     <string name="delete">Delete</string>
 
-    <string name="usename">Usename</string>
     <string name="dateFormat">MMM DD,YYYY</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
@@ -44,6 +43,7 @@
     <string name="keep_editing">KEEP EDITING</string>
     <string name="discard">DISCARD</string>
     <string name="editBookPageTitle">Edit Book</string>
+    <string name="editProfilePageTitle">Edit Profile</string>
     <string name="addBookPageTitle">Add Book</string>
 
     <string name="edit_profile">Edit Profile</string>
@@ -52,12 +52,11 @@
 
     <string name="name">Name</string>
     <string name="change_profile_photo">Change Profile Photo</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
 
     <string name="profile_image">profile_Image</string>
     <string name="firstlastname">FirstLastName</string>
-    <string name="profile_username">UserName</string>
 
     <string name="greatCondition">GREAT</string>
     <string name="goodCondition">GOOD</string>

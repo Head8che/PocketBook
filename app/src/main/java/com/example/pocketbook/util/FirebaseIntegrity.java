@@ -286,10 +286,97 @@ public class FirebaseIntegrity {
     ////////////////////////////// FIREBASE METHODS FOR THE USER MODEL /////////////////////////////
 
     /**
+     * Sets the cover of the user as an image
+     * if the url is a local file
+     * @param localURL : url of the user
+     */
+    public static void setUserProfilePicture(User user, String localURL) {
+        if(localURL != null) {
+
+            String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
+
+            StorageReference childRef = FirebaseStorage.getInstance()
+                    .getReference().child("profile_pictures").child(photoName);
+
+            if (localURL.equals("REMOVE")) {
+                childRef.delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("REMOVE_USER_PROFILE_PICTURE",
+                                        "User data successfully written!");
+                                FirebaseIntegrity.setUserPhotoFirebase(user, photoName);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("REMOVE_USER_PROFILE_PICTURE", "Error writing user data!");
+                            }
+                        });
+                return;
+            }
+
+            //uploading the image
+            UploadTask uploadTask = childRef.putFile(Uri.fromFile(new File(localURL)));
+
+            Log.e("SET_USER_PROFILE_PICTURE", "After parse!");
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SET_USER_PROFILE_PICTURE", "Successful upload!");
+                    FirebaseIntegrity.setUserPhotoFirebase(user, photoName);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("SET_USER_PROFILE_PICTURE", "Failed upload!");
+                }
+            });
+        }
+    }
+
+    /**
+     * Sets the cover of the user
+     * if the argument is a bitmap file
+     * @param bitmap : photo of user
+     */
+    public static void setUserProfilePictureBitmap(User user, Bitmap bitmap) {
+
+        String photoName = String.format("%s.jpg", UUID.randomUUID().toString());
+
+        if(bitmap != null) {
+
+            StorageReference childRef = FirebaseStorage.getInstance()
+                    .getReference().child("profile_pictures").child(photoName);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            //uploading the image
+            UploadTask uploadTask = childRef.putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SET_USER_PROFILE_PICTURE", "Successful upload!");
+                    FirebaseIntegrity.setUserPhotoFirebase(user, photoName);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("SET_USER_PROFILE_PICTURE", "Failed upload!");
+                }
+            });
+        }
+    }
+
+    /**
      * returns default photo for no uploaded image for user
      * @return
      */
-    public static StorageReference getProfilePicture(User user) {
+    public static StorageReference getUserProfilePicture(User user) {
         String userPhoto = user.getPhoto();
 
         // return the image of a valid user photo

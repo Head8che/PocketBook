@@ -88,7 +88,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                             mRequester = FirebaseIntegrity.getUserFromFirestore(document);
                             requestHolder.username.setText(mRequester.getUsername());
                             GlideApp.with(Objects.requireNonNull(requestHolder.itemView.getContext()))
-                                    .load(FirebaseIntegrity.getProfilePicture(mRequester))
+                                    .load(FirebaseIntegrity.getUserProfilePicture(mRequester))
                                     .into(requestHolder.userProfile);
                         }
                     }

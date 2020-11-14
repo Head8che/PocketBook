@@ -65,7 +65,7 @@ public class ViewBookFragmentTest {
         solo.clickOnView(solo.getView(R.id.bottom_nav_home));  // click on home button
         mockOwner = new User("amockFirst", "amockLast", "aaa@test.com", "amockUser", "mock", "");
         mockOwner.setNewUserFirebase();
-        mockBook = new Book("0", "mockTitle", "mockAuthor", "0000000000000", "aaa@test.com", "AVAILABLE", "this is a test", "GOOD", "");
+        mockBook = new Book("mockID", "mockTitle", "mockAuthor", "0000000000000", "aaa@test.com", "AVAILABLE", "this is a test", "GOOD", "");
         mockBook.pushNewBookToFirebase();
     }
 
@@ -75,8 +75,8 @@ public class ViewBookFragmentTest {
      */
     @After
     public void removeMockFromFirebase() {
-        FirebaseIntegrity.removeAuthorFromFirestore("mockAuthor");
-        FirebaseIntegrity.removeUserFromFirebase("aaa@test.com");
+        FirebaseIntegrity.deleteDocumentFromCollectionFirebase("users", "aaa@test.com");
+        FirebaseIntegrity.deleteDocumentFromCollectionFirebase("catalogue", "mockID");
     }
 
     /**

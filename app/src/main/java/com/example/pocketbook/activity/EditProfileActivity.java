@@ -2,10 +2,6 @@ package com.example.pocketbook.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,56 +15,32 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.fragment.HomeFragment;
-import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.Parser;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -77,24 +49,7 @@ import java.util.Objects;
  * User inputs are validated
  */
 public class EditProfileActivity extends AppCompatActivity {
-    private EditText firstName;
-    private EditText lastName;
-    private EditText userName;
-    private EditText userEmail1;
-
-    String first_name;
-    String last_name;
-    String user_name;
-    String email;
-    String profileImg;
-
-    private ImageView userProfileImg, backButton;
-    private TextView changeProfilePicture, saveButton;
-    private static final String USER = "users";
-    private static final String TAG = "EditProfileActivity";
     private User currentUser = new User();
-    Uri filePath;
-    ProgressDialog pd;
 
     private Boolean validFirstName;
     private Boolean validLastName;
@@ -111,7 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     String currentPhotoPath;
     Bitmap currentPhoto;
-    Boolean removePhoto;
+    Boolean showRemovePhoto;
 
     TextInputEditText layoutUserFirstName;
     TextInputEditText layoutUserLastName;
@@ -125,14 +80,6 @@ public class EditProfileActivity extends AppCompatActivity {
     TextInputLayout layoutUserEmailContainer;
 
 
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://pocketbook-t09.appspot.com/profile_pictures");
-    private FirebaseDatabase database;
-    private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mFirestore;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,14 +89,12 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser = (User) intent.getSerializableExtra("currentUser");
         StorageReference profilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
 
-        Log.e("TAG_PROFILE", profilePicture.getName());
-
         userFirstName = currentUser.getFirstName();
         userLastName = currentUser.getLastName();
         userUsername = currentUser.getUsername();
         userEmail = currentUser.getEmail();
 
-        removePhoto = (currentUser.getPhoto() != null) && (!currentUser.getPhoto().equals(""));
+        showRemovePhoto = (currentUser.getPhoto() != null) && (!currentUser.getPhoto().equals(""));
         validFirstName = true;
         validLastName = true;
         validUsername = true;
@@ -392,12 +337,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         TextView takePhotoOption = view.findViewById(R.id.takePhotoField);
         TextView choosePhotoOption = view.findViewById(R.id.choosePhotoField);
-        TextView removePhotoOption = view.findViewById(R.id.removePhotoField);
+        TextView showRemovePhotoOption = view.findViewById(R.id.removePhotoField);
 
-        if (removePhoto) {
-            removePhotoOption.setVisibility(View.VISIBLE);
+        if (showRemovePhoto) {
+            showRemovePhotoOption.setVisibility(View.VISIBLE);
         } else {
-            removePhotoOption.setVisibility(View.GONE);
+            showRemovePhotoOption.setVisibility(View.GONE);
         }
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
@@ -424,7 +369,7 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         // TODO: Handle removing photo! Can't just overwrite current photo before save
-        removePhotoOption.setOnClickListener(new View.OnClickListener() {
+        showRemovePhotoOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String removedPhoto = currentUser.getPhoto();
@@ -436,7 +381,7 @@ public class EditProfileActivity extends AppCompatActivity {
 //                currentUser.setPhoto(removedPhoto);
 //                FirebaseIntegrity.setBookPhotoFirebase(currentUser, "");
                 currentPhotoPath = "REMOVE";
-                removePhoto = false;
+                showRemovePhoto = false;
             }
         });
     }
@@ -507,7 +452,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 ImageView myImage = (ImageView) findViewById(R.id.editProfileProfilePictureField);
                 myImage.setImageBitmap(myBitmap);
-                removePhoto = true;
+                showRemovePhoto = true;
                 currentPhoto = null;
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.e("EDIT_PROFILE_ACTIVITY", "Camera failed!");
@@ -521,7 +466,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     currentPhotoPath = "BITMAP";
                     ImageView myImage = (ImageView) findViewById(R.id.editProfileProfilePictureField);
                     myImage.setImageBitmap(currentPhoto);
-                    removePhoto = true;
+                    showRemovePhoto = true;
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

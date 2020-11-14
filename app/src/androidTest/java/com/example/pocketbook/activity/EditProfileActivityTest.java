@@ -23,6 +23,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+// TODO: Migrate with SignUpActivityTest
+// TODO: login as specific user (unless User object is enough;
+//  but it might not be enough for Firebase update)
+
 public class EditProfileActivityTest {
     private Solo solo;
     private User user;
@@ -65,7 +69,7 @@ public class EditProfileActivityTest {
     @Test
     public void emptyFirstName(){
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText firstNameField = (EditText) solo.getView(R.id.userProfileFirstName);
+        EditText firstNameField = (EditText) solo.getView(R.id.editProfileFirstNameField);
         assertNotNull(firstNameField);
         solo.clearEditText(firstNameField);
         solo.clickOnView(saveBtn);
@@ -76,7 +80,7 @@ public class EditProfileActivityTest {
     @Test
     public void emptyLastName(){
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText lastNameField = (EditText) solo.getView(R.id.userProfileLastName);
+        EditText lastNameField = (EditText) solo.getView(R.id.editProfileLastNameField);
         assertNotNull(lastNameField);
         solo.clearEditText(lastNameField);
         solo.clickOnView(saveBtn);
@@ -87,7 +91,7 @@ public class EditProfileActivityTest {
     @Test
     public void emptyuserName(){
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText userNameField = (EditText) solo.getView(R.id.userProfileUserName);
+        EditText userNameField = (EditText) solo.getView(R.id.editProfileUsernameField);
         assertNotNull(userNameField);
         solo.clearEditText(userNameField);
         solo.clickOnView(saveBtn);
@@ -98,7 +102,7 @@ public class EditProfileActivityTest {
     @Test
     public void emptyEmail(){
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText emailField = (EditText) solo.getView(R.id.userProfileEmail);
+        EditText emailField = (EditText) solo.getView(R.id.editProfileEmailField);
         assertNotNull(emailField);
         solo.clearEditText(emailField);
         solo.clickOnView(saveBtn);
@@ -118,10 +122,10 @@ public class EditProfileActivityTest {
     @Test
     public void validInputs(){
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText firstNameField = (EditText) solo.getView(R.id.userProfileFirstName);
-        EditText lastNameField = (EditText) solo.getView(R.id.userProfileLastName);
-        EditText userNameField = (EditText) solo.getView(R.id.userProfileUserName);
-        EditText emailField = (EditText) solo.getView(R.id.userProfileEmail);
+        EditText firstNameField = (EditText) solo.getView(R.id.editProfileFirstNameField);
+        EditText lastNameField = (EditText) solo.getView(R.id.editProfileLastNameField);
+        EditText userNameField = (EditText) solo.getView(R.id.editProfileUsernameField);
+        EditText emailField = (EditText) solo.getView(R.id.editProfileEmailField);
         assertNotNull(emailField);
         assertNotNull(userNameField);
         assertNotNull(lastNameField);

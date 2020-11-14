@@ -34,6 +34,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+// TODO: Handle creating MockUser with Auth and everything in FirebaseIntegrity
+
 public class ViewBookFragmentTest {
     private Solo solo;
     private Book mockBook;

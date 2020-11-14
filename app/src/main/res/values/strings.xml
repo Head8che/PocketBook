@@ -45,6 +45,8 @@
     <string name="editBookPageTitle">Edit Book</string>
     <string name="editProfilePageTitle">Edit Profile</string>
     <string name="addBookPageTitle">Add Book</string>
+    <string name="signUpPageTitle">Create An Account</string>
+    <string name="signUp">Sign Up</string>
 
     <string name="edit_profile">Edit Profile</string>
     <string name="suggested_books">Suggested Books</string>
@@ -63,7 +65,7 @@
     <string name="fairCondition">FAIR</string>
     <string name="acceptableCondition">ACCEPTABLE</string>
 
-    <string name="bookPhotoDialogTitle">Change Book Photo</string>
+    <string name="bookPhotoDialogTitle">Change Photo</string>
     <string name="takePhoto">Take Photo</string>
     <string name="choosePhoto">Choose Photo</string>
     <string name="removePhoto">Remove Current Photo</string>

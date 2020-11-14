@@ -3,9 +3,11 @@ package com.example.pocketbook.util;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
@@ -13,6 +15,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -82,13 +89,16 @@ public class FirebaseIntegrity {
                     .getReference().child("book_covers").child(photoName);
 
             if (localURL.equals("REMOVE")) {
-                childRef.delete()
+                FirebaseStorage.getInstance()
+                        .getReference().child("book_covers")
+                        .child(book.getPhoto())
+                        .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d("REMOVE_BOOK_COVER",
                                         "Book data successfully written!");
-                                FirebaseIntegrity.setBookPhotoFirebase(book, photoName);
+                                FirebaseIntegrity.setBookPhotoFirebase(book, "");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -299,19 +309,23 @@ public class FirebaseIntegrity {
                     .getReference().child("profile_pictures").child(photoName);
 
             if (localURL.equals("REMOVE")) {
-                childRef.delete()
+                FirebaseStorage.getInstance()
+                        .getReference().child("profile_pictures")
+                        .child(user.getPhoto())
+                        .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d("REMOVE_USER_PROFILE_PICTURE",
                                         "User data successfully written!");
-                                FirebaseIntegrity.setUserPhotoFirebase(user, photoName);
+                                FirebaseIntegrity.setUserPhotoFirebase(user, "");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.e("REMOVE_USER_PROFILE_PICTURE", "Error writing user data!");
+                                Log.e("REMOVE_USER_PROFILE_PICTURE",
+                                        "Error writing user data!");
                             }
                         });
                 return;
@@ -438,29 +452,104 @@ public class FirebaseIntegrity {
     }
 
     /**
-     * sets updated user information into the Firebase*
+     * puts user information into Firebase*
      */
-    public static void pushNewUserToFirebase(User newUser) {
+    public static void pushUserToFirebaseNoAuth(User newUser) {
 
-        String firstName = newUser.getFirstName();
-        String lastName = newUser.getLastName();
-        String email = newUser.getEmail();
-        String username = newUser.getUsername();
-        String password = newUser.getPassword();
-        String photo = newUser.getPhoto();
+        if (Parser.isValidUserObject(newUser)) {
 
-        DocumentReference userDoc = FirebaseFirestore.getInstance()
-                .collection("users").document(email);
+            String firstName = newUser.getFirstName();
+            String lastName = newUser.getLastName();
+            String email = newUser.getEmail();
+            String username = newUser.getUsername();
+            String password = newUser.getPassword();
+            String photo = newUser.getPhoto();
 
-        HashMap<String, Object> docData = new HashMap<>();
-        docData.put("firstName", firstName);
-        docData.put("lastName", lastName);
-        docData.put("email", email);
-        docData.put("username", username);
-        docData.put("password", password);
-        docData.put("photo", photo);
+            HashMap<String, Object> docData = new HashMap<>();
+            docData.put("firstName", firstName);
+            docData.put("lastName", lastName);
+            docData.put("email", email);
+            docData.put("username", username);
+            docData.put("password", password);
+            docData.put("photo", photo);
 
-        FirebaseIntegrity.setDocumentFromObject("users", email, docData);
+            FirebaseIntegrity.setDocumentFromObject("users", email, docData);
+
+        }
+    }
+
+    public static void pushNewUserToFirebaseWithURL(User newUser, String localURL) {
+
+        if (Parser.isValidUserObject(newUser)) {
+
+            String firstName = newUser.getFirstName();
+            String lastName = newUser.getLastName();
+            String email = newUser.getEmail();
+            String username = newUser.getUsername();
+            String password = newUser.getPassword();
+            String photo = newUser.getPhoto();
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.e("CREATE_USER", "createUserWithEmail:success");
+
+                                HashMap<String, Object> docData = new HashMap<>();
+                                docData.put("firstName", firstName);
+                                docData.put("lastName", lastName);
+                                docData.put("email", email);
+                                docData.put("username", username);
+                                docData.put("password", password);
+                                docData.put("photo", photo);
+
+                                if ((localURL != null) && (!localURL.equals(""))) {
+                                    FirebaseIntegrity.setUserProfilePicture(newUser, localURL);
+                                } else {
+                                    docData.put("photo", photo);
+                                }
+
+                                FirebaseIntegrity.setDocumentFromObject("users", email, docData);
+
+                            } else {
+
+                            }
+                        }
+                    });
+
+        }
+
+    }
+
+    public static void pushNewUserToFirebaseWithBitmap(User newUser, Bitmap bitmap) {
+
+        if (Parser.isValidUserObject(newUser)) {
+
+            String firstName = newUser.getFirstName();
+            String lastName = newUser.getLastName();
+            String email = newUser.getEmail();
+            String username = newUser.getUsername();
+            String password = newUser.getPassword();
+            String photo = newUser.getPhoto();
+
+            HashMap<String, Object> docData = new HashMap<>();
+            docData.put("firstName", firstName);
+            docData.put("lastName", lastName);
+            docData.put("email", email);
+            docData.put("username", username);
+            docData.put("password", password);
+            docData.put("photo", photo);
+
+            FirebaseIntegrity.setDocumentFromObject("users", email, docData);
+
+            if (bitmap != null) {
+                FirebaseIntegrity.setUserProfilePictureBitmap(newUser, bitmap);
+            }
+
+        }
+
     }
 
 
@@ -589,6 +678,35 @@ public class FirebaseIntegrity {
 
     private static String CLEAN_OC_SRC_D_CHAIN = "CLEAN_OBJECT_COLLECTION_SRC_DEST_CHAIN";
     private static String CLEAN_OC_DEST_S_CHAIN = "CLEAN_OBJECT_COLLECTION_DEST_SRC_CHAIN";
+
+    public static void signOutCurrentlyLoggedInUser() {
+        FirebaseAuth.getInstance().signOut();
+    }
+
+    public static void deleteCurrentlyLoggedInUser() {
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if ((currentUser != null) && (currentUser.getEmail() != null)) {
+
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(currentUser.getEmail())
+                    .delete()
+                    .addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            currentUser.delete()
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Log.d("DELETE_USER", "User account deleted.");
+                                        }
+                                    });
+                        }
+                    });
+        }
+
+
+    }
+
 
     public static Book getBookFromFirestore(DocumentSnapshot document) {
         String id = document.getString("id");

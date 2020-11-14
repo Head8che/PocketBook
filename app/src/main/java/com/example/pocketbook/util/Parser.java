@@ -20,6 +20,8 @@ import java.util.Random;
 // TODO: for Request and Notification set date format to have milliseconds (for sorting),
 //  but have the classes' get...Date() methods return a hour-minute formatted string
 
+// TODO: extract common methods to single method (like book owner and user email methods)
+
 /**
  * Parser class ensures the validity of the
  * objects and text within the app
@@ -631,6 +633,45 @@ public class Parser {
         return false;
     }
 
+    /**
+     * This checks whether or not a user object contains valid User data
+     * @param userObject a user object containing User data
+     * @return
+     *      true if the user object contains valid User data
+     *      false otherwise
+     */
+    public static boolean isValidUserObject(User userObject) {
+        // get all values
+        String firstName = userObject.getFirstName();
+        String lastName = userObject.getLastName();
+        String email = userObject.getEmail();
+        String username = userObject.getUsername();
+        String password = userObject.getPassword();
+        String photo = userObject.getPhoto();
+
+        // if all fields (other than isbn) are valid
+        if (isValidFirstName(firstName) && isValidLastName(lastName)
+                && isValidUserEmail(email) && isValidUsername(username)
+                && isValidPassword(password) && isValidUserPhoto(photo)) {
+
+            // return whether or not all fields are valid
+            return true;
+
+        }
+
+        Log.e("PARSER_VALID_USER", email + " is not valid!"
+                + " " + "firstName:" + isValidFirstName(firstName)
+                + " " + "lastName:" + isValidLastName(lastName)
+                + " " + "email:" + isValidUserEmail(email)
+                + " " + "username:" + isValidUsername(username)
+                + " " + "password:" + isValidPassword(password)
+                + " " + "photo:" + isValidUserPhoto(photo)
+        );
+
+        // return null if not all fields are valid
+        return false;
+    }
+
     public static boolean isValidUserData(String firstName, String lastName, String email,
                                           String username, String password, String photo) {
 
@@ -676,7 +717,39 @@ public class Parser {
      *      false otherwise
      */
     public static boolean isValidUserEmail(String email) {
-        return (email != null) && (!email.equals("")) && email.equals(email.toLowerCase());
+
+        if (email == null) {
+            return false;
+        }
+
+        int at_index = -1;
+        int at_count = 0;
+        int dot_index = -1;
+        int emailLength = email.length();
+
+        // if the email is shorter than a@b.c or longer than 100 chars
+        if ((emailLength < 5) || (emailLength > 100)) {
+            return false;
+        }
+
+        // for each char in the email
+        for (int i = 0; i < emailLength; i++) {
+
+            // if the char is @ and @ is not the first char
+            if ((email.charAt(i) == '@') && (i > 0)) {
+                // set at_index to i when i is found & increment at_count
+                if (at_index == -1) {
+                    at_index = i;
+                }
+                at_count += 1;  // increment at_count
+            }
+            // if the char is . and it's at least one char away from @
+            if ((email.charAt(i) == '.') && (i != (emailLength - 1)) && (i > (at_index + 1))) {
+                dot_index = i;
+            }
+        }
+        // return true if there's only one @ and at least one . after the @
+        return (at_count == 1) && (dot_index > -1) && email.equals(email.toLowerCase());
     }
 
     /**

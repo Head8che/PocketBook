@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
@@ -28,16 +27,14 @@ public class ScrollUpdate {
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private RecyclerView mBooksRecycler;
-    private BookList catalogue ;
     private BookAdapter mAdapter;
 
     private DocumentSnapshot lastVisible;
     private boolean isScrolling;
     private boolean isLastItemReached;
 
-    public ScrollUpdate(BookList catalogue, Query query,
+    public ScrollUpdate(Query query,
                         BookAdapter adapter, RecyclerView recycler){
-        this.catalogue = catalogue;
         this.mQuery = query;
         this.mAdapter = adapter;
         this.isScrolling = false;
@@ -59,7 +56,7 @@ public class ScrollUpdate {
                             Book book = FirebaseIntegrity.getBookFromFirestore(document);
 
                             if (book != null) {
-                                catalogue.addBookToListLocal(book);
+//                                catalogue.addBookToListLocal(book);
                             }
                         }
                         mAdapter.notifyDataSetChanged();
@@ -101,7 +98,7 @@ public class ScrollUpdate {
                                                             for (DocumentSnapshot d : t.getResult()) {
                                                                 Book book = FirebaseIntegrity.getBookFromFirestore(d);
                                                                 if (book != null) {
-                                                                    catalogue.addBookToListLocal(book);
+//                                                                    catalogue.addBookToListLocal(book);
                                                                 }
                                                             }
                                                         }

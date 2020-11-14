@@ -46,10 +46,9 @@ public class AddBookActivityTest {
 
     /**
      * Runs before all tests and creates solo instance. Also navigates to AddBookActivity.
-     * @throws Exception
      */
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
 
         // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
@@ -99,8 +98,8 @@ public class AddBookActivityTest {
     public void checkOptions(){
         solo.clickOnText("CHANGE PHOTO"); // Click CHANGE PHOTO text
 
-        // True if the title 'Change Book Photo' is present
-        assertTrue(solo.searchText("Change Book Photo"));
+        // True if the title 'Change Photo' is present
+        assertTrue(solo.searchText("Change Photo"));
 
         /* True if the options Take Photo and Choose Photo show up on the screen;
         wait at least 2 seconds and find minimum one match for both. */
@@ -208,7 +207,7 @@ public class AddBookActivityTest {
         solo.enterText(authorField, "M0cK^U+H0R");  // add an author
 
         assertNotNull(isbnField);  // isbn field exists
-        solo.enterText(isbnField, "9781234567890");  // add an isbn
+        solo.enterText(isbnField, "9781234567897");  // add an isbn
 
         solo.clickOnView(saveBtn); // click save button
 

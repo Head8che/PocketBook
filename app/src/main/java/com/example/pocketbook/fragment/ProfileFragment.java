@@ -16,7 +16,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,7 +52,6 @@ public class ProfileFragment extends Fragment {
     private static final int LIMIT = 20;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
-    private BookList ownedBooks = new BookList();
     private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
     private TextView profileName, userName;
@@ -192,12 +190,12 @@ public class ProfileFragment extends Fragment {
         }
         View v = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
-        StorageReference userProfilePicture = currentUser.getProfilePicture();
+        StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
-        mAdapter = new BookAdapter(options, currentUser, ownedBooks, getActivity());
+        mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
 

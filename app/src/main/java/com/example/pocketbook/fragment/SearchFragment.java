@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,7 +41,6 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     private LinearBookAdapter mAdapter;
 
     private User currentUser;
-    private BookList catalogue;
 
     private DocumentSnapshot lastVisible;
     private boolean isScrolling = false;
@@ -57,14 +55,12 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     /**
      * Search fragment instance that bundles the user information to be accessible
      * @param user
-     * @param catalogue
      * @return
      */
-    public static SearchFragment newInstance(User user, BookList catalogue) {
+    public static SearchFragment newInstance(User user) {
         SearchFragment searchFragment = new SearchFragment();
         Bundle args = new Bundle();
         args.putSerializable("SF_USER", user);
-        args.putSerializable("SF_CATALOGUE", catalogue);
         searchFragment.setArguments(args);
         return searchFragment;
     }
@@ -79,7 +75,6 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
 
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("SF_USER");
-            this.catalogue = (BookList) getArguments().getSerializable("SF_CATALOGUE");
         }
 
         // Initialize Firestore
@@ -193,7 +188,7 @@ public class SearchFragment extends Fragment implements LinearBookAdapter.OnBook
     public void onBookSelected(DocumentSnapshot snapshot) {
         Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);
         if(book.getOwner() == currentUser.getEmail()){
-            ViewMyBookFragment mbf = ViewMyBookFragment.newInstance(currentUser, book, catalogue);
+            ViewMyBookFragment mbf = ViewMyBookFragment.newInstance(currentUser, book);
         }
          else{
 //            ViewBookFragment bf = ViewBookFragment.newInstance(currentUser, currentUser, book);

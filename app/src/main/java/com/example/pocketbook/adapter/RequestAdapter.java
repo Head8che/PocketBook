@@ -21,9 +21,7 @@ import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.Request;
-import com.example.pocketbook.model.RequestList;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -40,13 +38,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAdapter.RequestHolder> {
     private Book mBook;
-    private RequestList mRequestList;
     private User mRequester;
 
     public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Book mBook) {
         super(options);
         this.mBook = mBook;
-        this.mRequestList = mBook.getRequestList();
     }
 
     static class RequestHolder extends RecyclerView.ViewHolder {
@@ -92,12 +88,18 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                             mRequester = FirebaseIntegrity.getUserFromFirestore(document);
                             requestHolder.username.setText(mRequester.getUsername());
                             GlideApp.with(Objects.requireNonNull(requestHolder.itemView.getContext()))
-                                    .load(mRequester.getProfilePicture())
+                                    .load(FirebaseIntegrity.getUserProfilePicture(mRequester))
                                     .into(requestHolder.userProfile);
                         }
                     }
                 });
         requestHolder.date.setText(request.getRequestDate());
+
+        // TODO: if request is accepted:
+        //  - change tab title from REQUESTS to ACCEPTED
+        //  - hide decline button
+        //  - set test to You Accepted Username's Request
+        //  - feat: add Cancel Accept feature to requests & cancel request to ViewBookFrag
 
         //if the user already accepted a request, they can't accept or decline that request
         if (mBook.getStatus().equals("ACCEPTED")){
@@ -110,11 +112,22 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBook.acceptRequest(request);
-                notifyDataSetChanged();
-                requestHolder.accept.setText("Accepted");
-                requestHolder.accept.setEnabled(false);
-                requestHolder.decline.setEnabled(false);
+                // NOTE: this local setter is purely for testing;
+                //  FirebaseIntegrity will overwrite local data with Firebase data
+
+//                mBook.acceptRequest(request);
+
+                // TODO: startActivityForResult(SetLocationActivity)
+                //  once the activity returns a result:
+                //   if user sets a location, ACCEPT REQUEST; else, do nothing
+
+                // TODO: accept a book request in Firebase (method isn't done yet)
+//                FirebaseIntegrity.acceptBookRequest(request);
+
+//                notifyDataSetChanged();
+//                requestHolder.accept.setText("Accepted");
+//                requestHolder.accept.setEnabled(false);
+//                requestHolder.decline.setEnabled(false);
             }
         });
 
@@ -122,120 +135,15 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mBook.declineRequest(request))
-                    notifyDataSetChanged();
+                // NOTE: the local declineRequest is purely for testing; FirebaseIntegrity will
+                //  overwrite all locally set data with the appropriate Firebase data
+
+//                mBook.declineRequest(request);
+
+                // decline a book request in Firebase
+                FirebaseIntegrity.declineBookRequest(request);
             }
         });
 
     }
 }
-
-///**
-// * A {@link RecyclerView.Adapter<RequestAdapter.ViewHolder>} subclass.
-// */
-//public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>{
-//
-//    private Book mBook;
-//    private RequestList mRequestList;
-//    private User mRequester;
-//
-//    /**
-//     * constructor for the RequestAdapter
-//     * @param mBook: the book for which the requests are being viewed
-//     */
-//    public RequestAdapter(Book mBook) {
-//        this.mBook = mBook;
-//        this.mRequestList = mBook.getRequestList();
-//    }
-//
-//
-//    @NonNull
-//    @Override
-//    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-//        return new ViewHolder(inflater.inflate(R.layout.item_request, parent, false));
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull RequestAdapter.ViewHolder holder, int position) {
-//
-//        Request request = mRequestList.getRequestAtPosition(position);
-//        holder.bind(request);
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return mRequestList.getSize();
-//    }
-//
-//
-//    public class ViewHolder extends RecyclerView.ViewHolder{
-//
-//        private TextView username;
-//        private TextView date;
-//        private CircleImageView userProfile;
-//        private Button accept;
-//        private Button decline;
-//
-//        public ViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            //get the views' ids
-//            username = itemView.findViewById(R.id.itemRequestUsernameTextView);
-//            date = itemView.findViewById(R.id.itemRequestDateTextView);
-//            userProfile = itemView.findViewById(R.id.itemRequestProfileImageView);
-//            accept = itemView.findViewById(R.id.itemRequestAcceptButton);
-//            decline = itemView.findViewById(R.id.itemRequestDeclineButton);
-//        }
-//
-//
-//        public void bind(Request request){
-//
-//            //get the requester's info from Firestore to display it to the owner
-//            String requesterEmail = request.getRequester();
-//            FirebaseFirestore.getInstance().collection("users").document(requesterEmail)
-//                    .get()
-//                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                DocumentSnapshot document = task.getResult();
-//                                mRequester = FirebaseIntegrity.getUserFromFirestore(document);
-//                                username.setText(mRequester.getUsername());
-//                                GlideApp.with(Objects.requireNonNull(itemView.getContext()))
-//                                        .load(mRequester.getProfilePicture())
-//                                        .into(userProfile);
-//                            }
-//                        }
-//                    });
-//            date.setText(request.getRequestDate());
-//
-//            //if the user already accepted a request, they can't accept or decline that request
-//            if (mBook.getStatus().equals("ACCEPTED")){
-//                accept.setText("Accepted");
-//                accept.setEnabled(false);
-//                decline.setEnabled(false);
-//            }
-//
-//            //when the user taps on the accept button for a request, the request is accepted and they can't decline that request
-//            accept.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    mBook.acceptRequest(request);
-//                    notifyDataSetChanged();
-//                    accept.setText("Accepted");
-//                    accept.setEnabled(false);
-//                    decline.setEnabled(false);
-//                }
-//            });
-//
-//            //when the user taps on the decline button for a request, that request is declined
-//            decline.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if(mBook.declineRequest(request))
-//                        notifyDataSetChanged();
-//                }
-//            });
-//        }
-//    }
-//}

@@ -1,143 +1,382 @@
 package com.example.pocketbook.activity;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Objects;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-// TODO: Migrate with SignUpActivityTest
-// TODO: login as specific user (unless User object is enough;
-//  but it might not be enough for Firebase update)
-
 public class EditProfileActivityTest {
     private Solo solo;
-    private User user;
+    private boolean inEditProfileActivityWithChanges = false;
+    private long currentTime = System.currentTimeMillis();
 
     @Rule
-    public ActivityTestRule<HomeActivity> rule =
-            new ActivityTestRule<HomeActivity>(HomeActivity.class, true, true) {
-                @Override
-                protected Intent getActivityIntent() {  // start HomeActivity with User object
-                    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-                    Intent result = new Intent(targetContext, HomeActivity.class);
-                    result.putExtra("CURRENT_USER", user = new User("mockFirstName",
-                            "mockLastName", "mock@mock.com", "mockUsername",
-                            "mockPassword", null));
-                    return result;
-                }
-            };
+    public ActivityTestRule<LogInActivity> rule = new ActivityTestRule<>(LogInActivity.class);
+
+    /**
+     * Runs before all tests and signs out any logged in user.
+     */
+    @BeforeClass
+    public static void signOut() {
+        FirebaseIntegrity.signOutCurrentlyLoggedInUser();
+    }
 
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
+        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        solo.clickOnView(solo.getView(R.id.RegisterBtn));  // click on register button
+
+        // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
+        solo.sleep(2000); // give it time to change activity
+
+        //////////////////////////////// CREATE A MOCK USER ACCOUNT ////////////////////////////////
+
+        View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
+        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText) solo.getView(R.id.signUpUsernameField);
+        TextInputEditText emailField = (TextInputEditText) solo.getView(R.id.signUpEmailField);
+        TextInputEditText passwordField = (TextInputEditText) solo.getView(R.id.signUpPasswordField);
+
+        assertNotNull(firstNameField);  // firstName field exists
+        solo.enterText(firstNameField, "MockFirst");  // add a firstName
+
+        assertNotNull(lastNameField);  // lastName field exists
+        solo.enterText(lastNameField, "MockLast");  // add a lastName
+
+        assertNotNull(usernameField);  // username field exists
+        solo.enterText(usernameField, "MockUsername");  // add a username
+
+        assertNotNull(emailField);  // email field exists
+        solo.enterText(emailField, "mockeditprofile" + currentTime + "@gmail.com");  // add an email
+
+        assertNotNull(passwordField);
+        solo.enterText(passwordField, "123456");  // add a password
+
+        solo.clickOnView(signUpBtn); // click save button
+
+        // False if 'Input required' is present
+        assertFalse(solo.searchText("Input required"));
+
+        // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
         solo.clickOnView(solo.getView(R.id.bottom_nav_profile));
         solo.clickOnView(solo.getView(R.id.edit_profile_button));
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
-        solo.sleep(2000);
     }
 
+    /**
+     * Runs after each test to exit from EditProfileActivity
+     * and remove the test user from Firebase.
+     */
     @After
-    public void removeUserFromFirestore() {
-//        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
+    public void removeMockFromFirebase() {
+
+        // Exiting the test from EditProfileActivity, without going back to ProfileFragment,
+        // causes errors because ProfileFragment gets closed incorrectly by the test.
+
+        if (inEditProfileActivityWithChanges) {
+
+            View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
+
+            solo.clickOnView(cancelBtn); // click cancel button
+
+            // Asserts that the current activity is EditProfileActivity (i.e. cancel didn't redirect).
+            solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
+
+            // True if the text 'Discard Changes?' is present
+            assertTrue(solo.searchText("Discard Changes?"));
+
+            solo.clickOnText("DISCARD"); // click discard text
+
+            // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
+            solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        }
+
+        FirebaseIntegrity.deleteCurrentlyLoggedInUser();
     }
 
+    /**
+     * Check if the cancel button redirects to HomeActivity with assertCurrentActivity
+     * Check if the fragment after redirect to ProfileFragment with assertTrue
+     * Check if the selected bottom navigation item is correct with assertEquals
+     */
     @Test
-    public void start() throws Exception {
-        Activity activity = rule.getActivity();
+    public void checkCancelButton() {
+        View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
+
+        solo.clickOnView(cancelBtn); // click cancel button
+
+        solo.sleep(2000); // give it time to change activity
+
+        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        BottomNavigationView bottomNavigation = (BottomNavigationView)
+                solo.getView(R.id.bottomNavigationView);
+
+        // assert that we are in ProfileFragment i.e. that the user's first name and last name
+        // are shown, and that Suggested Books is shown, since the user has no books
+        assertTrue(solo.searchText("MockFirst"));
+        assertTrue(solo.searchText("MockLast"));
+        assertTrue(solo.searchText("Suggested Books"));
+
+        // assert that the profile bottom navigation item is currently selected
+        assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
+
+        inEditProfileActivityWithChanges = false;
     }
 
+    /**
+     * Check if the Change Photo dialog displays the correct options with assertTrue
+     */
     @Test
-    public void emptyFirstName(){
+    public void checkPhotoOptions(){
+
+        solo.clickOnText("CHANGE PHOTO"); // Click CHANGE PHOTO text
+
+        // True if the title 'Change Photo' is present
+        assertTrue(solo.searchText("Change Photo"));
+
+        /* True if the options Take Photo and Choose Photo show up on the screen;
+        wait at least 2 seconds and find minimum one match for both. */
+
+        assertTrue(solo.waitForText("Take Photo",
+                1, 2000));
+        assertTrue(solo.waitForText("Choose Photo",
+                1, 2000));
+
+        inEditProfileActivityWithChanges = false;
+    }
+
+    /**
+     * Check if the firstName field exists with assertNotNull.
+     * Check if the cleared string in the firstName field is "" with assertEquals.
+     * Check if saving a user with no firstName fails with assertCurrentActivity.
+     * Check if the user is alerted to the erroneous field with assertTrue.
+     */
+    @Test
+    public void checkInvalidFirstNameSave() {
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText firstNameField = (EditText) solo.getView(R.id.editProfileFirstNameField);
-        assertNotNull(firstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.editProfileFirstNameField);
+
+        assertNotNull(firstNameField);  // firstName field exists
         solo.clearEditText(firstNameField);
-        solo.clickOnView(saveBtn);
+        assertEquals("", Objects.requireNonNull(firstNameField.getText()).toString());
+
+        solo.clickOnView(saveBtn); // click save button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. save didn't redirect).
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
-        assertFalse(solo.searchText("Input required"));
+
+        // True if 'Input required' is present
+        assertTrue(solo.searchText("Input required"));
+
+        inEditProfileActivityWithChanges = true;
     }
 
+    /**
+     * Check if the lastName field exists with assertNotNull.
+     * Check if the cleared string in the lastName field is "" with assertEquals.
+     * Check if saving a user with no lastName fails with assertCurrentActivity.
+     * Check if the user is alerted to the erroneous field with assertTrue.
+     */
     @Test
-    public void emptyLastName(){
+    public void checkInvalidLastNameSave() {
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText lastNameField = (EditText) solo.getView(R.id.editProfileLastNameField);
-        assertNotNull(lastNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.editProfileLastNameField);
+
+        assertNotNull(lastNameField);  // lastName field exists
         solo.clearEditText(lastNameField);
-        solo.clickOnView(saveBtn);
+        assertEquals("", Objects.requireNonNull(lastNameField.getText()).toString());
+
+        solo.clickOnView(saveBtn); // click save button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. save didn't redirect).
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
-        assertFalse(solo.searchText("Input required"));
+
+        // True if 'Input required' is present
+        assertTrue(solo.searchText("Input required"));
+
+        inEditProfileActivityWithChanges = true;
     }
 
+    /**
+     * Check if the username field exists with assertNotNull.
+     * Check if the cleared string in the username field is "" with assertEquals.
+     * Check if saving a user with no username fails with assertCurrentActivity.
+     * Check if the user is alerted to the erroneous field with assertTrue.
+     */
     @Test
-    public void emptyuserName(){
+    public void checkInvalidUsernameSave() {
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText userNameField = (EditText) solo.getView(R.id.editProfileUsernameField);
-        assertNotNull(userNameField);
-        solo.clearEditText(userNameField);
-        solo.clickOnView(saveBtn);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.editProfileUsernameField);
+
+        assertNotNull(usernameField);  // username field exists
+        solo.clearEditText(usernameField);
+        assertEquals("", Objects.requireNonNull(usernameField.getText()).toString());
+
+        solo.clickOnView(saveBtn); // click save button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. save didn't redirect).
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
-        assertFalse(solo.searchText("Input required"));
+
+        // True if 'Input required' is present
+        assertTrue(solo.searchText("Input required"));
+
+        inEditProfileActivityWithChanges = true;
     }
 
+    /**
+     * Check if erroneous field alert is invisible on valid entry with assertFalse.
+     * Check if saving a valid profile edit succeeds with assertCurrentActivity.
+     * Check if the saved edit shows up in ProfileFragment with assertTrue.
+     */
     @Test
-    public void emptyEmail(){
+    public void checkValidSave() {
         View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText emailField = (EditText) solo.getView(R.id.editProfileEmailField);
-        assertNotNull(emailField);
-        solo.clearEditText(emailField);
-        solo.clickOnView(saveBtn);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.editProfileUsernameField);
+
+        assertNotNull(usernameField);  // username field exists
+        solo.clearEditText(usernameField);
+        solo.enterText(usernameField, "newMockUsername");  // add a username
+        assertEquals("newMockUsername",
+                Objects.requireNonNull(usernameField.getText()).toString());
+
+        solo.clickOnView(saveBtn); // click save button
+
+        // False if 'Input required' is present
+        assertFalse(solo.searchText("Input required"));
+
+        // Asserts that the current activity is HomeActivity (i.e. save redirected).
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        // Asserts that Profile Fragment is updated with the new username
+        assertTrue(solo.searchText("newMockUsername"));
+
+        inEditProfileActivityWithChanges = false;
+    }
+
+    /**
+     * Check if user is kept in EditProfileActivity when they try to exit
+     * but have unsaved edits with assertCurrentActivity.
+     * Check if discard dialog appears with assertTrue.
+     */
+    @Test
+    public void checkDiscardDialog(){
+        View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
+
+        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.editProfileFirstNameField);
+
+        assertNotNull(firstNameField);  // firstName field exists
+        solo.enterText(firstNameField, "MockFirst");  // add a firstName
+
+        solo.clickOnView(cancelBtn); // click cancel button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. back didn't redirect).
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
-        assertFalse(solo.searchText("Input required"));
+
+        // True if the text 'Discard Changes?' is present
+        assertTrue(solo.searchText("Discard Changes?"));
+
+        // True if the discard changes body text is present
+        assertTrue(solo.searchText("If you go back now, you will lose your changes."));
+
+        // True if the text 'KEEP EDITING' is present
+        assertTrue(solo.searchText("KEEP EDITING"));
+
+        // True if the text 'DISCARD' is present
+        assertTrue(solo.searchText("DISCARD"));
+
+        inEditProfileActivityWithChanges = false;
     }
 
-
+    /**
+     * Check if user is sent to LogInActivity
+     * when they opt to discard their changes with AssertCurrentActivity.
+     */
     @Test
-    public void cameraOptions() {
-        solo.clickOnText("Change Profile Photo");
-        assertTrue(solo.searchText("Change Profile Photo"));
-        assertTrue(solo.waitForText("Take Photo", 1, 2000));
-        assertTrue(solo.waitForText("Choose Photo", 1, 2000));
+    public void checkDiscardDialogDiscard(){
+        View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
+
+        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.editProfileFirstNameField);
+
+        assertNotNull(firstNameField);  // firstName field exists
+        solo.enterText(firstNameField, "MockFirst");  // add a firstName
+
+        solo.clickOnView(cancelBtn); // click cancel button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. back didn't redirect).
+        solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
+
+        // True if the text 'Discard Changes?' is present
+        assertTrue(solo.searchText("Discard Changes?"));
+
+        solo.clickOnText("DISCARD"); // click discard text
+
+        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        inEditProfileActivityWithChanges = false;
+
     }
 
+    /**
+     * Check if user is kept in EditProfileActivity
+     * when they opt to keep editing with AssertCurrentActivity.
+     */
     @Test
-    public void validInputs(){
-        View saveBtn = solo.getView(R.id.editProfileSaveBtn);
-        EditText firstNameField = (EditText) solo.getView(R.id.editProfileFirstNameField);
-        EditText lastNameField = (EditText) solo.getView(R.id.editProfileLastNameField);
-        EditText userNameField = (EditText) solo.getView(R.id.editProfileUsernameField);
-        EditText emailField = (EditText) solo.getView(R.id.editProfileEmailField);
-        assertNotNull(emailField);
-        assertNotNull(userNameField);
-        assertNotNull(lastNameField);
-        assertNotNull(firstNameField);
-        solo.clearEditText(userNameField);
-        solo.clearEditText(lastNameField);
-        solo.clearEditText(firstNameField);
-        solo.clearEditText(emailField);
-        solo.enterText(firstNameField, "mockFirstName");
-        solo.enterText(lastNameField, "mockLastName");
-        solo.enterText(emailField, "mock@mock.com");
-        solo.enterText(userNameField, "mockUsername");
-        solo.clickOnView(saveBtn);
+    public void checkDiscardDialogKeepEditing(){
+        View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
+
+        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.editProfileFirstNameField);
+
+        assertNotNull(firstNameField);  // firstName field exists
+        solo.enterText(firstNameField, "MockFirst");  // add a firstName
+
+        solo.clickOnView(cancelBtn); // click cancel button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. back didn't redirect).
+        solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
+
+        // True if the text 'Discard Changes?' is present
+        assertTrue(solo.searchText("Discard Changes?"));
+
+        solo.clickOnText("KEEP EDITING"); // click keep editing text
+
+        // Asserts that the current activity is EditProfileActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
+
+        inEditProfileActivityWithChanges = false;
+
     }
 }

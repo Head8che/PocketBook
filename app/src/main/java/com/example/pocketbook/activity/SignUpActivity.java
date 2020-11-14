@@ -62,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
     private int LAUNCH_GALLERY_CODE = 1922;
 
     String currentPhotoPath;
-    Bitmap currentPhoto;
+    Bitmap galleryPhoto;
     Boolean showRemovePhoto;
 
     User currentUser;
@@ -99,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
         validUserEmail = false;
         validUserPassword = false;
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.signUpToolbar);
+        // Toolbar toolbar = (Toolbar) findViewById(R.id.signUpToolbar);
         ImageView backButton = (ImageView) findViewById(R.id.signUpBackBtn);
         signUpButton = (TextView) findViewById(R.id.signUpSignUpBtn);
         TextView changePhotoButton = (TextView) findViewById(R.id.signUpChangePhotoBtn);
@@ -427,9 +427,9 @@ public class SignUpActivity extends AppCompatActivity {
                                 Log.e("CREATE_USER", "createUserWithEmail:success");
 
                                 // set the user's photo appropriately
-                                if (currentPhoto != null) {
+                                if (galleryPhoto != null) {
                                     FirebaseIntegrity.setUserProfilePictureBitmap(currentUser,
-                                            currentPhoto);
+                                            galleryPhoto);
                                 } else {
                                     docData.put("photo", photo);
                                 }
@@ -546,7 +546,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         // create the cancel dialog
         AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
-        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(alertDialog.getWindow())
+                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
 
         // stay in this activity if the user opts to keep editing
@@ -574,31 +575,35 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
-     * Image Option dialog that allows the user
+     * Image Option dialog that allows the user to take, choose, or remove a photo
      */
     private void showImageSelectorDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.alert_dialog_book_photo, null);
 
+        // access the photo option text fields
         TextView takePhotoOption = view.findViewById(R.id.takePhotoField);
         TextView choosePhotoOption = view.findViewById(R.id.choosePhotoField);
         TextView showRemovePhotoOption = view.findViewById(R.id.removePhotoField);
 
-        if (showRemovePhoto) {
+        if (showRemovePhoto) {  // only show the Remove Photo option if the user has a photo
             showRemovePhotoOption.setVisibility(View.VISIBLE);
         } else {
             showRemovePhotoOption.setVisibility(View.GONE);
         }
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
-        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(alertDialog.getWindow())
+                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
 
+        // if the user opts to take a photo, open the camera
         takePhotoOption.setOnClickListener(v -> {
             alertDialog.dismiss();
             openCamera();
         });
 
+        // if the user opts to choose a photo, open their gallery
         choosePhotoOption.setOnClickListener(v -> {
             alertDialog.dismiss();
             Intent intent = new Intent();
@@ -608,13 +613,14 @@ public class SignUpActivity extends AppCompatActivity {
                     LAUNCH_GALLERY_CODE);
         });
 
+        // if the user opts to remove their photo, replace their image with the default image
         showRemovePhotoOption.setOnClickListener(v -> {
             alertDialog.dismiss();
             GlideApp.with(Objects.requireNonNull(getApplicationContext()))
                     .load(defaultPhoto)
                     .into(layoutProfilePicture);
             currentPhotoPath = "REMOVE";
-            showRemovePhoto = false;
+            showRemovePhoto = false;  // don't show Remove Photo option since user has no photo
         });
     }
 
@@ -623,26 +629,26 @@ public class SignUpActivity extends AppCompatActivity {
      */
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
+        // ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
+            // create the file where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-                // display error state to the user
+                // catch errors that occur while creating the file
                 Log.e("SIGN_UP_ACTIVITY", ex.toString());
             }
-            // Continue only if the File was successfully created
+            // continue only if the file was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
+                // open the camera
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, LAUNCH_CAMERA_CODE);
             }
-        } else {
+        } else {  // if there's no camera activity to handle the intent
             Log.e("SIGN_UP_ACTIVITY", "Failed to resolve activity!");
         }
 
@@ -650,13 +656,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     /**
      * Create an image file for the images to be stored
-     * @return
-     * @throws IOException
+     * @return the created image
+     * @throws IOException exception if creating the image file fails
      */
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.CANADA).format(new Date());
+        String imageFileName = "JPG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -670,41 +677,45 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
-     * Allows the users to set the bitmap image from the gallery to the image field.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * Sets the user's photo to the image from either the camera or the gallery.
+     * @param requestCode code that the image activity was launched with
+     * @param resultCode code that the image activity returns
+     * @param data data from the intent
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // if the user launched the camera
         if (requestCode == LAUNCH_CAMERA_CODE) {
-            if(resultCode == Activity.RESULT_OK) {
+            if(resultCode == Activity.RESULT_OK) {  // if a photo was successfully chosen
+                // set the profile picture ImageView to the chosen image
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 ImageView myImage = (ImageView) findViewById(R.id.signUpProfilePictureField);
                 myImage.setImageBitmap(myBitmap);
-                showRemovePhoto = true;
-                currentPhoto = null;
-            } else if (resultCode == Activity.RESULT_CANCELED) {
+                showRemovePhoto = true;  // show Remove Photo option since user now has a photo
+                galleryPhoto = null;  // nullify the gallery photo variable
+            } else if (resultCode == Activity.RESULT_CANCELED) {  // if the activity was cancelled
                 Log.e("SIGN_UP_ACTIVITY", "Camera failed!");
             }
-        } else if (requestCode == LAUNCH_GALLERY_CODE) {
-            if(resultCode == Activity.RESULT_OK) {
-                try {
+        } else if (requestCode == LAUNCH_GALLERY_CODE) {  // if the user launched the gallery
+            if(resultCode == Activity.RESULT_OK) {  // if a photo was successfully selected
+                try {  // try to get a Bitmap of the selected image
                     InputStream inputStream = getBaseContext()
-                            .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
-                    currentPhoto = BitmapFactory.decodeStream(inputStream);
+                            .getContentResolver()
+                            .openInputStream(Objects.requireNonNull(data.getData()));
+                    // store the selected image in currentPhoto
+                    galleryPhoto = BitmapFactory.decodeStream(inputStream);
                     currentPhotoPath = "BITMAP";
                     ImageView myImage = (ImageView) findViewById(R.id.signUpProfilePictureField);
-                    myImage.setImageBitmap(currentPhoto);
-                    showRemovePhoto = true;
+                    myImage.setImageBitmap(galleryPhoto);
+                    showRemovePhoto = true;  // show Remove Photo option since user now has a photo
 
-                } catch (FileNotFoundException e) {
+                } catch (FileNotFoundException e) {  // handle when the selected image is not found
                     e.printStackTrace();
                 }
 
-            } else if (resultCode == Activity.RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {  // if the activity was cancelled
                 Log.e("SIGN_UP_ACTIVITY", "Failed Gallery!");
             }
         }

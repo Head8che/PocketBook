@@ -697,7 +697,7 @@ public class FirebaseIntegrity {
                             currentUser.delete()
                                     .addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
-                                            Log.d("DELETE_USER", "User account deleted.");
+                                            Log.e("DELETE_USER", "User account deleted.");
                                         }
                                     });
                         }

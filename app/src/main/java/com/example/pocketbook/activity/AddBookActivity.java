@@ -25,15 +25,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.util.Parser;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,9 +42,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Allows the user to add a new book to be placed/available on PocketBook
@@ -65,7 +63,7 @@ public class AddBookActivity extends AppCompatActivity {
     String currentPhotoPath;
     Bitmap currentPhoto;
     Boolean removePhoto;
-    StorageReference currentBookCover;
+    StorageReference defaultBookCover;
 
     TextInputEditText layoutBookTitle;
     TextInputEditText layoutBookAuthor;
@@ -87,7 +85,7 @@ public class AddBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("HA_USER");
-        currentBookCover = FirebaseStorage.getInstance().getReference()
+        defaultBookCover = FirebaseStorage.getInstance().getReference()
                 .child("default_images").child("no_book_cover_light.png");
 
         removePhoto = false;
@@ -118,7 +116,7 @@ public class AddBookActivity extends AppCompatActivity {
         layoutBookTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equals("")) {
+                if (!(Parser.isValidBookTitle(s.toString()))) {
                     layoutBookTitle.setError("Input required");
                     layoutBookTitleContainer.setErrorEnabled(true);
                 } else {
@@ -136,7 +134,7 @@ public class AddBookActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (s.toString().equals("")) {
+                if (!(Parser.isValidBookAuthor(s.toString()))) {
                     layoutBookAuthor.setError("Input required");
                     layoutBookAuthorContainer.setErrorEnabled(true);
                 } else {
@@ -154,8 +152,8 @@ public class AddBookActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (s.toString().equals("")) {
-                    layoutBookISBN.setError("Input required");
+                if (!(Parser.isValidBookIsbn(s.toString()))) {
+                    layoutBookISBN.setError("Invalid ISBN");
                     layoutBookISBNContainer.setErrorEnabled(true);
                 } else {
                     validISBN = true;
@@ -183,8 +181,10 @@ public class AddBookActivity extends AppCompatActivity {
         });
 
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
-                .load(currentBookCover)
+                .load(defaultBookCover)
                 .into(layoutBookCover);
+
+        // TODO: Handle remove photo (like in EditBookActivity)
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,23 +198,34 @@ public class AddBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validTitle && validAuthor && validISBN) {
                     if (!noChanges()) {
-                        String title = layoutBookTitle.getText().toString();
-                        String author = layoutBookAuthor.getText().toString();
-                        String isbn = layoutBookISBN.getText().toString();
-                        String condition = layoutBookCondition.getText().toString();
-                        String comment = layoutBookComment.getText().toString();
+                        String title = Objects.requireNonNull(layoutBookTitle.getText())
+                                .toString();
+                        String author = Objects.requireNonNull(layoutBookAuthor.getText())
+                                .toString();
+                        String isbn = Objects.requireNonNull(layoutBookISBN.getText())
+                                .toString();
+                        String condition = Objects.requireNonNull(layoutBookCondition.getText())
+                                .toString();
+                        String comment = Objects.requireNonNull(layoutBookComment.getText())
+                                .toString();
+
+                        String bookId = Parser.generateValidId();
 
                         // if all booleans are good, pushNewBook
-                        Book book = new Book(null, title, author, isbn, currentUser.getEmail(),
-                                "AVAILABLE", comment, condition, null);
-                        book.pushNewBookToFirebase();
-                        SystemClock.sleep(300);
+                        Book book = Parser.parseBook(bookId, title, author, isbn,
+                                currentUser.getEmail(), "AVAILABLE", comment,
+                                condition, "", new ArrayList<>());
+
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
-                                book.setBookCoverBitmap(currentPhoto);
+                                FirebaseIntegrity.pushNewBookToFirebaseWithBitmap(book,
+                                        currentPhoto);
                             } else {
-                                book.setBookCover(currentPhotoPath);
+                                FirebaseIntegrity.pushNewBookToFirebaseWithURL(book,
+                                        currentPhotoPath);
                             }
+                        } else {
+                            FirebaseIntegrity.pushNewBookToFirebaseWithURL(book, null);
                         }
 
                         Intent resultIntent = new Intent();
@@ -419,7 +430,7 @@ public class AddBookActivity extends AppCompatActivity {
 //                book.setPhoto("");
                 alertDialog.dismiss();
                 GlideApp.with(Objects.requireNonNull(getApplicationContext()))
-                        .load(currentBookCover)
+                        .load(defaultBookCover)
                         .into(layoutBookCover);
 //                book.setPhoto(removedPhoto);
                 currentPhotoPath = "REMOVE";

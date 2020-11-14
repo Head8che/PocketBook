@@ -33,6 +33,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+// TODO: Replace with EditProfileActivityTest / delete after EditProfileActivityTest
+// TODO: login as specific user (unless User object is enough;
+//  but it might not be enough for Firebase update)
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class EditProfileFragmentUITest {

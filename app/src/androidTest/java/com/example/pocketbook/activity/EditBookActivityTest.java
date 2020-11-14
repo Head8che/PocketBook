@@ -98,6 +98,12 @@ public class EditBookActivityTest {
                 "author", "M0cK^U+H0R");
     }
 
+    // TODO: checkCancel
+    // TODO: checkOptions
+    // TODO: check invalid saves
+    // TODO: checkDiscardDialog
+    // TODO: checkDiscardDialog options
+
 
     /**
      * Check if erroneous field alert is invisible on valid entry with assertFalse.

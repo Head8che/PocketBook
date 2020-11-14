@@ -1,57 +1,14 @@
 package com.example.pocketbook.util;
 
-import com.example.pocketbook.R;
-import com.example.pocketbook.activity.AddBookActivity;
-import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApiNotAvailableException;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-
 import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class ParserTest {
-
-    @Before
-    public void setUp(){
-        /* One option for dealing with testing & Firebase is to have a guard in the Model classes
-        * primarily that toggles a variable's value. All code that engages with Firebase could then
-        * be wrapped in an if-statement as such: if guard is on, do not call Firebase. In this case,
-        * we would not need to mock Firebase because we would avoid engaging with it all-together. */
-
-        /* The second option is to mock Firebase. This would involve us passing a FirebaseFirestore
-        * (and perhaps FirebaseAuth for Login/SignUp) object into each place that interacts with
-        * Firebase. We would then need to pass a mock object into our classes when we test them. */
-        DocumentReference documentReference;
-        FirebaseFirestore firebaseFirestore;
-
-        FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
-        CollectionReference catalogueReference = Mockito.mock(CollectionReference.class);
-        DocumentReference bookReference = Mockito.mock(DocumentReference.class);
-        CollectionReference requestsReference = Mockito.mock(CollectionReference.class);
-        Task taskReference = Mockito.mock(Task.class);
-
-        Mockito.when(mockFirestore.collection("catalogue")).thenReturn(catalogueReference);
-        Mockito.when(mockFirestore.collection("catalogue").document("bookID")).thenReturn(bookReference);
-        Mockito.when(mockFirestore.collection("catalogue").document("bookID")
-                .collection("requests")).thenReturn(requestsReference);
-        Mockito.when(mockFirestore.collection("catalogue").document("bookID")
-                .collection("requests").get()).thenReturn(taskReference);
-
-//        Class instance = new Class(mockFirestore, ...);
-    }
 
     @Test
     public void testIsValidNewBookId() {
@@ -303,39 +260,6 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseNewBook() {
-        String id = "";  // valid new book id
-        String title = "mockBookTitle";
-        String author = "mockBookAuthor";
-        String isbn = "9781861972712";  // valid isbn
-        String owner = "mock@mock.com";  // locally valid owner, not in Firebase
-        String status = "AVAILABLE";
-        String comment = "This is a mock book.";
-        String condition = "GOOD";
-        String photo = "";
-
-        // assert that Parser returns a Book i.e. assert that input was valid
-        assertThat(Parser.parseNewBook(id, title, author, isbn, owner,
-                status, comment, condition, photo), instanceOf(Book.class));
-
-        isbn = "123456789X";  // valid isbn10 condition
-        // assert that Parser returns a Book i.e. assert that input was valid
-        assertThat(Parser.parseNewBook(id, title, author, isbn, owner,
-                status, comment, condition, photo), instanceOf(Book.class));
-
-        // assert that Parser fails with bad data
-        assertNull(Parser.parseNewBook("FRo3Rn4iaIHD04qOej", title, author, isbn, owner,
-                status, comment, condition, photo));
-
-        // assert that Parser fails with bad data
-        assertNull(Parser.parseNewBook(id, title, author, isbn, owner,
-                status, comment, condition, "jpg"));
-
-        // Parser.ParseBook(...) is based on the other Parser Book methods,
-        // which have been tested, so further argument testing would be redundant.
-    }
-
-    @Test
     public void testParseBook() {
         String id = "bookID";  // valid book id
         String title = "mockBookTitle";
@@ -347,28 +271,25 @@ public class ParserTest {
         String condition = "GOOD";
         String photo = "";
 
-        /* tests are commented out because they fail
-        since Firebase is not avoided or mocked in Book.java */
-//
-//        // assert that Parser returns a Book i.e. assert that input was valid
-//        assertThat(Parser.parseBook(id, title, author, isbn, owner,
-//                status, comment, condition, photo), instanceOf(Book.class));
-//
-//        isbn = "123456789X";  // valid isbn10 condition
-//        // assert that Parser returns a Book i.e. assert that input was valid
-//        assertThat(Parser.parseBook(id, title, author, isbn, owner,
-//                status, comment, condition, photo), instanceOf(Book.class));
-//
-//        // assert that Parser returns a Book i.e. assert that input was valid
-//        assertThat(Parser.parseBook(id, title, author, isbn, owner,
-//                status, comment, condition, photo), instanceOf(Book.class));
-//
-//        // assert that Parser fails with bad data
-//        assertNull(Parser.parseBook(id, title, author, isbn, owner,
-//                status, comment, condition, "jpg"));
-//
-//        // Parser.ParseBook(...) is based on the other Parser Book methods,
-//        // which have been tested, so further argument testing would be redundant.
+        // assert that Parser returns a Book i.e. assert that input was valid
+        assertThat(Parser.parseBook(id, title, author, isbn, owner,
+                status, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
+
+        isbn = "123456789X";  // valid isbn10 condition
+        // assert that Parser returns a Book i.e. assert that input was valid
+        assertThat(Parser.parseBook(id, title, author, isbn, owner,
+                status, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
+
+        // assert that Parser returns a Book i.e. assert that input was valid
+        assertThat(Parser.parseBook(id, title, author, isbn, owner,
+                status, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
+
+        // assert that Parser fails with bad data
+        assertNull(Parser.parseBook(id, title, author, isbn, owner,
+                status, comment, condition, "jpg", new ArrayList<>()));
+
+        // Parser.ParseBook(...) is based on the other Parser Book methods,
+        // which have been tested, so further argument testing would be redundant.
     }
 
     @Test

@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;

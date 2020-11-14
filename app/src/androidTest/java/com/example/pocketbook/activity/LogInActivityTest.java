@@ -17,6 +17,10 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNotNull;
 
+// TODO; actually log in and go to HomeFragment
+// TODO: Handle creating MockUser with Auth and everything in FirebaseIntegrity
+// TODO: Rename LogIn to Login
+
 public class LogInActivityTest {
 
     @Rule

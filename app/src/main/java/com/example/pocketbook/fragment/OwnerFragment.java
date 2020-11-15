@@ -147,7 +147,7 @@ public class OwnerFragment extends Fragment {
             container.removeAllViews();
         }
         View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
-        mBooksRecycler = v.findViewById(R.id.recycler_books);
+        mBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()

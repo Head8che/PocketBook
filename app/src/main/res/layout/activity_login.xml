@@ -100,31 +100,33 @@
 
     <Button
         android:id="@+id/RegisterText"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
         android:background="@null"
         android:text="New to Pocketbook?"
         android:textColor="@color/colorUnselected"
         android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/RegisterBtn"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LoginBtn" />
 
     <Button
         android:id="@+id/RegisterBtn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="31.7dp"
+        android:layout_marginStart="0dp"
         android:layout_marginEnd="90dp"
         android:background="@null"
+        android:letterSpacing="0.02"
         android:text="Sign Up"
         android:textColor="@color/colorAccent"
-        android:textStyle="bold"
         android:textSize="16sp"
-        android:letterSpacing="0.02"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/RegisterText"
         app:layout_constraintTop_toBottomOf="@+id/LoginBtn" />
 
     <Button

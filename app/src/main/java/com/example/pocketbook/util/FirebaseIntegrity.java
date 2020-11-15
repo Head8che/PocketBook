@@ -573,7 +573,7 @@ public class FirebaseIntegrity {
             docData.put("requestee", requestee);
             docData.put("requester", requester);
             docData.put("requestDate", requestDate);
-            docData.put("requestedBookObject", requestedBookObject.getId());
+            docData.put("requestedBook", requestedBookObject.getId());
 
             FirebaseFirestore.getInstance().collection("catalogue")
                     .document(requestedBookObject.getId())

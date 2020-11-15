@@ -21,16 +21,22 @@ import static org.junit.Assert.assertNotNull;
 // TODO: Handle creating MockUser with Auth and everything in FirebaseIntegrity
 // TODO: Rename LogIn to Login
 
-public class LogInActivityTest {
+public class LoginActivityTest {
 
     @Rule
-    public ActivityTestRule<LogInActivity> Activity = new ActivityTestRule<LogInActivity>(LogInActivity.class);
+    public ActivityTestRule<LoginActivity> Activity = new ActivityTestRule<LoginActivity>(LoginActivity.class);
 
-    private LogInActivity currentActivity = null;
+    private LoginActivity currentActivity = null;
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         currentActivity = Activity.getActivity();
     }
+
+    // TODO: Check Sign Up button sends to SignUpActivity
+    // TODO: Check invalid email form (should not click login)
+    // TODO: Check invalid password form (should not click login)
+    // TODO: Check login with invalid account (timestamp for randomness)
+    // TODO: Create valid account, logout, check login with valid account
 
 
     @Test

@@ -1,8 +1,5 @@
 package com.example.pocketbook.activity;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -10,7 +7,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.robotium.solo.Solo;
@@ -33,7 +29,7 @@ public class AddBookActivityTest {
     private long currentTime = System.currentTimeMillis();
 
     @Rule
-    public ActivityTestRule<LogInActivity> rule = new ActivityTestRule<>(LogInActivity.class);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class);
 
     /**
      * Runs before all tests and signs out any logged in user.
@@ -50,8 +46,8 @@ public class AddBookActivityTest {
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
-        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
-        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnView(solo.getView(R.id.RegisterBtn));  // click on register button
 
         // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
@@ -111,6 +107,8 @@ public class AddBookActivityTest {
     @After
     public void removeMockFromFirebase() {
         FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
+                "author", "M0cK^U+H0R");
     }
 
     /**

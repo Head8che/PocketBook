@@ -27,7 +27,7 @@ import java.util.Objects;
 /**
  * A login screen that allows users to login using (email/password)
  */
-public class LogInActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button signUp, login, forgotPass;
     private EditText userEmail, userPassword;
@@ -102,7 +102,7 @@ public class LogInActivity extends AppCompatActivity {
                                         if (document.exists()) {
                                             current_user = FirebaseIntegrity.getUserFromFirestore(document);
                                             Log.e(TAG, "DocumentSnapshot data: " + document.getData());
-                                            Toast.makeText(LogInActivity.this, String.format(Locale.CANADA,
+                                            Toast.makeText(LoginActivity.this, String.format(Locale.CANADA,
                                                     "Welcome back, %s.",current_user.getFirstName()),
                                                     Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -121,7 +121,7 @@ public class LogInActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LogInActivity.this, "Failed to Login.",
+                            Toast.makeText(LoginActivity.this, "Failed to Login.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

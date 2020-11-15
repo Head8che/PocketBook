@@ -30,7 +30,7 @@ public class SignUpActivityTest {
     private long currentTime = System.currentTimeMillis();
 
     @Rule
-    public ActivityTestRule<LogInActivity> rule = new ActivityTestRule<>(LogInActivity.class);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class);
 
     /**
      * Runs before all tests and signs out any logged in user.
@@ -47,8 +47,8 @@ public class SignUpActivityTest {
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
 
-        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
-        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnView(solo.getView(R.id.RegisterBtn));  // click on register button
 
         // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
@@ -68,7 +68,7 @@ public class SignUpActivityTest {
 
 
     /**
-     * Check if the back button redirects to LogInActivity with assertCurrentActivity
+     * Check if the back button redirects to LoginActivity with assertCurrentActivity
      */
     @Test
     public void checkBackButton(){
@@ -80,8 +80,8 @@ public class SignUpActivityTest {
 
         solo.sleep(2000); // give it time to change activity
 
-        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
-        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
 
     /**
@@ -379,7 +379,7 @@ public class SignUpActivityTest {
     }
 
     /**
-     * Check if user is sent to LogInActivity
+     * Check if user is sent to LoginActivity
      * when they opt to discard their changes with AssertCurrentActivity.
      */
     @Test
@@ -403,8 +403,8 @@ public class SignUpActivityTest {
 
         solo.clickOnText("DISCARD"); // click discard text
 
-        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
-        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
     }
 

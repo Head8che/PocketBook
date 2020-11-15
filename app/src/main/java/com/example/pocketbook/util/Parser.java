@@ -22,6 +22,8 @@ import java.util.Random;
 
 // TODO: extract common methods to single method (like book owner and user email methods)
 
+// TODO: Parser request book breaks; handle null book objects / Parser-invalid book objects
+
 /**
  * Parser class ensures the validity of the
  * objects and text within the app

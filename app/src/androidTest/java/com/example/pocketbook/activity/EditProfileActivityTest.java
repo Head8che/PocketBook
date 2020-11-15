@@ -30,7 +30,7 @@ public class EditProfileActivityTest {
     private long currentTime = System.currentTimeMillis();
 
     @Rule
-    public ActivityTestRule<LogInActivity> rule = new ActivityTestRule<>(LogInActivity.class);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class);
 
     /**
      * Runs before all tests and signs out any logged in user.
@@ -44,8 +44,8 @@ public class EditProfileActivityTest {
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
-        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
-        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnView(solo.getView(R.id.RegisterBtn));  // click on register button
 
         // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
@@ -91,8 +91,8 @@ public class EditProfileActivityTest {
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
-        solo.clickOnView(solo.getView(R.id.bottom_nav_profile));
-        solo.clickOnView(solo.getView(R.id.edit_profile_button));
+        solo.clickOnView(solo.getView(R.id.bottom_nav_profile));  // click on profile button
+        solo.clickOnView(solo.getView(R.id.edit_profile_button));  // click on Edit Profile
 
         // Asserts that the current activity is EditProfileActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
@@ -332,7 +332,7 @@ public class EditProfileActivityTest {
     }
 
     /**
-     * Check if user is sent to LogInActivity
+     * Check if user is sent to LoginActivity
      * when they opt to discard their changes with AssertCurrentActivity.
      */
     @Test

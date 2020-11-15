@@ -613,8 +613,8 @@ public class Parser {
      *      valid User object if arguments are valid
      *      null otherwise
      */
-    public static User parseUser(String firstName, String lastName, String email,
-                                 String username, String password, String photo) {
+    public static User parseUser(String firstName, String lastName, String email, String username,
+                                 String password, String phoneNumber, String photo) {
         // return null if non-optional fields are null
         if ((firstName == null) || (lastName == null) || (email == null)
                 || (username == null) || (password == null)) {
@@ -626,15 +626,17 @@ public class Parser {
         email = email.trim().toLowerCase();
         username = username.trim();
         password = password.trim();
+        phoneNumber = (phoneNumber == null) ? "" : phoneNumber.trim();  // replace null
         photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
 
         // if all fields are valid
         if (isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)) {
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo)) {
 
             // return a new User object if all fields are valid
-            return new User(firstName, lastName, email, username, password, photo);
+            return new User(firstName, lastName, email, username, password, phoneNumber, photo);
         }
 
         // return null if not all fields are valid
@@ -655,12 +657,14 @@ public class Parser {
         String email = (String) userMapObject.get("email");
         String username = (String) userMapObject.get("username");
         String password = (String) userMapObject.get("password");
+        String phoneNumber = (String) userMapObject.get("phoneNumber");
         String photo = (String) userMapObject.get("photo");
 
         // if all fields (other than isbn) are valid
         if (isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)) {
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo)) {
 
             // return whether or not all fields are valid
             return true;
@@ -673,6 +677,7 @@ public class Parser {
                 + " " + "email:" + isValidUserEmail(email)
                 + " " + "username:" + isValidUsername(username)
                 + " " + "password:" + isValidPassword(password)
+                + " " + "phoneNumber:" + isValidPhoneNumber(phoneNumber)
                 + " " + "photo:" + isValidUserPhoto(photo)
         );
 
@@ -694,12 +699,14 @@ public class Parser {
         String email = userObject.getEmail();
         String username = userObject.getUsername();
         String password = userObject.getPassword();
+        String phoneNumber = userObject.getPhoneNumber();
         String photo = userObject.getPhoto();
 
         // if all fields (other than isbn) are valid
         if (isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)) {
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo)) {
 
             // return whether or not all fields are valid
             return true;
@@ -712,6 +719,7 @@ public class Parser {
                 + " " + "email:" + isValidUserEmail(email)
                 + " " + "username:" + isValidUsername(username)
                 + " " + "password:" + isValidPassword(password)
+                + " " + "phoneNumber:" + isValidPhoneNumber(phoneNumber)
                 + " " + "photo:" + isValidUserPhoto(photo)
         );
 
@@ -720,7 +728,8 @@ public class Parser {
     }
 
     public static boolean isValidUserData(String firstName, String lastName, String email,
-                                          String username, String password, String photo) {
+                                          String username, String password,
+                                          String phoneNumber, String photo) {
 
         // return false if non-optional fields are null
         if ((firstName == null) || (lastName == null) || (email == null)
@@ -731,7 +740,8 @@ public class Parser {
         // return true if all fields are valid
         return isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo);
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo);
     }
 
     /**
@@ -787,6 +797,18 @@ public class Parser {
      */
     public static boolean isValidPassword(String password) {
         return ((password != null) && (password.trim().length() >= 6));
+    }
+
+    /**
+     * This checks if a user phoneNumber is valid
+     * @param phoneNumber user phoneNumber
+     * @return
+     *      true if phoneNumber a non-null number with a length of [5, 15]
+     *      false otherwise
+     */
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        return (((phoneNumber != null) && ((phoneNumber.equals("")) || (!isNotDigit(phoneNumber))
+                && (phoneNumber.trim().length() > 4) && (phoneNumber.trim().length() < 16))));
     }
 
     /**

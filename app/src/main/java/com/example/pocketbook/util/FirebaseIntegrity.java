@@ -428,7 +428,11 @@ public class FirebaseIntegrity {
             setUserDataFirebase(user, "password", password);
         }
     }
-    public static void setUserPhotoFirebase(User user, String photo) {
+    public static void setPhoneNumberFirebase(User user, String phoneNumber) {
+        if (Parser.isValidPhoneNumber(phoneNumber)) {
+            setUserDataFirebase(user, "phoneNumber", phoneNumber);
+        }
+    }public static void setUserPhotoFirebase(User user, String photo) {
         if (Parser.isValidUserPhoto(photo)) {
             setUserDataFirebase(user, "photo", photo);
         }
@@ -463,6 +467,7 @@ public class FirebaseIntegrity {
             String email = newUser.getEmail();
             String username = newUser.getUsername();
             String password = newUser.getPassword();
+            String phoneNumber = newUser.getPhoneNumber();
             String photo = newUser.getPhoto();
 
             HashMap<String, Object> docData = new HashMap<>();
@@ -471,6 +476,7 @@ public class FirebaseIntegrity {
             docData.put("email", email);
             docData.put("username", username);
             docData.put("password", password);
+            docData.put("phoneNumber", phoneNumber);
             docData.put("photo", photo);
 
             FirebaseIntegrity.setDocumentFromObject("users", email, docData);
@@ -487,6 +493,7 @@ public class FirebaseIntegrity {
             String email = newUser.getEmail();
             String username = newUser.getUsername();
             String password = newUser.getPassword();
+            String phoneNumber = newUser.getPhoneNumber();
             String photo = newUser.getPhoto();
 
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -503,6 +510,7 @@ public class FirebaseIntegrity {
                                 docData.put("email", email);
                                 docData.put("username", username);
                                 docData.put("password", password);
+                                docData.put("phoneNumber", phoneNumber);
                                 docData.put("photo", photo);
 
                                 if ((localURL != null) && (!localURL.equals(""))) {
@@ -532,6 +540,7 @@ public class FirebaseIntegrity {
             String email = newUser.getEmail();
             String username = newUser.getUsername();
             String password = newUser.getPassword();
+            String phoneNumber = newUser.getPhoneNumber();
             String photo = newUser.getPhoto();
 
             HashMap<String, Object> docData = new HashMap<>();
@@ -541,6 +550,7 @@ public class FirebaseIntegrity {
             docData.put("username", username);
             docData.put("password", password);
             docData.put("photo", photo);
+            docData.put("phoneNumber", phoneNumber);
 
             FirebaseIntegrity.setDocumentFromObject("users", email, docData);
 
@@ -720,11 +730,12 @@ public class FirebaseIntegrity {
         String photo = document.getString("photo");
         ArrayList<String> requesters = (ArrayList<String>) document.get("requesters");
 
-        Log.e("SET_DOC_FIRE_FROM_OBJECT", Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo, requesters) + " " + id);
+//        Log.e("GET_DOC_FIRE_FROM_OBJECT", Parser.parseBook(id, title, author, isbn, owner,
+//                status, comment, condition, photo, requesters) + " " + id);
 
+        // this assumes that Firebase books are valid
         return Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo, requesters);  // this assumes that Firebase books are valid
+                status, comment, condition, photo, requesters);
     }
 
     public static User getUserFromFirestore(DocumentSnapshot document) {
@@ -733,12 +744,16 @@ public class FirebaseIntegrity {
         String email = document.getString("email");
         String username = document.getString("username");
         String password = document.getString("password");
+        String phoneNumber = document.getString("phoneNumber");
         String photo = document.getString("photo");
 
-        return new User(firstName, lastName, email, username, password, photo);
+        Log.e("GET_DOC_FIRE_USER_FROM_OBJECT", Parser.parseUser(firstName, lastName, email,
+                username, password, phoneNumber, photo) + " " + email);
 
-//        return Parser.parseUser(firstName, lastName, email,
-//                username, password, photo);  // this assumes that Firebase users are valid
+//        return new User(firstName, lastName, email, username, password, phoneNumber, photo);
+
+        return Parser.parseUser(firstName, lastName, email,
+                username, password, phoneNumber, photo);  // this assumes that Firebase users are valid
     }
 
     public static ArrayList<String> getBookKeywords (String title, String author, String isbn) {
@@ -999,6 +1014,7 @@ public class FirebaseIntegrity {
         userMapObject.put("lastName", document.getString("lastName"));
         userMapObject.put("username", document.getString("username"));
         userMapObject.put("password", document.getString("password"));
+        userMapObject.put("phoneNumber", document.getString("phoneNumber"));
         userMapObject.put("photo", document.getString("photo"));
 
         if ((email != null)  // non-null email

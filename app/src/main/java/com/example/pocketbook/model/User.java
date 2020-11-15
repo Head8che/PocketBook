@@ -4,8 +4,6 @@ import com.example.pocketbook.util.Parser;
 
 import java.io.Serializable;
 
-// TODO: add borrowedBooks, ... for easier validation when scanning to return borrowed book
-
 public class User implements Serializable {
 
     private String firstName;
@@ -13,6 +11,7 @@ public class User implements Serializable {
     private String email;
     private String username;
     private String password;
+    private String phoneNumber;
     private String photo;
 
     /**
@@ -27,10 +26,11 @@ public class User implements Serializable {
      * @param email user email
      * @param username user username
      * @param password user password
+     * @param phoneNumber user phone number
      * @param photo user photo i.e. profile picture
      */
     public User(String firstName, String lastName, String email, String username,
-                String password, String photo) {
+                String password, String phoneNumber, String photo) {
 
         // if non-optional fields are not null
         if ((firstName != null) && (lastName != null)
@@ -42,16 +42,19 @@ public class User implements Serializable {
             email = email.trim().toLowerCase();  // lowercase email
             username = username.trim();
             password = password.trim();
+            phoneNumber = (phoneNumber == null) ? "" : phoneNumber.trim();  // replace null
             photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
 
             // only sets User data if the data is valid
-            if (Parser.isValidUserData(firstName, lastName, email, username, password, photo)) {
+            if (Parser.isValidUserData(firstName, lastName,
+                    email, username, password, phoneNumber, photo)) {
 
                 this.firstName = firstName.trim();
                 this.lastName = lastName.trim();
                 this.email = email.trim();
                 this.username = username.trim();
                 this.password = password.trim();
+                this.phoneNumber = phoneNumber.trim();
                 this.photo = photo.trim();
             }
         }
@@ -86,6 +89,12 @@ public class User implements Serializable {
      * @return password as String
      */
     public String getPassword() { return this.password; }
+
+    /**
+     * Getter method for phoneNumber
+     * @return phoneNumber as String
+     */
+    public String getPhoneNumber() { return this.phoneNumber; }
 
     /**
      * Getter method for photo

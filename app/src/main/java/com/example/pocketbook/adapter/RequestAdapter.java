@@ -86,10 +86,12 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             mRequester = FirebaseIntegrity.getUserFromFirestore(document);
-                            requestHolder.username.setText(mRequester.getUsername());
-                            GlideApp.with(Objects.requireNonNull(requestHolder.itemView.getContext()))
-                                    .load(FirebaseIntegrity.getUserProfilePicture(mRequester))
-                                    .into(requestHolder.userProfile);
+                            if (mRequester != null) {
+                                requestHolder.username.setText(mRequester.getUsername());
+                                GlideApp.with(Objects.requireNonNull(requestHolder.itemView.getContext()))
+                                        .load(FirebaseIntegrity.getUserProfilePicture(mRequester))
+                                        .into(requestHolder.userProfile);
+                            }
                         }
                     }
                 });

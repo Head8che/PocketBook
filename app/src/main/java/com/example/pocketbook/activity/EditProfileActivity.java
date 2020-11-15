@@ -51,11 +51,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Boolean validFirstName;
     private Boolean validLastName;
+    private Boolean validPhoneNumber;
     private Boolean validUsername;
 
     private String userFirstName;
     private String userLastName;
     private String userUsername;
+    private String userPhoneNumber;
     private String userEmail;
 
     private int LAUNCH_CAMERA_CODE = 1408;
@@ -71,12 +73,14 @@ public class EditProfileActivity extends AppCompatActivity {
     TextInputEditText layoutUserFirstName;
     TextInputEditText layoutUserLastName;
     TextInputEditText layoutUserUsername;
+    TextInputEditText layoutUserPhoneNumber;
     TextInputEditText layoutUserEmail;
     ImageView layoutProfilePicture;
 
     TextInputLayout layoutUserFirstNameContainer;
     TextInputLayout layoutUserLastNameContainer;
     TextInputLayout layoutUserUsernameContainer;
+    TextInputLayout layoutUserPhoneNumberContainer;
     TextInputLayout layoutUserEmailContainer;
 
 
@@ -96,16 +100,20 @@ public class EditProfileActivity extends AppCompatActivity {
         // access the user's profile picture
         StorageReference profilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
 
-        // initialize validation booleans to false
+        // extract user details into variables
         userFirstName = currentUser.getFirstName();
         userLastName = currentUser.getLastName();
         userUsername = currentUser.getUsername();
+        userPhoneNumber = currentUser.getPhoneNumber();
         userEmail = currentUser.getEmail();
 
         showRemovePhoto = (currentUser.getPhoto() != null) && (!currentUser.getPhoto().equals(""));
+
+        // initialize validation booleans to false
         validFirstName = true;
         validLastName = true;
         validUsername = true;
+        validPhoneNumber = true;
 
         // Toolbar toolbar = (Toolbar) findViewById(R.id.editProfileToolbar);
         ImageView cancelButton = (ImageView) findViewById(R.id.editProfileCancelBtn);
@@ -116,6 +124,7 @@ public class EditProfileActivity extends AppCompatActivity {
         layoutUserFirstName = (TextInputEditText) findViewById(R.id.editProfileFirstNameField);
         layoutUserLastName = (TextInputEditText) findViewById(R.id.editProfileLastNameField);
         layoutUserUsername = (TextInputEditText) findViewById(R.id.editProfileUsernameField);
+        layoutUserPhoneNumber = (TextInputEditText) findViewById(R.id.editProfilePhoneNumberField);
         layoutUserEmail = (TextInputEditText) findViewById(R.id.editProfileEmailField);
         layoutProfilePicture = (ImageView) findViewById(R.id.editProfileProfilePictureField);
 
@@ -123,6 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
         layoutUserFirstName.setText(userFirstName);
         layoutUserLastName.setText(userLastName);
         layoutUserUsername.setText(userUsername);
+        layoutUserPhoneNumber.setText(userPhoneNumber);
         layoutUserEmail.setText(userEmail);
 
         // access the layout text containers
@@ -132,6 +142,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 findViewById(R.id.editProfileLastNameContainer);
         layoutUserUsernameContainer = (TextInputLayout)
                 findViewById(R.id.editProfileUsernameContainer);
+        layoutUserPhoneNumberContainer =
+                (TextInputLayout) findViewById(R.id.editProfilePhoneNumberContainer);
         layoutUserEmailContainer = (TextInputLayout)
                 findViewById(R.id.editProfileEmailContainer);
 
@@ -198,6 +210,27 @@ public class EditProfileActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
+        // add a text field listener that validates the inputted text
+        layoutUserPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // if the inputted text is invalid
+                if ((s.toString().length() > 0) && !(Parser.isValidPhoneNumber(s.toString()))) {
+                    layoutUserPhoneNumber.setError("Invalid Phone Number");
+                    layoutUserPhoneNumberContainer.setErrorEnabled(true);
+                    validPhoneNumber = false;
+                } else {  // if the inputted text is valid
+                    validPhoneNumber = true;
+                    layoutUserPhoneNumber.setError(null);
+                    layoutUserPhoneNumberContainer.setErrorEnabled(false);
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         // showImageSelectorDialog when changePhotoButton is clicked
         changePhotoButton.setOnClickListener(v -> showImageSelectorDialog());
 
@@ -213,7 +246,7 @@ public class EditProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
 
             // if all fields are valid
-            if (validFirstName && validLastName && validUsername) {
+            if (validFirstName && validLastName && validUsername && validPhoneNumber) {
                 if (!noChanges()) {  // if the user has changed some text or changed their photo
 
                     // extract the layout text field values into variables
@@ -222,6 +255,9 @@ public class EditProfileActivity extends AppCompatActivity {
                     String newLastName = Objects.requireNonNull(layoutUserLastName.getText())
                             .toString();
                     String newUsername = Objects.requireNonNull(layoutUserUsername.getText())
+                            .toString();
+                    String newPhoneNumber = Objects.requireNonNull(layoutUserPhoneNumber
+                            .getText())
                             .toString();
 
                     if (!(userFirstName.equals(newFirstName))) {
@@ -235,6 +271,10 @@ public class EditProfileActivity extends AppCompatActivity {
                     if (!(userUsername.equals(newUsername))) {
                         // handle the user changing their username
                         FirebaseIntegrity.setUsernameFirebase(currentUser, newUsername);
+                    }
+                    if (!(userPhoneNumber.equals(newPhoneNumber))) {
+                        // handle the user changing their username
+                        FirebaseIntegrity.setPhoneNumberFirebase(currentUser, newPhoneNumber);
                     }
                     if (currentPhotoPath != null) {
                         if (currentPhotoPath.equals("BITMAP")) {
@@ -257,7 +297,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     layoutUserLastName.setError("Input required");
                     layoutUserLastNameContainer.setErrorEnabled(true);
                     layoutUserLastName.requestFocus();
-                } else {
+                } else if (!validPhoneNumber) {
+                    // set an error and focus the app on the erroneous field
+                    layoutUserPhoneNumber.setError("Invalid Phone Number");
+                    layoutUserPhoneNumberContainer.setErrorEnabled(true);
+                    layoutUserPhoneNumber.requestFocus();
+                }else {
                     // set an error and focus the app on the erroneous field
                     layoutUserUsername.setError("Input required");
                     layoutUserUsernameContainer.setErrorEnabled(true);
@@ -318,6 +363,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 .equals(Objects.requireNonNull(layoutUserLastName.getText()).toString())
                 && userUsername
                 .equals(Objects.requireNonNull(layoutUserUsername.getText()).toString())
+                && userPhoneNumber
+                .equals(Objects.requireNonNull(layoutUserPhoneNumber.getText()).toString())
                 && userEmail
                 .equals(Objects.requireNonNull(layoutUserEmail.getText()).toString())
                 && (currentPhotoPath == null)

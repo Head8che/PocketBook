@@ -266,6 +266,35 @@ public class EditProfileActivityTest {
     }
 
     /**
+     * Check if the phoneNumber field exists with assertNotNull.
+     * Check if the cleared string in the phoneNumber field is "" with assertEquals.
+     * Check if saving a user with no phoneNumber fails with assertCurrentActivity.
+     * Check if the user is alerted to the erroneous field with assertTrue.
+     */
+    @Test
+    public void checkInvalidPhoneNumberSave() {
+        View saveBtn = solo.getView(R.id.editProfileSaveBtn);
+        TextInputEditText phoneNumberField = (TextInputEditText)
+                solo.getView(R.id.editProfilePhoneNumberField);
+
+        assertNotNull(phoneNumberField);  // phoneNumber field exists
+        solo.clearEditText(phoneNumberField);
+        assertEquals("", Objects.requireNonNull(phoneNumberField.getText()).toString());
+
+        solo.enterText(phoneNumberField, "1");  // add an invalid phone number
+
+        solo.clickOnView(saveBtn); // click save button
+
+        // Asserts that the current activity is EditProfileActivity (i.e. save didn't redirect).
+        solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
+
+        // True if 'Invalid Phone Number' is present
+        assertTrue(solo.searchText("Invalid Phone Number"));
+
+        inEditProfileActivityWithChanges = true;
+    }
+
+    /**
      * Check if erroneous field alert is invisible on valid entry with assertFalse.
      * Check if saving a valid profile edit succeeds with assertCurrentActivity.
      * Check if the saved edit shows up in ProfileFragment with assertTrue.

@@ -455,21 +455,22 @@ public class ParserTest {
         String email = "joey@monday.com";  // locally valid email, not in Firebase
         String username = "joemon";
         String password = "123456";
+        String phoneNumber = "7801234567";
         String photo = "";
 
         // assert that Parser returns a User i.e. assert that input was valid
         assertThat(Parser.parseUser(firstName, lastName, email, username,
-                password, photo), instanceOf(User.class));
+                password, phoneNumber, photo), instanceOf(User.class));
 
         photo = "photo.jpg";  // valid photo condition
         // assert that Parser returns a User i.e. assert that input was valid
         assertThat(Parser.parseUser(firstName, lastName, email, username,
-                password, photo), instanceOf(User.class));
+                password, phoneNumber, photo), instanceOf(User.class));
 
         username = "";
         // assert that Parser fails with bad data
         assertNull(Parser.parseUser(firstName, lastName, email, username,
-                password, photo));
+                password, phoneNumber, photo));
 
         // Parser.ParseUser(...) is based on the other Parser User methods,
         // which have been tested, so further argument testing would be redundant.

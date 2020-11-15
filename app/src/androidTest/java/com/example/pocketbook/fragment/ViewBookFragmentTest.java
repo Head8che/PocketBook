@@ -1,4 +1,4 @@
-package com.example.pocketbook;
+package com.example.pocketbook.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.pocketbook.R;
 import com.example.pocketbook.activity.AddBookActivity;
 import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
@@ -50,7 +51,7 @@ public class ViewBookFragmentTest {
                     Intent result = new Intent(targetContext, HomeActivity.class);
                     User mockUser = new User("mockFirstName",
                             "mockLastName","mock@mock.com","mockUsername",
-                            "mockPassword", null);
+                            "mockPassword", null, null);
                     result.putExtra("CURRENT_USER", mockUser );
                     return result;
                 }
@@ -65,7 +66,7 @@ public class ViewBookFragmentTest {
         // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
         solo.clickOnView(solo.getView(R.id.bottom_nav_home));  // click on home button
-        mockOwner = new User("amockFirst", "amockLast", "aaa@test.com", "amockUser", "mock", "");
+        mockOwner = new User("amockFirst", "amockLast", "aaa@test.com", "amockUser", "mock", "", "");
 //        mockOwner.setNewUserFirebase();
 //        mockBook = new Book("mockID", "mockTitle", "mockAuthor", "0000000000000", "aaa@test.com", "AVAILABLE", "this is a test", "GOOD", "");
 //        mockBook.pushNewBookToFirebase();

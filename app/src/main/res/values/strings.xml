@@ -33,6 +33,7 @@
     <string name="dateFormat">MMM DD,YYYY</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+    <string name="phoneNumber">Phone Number</string>
 
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>

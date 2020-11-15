@@ -114,7 +114,8 @@ public class SignUpActivityTest {
         userWasCreated = false;  // reset userWasCreated to prevent unnecessary delete attempt
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         assertEquals("", Objects.requireNonNull(firstNameField.getText()).toString());
@@ -139,8 +140,10 @@ public class SignUpActivityTest {
         userWasCreated = false;  // reset userWasCreated to prevent unnecessary delete attempt
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
-        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -168,9 +171,12 @@ public class SignUpActivityTest {
         userWasCreated = false;  // reset userWasCreated to prevent unnecessary delete attempt
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
-        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
-        TextInputEditText usernameField = (TextInputEditText) solo.getView(R.id.signUpUsernameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -191,6 +197,49 @@ public class SignUpActivityTest {
     }
 
     /**
+     * Check if the phoneNumber field exists with assertNotNull.
+     * Check if the initial string in the phoneNumber field is "" with assertEquals.
+     * Check if saving a user with no phoneNumber fails with assertCurrentActivity.
+     * Check if the user is alerted to the erroneous field with assertTrue.
+     */
+    @Test
+    public void checkInvalidPhoneNumberSave(){
+        userWasCreated = false;  // reset userWasCreated to prevent unnecessary delete attempt
+
+        View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
+        TextInputEditText phoneNumberField = (TextInputEditText)
+                solo.getView(R.id.signUpPhoneNumberField);
+
+        assertNotNull(firstNameField);  // firstName field exists
+        solo.enterText(firstNameField, "MockFirst");  // add a firstName
+
+        assertNotNull(lastNameField);  // lastName field exists
+        solo.enterText(lastNameField, "MockLast");  // add a lastName
+
+        assertNotNull(usernameField);  // username field exists
+        solo.enterText(usernameField, "MockUsername");  // add a username
+
+        assertNotNull(phoneNumberField);  // phoneNumber field exists
+        assertEquals("", Objects.requireNonNull(phoneNumberField.getText()).toString());
+
+        solo.enterText(phoneNumberField, "1");  // add an invalid phone number
+
+        solo.clickOnView(signUpBtn); // click sign up button
+
+        // Asserts that the current activity is SignUpActivity (i.e. save didn't redirect).
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
+
+        // True if 'Invalid Phone Number' is present
+        assertTrue(solo.searchText("Invalid Phone Number"));
+    }
+
+    /**
      * Check if the email field exists with assertNotNull.
      * Check if the initial string in the email field is "" with assertEquals.
      * Check if saving a user with no email fails with assertCurrentActivity.
@@ -205,10 +254,14 @@ public class SignUpActivityTest {
         userWasCreated = false;  // reset userWasCreated to prevent unnecessary delete attempt
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
-        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
-        TextInputEditText usernameField = (TextInputEditText) solo.getView(R.id.signUpUsernameField);
-        TextInputEditText emailField = (TextInputEditText) solo.getView(R.id.signUpEmailField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
+        TextInputEditText emailField = (TextInputEditText)
+                solo.getView(R.id.signUpEmailField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -265,11 +318,16 @@ public class SignUpActivityTest {
         userWasCreated = false;  // reset userWasCreated to prevent unnecessary delete attempt
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
-        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
-        TextInputEditText usernameField = (TextInputEditText) solo.getView(R.id.signUpUsernameField);
-        TextInputEditText emailField = (TextInputEditText) solo.getView(R.id.signUpEmailField);
-        TextInputEditText passwordField = (TextInputEditText) solo.getView(R.id.signUpPasswordField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
+        TextInputEditText emailField = (TextInputEditText)
+                solo.getView(R.id.signUpEmailField);
+        TextInputEditText passwordField = (TextInputEditText)
+                solo.getView(R.id.signUpPasswordField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -314,11 +372,16 @@ public class SignUpActivityTest {
         userWasCreated = true;  // reset userWasCreated to prevent unnecessary delete attempt
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
-        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
-        TextInputEditText usernameField = (TextInputEditText) solo.getView(R.id.signUpUsernameField);
-        TextInputEditText emailField = (TextInputEditText) solo.getView(R.id.signUpEmailField);
-        TextInputEditText passwordField = (TextInputEditText) solo.getView(R.id.signUpPasswordField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
+        TextInputEditText emailField = (TextInputEditText)
+                solo.getView(R.id.signUpEmailField);
+        TextInputEditText passwordField = (TextInputEditText)
+                solo.getView(R.id.signUpPasswordField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -355,7 +418,8 @@ public class SignUpActivityTest {
 
         View backBtn = solo.getView(R.id.signUpBackBtn);
 
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -388,7 +452,8 @@ public class SignUpActivityTest {
 
         View backBtn = solo.getView(R.id.signUpBackBtn);
 
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -418,7 +483,8 @@ public class SignUpActivityTest {
 
         View backBtn = solo.getView(R.id.signUpBackBtn);
 
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName

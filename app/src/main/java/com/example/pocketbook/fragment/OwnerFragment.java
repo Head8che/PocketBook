@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,9 +27,11 @@ import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.ScrollUpdate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -52,6 +55,8 @@ public class OwnerFragment extends Fragment {
     private static final String USERS = "users";
     private User currentUser;
     private ScrollUpdate scrollUpdate;
+    private Fragment ownerFragment = this;
+    private boolean firstTimeFragLoads = true;
 
     FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
@@ -131,6 +136,46 @@ public class OwnerFragment extends Fragment {
 
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
 
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail());
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("VMBBF_LISTENER", "Listen failed.", e);
+                    return;
+                }
+
+                if ((snapshot != null) && snapshot.exists()) {
+                    currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                    if (currentUser == null) {
+                        return;
+                    }
+
+                    // TODO; Add isAdded to other listeners
+                    // if fragment can have a manager; tests crash without this line
+                    if ((!firstTimeFragLoads) && ownerFragment.isAdded()) {
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .detach(OwnerFragment.this)
+                                .attach(OwnerFragment.this)
+                                .setTransition(FragmentTransaction.TRANSIT_NONE)
+                                .addToBackStack(null)
+                                .commitAllowingStateLoss();
+                    } else {
+                        firstTimeFragLoads = false;
+                    }
+                }
+                else if (ownerFragment.isAdded()) {
+                    getParentFragmentManager().beginTransaction()
+                            .detach(OwnerFragment.this).commitAllowingStateLoss();
+                }
+            }
+
+        });
+
     }
     /**
      * Inflates the layout/container in the respectful fields and fills the fields that require the onwer informationto be displayed
@@ -175,8 +220,8 @@ public class OwnerFragment extends Fragment {
 
         editProfile = v.findViewById(R.id.edit_profile_button);
 
-        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
-        scrollUpdate.load();
+//        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
+//        scrollUpdate.load();
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

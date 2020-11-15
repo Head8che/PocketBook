@@ -55,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Boolean validFirstName;
     private Boolean validLastName;
     private Boolean validUsername;
+    private Boolean validPhoneNumber;
     private Boolean validUserEmail;
     private Boolean validUserPassword;
 
@@ -72,6 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextInputEditText layoutUserFirstName;
     TextInputEditText layoutUserLastName;
     TextInputEditText layoutUserUsername;
+    TextInputEditText layoutUserPhoneNumber;
     TextInputEditText layoutUserEmail;
     TextInputEditText layoutUserPassword;
     ImageView layoutProfilePicture;
@@ -79,6 +81,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextInputLayout layoutUserFirstNameContainer;
     TextInputLayout layoutUserLastNameContainer;
     TextInputLayout layoutUserUsernameContainer;
+    TextInputLayout layoutUserPhoneNumberContainer;
     TextInputLayout layoutUserEmailContainer;
     TextInputLayout layoutUserPasswordContainer;
 
@@ -96,6 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
         validFirstName = false;
         validLastName = false;
         validUsername = false;
+        validPhoneNumber = true;
         validUserEmail = false;
         validUserPassword = false;
 
@@ -108,6 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
         layoutUserFirstName = (TextInputEditText) findViewById(R.id.signUpFirstNameField);
         layoutUserLastName = (TextInputEditText) findViewById(R.id.signUpLastNameField);
         layoutUserUsername = (TextInputEditText) findViewById(R.id.signUpUsernameField);
+        layoutUserPhoneNumber = (TextInputEditText) findViewById(R.id.signUpPhoneNumberField);
         layoutUserEmail = (TextInputEditText) findViewById(R.id.signUpEmailField);
         layoutUserPassword = (TextInputEditText) findViewById(R.id.signUpPasswordField);
         layoutProfilePicture = (ImageView) findViewById(R.id.signUpProfilePictureField);
@@ -117,6 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
                 findViewById(R.id.signUpFirstNameContainer);
         layoutUserLastNameContainer = (TextInputLayout) findViewById(R.id.signUpLastNameContainer);
         layoutUserUsernameContainer = (TextInputLayout) findViewById(R.id.signUpUsernameContainer);
+        layoutUserPhoneNumberContainer = (TextInputLayout) findViewById(R.id.signUpPhoneNumberContainer);
         layoutUserEmailContainer = (TextInputLayout) findViewById(R.id.signUpEmailContainer);
         layoutUserPasswordContainer = (TextInputLayout) findViewById(R.id.signUpPasswordContainer);
 
@@ -175,6 +181,27 @@ public class SignUpActivity extends AppCompatActivity {
                     validUsername = true;
                     layoutUserUsername.setError(null);
                     layoutUserUsernameContainer.setErrorEnabled(false);
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // add a text field listener that validates the inputted text
+        layoutUserPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // if the inputted text is invalid
+                if ((s.toString().length() > 0) && !(Parser.isValidPhoneNumber(s.toString()))) {
+                    layoutUserPhoneNumber.setError("Invalid Phone Number");
+                    layoutUserPhoneNumberContainer.setErrorEnabled(true);
+                    validPhoneNumber = false;
+                } else {  // if the inputted text is valid
+                    validPhoneNumber = true;
+                    layoutUserPhoneNumber.setError(null);
+                    layoutUserPhoneNumberContainer.setErrorEnabled(false);
                 }
             }
             @Override
@@ -253,7 +280,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             // if all fields are valid
             if (validFirstName && validLastName && validUsername
-                    && validUserEmail && validUserPassword) {
+                    && validUserEmail && validPhoneNumber && validUserPassword) {
 
                 if (!noChanges()) {  // if the user has entered some text or chosen a photo
 
@@ -264,6 +291,9 @@ public class SignUpActivity extends AppCompatActivity {
                             .toString();
                     String newUsername = Objects.requireNonNull(layoutUserUsername.getText())
                             .toString();
+                    String newUserPhoneNumber = Objects.requireNonNull(layoutUserPhoneNumber
+                            .getText())
+                            .toString();
                     String newUserEmail = Objects.requireNonNull(layoutUserEmail.getText())
                             .toString();
                     String newUserPassword = Objects.requireNonNull(layoutUserPassword.getText())
@@ -271,7 +301,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                     // get a User variable from the valid inputted fields
                     currentUser = Parser.parseUser(newFirstName, newLastName, newUserEmail,
-                            newUsername, newUserPassword, "");
+                            newUsername, newUserPassword, newUserPhoneNumber, "");
 
                     // user can't create account multiple times with multi-click
                     signUpButton.setClickable(false);
@@ -299,6 +329,11 @@ public class SignUpActivity extends AppCompatActivity {
                     layoutUserUsername.setError("Input required");
                     layoutUserUsernameContainer.setErrorEnabled(true);
                     layoutUserUsername.requestFocus();
+                } else if (!validPhoneNumber) {
+                    // set an error and focus the app on the erroneous field
+                    layoutUserPhoneNumber.setError("Invalid Phone Number");
+                    layoutUserPhoneNumberContainer.setErrorEnabled(true);
+                    layoutUserPhoneNumber.requestFocus();
                 } else if (!validUserEmail) {
                     String email = Objects.requireNonNull(layoutUserEmail.getText()).toString();
 
@@ -402,6 +437,7 @@ public class SignUpActivity extends AppCompatActivity {
         String email = currentUser.getEmail();
         String username = currentUser.getUsername();
         String password = currentUser.getPassword();
+        String phoneNumber = currentUser.getPhoneNumber();
         String photo = currentUser.getPhoto();
 
         // put the user's data into a HashMap object
@@ -411,6 +447,7 @@ public class SignUpActivity extends AppCompatActivity {
         docData.put("email", email);
         docData.put("username", username);
         docData.put("password", password);
+        docData.put("phoneNumber", phoneNumber);
         docData.put("photo", photo);
 
         // if the user chose a photo from their gallery
@@ -569,6 +606,7 @@ public class SignUpActivity extends AppCompatActivity {
         return "".equals(Objects.requireNonNull(layoutUserFirstName.getText()).toString())
                 && "".equals(Objects.requireNonNull(layoutUserLastName.getText()).toString())
                 && "".equals(Objects.requireNonNull(layoutUserUsername.getText()).toString())
+                && "".equals(Objects.requireNonNull(layoutUserPhoneNumber.getText()).toString())
                 && "".equals(Objects.requireNonNull(layoutUserEmail.getText()).toString())
                 && "".equals(Objects.requireNonNull(layoutUserPassword.getText()).toString())
                 && (currentPhotoPath == null)

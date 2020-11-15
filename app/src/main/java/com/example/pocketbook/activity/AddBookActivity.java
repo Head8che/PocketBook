@@ -229,8 +229,8 @@ public class AddBookActivity extends AppCompatActivity {
                             currentUser.getEmail(), "AVAILABLE", comment,
                             condition, "", new ArrayList<>());
 
-                    if (currentPhotoPath != null) {  // if the user has a photo
-                        // set the user's photo appropriately
+                    if (currentPhotoPath != null) {  // if the user changed their book cover
+                        // set the book cover appropriately
                         if (currentPhotoPath.equals("BITMAP")) {
                             // if the user chose a photo from the gallery
                             FirebaseIntegrity.pushNewBookToFirebaseWithBitmap(book,

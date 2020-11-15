@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ViewMyBookRequestsFragment {
+public class ViewMyBookRequestsFragmentTest {
     private Solo solo;
     private Book mockBook;
     private Request mockRequest;

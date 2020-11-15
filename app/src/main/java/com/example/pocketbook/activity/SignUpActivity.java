@@ -570,6 +570,7 @@ public class SignUpActivity extends AppCompatActivity {
                 && "".equals(Objects.requireNonNull(layoutUserLastName.getText()).toString())
                 && "".equals(Objects.requireNonNull(layoutUserUsername.getText()).toString())
                 && "".equals(Objects.requireNonNull(layoutUserEmail.getText()).toString())
+                && "".equals(Objects.requireNonNull(layoutUserPassword.getText()).toString())
                 && (currentPhotoPath == null)
                 ;
     }

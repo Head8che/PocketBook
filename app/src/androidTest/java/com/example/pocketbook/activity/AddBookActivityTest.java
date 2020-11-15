@@ -48,7 +48,7 @@ public class AddBookActivityTest {
 
         // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.clickOnView(solo.getView(R.id.RegisterBtn));  // click on register button
+        solo.clickOnView(solo.getView(R.id.loginSignUpBtn));  // click on sign up button
 
         // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);

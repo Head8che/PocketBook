@@ -1,10 +1,8 @@
 package com.example.pocketbook.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,11 +16,15 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ViewMyBookPagerAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
-import com.google.android.material.tabs.TabItem;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
+
+/**
+ * Allows users to delete a book and move between the Book and Requests tab for their books
+ */
 public class ViewMyBookFragment extends Fragment {
 
     private Book book;
@@ -53,77 +55,65 @@ public class ViewMyBookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_my_book, container, false);
-
         // Inflate the layout for this fragment
-        TabLayout tabLayout = rootView.findViewById(R.id.viewMyBookFragTabLayout);
-        TabItem bookTab = rootView.findViewById(R.id.viewMyBookFragBookTab);
-        TabItem requestsTab = rootView.findViewById(R.id.viewMyBookFragRequestsTab);
-        ViewPager viewPager = rootView.findViewById(R.id.viewMyBookFragViewPager);
+        View rootView = inflater.inflate(R.layout.fragment_view_my_book,
+                container, false);
 
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.viewMyBookFragToolbar);
+        // access the layout materials
+        TabLayout tabLayout = rootView.findViewById(R.id.viewMyBookFragTabLayout);
+        // TabItem bookTab = rootView.findViewById(R.id.viewMyBookFragBookTab);
+        // TabItem requestsTab = rootView.findViewById(R.id.viewMyBookFragRequestsTab);
+        ViewPager viewPager = rootView.findViewById(R.id.viewMyBookFragViewPager);
+        // Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.viewMyBookFragToolbar);
         ImageView backButton = (ImageView) rootView.findViewById(R.id.viewMyBookFragBackBtn);
         TextView deleteButton = (TextView) rootView.findViewById(R.id.viewMyBookFragDeleteBtn);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
+        // go back when backButton is clicked
+        backButton.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
+
+        // show delete dialog when deleteButton is clicked
+        deleteButton.setOnClickListener(v -> {
+            AlertDialog diaBox = AskOption();
+            diaBox.show();
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog diaBox = AskOption();
-                diaBox.show();
-            }
-        });
-
+        // set up the adapter
         ViewMyBookPagerAdapter viewMyBookPagerAdapter =
-                new ViewMyBookPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), book);
+                new ViewMyBookPagerAdapter(getChildFragmentManager(),
+                        tabLayout.getTabCount(), book);
 
         viewPager.setAdapter(viewMyBookPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+        // handle tab selection
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
-
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
+            public void onTabUnselected(TabLayout.Tab tab) {}
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
 
         return rootView;
     }
 
     private AlertDialog AskOption() {
-        return new AlertDialog.Builder(getContext())
+        // return a new Alert Dialog for deleting the book
+        return new AlertDialog.Builder(Objects.requireNonNull(getContext()))
                 .setMessage("Delete this book?")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Delete", (dialog, whichButton) -> {
+                    dialog.dismiss();  // dismiss the delete dialog
 
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
-                        dialog.dismiss();
-//                        catalogue.removeBook(book);
-                        Objects.requireNonNull(getActivity()).onBackPressed();
-                    }
+                    // delete the book
+                    FirebaseIntegrity.deleteBookFirebase(book);
 
+                    // return to previous activity
+                    Objects.requireNonNull(getActivity()).onBackPressed();
                 })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton("cancel", (dialog, which) -> dialog.dismiss())
                 .create();
     }
 }

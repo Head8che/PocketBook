@@ -292,6 +292,17 @@ public class FirebaseIntegrity {
 
     }
 
+    public static void deleteBookFirebase(Book book) {
+        FirebaseFirestore.getInstance()
+                .collection("catalogue")
+                .document(book.getId())
+                .delete()
+                .addOnSuccessListener(aVoid
+                        -> Log.e("DELETE_BOOK", "Book data successfully written!"))
+                .addOnFailureListener(e
+                        -> Log.e("DELETE_BOOK", "Error writing book data!"));
+    }
+
 
     ////////////////////////////// FIREBASE METHODS FOR THE USER MODEL /////////////////////////////
 

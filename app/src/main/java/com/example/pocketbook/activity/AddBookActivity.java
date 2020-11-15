@@ -47,7 +47,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Allows the user to add a new book to be placed/available on PocketBook
+ * Allows the user to add a new book to PocketBook
  */
 public class AddBookActivity extends AppCompatActivity {
 

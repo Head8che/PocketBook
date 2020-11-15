@@ -33,8 +33,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 
-@LargeTest
-@RunWith(AndroidJUnit4.class)
 public class EditBookActivityTest {
     private Solo solo;
     private long currentTime = System.currentTimeMillis();

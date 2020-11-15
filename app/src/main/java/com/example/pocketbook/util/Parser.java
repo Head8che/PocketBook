@@ -28,6 +28,51 @@ import java.util.Random;
  */
 public class Parser {
 
+    //////////////////////////////////////// GENERAL PARSER ////////////////////////////////////////
+
+    /**
+     * This checks if an email is valid
+     * @param email email
+     * @return
+     *      true if email is formatted correctly, not null or an empty string, and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidEmail(String email) {
+
+        if (email == null) {
+            return false;
+        }
+
+        int at_index = -1;
+        int at_count = 0;
+        int dot_index = -1;
+        int emailLength = email.length();
+
+        // if the email is shorter than a@b.c or longer than 100 chars
+        if ((emailLength < 5) || (emailLength > 100)) {
+            return false;
+        }
+
+        // for each char in the email
+        for (int i = 0; i < emailLength; i++) {
+
+            // if the char is @ and @ is not the first char
+            if ((email.charAt(i) == '@') && (i > 0)) {
+                // set at_index to i when i is found & increment at_count
+                if (at_index == -1) {
+                    at_index = i;
+                }
+                at_count += 1;  // increment at_count
+            }
+            // if the char is . and it's at least one char away from @
+            if ((email.charAt(i) == '.') && (i != (emailLength - 1)) && (i > (at_index + 1))) {
+                dot_index = i;
+            }
+        }
+        // return true if there's only one @ and at least one . after the @
+        return (at_count == 1) && (dot_index > -1) && email.equals(email.toLowerCase());
+    }
+
     /////////////////////////////////////////  BOOK PARSER /////////////////////////////////////////
 
     private static List<String> conditions = Arrays.asList("GREAT",
@@ -296,11 +341,11 @@ public class Parser {
      * This checks if a book owner is valid
      * @param owner app user that owns the book
      * @return
-     *      true if owner is not null or an empty string and is lowercase
+     *      true if owner is formatted correctly, not null or an empty string, and is lowercase
      *      false otherwise
      */
     public static boolean isValidBookOwner(String owner) {
-        return (owner != null) && (!owner.equals("")) && owner.equals(owner.toLowerCase());
+        return isValidEmail(owner);
     }
 
     /**
@@ -713,43 +758,11 @@ public class Parser {
      * This checks if a user email is valid
      * @param email app user's email
      * @return
-     *      true if email is not null or an empty string and is lowercase
+     *      true if email is formatted correctly, not null or an empty string, and is lowercase
      *      false otherwise
      */
     public static boolean isValidUserEmail(String email) {
-
-        if (email == null) {
-            return false;
-        }
-
-        int at_index = -1;
-        int at_count = 0;
-        int dot_index = -1;
-        int emailLength = email.length();
-
-        // if the email is shorter than a@b.c or longer than 100 chars
-        if ((emailLength < 5) || (emailLength > 100)) {
-            return false;
-        }
-
-        // for each char in the email
-        for (int i = 0; i < emailLength; i++) {
-
-            // if the char is @ and @ is not the first char
-            if ((email.charAt(i) == '@') && (i > 0)) {
-                // set at_index to i when i is found & increment at_count
-                if (at_index == -1) {
-                    at_index = i;
-                }
-                at_count += 1;  // increment at_count
-            }
-            // if the char is . and it's at least one char away from @
-            if ((email.charAt(i) == '.') && (i != (emailLength - 1)) && (i > (at_index + 1))) {
-                dot_index = i;
-            }
-        }
-        // return true if there's only one @ and at least one . after the @
-        return (at_count == 1) && (dot_index > -1) && email.equals(email.toLowerCase());
+        return isValidEmail(email);
     }
 
     /**

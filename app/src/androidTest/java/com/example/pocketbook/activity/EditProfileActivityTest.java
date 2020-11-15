@@ -41,7 +41,7 @@ public class EditProfileActivityTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
         // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
@@ -55,11 +55,16 @@ public class EditProfileActivityTest {
         //////////////////////////////// CREATE A MOCK USER ACCOUNT ////////////////////////////////
 
         View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.signUpFirstNameField);
-        TextInputEditText lastNameField = (TextInputEditText) solo.getView(R.id.signUpLastNameField);
-        TextInputEditText usernameField = (TextInputEditText) solo.getView(R.id.signUpUsernameField);
-        TextInputEditText emailField = (TextInputEditText) solo.getView(R.id.signUpEmailField);
-        TextInputEditText passwordField = (TextInputEditText) solo.getView(R.id.signUpPasswordField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
+        TextInputEditText emailField = (TextInputEditText)
+                solo.getView(R.id.signUpEmailField);
+        TextInputEditText passwordField = (TextInputEditText)
+                solo.getView(R.id.signUpPasswordField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -71,7 +76,7 @@ public class EditProfileActivityTest {
         solo.enterText(usernameField, "MockUsername");  // add a username
 
         assertNotNull(emailField);  // email field exists
-        solo.enterText(emailField, "mockeditprofile" + currentTime + "@gmail.com");  // add an email
+        solo.enterText(emailField, "mockeditprofile" + currentTime + "@gmail.com"); //add email
 
         assertNotNull(passwordField);
         solo.enterText(passwordField, "123456");  // add a password
@@ -81,12 +86,17 @@ public class EditProfileActivityTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
+        //////////////////////////////// GO TO EditProfileActivity /////////////////////////////////
+
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
         solo.clickOnView(solo.getView(R.id.bottom_nav_profile));
         solo.clickOnView(solo.getView(R.id.edit_profile_button));
+
+        // Asserts that the current activity is EditProfileActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
+        solo.sleep(2000); // give it time to change activity
     }
 
     /**
@@ -105,7 +115,7 @@ public class EditProfileActivityTest {
 
             solo.clickOnView(cancelBtn); // click cancel button
 
-            // Asserts that the current activity is EditProfileActivity (i.e. cancel didn't redirect).
+            // Asserts that the current activity is EditProfileActivity (i.e. no redirect).
             solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
 
             // True if the text 'Discard Changes?' is present
@@ -295,7 +305,8 @@ public class EditProfileActivityTest {
     public void checkDiscardDialog(){
         View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
 
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.editProfileFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.editProfileFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -328,7 +339,8 @@ public class EditProfileActivityTest {
     public void checkDiscardDialogDiscard(){
         View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
 
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.editProfileFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.editProfileFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName
@@ -358,7 +370,8 @@ public class EditProfileActivityTest {
     public void checkDiscardDialogKeepEditing(){
         View cancelBtn = solo.getView(R.id.editProfileCancelBtn);
 
-        TextInputEditText firstNameField = (TextInputEditText) solo.getView(R.id.editProfileFirstNameField);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.editProfileFirstNameField);
 
         assertNotNull(firstNameField);  // firstName field exists
         solo.enterText(firstNameField, "MockFirst");  // add a firstName

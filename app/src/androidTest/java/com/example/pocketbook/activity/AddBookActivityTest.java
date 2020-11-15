@@ -17,6 +17,7 @@ import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -29,30 +30,73 @@ import static org.junit.Assert.assertTrue;
 
 public class AddBookActivityTest {
     private Solo solo;
+    private long currentTime = System.currentTimeMillis();
 
     @Rule
-    public ActivityTestRule<HomeActivity> rule =
-            new ActivityTestRule<HomeActivity>(HomeActivity.class, true, true) {
-                @Override
-                protected Intent getActivityIntent() {  // start HomeActivity with User object
-                    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-                    Intent result = new Intent(targetContext, HomeActivity.class);
-                    result.putExtra("CURRENT_USER", new User("mockFirstName",
-                            "mockLastName","mock@mock.com","mockUsername",
-                            "mockPassword", null));
-                    return result;
-                }
-            };
+    public ActivityTestRule<LogInActivity> rule = new ActivityTestRule<>(LogInActivity.class);
+
+    /**
+     * Runs before all tests and signs out any logged in user.
+     */
+    @BeforeClass
+    public static void signOut() {
+        FirebaseIntegrity.signOutCurrentlyLoggedInUser();
+    }
 
     /**
      * Runs before all tests and creates solo instance. Also navigates to AddBookActivity.
      */
     @Before
     public void setUp() {
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
-        // Asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
+        // Asserts that the current activity is LogInActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LogInActivity.class);
+        solo.clickOnView(solo.getView(R.id.RegisterBtn));  // click on register button
+
+        // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
+        solo.sleep(2000); // give it time to change activity
+
+        //////////////////////////////// CREATE A MOCK USER ACCOUNT ////////////////////////////////
+
+        View signUpBtn = solo.getView(R.id.signUpSignUpBtn);
+        TextInputEditText firstNameField = (TextInputEditText)
+                solo.getView(R.id.signUpFirstNameField);
+        TextInputEditText lastNameField = (TextInputEditText)
+                solo.getView(R.id.signUpLastNameField);
+        TextInputEditText usernameField = (TextInputEditText)
+                solo.getView(R.id.signUpUsernameField);
+        TextInputEditText emailField = (TextInputEditText)
+                solo.getView(R.id.signUpEmailField);
+        TextInputEditText passwordField = (TextInputEditText)
+                solo.getView(R.id.signUpPasswordField);
+
+        assertNotNull(firstNameField);  // firstName field exists
+        solo.enterText(firstNameField, "MockFirst");  // add a firstName
+
+        assertNotNull(lastNameField);  // lastName field exists
+        solo.enterText(lastNameField, "MockLast");  // add a lastName
+
+        assertNotNull(usernameField);  // username field exists
+        solo.enterText(usernameField, "MockUsername");  // add a username
+
+        assertNotNull(emailField);  // email field exists
+        solo.enterText(emailField, "mockaddbook" + currentTime + "@gmail.com"); //add email
+
+        assertNotNull(passwordField);
+        solo.enterText(passwordField, "123456");  // add a password
+
+        solo.clickOnView(signUpBtn); // click save button
+
+        // False if 'Input required' is present
+        assertFalse(solo.searchText("Input required"));
+
+        ////////////////////////////////// GO TO AddBookActivity ///////////////////////////////////
+
+        // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
         solo.clickOnView(solo.getView(R.id.bottom_nav_add));  // click on add button
 
         // Asserts that the current activity is AddBookActivity. Otherwise, show Wrong Activity
@@ -61,21 +105,12 @@ public class AddBookActivityTest {
     }
 
     /**
-     * Runs after each test to remove the test Book from Firebase.
+     * Runs after each test to exit from AddBookActivity
+     * and remove the test user from Firebase.
      */
     @After
     public void removeMockFromFirebase() {
-        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
-                "author", "M0cK^U+H0R");
-    }
-
-    /**
-     * Gets the Activity
-     * @throws Exception
-     */
-    @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
+        FirebaseIntegrity.deleteCurrentlyLoggedInUser();
     }
 
     /**

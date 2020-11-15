@@ -279,11 +279,11 @@ public class SignUpActivity extends AppCompatActivity {
                     // attempt to sign the user up
                     signUpUser();
 
-                } else {
+                } else {  // if the user has not made any changes
                     finish();
                 }
 
-            } else {
+            } else {  // if not all fields are valid
                 if (!validFirstName) {
                     // set an error and focus the app on the erroneous field
                     layoutUserFirstName.setError("Input required");
@@ -704,7 +704,7 @@ public class SignUpActivity extends AppCompatActivity {
                     InputStream inputStream = getBaseContext()
                             .getContentResolver()
                             .openInputStream(Objects.requireNonNull(data.getData()));
-                    // store the selected image in currentPhoto
+                    // store the selected image in galleryPhoto
                     galleryPhoto = BitmapFactory.decodeStream(inputStream);
                     currentPhotoPath = "BITMAP";
                     ImageView myImage = (ImageView) findViewById(R.id.signUpProfilePictureField);

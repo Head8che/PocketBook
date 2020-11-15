@@ -246,7 +246,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 }
                 finish();
-            } else {
+            } else {  // if not all fields are valid
                 if (!validFirstName) {
                     // set an error and focus the app on the erroneous field
                     layoutUserFirstName.setError("Input required");

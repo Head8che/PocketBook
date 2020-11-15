@@ -4,6 +4,8 @@ import com.example.pocketbook.util.Parser;
 
 import java.io.Serializable;
 
+// TODO: add borrowedBooks, ... for easier validation when scanning to return borrowed book
+
 public class User implements Serializable {
 
     private String firstName;

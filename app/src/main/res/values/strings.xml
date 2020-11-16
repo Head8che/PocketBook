@@ -83,11 +83,14 @@
     <string name="username">Username</string>
     <string name="book_status_image">book_status_image</string>
     <string name="owned_by_you">Owned by You</string>
+    <string name="notAvailable">Not Available</string>
+    <string name="alreadyRequested">Already Requested!</string>
+    <string name="viewPickupLocation">View Pickup Location</string>
     <string name="long_description">Long description</string>
     <string name="status">Status</string>
     <string name="book_title_that_is_really_long">Book title that is really long</string>
     <string name="book_author">Book author</string>
-    <string name="isbn_123_234_1234">ISBN: 123-234-1234</string>
+    <string name="isbn_123_234_1234">ISBN: 123–234–1234</string>
     <string name="condition_new">Condition: New</string>
     <string name="comment_this_book_is_good">Comment: This book is good!</string>
     <string name="scan_fragment">Scan Fragment</string>

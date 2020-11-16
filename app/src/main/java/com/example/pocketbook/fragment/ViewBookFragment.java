@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -21,21 +20,16 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
-import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
+ * Allows users to view a book that they do not own.
  * A {@link Fragment} subclass.
  * Use the {@link ViewBookFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -53,7 +47,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
      * @param currentUser: the user currently signed in the app
      * @param bookOwner: the owner of the book being viewed
      * @param book: the book being viewed
-     * @return
+     * @return a new instance of the ViewBookFragment
      */
     public static ViewBookFragment newInstance(User currentUser, User bookOwner, Book book) {
         ViewBookFragment viewBookFragment = new ViewBookFragment();
@@ -120,8 +114,11 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         // inflate fragment in container
         View view = inflater.inflate(R.layout.fragment_view_book, container, true);
 
+        String bookStatus = book.getStatus().toUpperCase();
+
         // get the view fields by ids
         TextView bookTitleField = view.findViewById(R.id.viewBookTitle);
+        TextView bookLocationField = view.findViewById(R.id.viewBookViewPickupLocation);
         TextView bookAuthorField = view.findViewById(R.id.viewBookAuthor);
         TextView isbnField = view.findViewById(R.id.viewBookISBN);
         TextView conditionField = view.findViewById(R.id.viewBookCondition);
@@ -132,6 +129,10 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         ImageView bookCoverImageView = view.findViewById(R.id.bookCover);
         ImageView bookStatusImage = view.findViewById(R.id.viewBookBookStatusImageView);
 
+        if (!(bookStatus.equals("ACCEPTED"))) {
+            bookLocationField.setVisibility(View.GONE);
+        }
+
         ImageView backButton = view.findViewById(R.id.viewBookFragBackBtn);
 
         backButton.setOnClickListener(v -> {
@@ -139,6 +140,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 getActivity().onBackPressed();
             }
         });
+
+        // TODO: clicking on View Pickup Location should show pickup location page
 
         // set the views' values to the values of the book being viewed
         bookTitleField.setText(book.getTitle());
@@ -169,16 +172,13 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .into(userProfilePicture);
 
         usernameField.setText(bookOwner.getUsername());
-
-        Log.e("VB", "status:" + book.getStatus()
-                + " " + "requesters:" + book.getRequesters());
         
-        switch(book.getStatus().toUpperCase()) {
+        switch(bookStatus) {
 
             // if the book is borrowed or accepted by another user, it cannot be requested
             case "BORROWED":
                 requestButton.setClickable(false);
-                requestButton.setText("Not Available");
+                requestButton.setText(R.string.notAvailable);
                 requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
                         R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_borrowed);
@@ -188,7 +188,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
             case "ACCEPTED":
                 requestButton.setClickable(false);
-                requestButton.setText("Not Available");
+                requestButton.setText(R.string.notAvailable);
                 requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
                         R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_accepted);
@@ -206,7 +206,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
                     // if the book has not been requested by this user before
                     if (book.getRequesters().contains(currentUser.getEmail())) {
-                        requestButton.setText("Already Requested!");
+                        requestButton.setText(R.string.alreadyRequested);
                         requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
                                 R.color.notAvailable));
                     }
@@ -219,9 +219,6 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         R.color.colorAvailable), android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
-
-
-        String bookStatus = book.getStatus().toUpperCase();
         boolean currentUserRequested = book.getRequesters().contains(currentUser.getEmail());
 
         // if the book is available for requesting (i.e. the user hasn't requested it and it's
@@ -256,7 +253,5 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         super.onDestroy();
         listenerRegistration.remove();
     }
-
-
 
 }

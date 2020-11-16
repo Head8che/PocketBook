@@ -125,7 +125,7 @@ public class ViewMyBookFragmentTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
-        ////////////////////////////////// GO TO ViewMyBookFragment //////////////////////////////////
+        ///////////////////////////////// GO TO ViewMyBookFragment /////////////////////////////////
 
         View backBtn = solo.getView(R.id.viewMyBookFragBackBtn);
 
@@ -140,9 +140,9 @@ public class ViewMyBookFragmentTest {
         assertTrue(solo.searchText("Mock Title"));  // book title
         assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
 
-        solo.clickOnView(solo.getView(R.id.itemBookCard));  // click on profile button
+        solo.clickOnView(solo.getView(R.id.itemBookCard));  // click on book
 
-        solo.sleep(2000); // give it time to change activity
+        solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
     }
 
     /**

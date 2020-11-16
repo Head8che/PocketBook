@@ -34,6 +34,12 @@ public class ViewMyBookFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * create a new instance of the ViewMyBookFragment
+     * @param user user object
+     * @param book book object
+     * @return a new instance of the ViewMyBookFragment
+     */
     public static ViewMyBookFragment newInstance(User user, Book book) {
         ViewMyBookFragment fragment = new ViewMyBookFragment();
         Bundle args = new Bundle();
@@ -100,6 +106,10 @@ public class ViewMyBookFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * delete dialog
+     * @return a dialog the prompts the user to confirm deleting the book
+     */
     private AlertDialog AskOption() {
         // return a new Alert Dialog for deleting the book
         return new AlertDialog.Builder(Objects.requireNonNull(getContext()))

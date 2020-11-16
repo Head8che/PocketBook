@@ -66,6 +66,12 @@
     <string name="fairCondition">FAIR</string>
     <string name="acceptableCondition">ACCEPTABLE</string>
 
+    <string name="seeBookDescription">See Book Description</string>
+    <string name="lendBook">Lend Book</string>
+    <string name="borrowBook">Borrow Book</string>
+    <string name="returnBook">Return Book</string>
+    <string name="receiveBook">Receive Book</string>
+
     <string name="bookPhotoDialogTitle">Change Photo</string>
     <string name="takePhoto">Take Photo</string>
     <string name="choosePhoto">Choose Photo</string>

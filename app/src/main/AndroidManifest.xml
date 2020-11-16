@@ -29,7 +29,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AddBookActivity"></activity>
+        <activity android:name=".activity.ScanActivity"></activity>
+        <activity android:name=".activity.AddBookActivity" />
         <activity
             android:name=".activity.EditBookActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />

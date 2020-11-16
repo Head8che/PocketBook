@@ -203,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // welcome the user back to Pocketbook
                                     Toast.makeText(LoginActivity.this,
                                             String.format(Locale.CANADA,
-                                            "Welcome back, %s.",
+                                                    "Welcome back, %s.",
                                                     currentUser.getFirstName()),
                                             Toast.LENGTH_SHORT).show();
 

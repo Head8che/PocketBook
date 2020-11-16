@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.activity.LocationActivity;
-import com.example.pocketbook.activity.LogInActivity;
+import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;

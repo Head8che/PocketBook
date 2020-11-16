@@ -316,6 +316,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             marker.remove();
         }
         mPinnedMap = new LatLng(lat, lng);
+        Log.e("LOCATION:", String.valueOf(lat)+(lng)+(locality));
         MarkerOptions options = new MarkerOptions()
                 .draggable(true)
                 .title(locality)

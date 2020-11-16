@@ -121,8 +121,8 @@ public class HomeActivity extends AppCompatActivity {
                         case R.id.bottom_nav_scan:
                             // showSpinnerDialog when layoutBookCondition is clicked
                             showScanningSpinnerDialog();
-                            selectedFragment = new ScanFragment();
-                            FRAG_TAG = "SCAN_FRAGMENT";
+//                            selectedFragment = new ScanFragment();
+//                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
 
                     }

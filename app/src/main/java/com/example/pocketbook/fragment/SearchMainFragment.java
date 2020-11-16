@@ -54,14 +54,28 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
 //        // Required empty public constructor
 //    }
 
+    /**
+     * Displays list of books given a search query
+     * @param user
+     * @return
+     */
+    public static SearchMainFragment newInstance(User user, int position) {
+        SearchMainFragment searchMainFragment = new SearchMainFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("SF_USER", user);
+        args.putInt("type", position);
+        searchMainFragment.setArguments(args);
+        return searchMainFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // get the book argument passed to the newInstance() method
         if (getArguments() != null) {
-            this.book = (Book) getArguments().getSerializable("VMBPA_BOOK");
-            this.pos = getArguments().getInt("pos");
+            this.currentUser = (User) getArguments().getSerializable("SF_USER");
+            this.pos = getArguments().getInt("type");
         }
 
         // Initialize Firestore
@@ -82,10 +96,6 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
         mBooksRecycler = v.findViewById(R.id.search_recycler_books);
         mBooksRecycler.setLayoutManager(new LinearLayoutManager(v.getContext()));
 
-//        Bundle args = getArguments();
-//        ((TextView) view.findViewById(android.R.id.text1))
-//                .setText(Integer.toString(args.getInt(ARG_OBJECT)));
-
         mAdapter = new LinearBookAdapter(mQuery, this);
         mBooksRecycler.setAdapter(mAdapter);
     }
@@ -96,10 +106,7 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
 
         newText = newText.toLowerCase();
 
-        Bundle args = getArguments();
-        int t = args.getInt("type");
-        Log.w("onQueryTextSubmit", String.valueOf(t));
-        if(t == 0) // searching all books
+        if(pos == 0) // searching all books
             mQuery = mFirestore.collection("catalogue").whereArrayContains("keywords", newText);
         else // searching in owned books only
             mQuery = mFirestore.collection("catalogue").whereEqualTo("owner", currentUser.getEmail())
@@ -125,19 +132,38 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
     }
 
     @Override
-    public void onBookSelected(DocumentSnapshot snapshot) {
-        Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+    public void onBookSelected(Book book) {
         if(book.getOwner() == currentUser.getEmail()){
-            ViewMyBookFragment mbf = ViewMyBookFragment.newInstance(currentUser, book);
+            ViewMyBookFragment f = ViewMyBookFragment.newInstance(currentUser, book);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("VMBF_USER", currentUser);
+            bundle.putSerializable("VMBF_BOOK", book);
+            f.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(getActivity().findViewById(R.id.container).getId(), f)
+                    .addToBackStack(null).commit();
         }
         else{
-            ViewBookFragment bf = ViewBookFragment.newInstance(currentUser, currentUser, book);
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(book.getOwner())
+                    .get().addOnCompleteListener(task -> {
+                DocumentSnapshot document = task.getResult();
+                if ((document != null) && (document.exists())) {
+                    User bookOwner;
+                    bookOwner = FirebaseIntegrity.getUserFromFirestore(document);
+                    ViewBookFragment nextFrag = ViewBookFragment
+                            .newInstance(currentUser, bookOwner, book);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("BA_CURRENTUSER", currentUser);
+                    bundle.putSerializable("BA_BOOK", book);
+                    bundle.putSerializable("BA_BOOKOWNER", bookOwner);
+                    nextFrag.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(getActivity().findViewById(R.id.container).getId(), nextFrag)
+                            .addToBackStack(null).commit();
+                }
+            });
         }
-//        ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
-//        Bundle args = new Bundle();
-//        args.putString("ID",Book.class snapshot.getId());
-//        nextFrag.setArguments(args);
-//        getActivity().getFragmentManager().beginTransaction().replace(R.id.container, frag, "findThisFragment").addToBackStack(null).commit();
 
     }
 

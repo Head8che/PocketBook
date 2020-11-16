@@ -81,13 +81,13 @@ public class SearchFragment extends Fragment{
 
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
-        searchStateAdapter = new SearchStateAdapter(this);
+        searchStateAdapter = new SearchStateAdapter(this, currentUser);
         tabLayout = v.findViewById(R.id.searchFragTabLayout);
         pager = v.findViewById(R.id.searchFragPager);
         pager.setAdapter(searchStateAdapter);
 
         new TabLayoutMediator(tabLayout, pager, (tab, position) -> {
-            if(position == 1)  tab.setText("All");
+            if(position == 0)  tab.setText("All");
             else tab.setText("Owned");
         }).attach();
 

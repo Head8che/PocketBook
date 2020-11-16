@@ -23,12 +23,9 @@ import com.example.pocketbook.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class NotificationFragment extends Fragment {
+public class SetLocationFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String VMBF_BOOK = "VMBF_BOOK";
-
-
     private RecyclerView requestsRecycler;
     private RequestAdapter requestAdapter;
     private Book book;
@@ -37,7 +34,7 @@ public class NotificationFragment extends Fragment {
 
 
 
-    public NotificationFragment() {
+    public SetLocationFragment() {
         // Required empty public constructor
     }
 
@@ -51,10 +48,19 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_set_location, container, false);
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        ImageView backButton = (ImageView) view.findViewById(R.id.notificationBackBtn);
+        View view = inflater.inflate(R.layout.fragment_set_location, container, false);
+        ImageView backButton = (ImageView) view.findViewById(R.id.setLocationBackBtn);
+        setLocation = (Button) view.findViewById(R.id.confirmPickupBtn);
 
+        setLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("USER","USERRRR");
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                intent.putExtra("currentUser", currentUser);
+                startActivity(intent);
+            }
+        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

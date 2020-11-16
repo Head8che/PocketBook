@@ -1,5 +1,6 @@
 package com.example.pocketbook.adapter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,14 +14,22 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.AddBookActivity;
+import com.example.pocketbook.activity.LocationActivity;
+import com.example.pocketbook.fragment.NotificationFragment;
+import com.example.pocketbook.fragment.SetLocationFragment;
 import com.example.pocketbook.fragment.ViewBookFragment;
+import com.example.pocketbook.fragment.ViewMyBookBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -39,10 +48,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAdapter.RequestHolder> {
     private Book mBook;
     private User mRequester;
+    private User currentUser;
+    private FragmentActivity activity;
 
-    public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Book mBook) {
+    public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Book mBook, FragmentActivity activity) {
         super(options);
         this.mBook = mBook;
+        this.activity = activity;
     }
 
     static class RequestHolder extends RecyclerView.ViewHolder {
@@ -112,6 +124,67 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("OWNERIN","TESTTTT");
+
+                Fragment someFragment = new SetLocationFragment();
+                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+
+//                ViewMyBookFragment nextFrag = ViewMyBookFragment
+////                        .newInstance(currentUser, book);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("VMBF_USER", currentUser);
+//                bundle.putSerializable("VMBF_BOOK", book);
+//                nextFrag.setArguments(bundle);
+//                activity.getSupportFragmentManager().beginTransaction()
+//                        .replace(activity.findViewById(R.id.container).getId(), nextFrag)
+//                        .addToBackStack(null).commit();
+
+//                if (mBook.getOwner().equals(currentUser.getEmail())) {
+//                    Log.e("OWNERIN", mBook.getOwner());
+//                    Log.d("OWNERIN", mBook.getOwner());
+//                    }
+//                    ViewMyBookFragment nextFrag = ViewMyBookFragment
+//                            .newInstance(currentUser, book);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("VMBF_USER", currentUser);
+//                    bundle.putSerializable("VMBF_BOOK", book);
+//                    nextFrag.setArguments(bundle);
+//                    activity.getSupportFragmentManager().beginTransaction()
+//                            .replace(activity.findViewById(R.id.container).getId(), nextFrag)
+//                            .addToBackStack(null).commit();
+
+
+//                Log.e("OWNERIN", mBook.getOwner());
+//                ViewMyBookFragment nextFrag = ViewMyBookFragment
+//                        .newInstance(currentUser, book);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("VMBF_USER", currentUser);
+//                bundle.putSerializable("VMBF_BOOK", book);
+//                nextFrag.setArguments(bundle);
+//                activity.getSupportFragmentManager().beginTransaction()
+//                        .replace(activity.findViewById(R.id.container).getId(), nextFrag)
+//                        .addToBackStack(null).commit();
+
+
+//                ViewMyBookFragment nextFrag = ViewMyBookFragment.newInstance(currentUser, book);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("VMBF_USER", currentUser);
+//                bundle.putSerializable("VMBF_BOOK", book);
+//                nextFrag.setArguments(bundle);
+//                activity.getSupportFragmentManager().beginTransaction()
+//                        .replace(activity.findViewById(R.id.container).getId(), nextFrag)
+//                        .addToBackStack(null).commit();
+//
+//                Fragment someFragment = new NotificationFragment();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
+//                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+//                transaction.commit();
+
+
                 // NOTE: this local setter is purely for testing;
                 //  FirebaseIntegrity will overwrite local data with Firebase data
 

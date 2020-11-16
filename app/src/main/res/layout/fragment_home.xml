@@ -33,11 +33,11 @@
 
         <ImageView
             android:id="@+id/notificationBtn"
-            android:layout_width="70dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="-10dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
             android:layout_gravity="end"
-            android:src="@drawable/ic_notification_foreground"
+            android:src="@drawable/ic_notification"
             app:tint="@color/colorUnselected">
         </ImageView>
 

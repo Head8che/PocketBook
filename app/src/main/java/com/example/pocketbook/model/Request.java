@@ -29,13 +29,12 @@ public class Request implements Serializable {
                    Book requestedBookObject, String requestDate) {
 
         // if non-optional fields are not null
-        if ((requester != null) && (requestee != null)
-                && (requestedBookObject != null) && (requestDate != null)) {
+        if ((requester != null) && (requestee != null) && (requestedBookObject != null)) {
 
             // trim all values
             requester = requester.trim().toLowerCase();  // lowercase email
             requestee = requestee.trim().toLowerCase();  // lowercase email
-            requestDate = (requestDate.equals(""))
+            requestDate = ((requestDate == null) || (requestDate.equals("")))
                     ? LocalDateTime.now().format(formatter).trim()
                     : requestDate.trim();  // replace null or empty string with current time
 

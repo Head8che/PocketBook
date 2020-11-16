@@ -2,13 +2,20 @@ package com.example.pocketbook.activity;
 
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
@@ -26,6 +33,8 @@ import com.example.pocketbook.model.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Objects;
+
 /**
  * Home Page Screen
  */
@@ -34,6 +43,13 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private User currentUser;
     private BottomNavigationView bottomNav;
+
+    private int LAUNCH_ADD_BOOK_CODE = 1234;
+    private int SEE_DESCRIPTION_CODE = 1111;
+    private int LEND_BOOK_CODE = 2222;
+    private int BORROW_BOOK_CODE = 3333;
+    private int RETURN_BOOK_CODE = 4444;
+    private int RECEIVE_BOOK_CODE = 5555;
 
     Fragment selectedFragment;
     String FRAG_TAG;
@@ -100,11 +116,13 @@ public class HomeActivity extends AppCompatActivity {
                         case R.id.bottom_nav_add:
                             Intent intent = new Intent(getBaseContext(), AddBookActivity.class);
                             intent.putExtra("HA_USER", currentUser);
-                            startActivityForResult(intent, 1);
+                            startActivityForResult(intent, LAUNCH_ADD_BOOK_CODE);
                             break;
                         case R.id.bottom_nav_scan:
-                            selectedFragment = new ScanFragment();
-                            FRAG_TAG = "SCAN_FRAGMENT";
+                            // showSpinnerDialog when layoutBookCondition is clicked
+                            showScanningSpinnerDialog();
+//                            selectedFragment = new ScanFragment();
+//                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
 
                     }
@@ -146,7 +164,9 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     if ((selectedFragment != null)) {
 
-                        if (!(CURRENT_TAG.equals(FRAG_TAG)) && (item.getItemId() !=  R.id.bottom_nav_profile)) {
+                        if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                && (item.getItemId() !=  R.id.bottom_nav_profile)
+                                && (item.getItemId() !=  R.id.bottom_nav_scan)) {
                             // only change fragment if it is not the current fragment
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
@@ -157,11 +177,70 @@ public class HomeActivity extends AppCompatActivity {
                 }
             };
 
+    /**
+     * Spinner Dialog that allows the user to choose what they want to scan for
+     */
+    private void showScanningSpinnerDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.alert_dialog_scanning_spinner, null);
+
+        // access the spinner text fields
+        TextView descriptionOption = view.findViewById(R.id.spinnerDialogSeeBookDescriptionField);
+        TextView lendOption = view.findViewById(R.id.spinnerDialogLendBookField);
+        TextView borrowOption = view.findViewById(R.id.spinnerDialogBorrowBookField);
+        TextView returnOption = view.findViewById(R.id.spinnerDialogReturnBookField);
+        TextView receiveOption = view.findViewById(R.id.spinnerDialogReceiveBookField);
+        TextView selectedOption;
+
+        // create the scanning dialog
+        AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
+        Objects.requireNonNull(alertDialog.getWindow())
+                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+
+        // start ScanActivity appropriately based on the selected scanning dialog option
+        descriptionOption.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+//            intent.putExtra("HA_USER", currentUser);
+            startActivityForResult(intent, SEE_DESCRIPTION_CODE);
+        });
+
+        // start ScanActivity appropriately based on the selected scanning dialog option
+        lendOption.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            startActivityForResult(intent, LEND_BOOK_CODE);
+        });
+
+        // start ScanActivity appropriately based on the selected scanning dialog option
+        borrowOption.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            startActivityForResult(intent, BORROW_BOOK_CODE);
+        });
+
+        // start ScanActivity appropriately based on the selected scanning dialog option
+        returnOption.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            startActivityForResult(intent, RETURN_BOOK_CODE);
+        });
+
+        // start ScanActivity appropriately based on the selected scanning dialog option
+        receiveOption.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            startActivityForResult(intent, RECEIVE_BOOK_CODE);
+        });
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1) {
+        if (requestCode == LAUNCH_ADD_BOOK_CODE) {
             bottomNav.setSelectedItemId(R.id.bottom_nav_home);
 
             if (resultCode == Activity.RESULT_OK) {

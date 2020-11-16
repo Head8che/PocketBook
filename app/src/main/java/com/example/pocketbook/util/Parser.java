@@ -22,11 +22,58 @@ import java.util.Random;
 
 // TODO: extract common methods to single method (like book owner and user email methods)
 
+// TODO: Parser request book breaks; handle null book objects / Parser-invalid book objects
+
 /**
  * Parser class ensures the validity of the
  * objects and text within the app
  */
 public class Parser {
+
+    //////////////////////////////////////// GENERAL PARSER ////////////////////////////////////////
+
+    /**
+     * This checks if an email is valid
+     * @param email email
+     * @return
+     *      true if email is formatted correctly, not null or an empty string, and is lowercase
+     *      false otherwise
+     */
+    public static boolean isValidEmail(String email) {
+
+        if (email == null) {
+            return false;
+        }
+
+        int at_index = -1;
+        int at_count = 0;
+        int dot_index = -1;
+        int emailLength = email.length();
+
+        // if the email is shorter than a@b.c or longer than 100 chars
+        if ((emailLength < 5) || (emailLength > 100)) {
+            return false;
+        }
+
+        // for each char in the email
+        for (int i = 0; i < emailLength; i++) {
+
+            // if the char is @ and @ is not the first char
+            if ((email.charAt(i) == '@') && (i > 0)) {
+                // set at_index to i when i is found & increment at_count
+                if (at_index == -1) {
+                    at_index = i;
+                }
+                at_count += 1;  // increment at_count
+            }
+            // if the char is . and it's at least one char away from @
+            if ((email.charAt(i) == '.') && (i != (emailLength - 1)) && (i > (at_index + 1))) {
+                dot_index = i;
+            }
+        }
+        // return true if there's only one @ and at least one . after the @
+        return (at_count == 1) && (dot_index > -1) && email.equals(email.toLowerCase());
+    }
 
     /////////////////////////////////////////  BOOK PARSER /////////////////////////////////////////
 
@@ -296,11 +343,11 @@ public class Parser {
      * This checks if a book owner is valid
      * @param owner app user that owns the book
      * @return
-     *      true if owner is not null or an empty string and is lowercase
+     *      true if owner is formatted correctly, not null or an empty string, and is lowercase
      *      false otherwise
      */
     public static boolean isValidBookOwner(String owner) {
-        return (owner != null) && (!owner.equals("")) && owner.equals(owner.toLowerCase());
+        return isValidEmail(owner);
     }
 
     /**
@@ -566,8 +613,8 @@ public class Parser {
      *      valid User object if arguments are valid
      *      null otherwise
      */
-    public static User parseUser(String firstName, String lastName, String email,
-                                 String username, String password, String photo) {
+    public static User parseUser(String firstName, String lastName, String email, String username,
+                                 String password, String phoneNumber, String photo) {
         // return null if non-optional fields are null
         if ((firstName == null) || (lastName == null) || (email == null)
                 || (username == null) || (password == null)) {
@@ -579,15 +626,17 @@ public class Parser {
         email = email.trim().toLowerCase();
         username = username.trim();
         password = password.trim();
+        phoneNumber = (phoneNumber == null) ? "" : phoneNumber.trim();  // replace null
         photo = (photo == null) ? "" : photo.trim();  // replace null with empty string
 
         // if all fields are valid
         if (isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)) {
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo)) {
 
             // return a new User object if all fields are valid
-            return new User(firstName, lastName, email, username, password, photo);
+            return new User(firstName, lastName, email, username, password, phoneNumber, photo);
         }
 
         // return null if not all fields are valid
@@ -608,12 +657,14 @@ public class Parser {
         String email = (String) userMapObject.get("email");
         String username = (String) userMapObject.get("username");
         String password = (String) userMapObject.get("password");
+        String phoneNumber = (String) userMapObject.get("phoneNumber");
         String photo = (String) userMapObject.get("photo");
 
         // if all fields (other than isbn) are valid
         if (isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)) {
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo)) {
 
             // return whether or not all fields are valid
             return true;
@@ -626,6 +677,7 @@ public class Parser {
                 + " " + "email:" + isValidUserEmail(email)
                 + " " + "username:" + isValidUsername(username)
                 + " " + "password:" + isValidPassword(password)
+                + " " + "phoneNumber:" + isValidPhoneNumber(phoneNumber)
                 + " " + "photo:" + isValidUserPhoto(photo)
         );
 
@@ -647,12 +699,14 @@ public class Parser {
         String email = userObject.getEmail();
         String username = userObject.getUsername();
         String password = userObject.getPassword();
+        String phoneNumber = userObject.getPhoneNumber();
         String photo = userObject.getPhoto();
 
         // if all fields (other than isbn) are valid
         if (isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo)) {
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo)) {
 
             // return whether or not all fields are valid
             return true;
@@ -665,6 +719,7 @@ public class Parser {
                 + " " + "email:" + isValidUserEmail(email)
                 + " " + "username:" + isValidUsername(username)
                 + " " + "password:" + isValidPassword(password)
+                + " " + "phoneNumber:" + isValidPhoneNumber(phoneNumber)
                 + " " + "photo:" + isValidUserPhoto(photo)
         );
 
@@ -673,7 +728,8 @@ public class Parser {
     }
 
     public static boolean isValidUserData(String firstName, String lastName, String email,
-                                          String username, String password, String photo) {
+                                          String username, String password,
+                                          String phoneNumber, String photo) {
 
         // return false if non-optional fields are null
         if ((firstName == null) || (lastName == null) || (email == null)
@@ -684,7 +740,8 @@ public class Parser {
         // return true if all fields are valid
         return isValidFirstName(firstName) && isValidLastName(lastName)
                 && isValidUserEmail(email) && isValidUsername(username)
-                && isValidPassword(password) && isValidUserPhoto(photo);
+                && isValidPassword(password) && isValidPhoneNumber(phoneNumber)
+                && isValidUserPhoto(photo);
     }
 
     /**
@@ -713,43 +770,11 @@ public class Parser {
      * This checks if a user email is valid
      * @param email app user's email
      * @return
-     *      true if email is not null or an empty string and is lowercase
+     *      true if email is formatted correctly, not null or an empty string, and is lowercase
      *      false otherwise
      */
     public static boolean isValidUserEmail(String email) {
-
-        if (email == null) {
-            return false;
-        }
-
-        int at_index = -1;
-        int at_count = 0;
-        int dot_index = -1;
-        int emailLength = email.length();
-
-        // if the email is shorter than a@b.c or longer than 100 chars
-        if ((emailLength < 5) || (emailLength > 100)) {
-            return false;
-        }
-
-        // for each char in the email
-        for (int i = 0; i < emailLength; i++) {
-
-            // if the char is @ and @ is not the first char
-            if ((email.charAt(i) == '@') && (i > 0)) {
-                // set at_index to i when i is found & increment at_count
-                if (at_index == -1) {
-                    at_index = i;
-                }
-                at_count += 1;  // increment at_count
-            }
-            // if the char is . and it's at least one char away from @
-            if ((email.charAt(i) == '.') && (i != (emailLength - 1)) && (i > (at_index + 1))) {
-                dot_index = i;
-            }
-        }
-        // return true if there's only one @ and at least one . after the @
-        return (at_count == 1) && (dot_index > -1) && email.equals(email.toLowerCase());
+        return isValidEmail(email);
     }
 
     /**
@@ -772,6 +797,18 @@ public class Parser {
      */
     public static boolean isValidPassword(String password) {
         return ((password != null) && (password.trim().length() >= 6));
+    }
+
+    /**
+     * This checks if a user phoneNumber is valid
+     * @param phoneNumber user phoneNumber
+     * @return
+     *      true if phoneNumber a non-null number with a length of [5, 15]
+     *      false otherwise
+     */
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        return (((phoneNumber != null) && ((phoneNumber.equals("")) || (!isNotDigit(phoneNumber))
+                && (phoneNumber.trim().length() > 4) && (phoneNumber.trim().length() < 16))));
     }
 
     /**

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:cardCornerRadius="20dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/spinnerDialogSeeBookDescriptionField"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/textBlack"
+                android:text="@string/seeBookDescription" />
+            <!--                android:drawableStart="@drawable/ic_back"-->
+            <!--                android:drawablePadding="8dp"-->
+
+
+            <TextView
+                android:id="@+id/spinnerDialogLendBookField"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/textBlack"
+                android:text="@string/lendBook" />
+
+            <TextView
+                android:id="@+id/spinnerDialogBorrowBookField"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/textBlack"
+                android:text="@string/borrowBook" />
+
+            <TextView
+                android:id="@+id/spinnerDialogReturnBookField"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/textBlack"
+                android:text="@string/returnBook" />
+
+            <TextView
+                android:id="@+id/spinnerDialogReceiveBookField"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/textBlack"
+                android:text="@string/receiveBook" />
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

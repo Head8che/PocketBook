@@ -58,8 +58,8 @@ public class ViewMyBookBookFragment extends Fragment {
             this.book = (Book) getArguments().getSerializable("VMBPA_BOOK");
         }
 
-        if ((book != null) && (book.getId() == null)) {
-
+        if ((book == null) || (book.getId() == null)) {
+            return;
         }
 
         listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
@@ -148,14 +148,14 @@ public class ViewMyBookBookFragment extends Fragment {
                         android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
-        if (bookCondition != null) {
+        if ((bookCondition != null) && (!bookCondition.equals(""))) {
             layoutBookCondition.setText(getResources().getString(R.string.condition_text,
                     bookCondition));
         } else {
             layoutBookCondition.setVisibility(View.GONE);
         }
 
-        if (bookComment != null) {
+        if ((bookComment != null) && (!bookComment.equals(""))) {
             layoutBookComment.setText(getResources().getString(R.string.comment_text,
                     bookComment));
         } else {

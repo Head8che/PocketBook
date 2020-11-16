@@ -26,7 +26,7 @@ import java.util.Objects;
 public class LinearBookAdapter extends FirestoreAdapter<LinearBookAdapter.ViewHolder>{
 
     public interface OnBookSelectedListener {
-        void onBookSelected(DocumentSnapshot snapshot);
+        void onBookSelected(Book book);
     }
 
     private OnBookSelectedListener mListener;
@@ -83,7 +83,7 @@ public class LinearBookAdapter extends FirestoreAdapter<LinearBookAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
-                        listener.onBookSelected(snapshot);
+                        listener.onBookSelected(book);
                     }
                 }
             });

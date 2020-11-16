@@ -60,7 +60,7 @@ public class HomeActivityTest {
                     Intent result = new Intent(targetContext, HomeActivity.class);
                     result.putExtra("CURRENT_USER", user = new User("mockFirstName",
                             "mockLastName", "mock@mock.com", "mockUsername",
-                            "mockPassword", null));
+                            "mockPassword", null, null));
                     return result;
                 }
             };

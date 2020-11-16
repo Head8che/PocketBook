@@ -30,6 +30,9 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".activity.ScanActivity"></activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAuHw4wNX8nFZ5IVahC5J4lYEX1s5Msey8" />
@@ -43,7 +46,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.LogInActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -33,6 +33,7 @@
     <string name="dateFormat">MMM DD,YYYY</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+    <string name="phoneNumber">Phone Number</string>
 
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
@@ -65,6 +66,12 @@
     <string name="fairCondition">FAIR</string>
     <string name="acceptableCondition">ACCEPTABLE</string>
 
+    <string name="seeBookDescription">See Book Description</string>
+    <string name="lendBook">Lend Book</string>
+    <string name="borrowBook">Borrow Book</string>
+    <string name="returnBook">Return Book</string>
+    <string name="receiveBook">Receive Book</string>
+
     <string name="bookPhotoDialogTitle">Change Photo</string>
     <string name="takePhoto">Take Photo</string>
     <string name="choosePhoto">Choose Photo</string>
@@ -75,18 +82,21 @@
     <string name="owner">Owner</string>
     <string name="borrower">Borrower</string>
     <string name="addBookFragmentTitle">Add New Book</string>
-    <string name="new_to_pocketbook_sign_up">New to Pocketbook? Sign Up</string>
+    <string name="new_to_pocketbook">New to Pocketbook?</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="book_status_image">book_status_image</string>
     <string name="owned_by_you">Owned by You</string>
+    <string name="notAvailable">Not Available</string>
+    <string name="alreadyRequested">Already Requested!</string>
+    <string name="viewPickupLocation">View Pickup Location</string>
     <string name="long_description">Long description</string>
     <string name="status">Status</string>
     <string name="book_title_that_is_really_long">Book title that is really long</string>
     <string name="book_author">Book author</string>
-    <string name="isbn_123_234_1234">ISBN: 123-234-1234</string>
+    <string name="isbn_123_234_1234">ISBN: 123–234–1234</string>
     <string name="condition_new">Condition: New</string>
     <string name="comment_this_book_is_good">Comment: This book is good!</string>
     <string name="scan_fragment">Scan Fragment</string>

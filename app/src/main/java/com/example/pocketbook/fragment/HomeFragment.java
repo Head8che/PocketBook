@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Query to retrieve all books
+        // Retrieving books that do not belong to user
         mQuery = mFirestore.collection("catalogue")
                 .whereNotEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 

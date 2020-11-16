@@ -19,7 +19,6 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,7 +36,6 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
     private LinearBookAdapter mAdapter;
 
     private User currentUser;
-    private BookList catalogue;
 
     private DocumentSnapshot lastVisible;
     private boolean isScrolling = false;
@@ -104,7 +102,7 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
         if(t == 0) // searching all books
             mQuery = mFirestore.collection("catalogue").whereArrayContains("keywords", newText);
         else // searching in owned books only
-            mQuery = mFirestore.collection("catalogue").whereEqualTo("owner", "currentUser") // change this
+            mQuery = mFirestore.collection("catalogue").whereEqualTo("owner", currentUser.getEmail())
                                                                     .whereArrayContains("keywords", newText);
         mAdapter.setQuery(mQuery);
     }
@@ -129,13 +127,20 @@ public class SearchMainFragment extends Fragment implements LinearBookAdapter.On
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
         Book book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+        if(book.getOwner() == currentUser.getEmail()){
+            ViewMyBookFragment mbf = ViewMyBookFragment.newInstance(currentUser, book);
+        }
+        else{
+            ViewBookFragment bf = ViewBookFragment.newInstance(currentUser, currentUser, book);
+        }
 //        ViewBookFragment nextFrag = ViewBookFragment.newInstance(currentUser, book);
 //        Bundle args = new Bundle();
 //        args.putString("ID",Book.class snapshot.getId());
 //        nextFrag.setArguments(args);
-//        activity.getFragmentManager().beginTransaction().replace(R.id.container, nextFrag, "findThisFragment").addToBackStack(null).commit();
+//        getActivity().getFragmentManager().beginTransaction().replace(R.id.container, frag, "findThisFragment").addToBackStack(null).commit();
 
     }
+
 }
 
 

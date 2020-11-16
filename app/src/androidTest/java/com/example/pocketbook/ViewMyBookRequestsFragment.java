@@ -24,6 +24,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -56,12 +58,14 @@ public class ViewMyBookRequestsFragment {
     @Before
     public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
-        mockBook = new Book("0", "mockTitle", "mockAuthor", "0000000000000", "mock@mock.com", "AVAILABLE", "this is a test", "GOOD", "");
-        mockBook.pushNewBookToFirebase();
-        mockRequester = new User("mockFirst", "mockLast", "test@gmail.com", "mockUser", "123456", "");
-        mockRequester.setNewUserFirebase();
-        mockRequest = new Request("test@gmail.com", "mock@mock.com", mockBook);
-        mockBook.addRequest(mockRequest);
+        mockBook = new Book("mockID", "mockTitle", "mockAuthor",
+                "0000000000000", "mock@mock.com", "AVAILABLE",
+                "this is a test", "GOOD", "", new ArrayList<>());
+//        mockBook.pushNewBookToFirebase();
+//        mockRequester = new User("mockFirst", "mockLast", "mockuser@gmail.com", "mockUser", "123456", "");
+//        mockRequester.setNewUserFirebase();
+//        mockRequest = new Request("mockuser@gmail.com", "mock1@mock.com", mockBook);
+//        mockBook.addRequest(mockRequest);
 
         //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
@@ -79,8 +83,13 @@ public class ViewMyBookRequestsFragment {
      */
     @After
     public void removeMockFromFirebase() {
-        FirebaseIntegrity.removeAuthorFromFirestore("mockAuthor");
-        FirebaseIntegrity.removeUserFromFirebase("test@gmail.com");
+        FirebaseIntegrity.deleteDocumentsFromSubcollectionOnFieldValue("catalogue",
+                "requests",
+                "requester", "mockuser@gmail.com");
+        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("users",
+                "email", "mockuser@gmail.com");
+        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
+                "author", "mockAuthor");
     }
 
     /**

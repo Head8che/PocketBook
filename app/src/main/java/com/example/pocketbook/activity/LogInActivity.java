@@ -103,7 +103,7 @@ public class LogInActivity extends AppCompatActivity {
                                             current_user = FirebaseIntegrity.getUserFromFirestore(document);
                                             Log.e(TAG, "DocumentSnapshot data: " + document.getData());
                                             Toast.makeText(LogInActivity.this, String.format(Locale.CANADA,
-                                                    "Welcome to Pocketbook, %s.",current_user.getFirstName()),
+                                                    "Welcome back, %s.",current_user.getFirstName()),
                                                     Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                             intent.putExtra("CURRENT_USER", current_user);

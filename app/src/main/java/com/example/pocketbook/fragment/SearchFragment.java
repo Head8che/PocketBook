@@ -1,6 +1,5 @@
 package com.example.pocketbook.fragment;
 
-import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.adapter.SearchStateAdapter;
-import com.example.pocketbook.model.BookList;
+import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -29,8 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class SearchFragment extends Fragment{
-
-    private OnSearchChangeListener mCallback;
 
     private static final String TAG = "SearchFragment";
     private static final int LIMIT = 20;
@@ -41,11 +38,6 @@ public class SearchFragment extends Fragment{
     private LinearBookAdapter mAdapter;
 
     private User currentUser;
-    private BookList catalogue;
-
-    private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
 
     private SearchView searchView;
 
@@ -53,11 +45,16 @@ public class SearchFragment extends Fragment{
     private ViewPager2 pager;
     private SearchStateAdapter searchStateAdapter;
 
-    public static SearchFragment newInstance(User user, BookList catalogue) {
+
+    /**
+     * Search fragment instance that bundles the user information to be accessible
+     * @param user
+     * @return
+     */
+    public static SearchFragment newInstance(User user) {
         SearchFragment searchFragment = new SearchFragment();
         Bundle args = new Bundle();
         args.putSerializable("SF_USER", user);
-        args.putSerializable("SF_CATALOGUE", catalogue);
         searchFragment.setArguments(args);
         return searchFragment;
     }
@@ -68,7 +65,6 @@ public class SearchFragment extends Fragment{
 
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("SF_USER");
-            this.catalogue = (BookList) getArguments().getSerializable("SF_CATALOGUE");
         }
     }
 
@@ -126,28 +122,9 @@ public class SearchFragment extends Fragment{
 
     }
 
-    // This is the interface that the Activity will implement
-    // so that this Fragment can communicate with the Activity.
-    public interface OnSearchChangeListener {
-        void messageFromOnSearchFrag(String text);
-    }
-
-    // This method insures that the Adapter has actually implemented our
-    // listener and that it isn't null.
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnSearchChangeListener) {
-            mCallback = (OnSearchChangeListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnSearchChangeListener");
-        }
-    }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallback = null;
-    }
+        }
 }

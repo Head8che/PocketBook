@@ -41,6 +41,8 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertNotNull;
 
+// TODO: Move the actual book click stuff to HomeFragment test (add comments)
+
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -76,7 +78,7 @@ public class HomeActivityTest {
      */
     @After
     public void removeMockFromFirebase() {
-        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
+//        FirebaseIntegrity.removeAuthorFromFirestore("M0cK^U+H0R");
     }
 
     @Test

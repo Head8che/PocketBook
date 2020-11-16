@@ -11,5 +11,6 @@
     <color name="colorRequested">#7C90FD</color>
     <color name="colorAccepted">#FF9800</color>
     <color name="colorBorrowed">#ED2F21</color>
+    <color name="colorBackground">#F5F5F5</color>
     <color name="notAvailable">#FFACACAC</color>
 </resources>

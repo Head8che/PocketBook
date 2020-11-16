@@ -30,6 +30,8 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.util.Parser;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.StorageReference;
@@ -87,7 +89,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         book = (Book) intent.getSerializableExtra("VMBBF_BOOK");
-        StorageReference bookCover = book.getBookCover();
+        StorageReference bookCover = FirebaseIntegrity.getBookCover(book);
 
         bookTitle = book.getTitle();
         bookAuthor = book.getAuthor();
@@ -127,7 +129,7 @@ public class EditBookActivity extends AppCompatActivity {
         layoutBookTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (layoutBookTitle.getText().toString().equals("")) {
+                if (!(Parser.isValidBookTitle(s.toString()))) {
                     layoutBookTitle.setError("Input required");
                     layoutBookTitleContainer.setErrorEnabled(true);
                     validTitle = false;
@@ -146,7 +148,7 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (layoutBookAuthor.getText().toString().equals("")) {
+                if (!(Parser.isValidBookAuthor(s.toString()))) {
                     layoutBookAuthor.setError("Input required");
                     layoutBookAuthorContainer.setErrorEnabled(true);
                     validAuthor = false;
@@ -165,8 +167,8 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (layoutBookISBN.getText().toString().equals("")) {
-                    layoutBookISBN.setError("Input required");
+                if (!(Parser.isValidBookIsbn(s.toString()))) {
+                    layoutBookISBN.setError("Invalid ISBN");
                     layoutBookISBNContainer.setErrorEnabled(true);
                     validISBN = false;
                 } else {
@@ -210,32 +212,37 @@ public class EditBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validTitle && validAuthor && validISBN) {
                     if (!noChanges()) {
-                        String newTitle = layoutBookTitle.getText().toString();
-                        String newAuthor = layoutBookAuthor.getText().toString();
-                        String newISBN = layoutBookISBN.getText().toString();
-                        String newCondition = layoutBookCondition.getText().toString();
-                        String newComment = layoutBookComment.getText().toString();
+                        String newTitle = Objects.requireNonNull(layoutBookTitle.getText())
+                                .toString();
+                        String newAuthor = Objects.requireNonNull(layoutBookAuthor.getText())
+                                .toString();
+                        String newISBN = Objects.requireNonNull(layoutBookISBN.getText())
+                                .toString();
+                        String newCondition = Objects.requireNonNull(layoutBookCondition.getText())
+                                .toString();
+                        String newComment = Objects.requireNonNull(layoutBookComment.getText())
+                                .toString();
 
                         if (!(bookTitle.equals(newTitle))) {
-                            book.setTitle(newTitle);
+                            FirebaseIntegrity.setBookTitleFirebase(book, newTitle);
                         }
                         if (!(bookAuthor.equals(newAuthor))) {
-                            book.setAuthor(newAuthor);
+                            FirebaseIntegrity.setBookAuthorFirebase(book, newAuthor);
                         }
                         if (!(bookISBN.equals(newISBN))) {
-                            book.setIsbn(newISBN);
+                            FirebaseIntegrity.setBookIsbnFirebase(book, newISBN);
                         }
                         if (!(bookCondition.equals(newCondition))) {
-                            book.setCondition(newCondition);
+                            FirebaseIntegrity.setBookConditionFirebase(book, newCondition);
                         }
                         if (!(bookComment.equals(newComment))) {
-                            book.setComment(newComment);
+                            FirebaseIntegrity.setBookCommentFirebase(book, newComment);
                         }
                         if (currentPhotoPath != null) {
                             if (currentPhotoPath.equals("BITMAP")) {
-                                book.setBookCover(currentPhoto);
+                                FirebaseIntegrity.setBookCoverBitmap(book, currentPhoto);
                             } else {
-                                book.setBookCover(currentPhotoPath);
+                                FirebaseIntegrity.setBookCover(book, currentPhotoPath);
                             }
                         }
                     }
@@ -425,16 +432,18 @@ public class EditBookActivity extends AppCompatActivity {
             }
         });
 
+        // TODO: Handle removing photo! Can't just overwrite current photo before save
         removePhotoOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String removedPhoto = book.getPhoto();
-                book.setPhoto("");
+//                book.setPhoto("");
                 alertDialog.dismiss();
                 GlideApp.with(Objects.requireNonNull(getApplicationContext()))
-                        .load(book.getBookCover())
+                        .load(FirebaseIntegrity.getBookCover(book))
                         .into(layoutBookCover);
-                book.setPhoto(removedPhoto);
+//                book.setPhoto(removedPhoto);
+//                FirebaseIntegrity.setBookPhotoFirebase(book, "");
                 currentPhotoPath = "REMOVE";
                 removePhoto = false;
             }

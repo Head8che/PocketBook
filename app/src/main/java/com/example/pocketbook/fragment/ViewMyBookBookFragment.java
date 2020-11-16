@@ -19,13 +19,13 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.BookList;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
@@ -34,18 +34,18 @@ import java.util.Objects;
 public class ViewMyBookBookFragment extends Fragment {
 
     private Book book;
-    private BookList catalogue;
+
+    ListenerRegistration listenerRegistration;
 
     public ViewMyBookBookFragment() {
         // Required empty public constructor
     }
 
 
-    public static ViewMyBookBookFragment newInstance(Book book, BookList catalogue) {
+    public static ViewMyBookBookFragment newInstance(Book book) {
         ViewMyBookBookFragment fragment = new ViewMyBookBookFragment();
         Bundle args = new Bundle();
         args.putSerializable("VMBPA_BOOK", book);
-        args.putSerializable("VMBPA_CATALOGUE", catalogue);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,12 +56,14 @@ public class ViewMyBookBookFragment extends Fragment {
 
         if (getArguments() != null) {
             this.book = (Book) getArguments().getSerializable("VMBPA_BOOK");
-            this.catalogue = (BookList) getArguments().getSerializable("VMBPA_CATALOGUE");
         }
 
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("catalogue")
-                .document(book.getId());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        if ((book != null) && (book.getId() == null)) {
+
+        }
+
+        listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
+                .document(book.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -103,7 +105,7 @@ public class ViewMyBookBookFragment extends Fragment {
         String bookTitle = book.getTitle();
         String bookAuthor = book.getAuthor();
         String bookISBN = book.getISBN();
-        StorageReference bookCover = book.getBookCover();
+        StorageReference bookCover = FirebaseIntegrity.getBookCover(book);
         String bookStatus = book.getStatus();
         String bookCondition = book.getCondition();
         String bookComment = book.getComment();
@@ -172,5 +174,11 @@ public class ViewMyBookBookFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listenerRegistration.remove();
     }
 }

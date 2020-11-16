@@ -1,20 +1,24 @@
 package com.example.pocketbook.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
@@ -139,6 +143,7 @@ public class HomeFragment extends Fragment {
         mAdapter = new BookAdapter(options, currentUser, getActivity());
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+        ImageView notificationBtn = (ImageView) v.findViewById(R.id.notificationBtn);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
 
@@ -146,6 +151,18 @@ public class HomeFragment extends Fragment {
 
 //        scrollUpdate = new ScrollUpdate(catalogue, mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();
+
+        notificationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment someFragment = new NotificationFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+
+            }
+        });
 
         return v;
     }

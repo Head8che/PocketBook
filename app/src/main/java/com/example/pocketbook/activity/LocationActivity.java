@@ -49,7 +49,8 @@ import java.util.List;
 
 // https://developers.google.com/maps/documentation/android-sdk/start
 // https://developer.android.com/reference/android/widget/AutoCompleteTextView
-public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleApiClient.OnConnectionFailedListener {
     private GoogleMap mGoogleMap;
     private Geocoder geocoder; // Gets the converts address to coordinates
     FusedLocationProviderClient mFusedLocationProviderClient;
@@ -139,16 +140,16 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
-                    Geocoder gc = new Geocoder(LocationActivity.this);
+                    Geocoder geocoder = new Geocoder(LocationActivity.this);
                     List<Address> list = null;
                     try {
-                        list = gc.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                        list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     Address addressLocation = list.get(0);
                     marker.setTitle(addressLocation.getLocality());
-                    setPin(addressLocation.getLocality(), addressLocation.getLatitude(), addressLocation.getLongitude());
+                    setPin(addressLocation.getFeatureName(), addressLocation.getLatitude(), addressLocation.getLongitude());
                 }
             });
 
@@ -173,8 +174,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     }
 
                     Address addressLocation = list.get(0);
-                    marker.setTitle(addressLocation.getLocality());
-                    setPin(addressLocation.getLocality(), addressLocation.getLatitude(), addressLocation.getLongitude());
+                    marker.setTitle(addressLocation.getAddressLine(0));
+                    setPin(addressLocation.getAddressLine(0),addressLocation.getLatitude(), addressLocation.getLongitude());
 
 
                 }
@@ -193,10 +194,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             }
 
             googleMap.setMyLocationEnabled(true);
-
-            // Disable this since we have a search view blocking
-            // the button anyway
             googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+
 
         }
 
@@ -240,17 +240,19 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private void geoLocate(String inputtedLocation) {
         hideSoftKeyboard();
         Geocoder geocoder = new Geocoder(LocationActivity.this);
+        String searchString = mSearchField.getText().toString();
         List<Address> list = new ArrayList<>();
         try {
-            list = geocoder.getFromLocationName(inputtedLocation, 1);
+            list = geocoder.getFromLocationName(searchString, 1);
         } catch (IOException e) {
             Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
         }
 
         if (list.size() > 0) {
             Address addressLocation = list.get(0);
-            goToLocationZoom(addressLocation.getLatitude(), addressLocation.getLongitude(), 15f);
-            setPin(addressLocation.getLocality(), addressLocation.getLatitude(), addressLocation.getLongitude());
+            Log.d("NAME", addressLocation.toString());
+            goToLocationZoom(addressLocation.getLatitude(), addressLocation.getLongitude(), 15f, addressLocation.getAddressLine(0));
+            setPin( addressLocation.getAddressLine(0), addressLocation.getLatitude(), addressLocation.getLongitude());
         }
     }
 
@@ -275,7 +277,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         if (task.isSuccessful()) {
                             if (task.getResult() != null) {
                                 Location currentLocation = (Location) task.getResult();
-                                goToLocationZoom(currentLocation.getLatitude(), currentLocation.getLongitude(), 15f);
+                                goToLocationZoom(currentLocation.getLatitude(), currentLocation.getLongitude(), 15f,"LOCATION");
                                 Geocoder geocoder = new Geocoder(LocationActivity.this);
                                 Address addressLocation = null;
                                 List<Address> list2 = new ArrayList<>();
@@ -285,7 +287,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                setPin(addressLocation.getLocality(), currentLocation.getLatitude(), currentLocation.getLongitude());
+                                setPin( addressLocation.getAddressLine(0), currentLocation.getLatitude(), currentLocation.getLongitude());
                             }
                         } else {
                             Toast.makeText(LocationActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
@@ -299,9 +301,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-    public void goToLocationZoom(double lat, double lng, float zoom) {
-        LatLng ll = new LatLng(lat, lng);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
+    public void goToLocationZoom(double lat, double lng, float zoom, String title) {
+        LatLng latilong = new LatLng(lat, lng);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latilong, zoom);
         if (mGoogleMap != null) {
             mGoogleMap.moveCamera(update);
         }
@@ -311,17 +313,15 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
 
     // Dropped Pin
-    private void setPin(String locality, double lat, double lng) {
+    private void setPin(String title, double lat, double lng) {
         if (marker != null) {
             marker.remove();
         }
         mPinnedMap = new LatLng(lat, lng);
-        Log.e("LOCATION:", String.valueOf(lat)+(lng)+(locality));
         MarkerOptions options = new MarkerOptions()
                 .draggable(true)
-                .title(locality)
+                .title(title)
                 .position(mPinnedMap);
-
         if (mGoogleMap != null) {
             marker = mGoogleMap.addMarker(options);
         }

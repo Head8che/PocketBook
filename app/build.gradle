@@ -97,6 +97,11 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
 
+    repositories {
+        jcenter()
+    }
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
 }
 
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin

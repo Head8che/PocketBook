@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/LocationActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/map_search_field_color"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:elevation="10dp"
+        android:id="@+id/locationSearch">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/geoLocationPin"
+            android:src="@drawable/ic_geolocationpin"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+          />
+
+        <AutoCompleteTextView
+            android:id="@+id/locationSearchField"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/geoLocationPin"
+            android:background="@null"
+            android:hint="Enter Address, City, or Zip Code"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:textColor="#000"
+            android:textSize="15dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/locationConfirmButton"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Confirm Location"
+        android:elevation="10dp"
+        android:textColor="@android:color/white" />
+
+
+</RelativeLayout>

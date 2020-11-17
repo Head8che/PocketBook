@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
+    <ImageView
+        android:id="@+id/loginPocketbookLogo"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginEmailContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_logo_vector"
+        android:contentDescription="@string/pocketbook" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView"
         android:layout_width="26dp"
@@ -14,12 +26,13 @@
         android:layout_marginTop="69dp"
         android:layout_marginStart="12dp"
         android:src="@drawable/ic_profile"
-        app:layout_constraintEnd_toStartOf="@+id/UserRegContainer"
+        app:layout_constraintEnd_toStartOf="@+id/loginEmailContainer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/loginPocketbookLogo" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/UserRegContainer"
+
+        android:id="@+id/loginEmailContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -30,10 +43,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        app:layout_constraintTop_toBottomOf="@+id/loginPocketbookLogo">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/UserReg"
+            android:id="@+id/loginEmailField"
             android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
@@ -49,12 +62,12 @@
         android:layout_marginTop="47dp"
         android:layout_marginStart="12dp"
         android:src="@drawable/ic_password"
-        app:layout_constraintEnd_toStartOf="@+id/PasswordRegContainer"
+        app:layout_constraintEnd_toStartOf="@+id/loginPasswordContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/PasswordRegContainer"
+        android:id="@+id/loginPasswordContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -66,10 +79,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserRegContainer">
+        app:layout_constraintTop_toBottomOf="@+id/loginEmailContainer">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/PasswordReg"
+            android:id="@+id/loginPasswordField"
             android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
@@ -81,7 +94,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/LoginBtn"
+        android:id="@+id/loginLoginBtn"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
@@ -96,65 +109,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordRegContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/loginPasswordContainer" />
 
-    <Button
-        android:id="@+id/RegisterText"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
+        android:orientation="horizontal"
         android:layout_marginTop="32dp"
-        android:background="@null"
-        android:text="New to Pocketbook?"
-        android:textColor="@color/colorUnselected"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginBtn" />
-
-    <Button
-        android:id="@+id/RegisterBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="31.7dp"
-        android:layout_marginEnd="90dp"
-        android:background="@null"
-        android:text="Sign Up"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:letterSpacing="0.02"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/RegisterText"
-        app:layout_constraintTop_toBottomOf="@+id/LoginBtn" />
-
-    <Button
-        android:id="@+id/ForgotPass"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="16dp"
-        android:background="@null"
-        android:text="Forgot Password"
-        android:clickable="false"
-        android:visibility="invisible"
-        android:textColor="@color/textBlack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RegisterBtn" />
-
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="64dp"
-        app:layout_constraintBottom_toTopOf="@+id/UserRegContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_logo_vector" />
+        app:layout_constraintTop_toBottomOf="@+id/loginLoginBtn">
+
+        <Button
+            android:id="@+id/RegisterText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:maxLines="1"
+            android:text="@string/new_to_pocketbook"
+            android:textColor="@color/colorUnselected"
+            android:textSize="14sp"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/loginSignUpBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:background="@null"
+            android:maxLines="1"
+            android:letterSpacing="0.02"
+            android:text="@string/signUp"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

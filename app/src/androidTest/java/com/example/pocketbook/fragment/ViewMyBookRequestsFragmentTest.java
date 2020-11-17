@@ -1,4 +1,4 @@
-package com.example.pocketbook;
+package com.example.pocketbook.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.pocketbook.R;
 import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
@@ -30,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ViewMyBookRequestsFragment {
+public class ViewMyBookRequestsFragmentTest {
     private Solo solo;
     private Book mockBook;
     private Request mockRequest;
@@ -45,7 +46,7 @@ public class ViewMyBookRequestsFragment {
                     Intent result = new Intent(targetContext, HomeActivity.class);
                     User mockUser = new User("mockFirstName",
                             "mockLastName","mock@mock.com","mockUsername",
-                            "mockPassword", null);
+                            "mockPassword", null, null);
                     result.putExtra("CURRENT_USER", mockUser );
                     return result;
                 }

@@ -18,9 +18,10 @@ public class UserTest {
         String email = "mock@mock.com";
         String username = "mockUsername";
         String password = "mockPassword";
+        String phoneNumber = "7801234567";
         String photo = "";
 
-        return new User(firstName, lastName, email, username, password, photo);
+        return new User(firstName, lastName, email, username, password, phoneNumber, photo);
     }
 
     /**
@@ -33,9 +34,10 @@ public class UserTest {
         String email = "mock@mock.com";
         String username = "mockUsername";
         String password = "mockPassword";
+        String phoneNumber = "7801234567";
         String photo = "";
 
-        return new User(firstName, lastName, email, username, password, photo);
+        return new User(firstName, lastName, email, username, password, phoneNumber, photo);
     }
 
     /**

@@ -24,16 +24,16 @@ public class Book implements Serializable {
 
     /**
      * Book constructor
-     * @param id : unique book id
-     * @param title : title of book
-     * @param author : author of book
-     * @param isbn : isbn of Book
-     * @param owner : User that owns the Book
-     * @param status : indicates availability of book
-     * @param comment : comment set by owner
-     * @param condition : condition of the book, set by owner
-     * @param photo : photo string of book by owner
-     * @param requesters : ArrayList of user emails that have requested the book
+     * @param id unique book id
+     * @param title title of book
+     * @param author author of book
+     * @param isbn isbn of Book
+     * @param owner User that owns the Book
+     * @param status indicates availability of book
+     * @param comment comment set by owner
+     * @param condition condition of the book, set by owner
+     * @param photo photo string of book by owner
+     * @param requesters ArrayList of user emails that have requested the book
      */
     public Book(String id, String title, String author, String isbn, String owner, String status,
                 String comment, String condition, String photo, ArrayList<String> requesters) {

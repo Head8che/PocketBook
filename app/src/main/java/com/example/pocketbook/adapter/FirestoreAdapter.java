@@ -2,6 +2,7 @@
 // loosely relates to an array of books(snapshots)
 // it implements a listener to be able to get data in real time
 // will add more functions to make it more robust and flexible
+// TODO: get rid of this and use firestore-ui:firecloud
 
 package com.example.pocketbook.adapter;
 

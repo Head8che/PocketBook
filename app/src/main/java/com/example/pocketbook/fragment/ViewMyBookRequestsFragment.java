@@ -135,7 +135,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
         requestsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //set a new requestAdapter as an adapter for the recycler
-        requestAdapter = new RequestAdapter(options, this.book);
+        requestAdapter = new RequestAdapter(options, this.book, getActivity());
         requestsRecycler.setAdapter(requestAdapter);
 
         return view;

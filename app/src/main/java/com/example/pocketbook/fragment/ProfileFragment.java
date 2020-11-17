@@ -59,6 +59,7 @@ public class ProfileFragment extends Fragment {
     private static final String USERS = "users";
     private User currentUser;
     private ScrollUpdate scrollUpdate;
+    private Fragment profileFragment = this;
 
     FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
@@ -155,18 +156,18 @@ public class ProfileFragment extends Fragment {
 
                     currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
 
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .detach(ProfileFragment.this)
-                            .attach(ProfileFragment.this)
-                            .commitAllowingStateLoss();
-                } else {
-                    if ( getActivity() == null) {
-                        getParentFragmentManager().beginTransaction()
-                                .detach(ProfileFragment.this).commitAllowingStateLoss();
-                    } else {
-                        getActivity().getFragmentManager().popBackStack();
+                    // TODO; Add isAdded to other listeners
+                    // if fragment can have a manager; tests crash without this line
+                    if (profileFragment.isAdded()) {
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .detach(ProfileFragment.this)
+                                .attach(ProfileFragment.this)
+                                .commitAllowingStateLoss();
                     }
+                } else if (profileFragment.isAdded()) {
+                    getParentFragmentManager().beginTransaction()
+                            .detach(ProfileFragment.this).commitAllowingStateLoss();
                 }
             }
 

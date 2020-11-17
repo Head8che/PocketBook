@@ -7,6 +7,21 @@
     android:orientation="vertical"
     tools:context=".activity.HomeActivity">
 
+
+    <!--    <TextView-->
+<!--        android:id="@+id/homeFragmentCatalogueTitle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:letterSpacing="0.02"-->
+<!--        android:paddingStart="24dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="Catalogue"-->
+<!--        android:textColor="@color/textBlack"-->
+<!--        android:textSize="24sp" />-->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/homeFragmentToolbar"
         android:layout_width="match_parent"
@@ -14,6 +29,17 @@
         android:background="?attr/colorPrimary"
         android:elevation="5dp"
         app:title="">
+
+
+        <ImageView
+            android:id="@+id/notificationBtn"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_notification"
+            app:tint="@color/colorUnselected">
+        </ImageView>
 
         <TextView
             android:id="@+id/homeFragmentPageTitle"
@@ -28,33 +54,19 @@
             android:textColor="@color/textBlack"
             android:textSize="18sp" />
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/notificationBtn"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="end"-->
-        <!--            android:minHeight="?actionBarSize"-->
-        <!--            android:padding="@dimen/appbar_padding"-->
-        <!--            android:textSize="18sp"-->
-        <!--            android:text="@string/save"-->
-        <!--            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
-        <!--            android:textColor="@color/colorAccent" />-->
+        <!--                <TextView-->
+        <!--                    android:id="@+id/notificationBtn"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_gravity="end"-->
+        <!--                    android:minHeight="?actionBarSize"-->
+        <!--                    android:padding="@dimen/appbar_padding"-->
+        <!--                    android:textSize="18sp"-->
+        <!--                    android:text="@string/save"-->
+        <!--                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+        <!--                    android:textColor="@color/colorAccent" />-->
 
     </androidx.appcompat.widget.Toolbar>
-
-<!--    <TextView-->
-<!--        android:id="@+id/homeFragmentCatalogueTitle"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:letterSpacing="0.02"-->
-<!--        android:paddingStart="24dp"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:paddingEnd="20dp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:text="Catalogue"-->
-<!--        android:textColor="@color/textBlack"-->
-<!--        android:textSize="24sp" />-->
 
     <FrameLayout
         android:id="@+id/container"

@@ -25,13 +25,18 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.notifications.Token;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.pocketbook.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
 
@@ -67,6 +72,15 @@ public class HomeActivity extends AppCompatActivity {
         FRAG_TAG = "HOME_FRAGMENT";
         getSupportFragmentManager().beginTransaction().add(R.id.container,
                 selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
+        UpdateToken(currentUser); //update the token for the user to send notifications
+    }
+
+    private void UpdateToken(User currentUser){
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail())
+                .update("token",token.getToken());
     }
 
     @Override

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -19,13 +21,31 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.notifications.APIService;
+import com.example.pocketbook.notifications.Client;
+import com.example.pocketbook.notifications.Data;
+import com.example.pocketbook.notifications.MyResponse;
+import com.example.pocketbook.notifications.Sender;
+import com.example.pocketbook.notifications.Token;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -42,11 +62,14 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     ListenerRegistration listenerRegistration;
 
+    APIService apiService;
+
     /**
      * create a new instance of the ViewBookFragment
+     *
      * @param currentUser: the user currently signed in the app
-     * @param bookOwner: the owner of the book being viewed
-     * @param book: the book being viewed
+     * @param bookOwner:   the owner of the book being viewed
+     * @param book:        the book being viewed
      * @return a new instance of the ViewBookFragment
      */
     public static ViewBookFragment newInstance(User currentUser, User bookOwner, Book book) {
@@ -88,7 +111,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                 .attach(ViewBookFragment.this)
                                 .commitAllowingStateLoss();
                     } else {
-                        if ( getActivity() == null) {
+                        if (getActivity() == null) {
                             getParentFragmentManager().beginTransaction()
                                     .detach(ViewBookFragment.this).commitAllowingStateLoss();
                         } else {
@@ -98,6 +121,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
 
                 });
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
     }
 
@@ -172,8 +197,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .into(userProfilePicture);
 
         usernameField.setText(bookOwner.getUsername());
-        
-        switch(bookStatus) {
+
+        switch (bookStatus) {
 
             // if the book is borrowed or accepted by another user, it cannot be requested
             case "BORROWED":
@@ -183,7 +208,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_borrowed);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
-                        R.color.colorBorrowed),android.graphics.PorterDuff.Mode.SRC_IN);
+                        R.color.colorBorrowed), android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
 
             case "ACCEPTED":
@@ -193,7 +218,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         R.color.notAvailable));
                 bookStatusImage.setImageResource(R.drawable.ic_accepted);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
-                        R.color.colorAccepted),android.graphics.PorterDuff.Mode.SRC_IN);
+                        R.color.colorAccepted), android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
 
 
@@ -236,9 +261,55 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 // display a message confirming that the book has been requested
                 new AlertDialog.Builder(getContext())
                         .setTitle("Request sent!")
-                        .setMessage("You have requested "+book.getTitle()+"!" )
+                        .setMessage("You have requested " + book.getTitle() + "!")
                         .show();
 
+
+                FirebaseFirestore.getInstance().collection("users").document(bookOwner.getEmail())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    String userToken = task.getResult().get("token").toString();
+                                    String msg = String.format("%s has requested %s", currentUser.getUsername(), book.getTitle());
+                                    Data data = new Data(msg, "New Request");
+                                    sendNotification(userToken,data);
+                                }
+                            }
+                        });
+
+
+//                Query query = tokens.orderByKey().equalTo(book.getOwner());
+//                query.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                            Token token = snapshot.getValue(Token.class);
+//                            Data data = new Data(currentUser.getUsername(), R.mipmap.ic_launcher, msg, "New Request", book.getOwner());
+//                            Sender sender = new Sender(data, token.getToken());
+//                            apiService.sendNotification(sender)
+//                                    .enqueue(new Callback<MyResponse>() {
+//                                        @Override
+//                                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+//                                            if (response.body().success != 1) {
+//                                                Toast.makeText(getActivity().getBaseContext(), "failed", Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onFailure(Call<MyResponse> call, Throwable t) {
+//
+//                                        }
+//                                    });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
                 // go back to the previous fragment
                 if (getActivity() != null) {
                     getActivity().onBackPressed();
@@ -254,4 +325,23 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         listenerRegistration.remove();
     }
 
+
+    private void sendNotification(String token,Data data) {
+
+        Sender sender = new Sender(data, token);
+        apiService.sendNotification(sender).enqueue((new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().success != 1) {
+                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+            }
+        }));
+    }
 }

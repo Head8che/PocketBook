@@ -135,8 +135,11 @@ public class HomeActivity extends AppCompatActivity {
                         case R.id.bottom_nav_scan:
                             // showSpinnerDialog when layoutBookCondition is clicked
                             showScanningSpinnerDialog();
-//                            selectedFragment = new ScanFragment();
-//                            FRAG_TAG = "SCAN_FRAGMENT";
+
+                            //ISSUE need to manually set camera permissions. Android manifest permission not working
+                            //ISSUE how to test using actual isbn?
+                            //TODO get information from the isbn
+                            startActivity(new Intent(HomeActivity.this, ScanActivity.class));
                             break;
 
                     }

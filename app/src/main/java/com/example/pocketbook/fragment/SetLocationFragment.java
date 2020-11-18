@@ -37,6 +37,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.type.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,7 +63,7 @@ public class SetLocationFragment extends Fragment {
     String date_time = "";
     String latEiffelTower = "48.858235";
     String lngEiffelTower = "2.294571";
-    String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=200x200&sensor=false&key=AIzaSyAuHw4wNX8nFZ5IVahC5J4lYEX1s5Msey8";
+
 
 
 
@@ -158,8 +159,8 @@ public class SetLocationFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), LocationActivity.class);
                 intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
-                setLocation.setText("LongLat");
+                startActivityForResult(intent,100);
+//                setLocation.setText("LongLat");
             }
         });
 
@@ -171,6 +172,24 @@ public class SetLocationFragment extends Fragment {
         });
 
         return view;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100) {
+
+            if (resultCode == Activity.RESULT_OK) {
+                double latitude = (double) data.getSerializableExtra("Lat");
+                double longitude = (double) data.getSerializableExtra("Lng");
+                String address = (String) data.getSerializableExtra("Address");
+
+                setLocation.setText(address);
+
+            }
+        }
     }
 
 }

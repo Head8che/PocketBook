@@ -4,9 +4,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.pocketbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -17,42 +19,48 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage){
         super.onMessageReceived(remoteMessage);
-
-        String sented = remoteMessage.getData().get("sented");
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            sendOreoNotification(remoteMessage);
+        }
+        else{
             sendNotification(remoteMessage);
         }
+
     }
 
-    private void sendNotification(RemoteMessage remoteMessage){
-        String user = remoteMessage.getData().get("user");
-        String icon = remoteMessage.getData().get("icon");
+    private void sendOreoNotification(RemoteMessage remoteMessage){
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-
+        int icon = R.mipmap.ic_launcher;
         RemoteMessage.Notification notification = remoteMessage.getNotification();
-        int j = Integer.parseInt(user.replaceAll("[\\D]",""));
 
         //TODO: add functionality to click on a notification
 
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(Integer.parseInt(icon))
+
+        OreoNotification oreoNotification = new OreoNotification(this);
+        NotificationCompat.Builder builder = oreoNotification.getOreoNotification(title,body,icon);
+
+        oreoNotification.getManager().notify(0,builder.build());
+    }
+
+    private void sendNotification(RemoteMessage remoteMessage){
+        String title = remoteMessage.getData().get("title");
+        String body = remoteMessage.getData().get("body");
+        int icon = R.mipmap.ic_launcher;
+        RemoteMessage.Notification notification = remoteMessage.getNotification();
+
+        //TODO: add functionality to click on a notification
+
+        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+                .setSmallIcon(icon)
                 .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(defaultSound);
+                .setContentText(body);
 
-        NotificationManager noti = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int i = 0;
-        if(j>0){
-            i=j;
-        }
-
-        noti.notify(i, builder.build());
+        manager.notify(0, builder.build());
 
     }
 }

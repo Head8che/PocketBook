@@ -68,14 +68,24 @@
         app:layout_constraintTop_toBottomOf="@+id/space2"
         app:layout_constraintVertical_bias="0.0">
 
+
+        <ImageView
+            android:id="@+id/mapLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/map_cover"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_streets" />
+
         <ImageView
             android:id="@+id/mapCover"
-            android:layout_width="325dp"
-            android:layout_height="280dp"
-
-            android:contentDescription="@string/book_cover_image"
+            android:layout_width="108dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="50dp"
+            android:contentDescription="@string/map_cover"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_scan" />
+            android:src="@drawable/ic_googlemaps" />
     </androidx.cardview.widget.CardView>
 
     <Space
@@ -103,6 +113,8 @@
             android:layout_width="291dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:clickable="false"
+            android:focusable="false"
             android:inputType="text"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -124,25 +136,29 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/setDateTimeContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="145dp"
+        android:layout_height="65dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="36dp"
-        android:hint="@string/set_date_and_time"
+        android:hint="@string/set_date"
+        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setPickupContainer">
+        app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
+        tools:ignore="RtlSymmetry">
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/setDateTime"
-            android:layout_width="291dp"
+            android:id="@+id/setDate"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:inputType="text"
+            android:clickable="false"
+            android:focusable="false"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,11 +168,51 @@
         android:layout_height="31dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="48dp"
-        android:src="@drawable/ic_baseline_datetime"
+        android:src="@drawable/ic_calendar"
         app:layout_constraintEnd_toStartOf="@+id/setDateTimeContainer"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mapImageView"
+        tools:ignore="MissingConstraints" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setTimeContainer"
+        android:layout_width="145dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="36dp"
+        android:hint="@string/set_time"
+        android:paddingStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
+        tools:ignore="RtlSymmetry">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/setTime"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:inputType="text"
+            android:clickable="false"
+            android:focusable="false"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/TimeImageView"
+        android:layout_width="26dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="36dp"
+        android:src="@drawable/ic_baseline_datetime"
+        app:layout_constraintEnd_toStartOf="@+id/setTimeContainer"
+        app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
         tools:ignore="MissingConstraints" />
 
     <Button

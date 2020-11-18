@@ -21,6 +21,7 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
+import com.example.pocketbook.fragment.ViewProfileFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;

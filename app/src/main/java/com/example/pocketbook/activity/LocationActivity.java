@@ -148,8 +148,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         e.printStackTrace();
                     }
                     Address addressLocation = list.get(0);
-                    marker.setTitle(addressLocation.getLocality());
-                    setPin(addressLocation.getFeatureName(), addressLocation.getLatitude(), addressLocation.getLongitude());
+                    marker.setTitle(addressLocation.getAddressLine(0));
+                    setPin(addressLocation.getAddressLine(0), addressLocation.getLatitude(), addressLocation.getLongitude());
+                    Log.d("Long Click:", addressLocation.getAddressLine(0));
                 }
             });
 
@@ -176,6 +177,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     Address addressLocation = list.get(0);
                     marker.setTitle(addressLocation.getAddressLine(0));
                     setPin(addressLocation.getAddressLine(0),addressLocation.getLatitude(), addressLocation.getLongitude());
+                    Log.d("Marker Drag:", addressLocation.getAddressLine(0));
 
 
                 }
@@ -250,9 +252,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         if (list.size() > 0) {
             Address addressLocation = list.get(0);
-            Log.d("NAME", addressLocation.toString());
             goToLocationZoom(addressLocation.getLatitude(), addressLocation.getLongitude(), 15f, addressLocation.getAddressLine(0));
             setPin( addressLocation.getAddressLine(0), addressLocation.getLatitude(), addressLocation.getLongitude());
+            Log.d("GEoLocate", addressLocation.toString());
+//            Log.d("GEoLocate", addressLocation.getLocality());
+//            Log.d("GEoLocate", addressLocation.getAdminArea());
+//            Log.d("GEoLocate", addressLocation.getFeatureName());
         }
     }
 

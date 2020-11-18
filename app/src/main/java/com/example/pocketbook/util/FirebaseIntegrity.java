@@ -11,6 +11,7 @@ import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.notifications.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -1622,6 +1624,19 @@ public class FirebaseIntegrity {
                 objectType, destCollectionName, CLEAN_OC_SRC_D_CHAIN);
 
     }
+
+    public static void updateToken(){
+        //  get the current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // get the token for this instance of the app
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        //  update the user's token in Firestore
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(firebaseUser.getEmail())
+                .update("token",token.getToken());
+    }
+
 
     /*
     ALWAYS DELETE SUBCOLLECTIONS BEFORE DELETING COLLECTIONS!

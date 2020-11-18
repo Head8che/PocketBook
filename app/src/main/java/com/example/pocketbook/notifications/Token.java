@@ -1,4 +1,4 @@
-package com.example.pocketbook.Notifications;
+package com.example.pocketbook.notifications;
 
 public class Token {
 

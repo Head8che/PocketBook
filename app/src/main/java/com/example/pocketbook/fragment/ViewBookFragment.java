@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -19,13 +21,28 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.notifications.APIService;
+import com.example.pocketbook.notifications.Client;
+import com.example.pocketbook.notifications.Data;
+import com.example.pocketbook.notifications.MyResponse;
+import com.example.pocketbook.notifications.Sender;
+import com.example.pocketbook.notifications.Token;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -41,6 +58,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     private User bookOwner;
 
     ListenerRegistration listenerRegistration;
+
+    APIService apiService;
 
     /**
      * create a new instance of the ViewBookFragment
@@ -98,6 +117,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
 
                 });
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
     }
 
@@ -239,6 +260,38 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         .setMessage("You have requested "+book.getTitle()+"!" )
                         .show();
 
+                final String msg = String.format("{} has requested {}", currentUser.getUsername(),book.getTitle());
+//                DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+//                Query query = tokens.orderByKey().equalTo(book.getOwner());
+//                query.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+//                            Token token = snapshot.getValue(Token.class);
+//                            Data data = new Data(currentUser.getUsername(), R.mipmap.ic_launcher, msg, "New Request",book.getOwner());
+//                            Sender sender = new Sender(data, token.getToken());
+//                            apiService.sendNotification(sender)
+//                                    .enqueue(new Callback<MyResponse>() {
+//                                        @Override
+//                                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+//                                            if (response.body().success !=1){
+//                                                Toast.makeText(getActivity().getBaseContext(), "failed",Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onFailure(Call<MyResponse> call, Throwable t) {
+//
+//                                        }
+//                                    });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
                 // go back to the previous fragment
                 if (getActivity() != null) {
                     getActivity().onBackPressed();

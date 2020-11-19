@@ -24,8 +24,8 @@ import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.example.pocketbook.util.ScrollUpdate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,10 +39,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
-/**
- * Owner Profile Page fragment that contains the user Profile (Books/Info)
- */
-public class OwnerFragment extends Fragment {
+public class ViewProfileFragment extends Fragment {
 
     private static final int numColumns = 2;
     private static final int LIMIT = 20;
@@ -50,29 +47,32 @@ public class OwnerFragment extends Fragment {
     private Query mQuery;
     private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
-    private TextView profileName, userName;
-    private TextView editProfile;
-    private static final String USERS = "users";
+    private User profileUser;
     private User currentUser;
-    private ScrollUpdate scrollUpdate;
-    private Fragment ownerFragment = this;
+    private Fragment viewProfileFragment = this;
     private boolean firstTimeFragLoads = true;
 
     FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
+    TextView layoutFullName;
+    TextView layoutEmail;
+    TextView layoutUsername;
+    ImageView layoutProfilePicture;
+
     /**
-     * Owner Profile fragment instance that bundles the user information to be accessible/displayed
-     * @param user
+     * View Profile fragment instance that bundles the user information to be accessible/displayed
+     * @param profileUser
+     * @param currentUser
      * @return
      */
-    public static OwnerFragment newInstance(User user) {
-        OwnerFragment ownerFragment = new OwnerFragment();
-        ProfileFragment profileFragment = new ProfileFragment();
+    public static ViewProfileFragment newInstance(User currentUser, User profileUser) {
+        ViewProfileFragment viewProfileFragment = new ViewProfileFragment();
         Bundle args = new Bundle();
-        args.putSerializable("PF_USER", user);
-        ownerFragment.setArguments(args);
-        return ownerFragment;
+        args.putSerializable("VPF_CURRENT_USER", currentUser);
+        args.putSerializable("VPF_PROFILE_USER", profileUser);
+        viewProfileFragment.setArguments(args);
+        return viewProfileFragment;
     }
 
     /**
@@ -84,13 +84,21 @@ public class OwnerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            this.currentUser = (User) getArguments().getSerializable("PF_USER");
+            this.currentUser = (User) getArguments().getSerializable("VPF_CURRENT_USER");
+            this.profileUser = (User) getArguments().getSerializable("VPF_PROFILE_USER");
         }
+
+        Log.e("VPF", profileUser + " " + profileUser.getEmail());
+
+//        if ((profileUser == null) || (profileUser.getEmail() == null)) {
+//            return;
+//        }
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
         // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",
+                profileUser.getEmail()).limit(LIMIT);
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -137,104 +145,86 @@ public class OwnerFragment extends Fragment {
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
-                .document(currentUser.getEmail());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("VMBBF_LISTENER", "Listen failed.", e);
+                .document(profileUser.getEmail());
+        docRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.e("VMBBF_LISTENER", "Listen failed.", e);
+                return;
+            }
+
+            if ((snapshot != null) && snapshot.exists()) {
+                 profileUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                if ( profileUser == null) {
                     return;
                 }
 
-                if ((snapshot != null) && snapshot.exists()) {
-                    currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
-
-                    if (currentUser == null) {
-                        return;
-                    }
-
-                    // TODO: Add isAdded to other listeners
-                    // if fragment can have a manager; tests crash without this line
-                    if ((!firstTimeFragLoads) && ownerFragment.isAdded()) {
-                        getParentFragmentManager()
-                                .beginTransaction()
-                                .detach(OwnerFragment.this)
-                                .attach(OwnerFragment.this)
-                                .setTransition(FragmentTransaction.TRANSIT_NONE)
-                                .addToBackStack(null)
-                                .commitAllowingStateLoss();
-                    } else {
-                        firstTimeFragLoads = false;
-                    }
-                }
-                else if (ownerFragment.isAdded()) {
-                    getParentFragmentManager().beginTransaction()
-                            .detach(OwnerFragment.this).commitAllowingStateLoss();
+                // if fragment can have a manager; tests crash without this line
+                if ((!firstTimeFragLoads) && viewProfileFragment.isAdded()) {
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .detach(ViewProfileFragment.this)
+                            .attach(ViewProfileFragment.this)
+                            .setTransition(FragmentTransaction.TRANSIT_NONE)
+                            .addToBackStack(null)
+                            .commitAllowingStateLoss();
+                } else {
+                    firstTimeFragLoads = false;
                 }
             }
-
+            else if (viewProfileFragment.isAdded()) {
+                getParentFragmentManager().beginTransaction()
+                        .detach(ViewProfileFragment.this).commitAllowingStateLoss();
+            }
         });
-
     }
 
-    /**
-     * Inflates the layout/container in the respectful fields and fills
-     * the fields that require the owner information to be displayed
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
-        mBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerBooks);
-        StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
+        View rootView = inflater.inflate(R.layout.fragment_view_profile,
+                container, false);
+        mBooksRecycler = rootView.findViewById(R.id.viewProfileRecyclerBooks);
+        StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(profileUser);
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
-        mAdapter = new BookAdapter(options, currentUser,getActivity());
+        mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
+        // extract user values into variables
+        String firstName =  profileUser.getFirstName();
+        String lastName =  profileUser.getLastName();
+        String username =  profileUser.getUsername();
+        String email =  profileUser.getEmail();
 
-        String first_Name = currentUser.getFirstName();
-        String last_Name = currentUser.getLastName();
-        String user_Name = currentUser.getUsername();
-        // TODO: obtain user_photo from firebase
-        String user_Pic = currentUser.getPhoto();
-        ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
-        TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
-        TextView UserName = (TextView) v.findViewById(R.id.user_name);
-        ProfileName.setText(first_Name + ' ' + last_Name);
-        UserName.setText(user_Name);
+        // access the layout text fields
+        layoutFullName = rootView.findViewById(R.id.viewProfileFullName);
+        layoutEmail = rootView.findViewById(R.id.viewProfileEmail);
+        layoutUsername = rootView.findViewById(R.id.viewProfileUsername);
+        layoutProfilePicture = rootView.findViewById(R.id.viewProfileProfilePicture);
 
+        // set the layout text fields to the appropriate user variables
+        layoutFullName.setText(String.format("%s %s", firstName, lastName));
+        layoutEmail.setText(email);
+        layoutUsername.setText(username);
+
+        // load the user's profile picture into ImageLayout
         GlideApp.with(Objects.requireNonNull(getContext()))
                 .load(userProfilePicture)
                 .circleCrop()
-                .into(profilePicture);
-
-        editProfile = v.findViewById(R.id.edit_profile_button);
+                .into(layoutProfilePicture);
 
 //        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();
 
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileActivity.class);
-                intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
-            }
-        });
-
-        return v;
+        return rootView;
     }
 
     @Override

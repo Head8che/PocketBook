@@ -48,40 +48,8 @@ public class Notification implements Serializable {
     public String getRelatedBook() { return this.relatedBook; }
     public String getSeen() { return this.seen; }
     public String getType() { return this.type; }
-    public String getNotificationDate() {  return this.notificationDate;  }
+    public String getNotificationDate() { return this.notificationDate;  }
 
     // TODO: seen should have a setter
-
-    /**
-     * Adds a notification to Firebase
-     */
-    public void pushNewNotificationToFirebase() {
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("message", this.message);
-        docData.put("sender", this.sender);
-        docData.put("receiver", this.receiver);
-        docData.put("relatedBook", this.relatedBook);
-        docData.put("seen", this.seen);
-        docData.put("type", this.type);
-        docData.put("notificationDate", this.notificationDate);
-
-        FirebaseFirestore.getInstance().collection("users").document(receiver)
-                .collection("notifications").document(this.notificationDate)
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("NEW_NOTIFICATION", "Notification data successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
-                    }
-                });
-
-    }
 
 }

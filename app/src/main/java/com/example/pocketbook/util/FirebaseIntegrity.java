@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.notifications.Token;
@@ -696,6 +697,39 @@ public class FirebaseIntegrity {
     }
 
 
+    ///////////////////////////////// FIREBASE METHODS FOR NOTIFICATIONS ////////////////////////////////
+
+    /**
+     * Adds a notification to Firebase
+     */
+    public static void pushNewNotificationToFirebase(Notification notification) {
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("message", notification.getMessage());
+        docData.put("sender", notification.getSender());
+        docData.put("receiver", notification.getReceiver());
+        docData.put("relatedBook", notification.getRelatedBook());
+        docData.put("seen", notification.getSeen());
+        docData.put("type", notification.getType());
+        docData.put("notificationDate", notification.getNotificationDate());
+
+        FirebaseFirestore.getInstance().collection("users").document(notification.getReceiver())
+                .collection("notifications").document(notification.getNotificationDate())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("NEW_NOTIFICATION", "Notification data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
+                    }
+                });
+
+    }
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
 

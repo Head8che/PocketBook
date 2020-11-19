@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.notifications.APIService;
@@ -46,6 +47,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationToFirebase;
 
 
 /**
@@ -274,42 +277,13 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                     String userToken = task.getResult().get("token").toString();
                                     String msg = String.format("%s has requested %s", currentUser.getUsername(), book.getTitle());
                                     Data data = new Data(msg, "New Request");
+                                    Notification notification = new Notification(msg, currentUser.getEmail(), bookOwner.getEmail(), book.getId(), false, "BOOK_REQUESTED");
+                                    pushNewNotificationToFirebase(notification);
                                     sendNotification(userToken,data);
                                 }
                             }
                         });
 
-
-//                Query query = tokens.orderByKey().equalTo(book.getOwner());
-//                query.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                            Token token = snapshot.getValue(Token.class);
-//                            Data data = new Data(currentUser.getUsername(), R.mipmap.ic_launcher, msg, "New Request", book.getOwner());
-//                            Sender sender = new Sender(data, token.getToken());
-//                            apiService.sendNotification(sender)
-//                                    .enqueue(new Callback<MyResponse>() {
-//                                        @Override
-//                                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-//                                            if (response.body().success != 1) {
-//                                                Toast.makeText(getActivity().getBaseContext(), "failed", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//
-//                                        @Override
-//                                        public void onFailure(Call<MyResponse> call, Throwable t) {
-//
-//                                        }
-//                                    });
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
                 // go back to the previous fragment
                 if (getActivity() != null) {
                     getActivity().onBackPressed();

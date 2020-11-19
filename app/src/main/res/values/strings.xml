@@ -112,5 +112,9 @@
     <string name="set_date">Set Date</string>
     <string name="set_time">Set Time</string>
     <string name="map_cover">Map Cover</string>
+    <string name="backbutton">BackButton</string>
+    <string name="Notifications">TextView</string>
+    <string name="notifications">Notifications</string>
+    <string name="notification_description">Notification Description</string>
 
 </resources>

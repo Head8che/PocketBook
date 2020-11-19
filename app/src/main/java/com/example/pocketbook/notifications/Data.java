@@ -5,12 +5,16 @@ public class Data {
     private String body;
     private String title;
     private String date;
+    private String group;
+    private int icon;
 
-    public Data(String body, String title, String date) {
+    public Data(String body, String title, String date, String group, int icon) {
 
         this.body = body;
         this.title = title;
         this.date = date;
+        this.group = group;
+        this.icon = icon;
 
     }
 

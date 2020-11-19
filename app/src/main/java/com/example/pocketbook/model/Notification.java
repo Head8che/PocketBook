@@ -24,11 +24,15 @@ public class Notification implements Serializable {
     private String sender;
     private String receiver;
     private String relatedBook;
-    private String seen;  // can only be "true" or "false"
+    private boolean seen;  // can only be "true" or "false"
     private String type;
     private String notificationDate;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
+
+    public Notification(){
+
+    }
     /* Default Constructor */
     public Notification(String message, String sender, String receiver, String relatedBook,
                         boolean seen, String type){
@@ -36,6 +40,7 @@ public class Notification implements Serializable {
         this.sender = sender.trim().toLowerCase();  // lowercase email
         this.receiver = receiver.trim().toLowerCase();  // lowercase email
         this.relatedBook = relatedBook.trim();
+        this.seen = seen;
         this.type = type.trim().toUpperCase();  /* one of ["BOOK_REQUESTED", "REQUEST_ACCEPTED",
                                                            "REQUEST_DECLINED", "RETURN_REQUESTED",
                                                            "LOCATION_SPECIFIED"] */
@@ -46,42 +51,10 @@ public class Notification implements Serializable {
     public String getSender() {  return this.sender; }
     public String getReceiver() {  return this.receiver; }
     public String getRelatedBook() { return this.relatedBook; }
-    public String getSeen() { return this.seen; }
+    public boolean getSeen() { return this.seen; }
     public String getType() { return this.type; }
-    public String getNotificationDate() {  return this.notificationDate;  }
+    public String getNotificationDate() { return this.notificationDate;  }
 
     // TODO: seen should have a setter
-
-    /**
-     * Adds a notification to Firebase
-     */
-    public void pushNewNotificationToFirebase() {
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("message", this.message);
-        docData.put("sender", this.sender);
-        docData.put("receiver", this.receiver);
-        docData.put("relatedBook", this.relatedBook);
-        docData.put("seen", this.seen);
-        docData.put("type", this.type);
-        docData.put("notificationDate", this.notificationDate);
-
-        FirebaseFirestore.getInstance().collection("users").document(receiver)
-                .collection("notifications").document(this.notificationDate)
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("NEW_NOTIFICATION", "Notification data successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
-                    }
-                });
-
-    }
 
 }

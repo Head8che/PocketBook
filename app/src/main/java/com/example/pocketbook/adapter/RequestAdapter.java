@@ -1,36 +1,30 @@
 package com.example.pocketbook.adapter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.activity.AddBookActivity;
-import com.example.pocketbook.activity.LocationActivity;
-import com.example.pocketbook.fragment.NotificationFragment;
 import com.example.pocketbook.fragment.SetLocationFragment;
+
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.fragment.ViewProfileFragment;
+
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -38,7 +32,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -68,7 +61,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         public RequestHolder(@NonNull View itemView) {
             super(itemView);
             //get the views' ids
-            username = itemView.findViewById(R.id.itemRequestUsernameTextView);
+            username = itemView.findViewById(R.id.itemNotiUsernameTextView);
             date = itemView.findViewById(R.id.itemRequestDateTextView);
             userProfile = itemView.findViewById(R.id.itemRequestProfileImageView);
             accept = itemView.findViewById(R.id.itemRequestAcceptButton);

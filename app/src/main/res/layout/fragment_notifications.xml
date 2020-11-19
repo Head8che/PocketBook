@@ -7,6 +7,8 @@
     android:id="@+id/container"
     tools:context=".activity.HomeActivity">
 
+
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/notificationToolbar"
         android:layout_width="match_parent"
@@ -25,6 +27,7 @@
                 android:id="@+id/notificationBackBtn"
                 android:layout_width="33dp"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/backbutton"
                 android:src="@drawable/ic_back"
                 app:tint="@color/colorUnselected">
 
@@ -45,21 +48,21 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
+        <TextView
+            android:id="@+id/notificationsTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/notifciation_screeeeeeeeeen"
-            android:textColor="@color/textBlack"/>
+            android:text="@string/notifications"
+            android:textSize="32sp"
+            android:layout_gravity="center"
+            android:textColor="@color/textBlack"
+            android:textStyle="normal"/>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/viewMyNotificationRecyclerView"
+        android:id="@+id/notificationsViewRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/notificationToolbar" />

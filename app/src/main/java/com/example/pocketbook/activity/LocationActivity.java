@@ -67,6 +67,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private double Lat;
     private double Lng;
     private String locationAddress;
+
     Marker marker;
 
 
@@ -82,7 +83,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 if (marker != null) {
                     Intent locationData = new Intent();
-                    locationData.putExtra("Location", mPinnedMap);
+//                    locationData.putExtra("Location", mPinnedMap);
                     locationData.putExtra("Lat", Lat);
                     locationData.putExtra("Lng",Lng);
                     locationData.putExtra("Address", locationAddress);

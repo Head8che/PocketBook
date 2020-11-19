@@ -51,18 +51,16 @@ public class SetLocationFragment extends Fragment {
     private RequestAdapter requestAdapter;
     private Book book;
     private User currentUser;
-    TextInputEditText setLocation;
-    TextInputEditText setDate;
-    TextInputEditText setTime;
-    ImageView cover;
-    String selectedDate;
+    private TextInputEditText setLocation;
+    private TextInputEditText setDate;
+    private TextInputEditText setTime;
+    private Button confirmBtn;
+    private ImageView cover;
+    private String selectedDate;
     public static final int REQUEST_CODE = 11; // Used to identify the result
-    final Calendar myCalendar = Calendar.getInstance();
+    private final Calendar myCalendar = Calendar.getInstance();
     private TimePickerDialog timePickerDialog;
-    final Calendar myTime = Calendar.getInstance();
-    String date_time = "";
-    String latEiffelTower = "48.858235";
-    String lngEiffelTower = "2.294571";
+    private final Calendar myTime = Calendar.getInstance();
 
 
 
@@ -93,6 +91,7 @@ public class SetLocationFragment extends Fragment {
         setLocation = (TextInputEditText) view.findViewById(R.id.setPickup);
         setDate = (TextInputEditText) view.findViewById(R.id.setDate);
         setTime = (TextInputEditText) view.findViewById(R.id.setTime);
+        confirmBtn = (Button) view.findViewById(R.id.confirmPickupBtn);
 
 
 
@@ -122,6 +121,15 @@ public class SetLocationFragment extends Fragment {
                 // TODO Auto-generated method stub
                 new TimePickerDialog(getContext(), time, myTime
                         .get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();
+            }
+        });
+
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Need to Set the Location Data to the Exchange Model/Update Book Status/ Notification to the user and Decline All other Requests to this book
+                getActivity().onBackPressed();
             }
         });
 
@@ -191,6 +199,9 @@ public class SetLocationFragment extends Fragment {
             }
         }
     }
+
+
+
 
 }
 

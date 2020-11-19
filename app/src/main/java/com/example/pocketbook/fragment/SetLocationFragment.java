@@ -37,6 +37,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.type.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,19 +51,17 @@ public class SetLocationFragment extends Fragment {
     private RequestAdapter requestAdapter;
     private Book book;
     private User currentUser;
-    TextInputEditText setLocation;
-    TextInputEditText setDate;
-    TextInputEditText setTime;
-    ImageView cover;
-    String selectedDate;
+    private TextInputEditText setLocation;
+    private TextInputEditText setDate;
+    private TextInputEditText setTime;
+    private Button confirmBtn;
+    private ImageView cover;
+    private String selectedDate;
     public static final int REQUEST_CODE = 11; // Used to identify the result
-    final Calendar myCalendar = Calendar.getInstance();
+    private final Calendar myCalendar = Calendar.getInstance();
     private TimePickerDialog timePickerDialog;
-    final Calendar myTime = Calendar.getInstance();
-    String date_time = "";
-    String latEiffelTower = "48.858235";
-    String lngEiffelTower = "2.294571";
-    String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=200x200&sensor=false&key=AIzaSyAuHw4wNX8nFZ5IVahC5J4lYEX1s5Msey8";
+    private final Calendar myTime = Calendar.getInstance();
+
 
 
 
@@ -92,6 +91,7 @@ public class SetLocationFragment extends Fragment {
         setLocation = (TextInputEditText) view.findViewById(R.id.setPickup);
         setDate = (TextInputEditText) view.findViewById(R.id.setDate);
         setTime = (TextInputEditText) view.findViewById(R.id.setTime);
+        confirmBtn = (Button) view.findViewById(R.id.confirmPickupBtn);
 
 
 
@@ -121,6 +121,15 @@ public class SetLocationFragment extends Fragment {
                 // TODO Auto-generated method stub
                 new TimePickerDialog(getContext(), time, myTime
                         .get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();
+            }
+        });
+
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Need to Set the Location Data to the Exchange Model/Update Book Status/ Notification to the user and Decline All other Requests to this book
+                getActivity().onBackPressed();
             }
         });
 
@@ -158,8 +167,8 @@ public class SetLocationFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), LocationActivity.class);
                 intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
-                setLocation.setText("LongLat");
+                startActivityForResult(intent,100);
+//                setLocation.setText("LongLat");
             }
         });
 
@@ -172,6 +181,27 @@ public class SetLocationFragment extends Fragment {
 
         return view;
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100) {
+
+            if (resultCode == Activity.RESULT_OK) {
+                double latitude = (double) data.getSerializableExtra("Lat");
+                double longitude = (double) data.getSerializableExtra("Lng");
+                String address = (String) data.getSerializableExtra("Address");
+
+                setLocation.setText(address);
+
+            }
+        }
+    }
+
+
+
 
 }
 

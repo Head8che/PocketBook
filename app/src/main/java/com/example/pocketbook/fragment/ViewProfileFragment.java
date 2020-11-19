@@ -189,6 +189,7 @@ public class ViewProfileFragment extends Fragment {
         }
         View rootView = inflater.inflate(R.layout.fragment_view_profile,
                 container, false);
+        ImageView backButton = (ImageView) rootView.findViewById(R.id.viewUserProfileBackBtn);
         mBooksRecycler = rootView.findViewById(R.id.viewProfileRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(profileUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
@@ -223,6 +224,14 @@ public class ViewProfileFragment extends Fragment {
 
 //        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
 
         return rootView;
     }

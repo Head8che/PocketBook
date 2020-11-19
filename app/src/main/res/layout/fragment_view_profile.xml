@@ -9,7 +9,7 @@
 
 
     <ScrollView
-        android:id="@+id/scrollview"
+        android:id="@+id/viewProfileScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,7 @@
 
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/viewMyBookFragToolbar"
+                android:id="@+id/viewProfileToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
@@ -44,7 +44,7 @@
                 android:layout_height="match_parent">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/Img_cardView"
+                    android:id="@+id/viewProfileCardView"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
@@ -58,7 +58,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/profile_image"
+                        android:id="@+id/viewProfileProfilePicture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@mipmap/ic_user_foreground" />
@@ -67,36 +67,36 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/profileName"
+                android:id="@+id/viewProfileFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="0dp"
                 android:gravity="center_horizontal"
-                android:text="firstlastname"
+                android:text="@string/firstlastname"
                 android:textColor="@color/textBlack"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/user_name"
+                android:id="@+id/viewProfileUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="4sp"
                 android:gravity="center_horizontal"
-                android:text="profile_username"
+                android:text="@string/username"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/user_email"
+                android:id="@+id/viewProfileEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="4sp"
                 android:gravity="center_horizontal"
-                android:text="user email"
+                android:text="@string/email"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -104,20 +104,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/suggested_Books"
+                    android:id="@+id/viewProfileOwnedBooksTitle"
                     android:layout_width="187dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="4sp"
-                    android:text="Owned Books"
+                    android:text="@string/ownedBooks"
                     android:textColor="@color/textBlack"
-                    android:textSize="25dp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_books"
+                android:id="@+id/viewProfileRecyclerBooks"
                 android:layout_width="match_parent"
                 android:layout_height="658dp"
                 android:layout_marginTop="8dp"

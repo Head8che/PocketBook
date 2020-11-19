@@ -1,5 +1,6 @@
 package com.example.pocketbook.adapter;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SetLocationFragment;
+
+import com.example.pocketbook.fragment.ViewBookFragment;
+import com.example.pocketbook.fragment.ViewMyBookBookFragment;
+import com.example.pocketbook.fragment.ViewMyBookFragment;
+import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
+import com.example.pocketbook.fragment.ViewProfileFragment;
+
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
@@ -86,7 +94,8 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                             mRequester = FirebaseIntegrity.getUserFromFirestore(document);
                             if (mRequester != null) {
                                 requestHolder.username.setText(mRequester.getUsername());
-                                GlideApp.with(Objects.requireNonNull(requestHolder.itemView.getContext()))
+                                GlideApp.with(Objects.requireNonNull(
+                                        requestHolder.itemView.getContext()))
                                         .load(FirebaseIntegrity.getUserProfilePicture(mRequester))
                                         .into(requestHolder.userProfile);
                             }
@@ -108,16 +117,42 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
             requestHolder.decline.setEnabled(false);
         }
 
-        //when the user taps on the accept button for a request, the request is accepted and they can't decline that request
+        View.OnClickListener profileClickListener = view -> {
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(mBook.getOwner())
+                    .get().addOnCompleteListener(task -> {
+                DocumentSnapshot document = task.getResult();
+                if ((document != null) && (document.exists())) {
+                    User bookOwner = FirebaseIntegrity.getUserFromFirestore(document);
+                    ViewProfileFragment nextFrag = ViewProfileFragment.newInstance(bookOwner,
+                            mRequester);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("VPF_CURRENT_USER", bookOwner);
+                    bundle.putSerializable("VPF_PROFILE_USER", mRequester);
+                    nextFrag.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(activity.findViewById(R.id.container).getId(), nextFrag)
+                            .addToBackStack(null).commit();
+                }
+            });
+        };
+
+        requestHolder.userProfile.setOnClickListener(profileClickListener);
+        requestHolder.username.setOnClickListener(profileClickListener);
+
+        // when the user taps on the accept button for a request,
+        // the request is accepted and they can't decline that request
         requestHolder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("OWNERIN","TESTTTT");
 
                 Fragment someFragment = new SetLocationFragment();
-                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
-                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                FragmentTransaction transaction = activity
+                        .getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, someFragment ); // give your fragment
+                                                                    // container id in first param
+                transaction.addToBackStack(null);  // if written, this will be added to backstack
                 transaction.commit();
 
 //                ViewMyBookFragment nextFrag = ViewMyBookFragment
@@ -168,8 +203,10 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
 //
 //                Fragment someFragment = new NotificationFragment();
 //                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
-//                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+//                transaction.replace(R.id.container, someFragment ); // give your
+//                fragment container id in first parameter
+//                transaction.addToBackStack(null);  // if written,
+//                this transaction will be added to backstack
 //                transaction.commit();
 
 

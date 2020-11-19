@@ -80,6 +80,7 @@
     <string name="new_profile_username">profile_username</string>
     <string name="new_profile_firstlastname">firstlastname</string>
     <string name="owner">Owner</string>
+    <string name="ownedBooks">Owned Books</string>
     <string name="borrower">Borrower</string>
     <string name="addBookFragmentTitle">Add New Book</string>
     <string name="new_to_pocketbook">New to Pocketbook?</string>

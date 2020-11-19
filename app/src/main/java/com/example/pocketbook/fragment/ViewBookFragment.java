@@ -199,6 +199,29 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .circleCrop()
                 .into(userProfilePicture);
 
+        View.OnClickListener profileClickListener = view1 -> {
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(book.getOwner())
+                    .get().addOnCompleteListener(task -> {
+                DocumentSnapshot document = task.getResult();
+                if ((document != null) && (document.exists())) {
+                    User bookOwner = FirebaseIntegrity.getUserFromFirestore(document);
+                    ViewProfileFragment nextFrag = ViewProfileFragment.newInstance(currentUser,
+                            bookOwner);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("VPF_CURRENT_USER", currentUser);
+                    bundle.putSerializable("VPF_PROFILE_USER", bookOwner);
+                    nextFrag.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(getActivity().findViewById(R.id.container).getId(), nextFrag)
+                            .addToBackStack(null).commit();
+                }
+            });
+        };
+
+        userProfilePicture.setOnClickListener(profileClickListener);
+        usernameField.setOnClickListener(profileClickListener);
+
         usernameField.setText(bookOwner.getUsername());
 
         switch (bookStatus) {

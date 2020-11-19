@@ -145,7 +145,6 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("OWNERIN","TESTTTT");
 
                 Fragment someFragment = new SetLocationFragment();
                 FragmentTransaction transaction = activity
@@ -154,6 +153,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                                                                     // container id in first param
                 transaction.addToBackStack(null);  // if written, this will be added to backstack
                 transaction.commit();
+
 
 //                ViewMyBookFragment nextFrag = ViewMyBookFragment
 ////                        .newInstance(currentUser, book);

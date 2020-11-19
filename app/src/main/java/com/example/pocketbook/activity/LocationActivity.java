@@ -64,6 +64,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private AutoCompleteTextView mSearchField; // Widget
     private Button setLocationButton;
     private LatLng mPinnedMap;
+    private double Lat;
+    private double Lng;
+    private String locationAddress;
+
     Marker marker;
 
 
@@ -79,7 +83,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 if (marker != null) {
                     Intent locationData = new Intent();
-                    locationData.putExtra("Location", mPinnedMap);
+//                    locationData.putExtra("Location", mPinnedMap);
+                    locationData.putExtra("Lat", Lat);
+                    locationData.putExtra("Lng",Lng);
+                    locationData.putExtra("Address", locationAddress);
                     setResult(RESULT_OK, locationData);
                     finish();
 
@@ -254,6 +261,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             Address addressLocation = list.get(0);
             goToLocationZoom(addressLocation.getLatitude(), addressLocation.getLongitude(), 15f, addressLocation.getAddressLine(0));
             setPin( addressLocation.getAddressLine(0), addressLocation.getLatitude(), addressLocation.getLongitude());
+            Lat = addressLocation.getLatitude();
+            Lng = addressLocation.getLongitude();
+            locationAddress = addressLocation.getAddressLine(0);
             Log.d("GEoLocate", addressLocation.toString());
 //            Log.d("GEoLocate", addressLocation.getLocality());
 //            Log.d("GEoLocate", addressLocation.getAdminArea());

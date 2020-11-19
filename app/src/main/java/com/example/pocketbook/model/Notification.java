@@ -29,6 +29,10 @@ public class Notification implements Serializable {
     private String notificationDate;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
+
+    public Notification(){
+
+    }
     /* Default Constructor */
     public Notification(String message, String sender, String receiver, String relatedBook,
                         boolean seen, String type){

@@ -138,6 +138,24 @@ public class NotificationsFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listenerRegistration.remove();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        notificationAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        notificationAdapter.stopListening();
+    }
 }
 
 

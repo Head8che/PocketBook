@@ -9,12 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,6 +44,23 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
     @Override
     protected void onBindViewHolder(@NonNull NotificationAdapter.NotificationHolder holder, int position, @NonNull Notification model) {
 
+        holder.description.setText(model.getMessage());
+
+        FirebaseFirestore.getInstance().collection("users").document(model.getSender())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot document = task.getResult();
+                        User sender = FirebaseIntegrity.getUserFromFirestore(document);
+                        holder.username.setText(sender.getUsername());
+                        if (sender != null) {
+                            GlideApp.with(Objects.requireNonNull(holder.itemView.getContext()))
+                                    .load(FirebaseIntegrity.getUserProfilePicture(sender))
+                                    .into(holder.userProfile);
+                    }
+                }
+                });
 
     }
 

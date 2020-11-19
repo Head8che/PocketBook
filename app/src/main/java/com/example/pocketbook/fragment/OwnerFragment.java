@@ -13,14 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.adapter.ProfileAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -49,9 +52,9 @@ public class OwnerFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private RecyclerView mBooksRecycler;
-    private BookAdapter mAdapter;
+    private ProfileAdapter mAdapter;
     private TextView profileName, userName;
-    private TextView editProfile;
+    private TextView editProfile, readyPickups;
     private static final String USERS = "users";
     private User currentUser;
     private ScrollUpdate scrollUpdate;
@@ -194,11 +197,13 @@ public class OwnerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
         mBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mBooksRecycler.setLayoutManager(layoutManager);
+//        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
-        mAdapter = new BookAdapter(options, currentUser,getActivity());
+        mAdapter = new ProfileAdapter(options, currentUser,getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
 
@@ -219,9 +224,22 @@ public class OwnerFragment extends Fragment {
                 .into(profilePicture);
 
         editProfile = v.findViewById(R.id.edit_profile_button);
+        readyPickups = v.findViewById(R.id.ViewAllReadyForPickup);
 
 //        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();
+
+        readyPickups.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                Fragment someFragment = new ReadyForPickupFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+            }
+        });
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

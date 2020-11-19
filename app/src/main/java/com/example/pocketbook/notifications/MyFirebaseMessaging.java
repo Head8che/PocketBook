@@ -1,10 +1,12 @@
 package com.example.pocketbook.notifications;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -31,7 +33,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     private void sendOreoNotification(RemoteMessage remoteMessage){
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
+        String date = remoteMessage.getData().get("date");
         int icon = R.mipmap.ic_launcher;
+
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
         //TODO: add functionality to click on a notification
@@ -39,9 +43,14 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         OreoNotification oreoNotification = new OreoNotification(this);
-        NotificationCompat.Builder builder = oreoNotification.getOreoNotification(title,body,icon);
+        Notification.Builder builder = oreoNotification.getOreoNotification(title,body,icon);
 
-        oreoNotification.getManager().notify(0,builder.build());
+        int j = 0;
+        String[] s = date.split("[-:.]");
+        for (int i = 0; i < s.length; i++) {
+            j+= Integer.parseInt(s[i].replace(" ",""));
+        }
+        oreoNotification.getManager().notify(j,builder.build());
     }
 
     private void sendNotification(RemoteMessage remoteMessage){

@@ -40,6 +40,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
 
+import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
+
 /**
  * Home Page Screen
  */
@@ -72,16 +74,9 @@ public class HomeActivity extends AppCompatActivity {
         FRAG_TAG = "HOME_FRAGMENT";
         getSupportFragmentManager().beginTransaction().add(R.id.container,
                 selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
-        UpdateToken(currentUser); //update the token for the user to send notifications
+        updateToken(); //update the token for the user to send and receive notifications
     }
 
-    private void UpdateToken(User currentUser){
-        String refreshToken = FirebaseInstanceId.getInstance().getToken();
-        Token token = new Token(refreshToken);
-        FirebaseFirestore.getInstance().collection("users")
-                .document(currentUser.getEmail())
-                .update("token",token.getToken());
-    }
 
     @Override
     public void onBackPressed() {

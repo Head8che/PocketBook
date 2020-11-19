@@ -4,11 +4,13 @@ public class Data {
 
     private String body;
     private String title;
+    private String date;
 
-    public Data(String body, String title) {
+    public Data(String body, String title, String date) {
 
         this.body = body;
         this.title = title;
+        this.date = date;
 
     }
 

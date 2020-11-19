@@ -49,8 +49,49 @@ public class Exchange implements Serializable {
                 this.ownerBookStatus = ownerBookStatus;  // ["AVAILABLE", "BORROWED", "ACCEPTED"]
                 this.borrowerBookStatus = borrowerBookStatus;  // same as ownerBookStatus
                 this.location = location;
+
             }
         }
 
+    }
+
+    /**
+     * Getter method for id
+     * @return id as String
+     */
+    public String getId()
+    { return this.id;
+    }
+
+    /**
+     * Getter method for owner
+     * @return owner as String
+     */
+    public String getOwner()
+    { return this.owner;
+    }
+
+    /**
+     * Getter method for OwnerBookStatus
+     * @return ownerBookStatus as String
+     */
+    public String getOwnerBookStatus()
+    { return this.ownerBookStatus;
+    }
+
+    /**
+     * Getter method for borrowerBookStatus
+     * @return borrowerBookStatus as String
+     */
+    public String getBorrowerBookStatus()
+    { return this.borrowerBookStatus;
+    }
+
+    /**
+     * Getter method for location
+     * @return location as String
+     */
+    public Location getLocation()
+    { return this.location;
     }
 }

@@ -157,7 +157,7 @@ public class OwnerFragment extends Fragment {
                         return;
                     }
 
-                    // TODO; Add isAdded to other listeners
+                    // TODO: Add isAdded to other listeners
                     // if fragment can have a manager; tests crash without this line
                     if ((!firstTimeFragLoads) && ownerFragment.isAdded()) {
                         getParentFragmentManager()
@@ -180,8 +180,10 @@ public class OwnerFragment extends Fragment {
         });
 
     }
+
     /**
-     * Inflates the layout/container in the respectful fields and fills the fields that require the onwer informationto be displayed
+     * Inflates the layout/container in the respectful fields and fills
+     * the fields that require the owner information to be displayed
      * @param inflater
      * @param container
      * @param savedInstanceState

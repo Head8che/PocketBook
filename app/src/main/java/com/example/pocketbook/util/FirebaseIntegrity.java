@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 
 import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.notifications.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +26,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -694,6 +698,60 @@ public class FirebaseIntegrity {
     }
 
 
+    ///////////////////////////////// FIREBASE METHODS FOR NOTIFICATIONS ////////////////////////////////
+
+    /**
+     * Adds a notification to Firebase
+     */
+    public static void pushNewNotificationToFirebase(Notification notification) {
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("message", notification.getMessage());
+        docData.put("sender", notification.getSender());
+        docData.put("receiver", notification.getReceiver());
+        docData.put("relatedBook", notification.getRelatedBook());
+        docData.put("seen", notification.getSeen());
+        docData.put("type", notification.getType());
+        docData.put("notificationDate", notification.getNotificationDate());
+
+        FirebaseFirestore.getInstance().collection("users").document(notification.getReceiver())
+                .collection("notifications").document(notification.getNotificationDate())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("NEW_NOTIFICATION", "Notification data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
+                    }
+                });
+
+    }
+
+    public static void setAllNotificationsToSeenTrue(User currentUser){
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                .collection("notifications")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                                        .collection("notifications").document(document.getId())
+                                        .update("seen",true);
+                            }
+                        } else {
+                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+    }
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
 
@@ -1622,6 +1680,19 @@ public class FirebaseIntegrity {
                 objectType, destCollectionName, CLEAN_OC_SRC_D_CHAIN);
 
     }
+
+    public static void updateToken(){
+        //  get the current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // get the token for this instance of the app
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        //  update the user's token in Firestore
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(firebaseUser.getEmail())
+                .update("token",token.getToken());
+    }
+
 
     /*
     ALWAYS DELETE SUBCOLLECTIONS BEFORE DELETING COLLECTIONS!

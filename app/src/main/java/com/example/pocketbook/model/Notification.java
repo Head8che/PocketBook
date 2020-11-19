@@ -24,7 +24,7 @@ public class Notification implements Serializable {
     private String sender;
     private String receiver;
     private String relatedBook;
-    private String seen;  // can only be "true" or "false"
+    private boolean seen;  // can only be "true" or "false"
     private String type;
     private String notificationDate;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
@@ -40,6 +40,7 @@ public class Notification implements Serializable {
         this.sender = sender.trim().toLowerCase();  // lowercase email
         this.receiver = receiver.trim().toLowerCase();  // lowercase email
         this.relatedBook = relatedBook.trim();
+        this.seen = seen;
         this.type = type.trim().toUpperCase();  /* one of ["BOOK_REQUESTED", "REQUEST_ACCEPTED",
                                                            "REQUEST_DECLINED", "RETURN_REQUESTED",
                                                            "LOCATION_SPECIFIED"] */
@@ -50,7 +51,7 @@ public class Notification implements Serializable {
     public String getSender() {  return this.sender; }
     public String getReceiver() {  return this.receiver; }
     public String getRelatedBook() { return this.relatedBook; }
-    public String getSeen() { return this.seen; }
+    public boolean getSeen() { return this.seen; }
     public String getType() { return this.type; }
     public String getNotificationDate() { return this.notificationDate;  }
 

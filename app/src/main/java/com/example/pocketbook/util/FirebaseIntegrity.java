@@ -26,6 +26,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
@@ -726,6 +727,27 @@ public class FirebaseIntegrity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
+                    }
+                });
+
+    }
+
+    public static void setAllNotificationsToSeenTrue(User currentUser){
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                .collection("notifications")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                                        .collection("notifications").document(document.getId())
+                                        .update("seen",true);
+                            }
+                        } else {
+                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                        }
                     }
                 });
 

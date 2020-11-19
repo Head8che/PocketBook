@@ -22,33 +22,40 @@
 <!--        android:textColor="@color/textBlack"-->
 <!--        android:textSize="24sp" />-->
 
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
         android:id="@+id/homeFragmentToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:elevation="5dp"
-        app:title="">
+        android:elevation="5dp">
 
 
-        <ImageView
-            android:id="@+id/notificationBtn"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
+        <Button
+            android:id="@+id/homeFragmentNotificationBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="10dp"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_notification"
-            app:tint="@color/colorUnselected">
-        </ImageView>
+            android:visibility="visible"
+            android:alpha="0"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+        <include
+            layout="@layout/item_notification_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/homeFragmentPageTitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:letterSpacing="0.02"
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:text="@string/pocketbook"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             android:textColor="@color/textBlack"
@@ -66,7 +73,7 @@
         <!--                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
         <!--                    android:textColor="@color/colorAccent" />-->
 
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/container"

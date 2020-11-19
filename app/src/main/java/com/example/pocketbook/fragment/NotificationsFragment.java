@@ -28,6 +28,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import static com.example.pocketbook.util.FirebaseIntegrity.setAllNotificationsToSeenTrue;
+
 public class NotificationsFragment extends Fragment {
 
 
@@ -66,6 +68,8 @@ public class NotificationsFragment extends Fragment {
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("CURRENTUSER");
         }
+
+        setAllNotificationsToSeenTrue(currentUser); // set all the seen attribute in all notifications to true
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();

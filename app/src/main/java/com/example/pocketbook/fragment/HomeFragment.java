@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -138,7 +139,7 @@ public class HomeFragment extends Fragment {
         mAdapter = new BookAdapter(options, currentUser, getActivity());
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        ImageView notificationBtn = (ImageView) v.findViewById(R.id.notificationBtn);
+        Button notificationBtn = (Button) v.findViewById(R.id.homeFragmentNotificationBtn);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
 

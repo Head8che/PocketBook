@@ -79,16 +79,13 @@ public class NotificationsFragment extends Fragment {
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("CURRENTUSER");
         }
-
-
-
-
-        setAllNotificationsToSeenTrue(currentUser); // set all the seen attribute in all notifications to true
+        if (currentUser != null)
+            setAllNotificationsToSeenTrue(currentUser); // set all the seen attribute in all notifications to true
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Query to retrieve all book requests
+        // Query to retrieve all user notifications
         mQuery = mFirestore.collection("users").document(currentUser.getEmail())
                 .collection("notifications");
 

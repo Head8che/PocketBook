@@ -576,6 +576,33 @@ public class FirebaseIntegrity {
         }
 
     }
+    //extras.getString("receiver")
+//    public static User getUserFromFirestore(String userEmail){
+//        final User[] user = new User[1];
+//        FirebaseFirestore.getInstance().collection("users").document(userEmail)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("attempt to get user","userrrrrrrrrr");
+//                            DocumentSnapshot document = task.getResult();
+//                            user[0] = Parser.parseUser(document.getString("firstName"),document.getString("lastName"),document.getString("email")
+//                            ,document.getString("username"),document.getString("password"),document.getString("phoneNumber"),document.getString("photo"));
+//                            if (user[0]==null){
+//                                Log.d("user is null","1");
+//                            }
+//
+//                        } else {
+//                            Log.d("FAILED_TO_GET_USER_FROM_FIRESTORE", "get failed with ", task.getException());
+//                        }
+//                    }
+//                });
+//        if (user[0]==null){
+//            Log.d("user is null","2");
+//        }
+//        return user[0];
+//    }
 
 
     ///////////////////////////////// FIREBASE METHODS FOR REQUESTS ////////////////////////////////
@@ -1725,6 +1752,19 @@ public class FirebaseIntegrity {
 
     }
 
+    public static void updateToken(User currentUser){
+        //  get the current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // get the token for this instance of the app
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        //  update the user's token in Firestore
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail())
+                .update("token",token.getToken());
+        Log.d("token","updated to "+refreshToken);
+    }
+
     public static void updateToken(){
         //  get the current user
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -1737,7 +1777,6 @@ public class FirebaseIntegrity {
                 .update("token",token.getToken());
         Log.d("token","updated to "+refreshToken);
     }
-
 
 
     /*

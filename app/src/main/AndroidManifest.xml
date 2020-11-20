@@ -79,7 +79,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <service android:name=".notifications.MyFirebaseIdService"
+        <service android:name=".notifications.FirebaseIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -87,7 +87,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".notifications.MyFirebaseMessaging"
+        <service android:name=".notifications.FirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

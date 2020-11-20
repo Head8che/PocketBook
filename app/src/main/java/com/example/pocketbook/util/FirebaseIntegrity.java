@@ -805,14 +805,14 @@ public class FirebaseIntegrity {
         return notifications;
     }
 
-    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position) {
+    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position, String userEmail) {
 
         Log.d("notifications",notifications.toString());
         Log.d("notificationsdeleeeeeeeeeeeeettttttte",notifications.get(position));
         // get an instance of the document and delete it
         FirebaseFirestore.getInstance()
                 .collection("users")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .document(userEmail)
                 .collection("notifications")
                 .document(notifications.get(position))
                 .delete()

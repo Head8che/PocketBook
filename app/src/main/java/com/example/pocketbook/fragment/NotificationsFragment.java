@@ -190,7 +190,7 @@ public class NotificationsFragment extends Fragment {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             Log.d("pussssssssssss",String.valueOf(viewHolder.getAdapterPosition()));
 
-            deleteNotificationFromFirebase(notifications, viewHolder.getAdapterPosition());
+            deleteNotificationFromFirebase(notifications, viewHolder.getAdapterPosition(),currentUser.getEmail());
             notificationAdapter.notifyDataSetChanged();
         }
     };

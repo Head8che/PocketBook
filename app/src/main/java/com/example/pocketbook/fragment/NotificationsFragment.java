@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +30,10 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+
+import static com.example.pocketbook.util.FirebaseIntegrity.deleteNotificationFromFirebase;
+import static com.example.pocketbook.util.FirebaseIntegrity.getAllNotificationsForCurrentUserFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.setAllNotificationsToSeenTrue;
 
 public class NotificationsFragment extends Fragment {
@@ -40,6 +46,7 @@ public class NotificationsFragment extends Fragment {
     private User currentUser;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
+    private  ArrayList<String> notifications;
     FirestoreRecyclerOptions<Notification> options;
     ListenerRegistration listenerRegistration;
 
@@ -69,6 +76,7 @@ public class NotificationsFragment extends Fragment {
             this.currentUser = (User) getArguments().getSerializable("CURRENTUSER");
         }
 
+        notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
         setAllNotificationsToSeenTrue(currentUser); // set all the seen attribute in all notifications to true
 
         // Initialize Firestore
@@ -140,6 +148,8 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter = new NotificationAdapter(options, currentUser);
         notificationsRecycler.setAdapter(notificationAdapter);
 
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(notificationsRecycler);
+
         return view;
     }
 
@@ -160,6 +170,21 @@ public class NotificationsFragment extends Fragment {
         super.onStop();
         notificationAdapter.stopListening();
     }
+
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            Log.d("pussssssssssss",String.valueOf(viewHolder.getAdapterPosition()));
+            deleteNotificationFromFirebase(notifications, viewHolder.getAdapterPosition());
+            notificationAdapter.notifyDataSetChanged();
+        }
+    };
 }
 
 

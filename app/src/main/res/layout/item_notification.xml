@@ -6,8 +6,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/itemNotiProfileImageView"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:src="@color/colorAccent"
         />
 
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:text="@string/username"
             android:textColor="@color/colorTitle"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <Space
@@ -42,9 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/notification_description"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="normal" />
 
     </LinearLayout>
+
+
 
 </RelativeLayout>

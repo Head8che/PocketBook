@@ -735,6 +735,7 @@ public class FirebaseIntegrity {
     public static void setAllNotificationsToSeenTrue(User currentUser){
         FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
                 .collection("notifications")
+//                .whereEqualTo("seen",false)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -751,6 +752,50 @@ public class FirebaseIntegrity {
                     }
                 });
 
+    }
+
+    public ArrayList<String> getAllNotificationsForCurrentUserFromFirebase(User currentUser){
+
+
+        ArrayList<String> notifications = new ArrayList<>();
+
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                .collection("notifications")
+//                .whereEqualTo("seen",false)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                notifications.add(document.getId());
+                                Log.d("workkkkkkkkkkkkkkkkksssssssss",document.getId() );
+                            }
+                        } else {
+                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return notifications;
+    }
+
+    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position) {
+
+        Log.d("notifications",notifications.toString());
+        Log.d("notificationsdeleeeeeeeeeeeeettttttte",notifications.get(position));
+//        // get an instance of the document and delete it
+//        FirebaseFirestore.getInstance()
+//                .collection("users")
+//                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+//                .collection("notifications")
+//                .document(notifications.get(position))
+//                .delete()
+//                .addOnCompleteListener(task -> {
+//                    if (!(task.isSuccessful())) {
+//                        Log.e("DELETE_DOCUMENT_FROM_COLLECTION",
+//                                "Error deleting collection document!");
+//                    }
+//                });
     }
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
@@ -1691,7 +1736,9 @@ public class FirebaseIntegrity {
         FirebaseFirestore.getInstance().collection("users")
                 .document(firebaseUser.getEmail())
                 .update("token",token.getToken());
+        Log.d("token","updated to "+refreshToken);
     }
+
 
 
     /*

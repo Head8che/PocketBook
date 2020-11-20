@@ -22,15 +22,19 @@ import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
 
 import static com.example.pocketbook.util.FirebaseIntegrity.deleteNotificationFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.getAllNotificationsForCurrentUserFromFirebase;
@@ -76,7 +80,9 @@ public class NotificationsFragment extends Fragment {
             this.currentUser = (User) getArguments().getSerializable("CURRENTUSER");
         }
 
-        notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
+
+
+
         setAllNotificationsToSeenTrue(currentUser); // set all the seen attribute in all notifications to true
 
         // Initialize Firestore
@@ -102,19 +108,19 @@ public class NotificationsFragment extends Fragment {
                     switch (dc.getType()) {
                             case ADDED:
                                 Log.d("NOTIFICATION_SCROLL_UPDATE", "New doc: " + document);
-
+                                notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;
 
                             case MODIFIED:
                                 Log.d("NOTIFICATION_SCROLL_UPDATE", "Modified doc: " + document);
-
+                                notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;
 
                             case REMOVED:
                                 Log.d("NOTIFICATION_SCROLL_UPDATE", "Removed doc: " + document);
-
+                                notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;
 
@@ -150,8 +156,13 @@ public class NotificationsFragment extends Fragment {
 
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(notificationsRecycler);
 
+
+
         return view;
     }
+
+
+
 
     @Override
     public void onDestroy() {
@@ -181,6 +192,7 @@ public class NotificationsFragment extends Fragment {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             Log.d("pussssssssssss",String.valueOf(viewHolder.getAdapterPosition()));
+
             deleteNotificationFromFirebase(notifications, viewHolder.getAdapterPosition());
             notificationAdapter.notifyDataSetChanged();
         }

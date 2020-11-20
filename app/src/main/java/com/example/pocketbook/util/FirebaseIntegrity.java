@@ -735,7 +735,7 @@ public class FirebaseIntegrity {
     public static void setAllNotificationsToSeenTrue(User currentUser){
         FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
                 .collection("notifications")
-//                .whereEqualTo("seen",false)
+                .whereEqualTo("seen",false)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -754,14 +754,13 @@ public class FirebaseIntegrity {
 
     }
 
-    public ArrayList<String> getAllNotificationsForCurrentUserFromFirebase(User currentUser){
+    public static ArrayList<String> getAllNotificationsForCurrentUserFromFirebase(User currentUser){
 
 
         ArrayList<String> notifications = new ArrayList<>();
 
         FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
                 .collection("notifications")
-//                .whereEqualTo("seen",false)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -783,19 +782,19 @@ public class FirebaseIntegrity {
 
         Log.d("notifications",notifications.toString());
         Log.d("notificationsdeleeeeeeeeeeeeettttttte",notifications.get(position));
-//        // get an instance of the document and delete it
-//        FirebaseFirestore.getInstance()
-//                .collection("users")
-//                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-//                .collection("notifications")
-//                .document(notifications.get(position))
-//                .delete()
-//                .addOnCompleteListener(task -> {
-//                    if (!(task.isSuccessful())) {
-//                        Log.e("DELETE_DOCUMENT_FROM_COLLECTION",
-//                                "Error deleting collection document!");
-//                    }
-//                });
+        // get an instance of the document and delete it
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .collection("notifications")
+                .document(notifications.get(position))
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (!(task.isSuccessful())) {
+                        Log.e("DELETE_DOCUMENT_FROM_COLLECTION",
+                                "Error deleting collection document!");
+                    }
+                });
     }
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////

@@ -44,12 +44,12 @@ public class OreoNotification extends ContextWrapper {
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    public Notification.Builder getOreoNotification(String title, String body, int icon){
+    public Notification.Builder getOreoNotification(String title, String body, String icon, String group){
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(icon)
-                .setGroup("New Requests");
+                .setSmallIcon(Integer.parseInt(icon))
+                .setGroup(group);
             }
 }
 

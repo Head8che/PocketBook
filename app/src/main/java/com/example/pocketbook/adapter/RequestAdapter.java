@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,8 +26,14 @@ import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
 import com.example.pocketbook.fragment.ViewProfileFragment;
 
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.notifications.APIService;
+import com.example.pocketbook.notifications.Client;
+import com.example.pocketbook.notifications.Data;
+import com.example.pocketbook.notifications.Response;
+import com.example.pocketbook.notifications.Sender;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -38,17 +45,24 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+
+import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationToFirebase;
 
 public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAdapter.RequestHolder> {
     private Book mBook;
     private User mRequester;
+    private User mRequestee;
     private User currentUser;
     private FragmentActivity activity;
+    APIService apiService;
 
     public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Book mBook, FragmentActivity activity) {
         super(options);
         this.mBook = mBook;
         this.activity = activity;
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
     }
 
     static class RequestHolder extends RecyclerView.ViewHolder {
@@ -239,8 +253,56 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
 
                 // decline a book request in Firebase
                 FirebaseIntegrity.declineBookRequest(request);
+
+                //send a notification to the requester
+                FirebaseFirestore.getInstance().collection("users").document(request.getRequester())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    FirebaseFirestore.getInstance().collection("users").document(request.getRequestee())
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        mRequestee = FirebaseIntegrity.getUserFromFirestore(document);
+                                                        String userToken = task.getResult().get("token").toString();
+                                                        String msg = String.format("%s has declined your request for '%s'", mRequestee.getUsername(), mBook.getTitle());
+                                                        Notification notification = new Notification(msg, mBook.getOwner(), request.getRequester(), mBook.getId(), false, "REQUEST_DECLINED");
+                                                        Data data = new Data(msg, "Request Declined", notification.getNotificationDate(), notification.getType(), R.mipmap.ic_launcher_round, notification.getReceiver());
+                                                        pushNewNotificationToFirebase(notification);
+                                                        sendNotification(userToken, data);
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
             }
         });
 
+    }
+    private void sendNotification(String token, Data data) {
+
+        Sender sender = new Sender(data, token);
+        apiService.sendNotification(sender).enqueue((new Callback<Response>() {
+
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                if (response.code() == 200) {
+                    if (response.body().success != 1) {
+                        Log.d("FAILED_TO_SEND_NOTIFICATION","0");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
+
+            }
+        }));
     }
 }

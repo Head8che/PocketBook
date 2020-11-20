@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
@@ -44,12 +45,13 @@ public class OreoNotification extends ContextWrapper {
     }
 
     @TargetApi(Build.VERSION_CODES.O)
-    public Notification.Builder getOreoNotification(String title, String body, String icon, String group){
+    public Notification.Builder getOreoNotification(String title, String body, String icon, String group, PendingIntent pendingIntent){
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(Integer.parseInt(icon))
-                .setGroup(group);
+                .setGroup(group)
+                .setContentIntent(pendingIntent);
             }
 }
 

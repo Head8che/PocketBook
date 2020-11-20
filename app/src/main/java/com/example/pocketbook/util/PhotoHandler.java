@@ -1,9 +1,10 @@
 package com.example.pocketbook.util;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.example.pocketbook.GlideApp;
@@ -96,6 +99,12 @@ public class PhotoHandler {
      * Allows the camera to be initiated upon request from the user
      */
     private void openCamera(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(activity, new String[]
+                    {Manifest.permission.CAMERA}, LAUNCH_CAMERA_CODE);
+        }
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
@@ -112,9 +121,12 @@ public class PhotoHandler {
                 Uri photoURI = FileProvider.getUriForFile(activity,
                         "com.example.android.fileprovider",
                         photoFile);
-                // open the camera
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                activity.startActivityForResult(takePictureIntent, LAUNCH_CAMERA_CODE);
+                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    // open the camera
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    activity.startActivityForResult(takePictureIntent, LAUNCH_CAMERA_CODE);
+                }
             }
         } else {  // if there's no camera activity to handle the intent
             Log.e("SIGN_UP_ACTIVITY", "Failed to resolve activity!");
@@ -194,10 +206,6 @@ public class PhotoHandler {
 
     public Bitmap getGalleryPhoto() {
         return galleryPhoto;
-    }
-
-    public Boolean getShowRemovePhoto() {
-        return showRemovePhoto;
     }
 
     public void setShowRemovePhoto(Boolean showRemovePhoto) {

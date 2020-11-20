@@ -7,11 +7,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+        <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-<!--    <uses-permission android:name="android.permission.CAMERA"/>-->
+    <uses-permission android:name="android.permission.CAMERA"/>
 
 
     <uses-feature android:name="android.hardware.location.gps" />
@@ -31,8 +33,6 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".activity.ScanActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -69,6 +69,15 @@
                 android:value="AIzaSyAuHw4wNX8nFZ5IVahC5J4lYEX1s5Msey8" />
 
         </activity>
+
+                <activity android:name=".activity.CaptureScanActivity"
+                    android:screenOrientation="fullSensor"
+                    android:stateNotNeeded="true"
+                    android:windowSoftInputMode="stateAlwaysHidden"
+                    />
+
+                <activity android:name=".activity.ScanActivity"
+                    />
 
         <provider
             android:name="androidx.core.content.FileProvider"

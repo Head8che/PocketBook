@@ -50,41 +50,43 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String receiver = remoteMessage.getData().get("receiver");
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
-        //TODO: add functionality to click on a notification
-        FirebaseFirestore.getInstance().collection("users").document(receiver)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            User user = getUserFromFirestore(document);
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra("NOTI_FRAG", true);
-                            intent.putExtra("CURRENT_USER",user);
-                            PendingIntent pendingIntent=PendingIntent.getActivity(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        //functionality to click on a notification
+        if (receiver != null) {
+            FirebaseFirestore.getInstance().collection("users").document(receiver)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                User user = getUserFromFirestore(document);
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra("NOTI_FRAG", true);
+                                intent.putExtra("CURRENT_USER", user);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                            Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-                            OreoNotification oreoNotification = new OreoNotification(getApplicationContext());
-                            Notification.Builder builder = oreoNotification.getOreoNotification(title,body,icon,group,pendingIntent);
+                                OreoNotification oreoNotification = new OreoNotification(getApplicationContext());
+                                Notification.Builder builder = oreoNotification.getOreoNotification(title, body, icon, group, pendingIntent);
 
-                            // generate an id for the notification from its date
-                            int j = 0;
-                            String[] s = date.split("[-:.]");
-                            for (int i = 0; i < s.length; i++) {
-                                j+= Integer.parseInt(s[i].replace(" ",""));
+                                // generate an id for the notification from its date
+                                int j = 0;
+                                String[] s = date.split("[-:.]");
+                                for (int i = 0; i < s.length; i++) {
+                                    j += Integer.parseInt(s[i].replace(" ", ""));
+                                }
+
+                                // show the notification and assign it a unique id so it does not get overwritten
+                                oreoNotification.getManager().notify(j, builder.build());
+
+                            } else {
+                                Log.d("FAILED_TO_GET_USER_FROM_FIRESTORE", "get failed with ", task.getException());
                             }
-
-                            // show the notification and assign it a unique id so it does not get overwritten
-                            oreoNotification.getManager().notify(j,builder.build());
-
-                        } else {
-                            Log.d("FAILED_TO_GET_USER_FROM_FIRESTORE", "get failed with ", task.getException());
                         }
-                    }
-                });
+                    });
+        }
 
     }
 

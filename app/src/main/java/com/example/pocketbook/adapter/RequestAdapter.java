@@ -53,6 +53,7 @@ import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationT
 public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAdapter.RequestHolder> {
     private Book mBook;
     private User mRequester;
+    private User mRequestee;
     private User currentUser;
     private FragmentActivity activity;
     APIService apiService;
@@ -260,16 +261,16 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()){
-                                    FirebaseFirestore.getInstance().collection("users").document(request.getRequester())
+                                    FirebaseFirestore.getInstance().collection("users").document(request.getRequestee())
                                             .get()
                                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     if (task.isSuccessful()) {
                                                         DocumentSnapshot document = task.getResult();
-                                                        mRequester = FirebaseIntegrity.getUserFromFirestore(document);
+                                                        mRequestee = FirebaseIntegrity.getUserFromFirestore(document);
                                                         String userToken = task.getResult().get("token").toString();
-                                                        String msg = String.format("%s has declined your request for '%s'", mRequester.getUsername(), mBook.getTitle());
+                                                        String msg = String.format("%s has declined your request for '%s'", mRequestee.getUsername(), mBook.getTitle());
                                                         Notification notification = new Notification(msg, mBook.getOwner(), request.getRequester(), mBook.getId(), false, "REQUEST_DECLINED");
                                                         Data data = new Data(msg, "Request Declined", notification.getNotificationDate(), notification.getType(), R.mipmap.ic_launcher_round, notification.getReceiver());
                                                         pushNewNotificationToFirebase(notification);

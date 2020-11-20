@@ -213,7 +213,7 @@ public class HomeActivity extends AppCompatActivity {
         // start ScanActivity appropriately based on the selected scanning dialog option
         descriptionOption.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
 //            intent.putExtra("HA_USER", currentUser);
             startActivityForResult(intent, SEE_DESCRIPTION_CODE);
         });
@@ -221,28 +221,28 @@ public class HomeActivity extends AppCompatActivity {
         // start ScanActivity appropriately based on the selected scanning dialog option
         lendOption.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivityForResult(intent, LEND_BOOK_CODE);
         });
 
         // start ScanActivity appropriately based on the selected scanning dialog option
         borrowOption.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivityForResult(intent, BORROW_BOOK_CODE);
         });
 
         // start ScanActivity appropriately based on the selected scanning dialog option
         returnOption.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivityForResult(intent, RETURN_BOOK_CODE);
         });
 
         // start ScanActivity appropriately based on the selected scanning dialog option
         receiveOption.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivityForResult(intent, RECEIVE_BOOK_CODE);
         });
 

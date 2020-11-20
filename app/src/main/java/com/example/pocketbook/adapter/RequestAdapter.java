@@ -236,7 +236,6 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                 // NOTE: the local declineRequest is purely for testing; FirebaseIntegrity will
                 //  overwrite all locally set data with the appropriate Firebase data
 
-//                mBook.declineRequest(request);
 
                 // decline a book request in Firebase
                 FirebaseIntegrity.declineBookRequest(request);

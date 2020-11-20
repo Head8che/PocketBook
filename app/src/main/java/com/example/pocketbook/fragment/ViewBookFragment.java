@@ -300,7 +300,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                     String userToken = task.getResult().get("token").toString();
                                     String msg = String.format("%s has requested %s", currentUser.getUsername(), book.getTitle());
                                     Notification notification = new Notification(msg, currentUser.getEmail(), bookOwner.getEmail(), book.getId(), false, "BOOK_REQUESTED");
-                                    Data data = new Data(msg, "New Request", notification.getNotificationDate());
+                                    Data data = new Data(msg, "New Request", notification.getNotificationDate(),notification.getType(),R.mipmap.ic_launcher_round);
                                     pushNewNotificationToFirebase(notification);
                                     sendNotification(userToken,data);
                                 }

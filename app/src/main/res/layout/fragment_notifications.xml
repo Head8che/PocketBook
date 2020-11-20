@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
+    android:orientation="vertical"
     tools:context=".activity.HomeActivity">
-
 
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/notificationToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/notificationFragToolbar"
@@ -48,23 +47,27 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/notificationsTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/notifications"
-            android:textSize="32sp"
-            android:layout_gravity="center"
-            android:textColor="@color/textBlack"
-            android:textStyle="normal"/>
-
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <TextView
+        android:id="@+id/notificationsTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="10dp"
+        android:text="@string/notifications"
+        android:textColor="@color/textBlack"
+        android:textSize="22sp"
+        android:textStyle="normal" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notificationsViewRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/notificationToolbar" />
+        android:layout_height="match_parent" />
 
-</RelativeLayout>
+</LinearLayout>

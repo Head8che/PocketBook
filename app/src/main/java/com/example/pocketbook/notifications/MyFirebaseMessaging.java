@@ -34,7 +34,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         String date = remoteMessage.getData().get("date");
-        int icon = R.mipmap.ic_launcher;
+        String group = remoteMessage.getData().get("group");
+        String icon = remoteMessage.getData().get("icon");
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
@@ -43,33 +44,45 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         OreoNotification oreoNotification = new OreoNotification(this);
-        Notification.Builder builder = oreoNotification.getOreoNotification(title,body,icon);
+        Notification.Builder builder = oreoNotification.getOreoNotification(title,body,icon,group);
 
+        // generate an id for the notification from its date
         int j = 0;
         String[] s = date.split("[-:.]");
         for (int i = 0; i < s.length; i++) {
             j+= Integer.parseInt(s[i].replace(" ",""));
         }
+
+        // show the notification and assign it a unique id so it does not get overwritten
         oreoNotification.getManager().notify(j,builder.build());
     }
 
     private void sendNotification(RemoteMessage remoteMessage){
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        int icon = R.mipmap.ic_launcher;
+        String date = remoteMessage.getData().get("date");
+        String icon = remoteMessage.getData().get("icon");
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
         //TODO: add functionality to click on a notification
 
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
-                .setSmallIcon(icon)
+                .setSmallIcon(Integer.parseInt(icon))
                 .setContentTitle(title)
                 .setContentText(body);
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        manager.notify(0, builder.build());
+        // generate an id for the notification from its date
+        int j = 0;
+        String[] s = date.split("[-:.]");
+        for (int i = 0; i < s.length; i++) {
+            j+= Integer.parseInt(s[i].replace(" ",""));
+        }
+
+        // show the notification and assign it a unique id so it does not get overwritten
+        manager.notify(j, builder.build());
 
     }
 }

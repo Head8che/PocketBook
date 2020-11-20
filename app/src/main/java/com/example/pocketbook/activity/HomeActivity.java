@@ -77,6 +77,8 @@ public class HomeActivity extends AppCompatActivity {
         extras = intent.getExtras();
         if (extras.containsKey("NOTI_FRAG") ) {
             if (extras.getBoolean("NOTI_FRAG")) {
+                if (!(FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(currentUser.getEmail())))
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(currentUser.getEmail(), currentUser.getPassword());
                 onNewIntent(intent);
             }
         }

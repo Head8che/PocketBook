@@ -795,7 +795,6 @@ public class FirebaseIntegrity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 notifications.add(document.getId());
-                                Log.d("workkkkkkkkkkkkkkkkksssssssss",document.getId() );
                             }
                         } else {
                             Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
@@ -807,8 +806,6 @@ public class FirebaseIntegrity {
 
     public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position, String userEmail) {
 
-        Log.d("notifications",notifications.toString());
-        Log.d("notificationsdeleeeeeeeeeeeeettttttte",notifications.get(position));
         // get an instance of the document and delete it
         FirebaseFirestore.getInstance()
                 .collection("users")

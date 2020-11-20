@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,28 +14,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
-import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.notifications.Token;
-import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.pocketbook.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
 
@@ -129,8 +120,6 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         case R.id.bottom_nav_scan:
                             // showSpinnerDialog when layoutBookCondition is clicked
-                            showScanningSpinnerDialog();
-
                             //ISSUE need to manually set camera permissions. Android manifest permission not working
                             //ISSUE how to test using actual isbn?
                             //TODO get information from the isbn
@@ -189,64 +178,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
             };
 
-    /**
-     * Spinner Dialog that allows the user to choose what they want to scan for
-     */
-    private void showScanningSpinnerDialog() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.alert_dialog_scanning_spinner, null);
-
-        // access the spinner text fields
-        TextView descriptionOption = view.findViewById(R.id.spinnerDialogSeeBookDescriptionField);
-        TextView lendOption = view.findViewById(R.id.spinnerDialogLendBookField);
-        TextView borrowOption = view.findViewById(R.id.spinnerDialogBorrowBookField);
-        TextView returnOption = view.findViewById(R.id.spinnerDialogReturnBookField);
-        TextView receiveOption = view.findViewById(R.id.spinnerDialogReceiveBookField);
-        TextView selectedOption;
-
-        // create the scanning dialog
-        AlertDialog alertDialog = new AlertDialog.Builder(this).setView(view).create();
-        Objects.requireNonNull(alertDialog.getWindow())
-                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.show();
-
-        // start ScanActivity appropriately based on the selected scanning dialog option
-        descriptionOption.setOnClickListener(v -> {
-            alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-//            intent.putExtra("HA_USER", currentUser);
-            startActivityForResult(intent, SEE_DESCRIPTION_CODE);
-        });
-
-        // start ScanActivity appropriately based on the selected scanning dialog option
-        lendOption.setOnClickListener(v -> {
-            alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-            startActivityForResult(intent, LEND_BOOK_CODE);
-        });
-
-        // start ScanActivity appropriately based on the selected scanning dialog option
-        borrowOption.setOnClickListener(v -> {
-            alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-            startActivityForResult(intent, BORROW_BOOK_CODE);
-        });
-
-        // start ScanActivity appropriately based on the selected scanning dialog option
-        returnOption.setOnClickListener(v -> {
-            alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-            startActivityForResult(intent, RETURN_BOOK_CODE);
-        });
-
-        // start ScanActivity appropriately based on the selected scanning dialog option
-        receiveOption.setOnClickListener(v -> {
-            alertDialog.dismiss();
-            Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-            startActivityForResult(intent, RECEIVE_BOOK_CODE);
-        });
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

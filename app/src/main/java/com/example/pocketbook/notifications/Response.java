@@ -1,6 +1,6 @@
 package com.example.pocketbook.notifications;
 
-public class MyResponse {
+public class Response {
 
     public int success;
 }

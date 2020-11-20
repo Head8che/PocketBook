@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 
 import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.notifications.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +26,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -572,6 +576,33 @@ public class FirebaseIntegrity {
         }
 
     }
+    //extras.getString("receiver")
+//    public static User getUserFromFirestore(String userEmail){
+//        final User[] user = new User[1];
+//        FirebaseFirestore.getInstance().collection("users").document(userEmail)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("attempt to get user","userrrrrrrrrr");
+//                            DocumentSnapshot document = task.getResult();
+//                            user[0] = Parser.parseUser(document.getString("firstName"),document.getString("lastName"),document.getString("email")
+//                            ,document.getString("username"),document.getString("password"),document.getString("phoneNumber"),document.getString("photo"));
+//                            if (user[0]==null){
+//                                Log.d("user is null","1");
+//                            }
+//
+//                        } else {
+//                            Log.d("FAILED_TO_GET_USER_FROM_FIRESTORE", "get failed with ", task.getException());
+//                        }
+//                    }
+//                });
+//        if (user[0]==null){
+//            Log.d("user is null","2");
+//        }
+//        return user[0];
+//    }
 
 
     ///////////////////////////////// FIREBASE METHODS FOR REQUESTS ////////////////////////////////
@@ -694,6 +725,101 @@ public class FirebaseIntegrity {
     }
 
 
+    ///////////////////////////////// FIREBASE METHODS FOR NOTIFICATIONS ////////////////////////////////
+
+    /**
+     * Adds a notification to Firebase
+     */
+    public static void pushNewNotificationToFirebase(Notification notification) {
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("message", notification.getMessage());
+        docData.put("sender", notification.getSender());
+        docData.put("receiver", notification.getReceiver());
+        docData.put("relatedBook", notification.getRelatedBook());
+        docData.put("seen", notification.getSeen());
+        docData.put("type", notification.getType());
+        docData.put("notificationDate", notification.getNotificationDate());
+
+        FirebaseFirestore.getInstance().collection("users").document(notification.getReceiver())
+                .collection("notifications").document(notification.getNotificationDate())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("NEW_NOTIFICATION", "Notification data successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
+                    }
+                });
+
+    }
+
+    public static void setAllNotificationsToSeenTrue(User currentUser){
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                .collection("notifications")
+                .whereEqualTo("seen",false)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                                        .collection("notifications").document(document.getId())
+                                        .update("seen",true);
+                            }
+                        } else {
+                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    public static ArrayList<String> getAllNotificationsForCurrentUserFromFirebase(User currentUser){
+
+
+        ArrayList<String> notifications = new ArrayList<>();
+
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+                .collection("notifications")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                notifications.add(document.getId());
+                            }
+                        } else {
+                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return notifications;
+    }
+
+    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position, String userEmail) {
+
+        // get an instance of the document and delete it
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userEmail)
+                .collection("notifications")
+                .document(notifications.get(position))
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (!(task.isSuccessful())) {
+                        Log.e("DELETE_DOCUMENT_FROM_COLLECTION",
+                                "Error deleting collection document!");
+                    }
+                });
+    }
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
 
@@ -1622,6 +1748,33 @@ public class FirebaseIntegrity {
                 objectType, destCollectionName, CLEAN_OC_SRC_D_CHAIN);
 
     }
+
+    public static void updateToken(User currentUser){
+        //  get the current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // get the token for this instance of the app
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        //  update the user's token in Firestore
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail())
+                .update("token",token.getToken());
+        Log.d("token","updated to "+refreshToken);
+    }
+
+    public static void updateToken(){
+        //  get the current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // get the token for this instance of the app
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        //  update the user's token in Firestore
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(firebaseUser.getEmail())
+                .update("token",token.getToken());
+        Log.d("token","updated to "+refreshToken);
+    }
+
 
     /*
     ALWAYS DELETE SUBCOLLECTIONS BEFORE DELETING COLLECTIONS!

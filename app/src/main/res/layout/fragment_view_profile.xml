@@ -37,6 +37,16 @@
                 android:elevation="0dp"
                 app:title="">
 
+
+                <ImageView
+                    android:id="@+id/viewUserProfileBackBtn"
+                    android:layout_width="33dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/colorUnselected">
+
+                </ImageView>
+
             </androidx.appcompat.widget.Toolbar>
 
             <androidx.constraintlayout.widget.ConstraintLayout

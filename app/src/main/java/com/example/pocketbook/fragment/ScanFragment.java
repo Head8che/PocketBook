@@ -172,13 +172,10 @@ public class ScanFragment extends Fragment  implements View.OnClickListener {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     // retrieving the book
                                     Book book = FirebaseIntegrity.getBookFromFirestore(document);
-                                    Log.d("CHECK","POINT1");
-
 
                                     // if currentUser owns book, go to viewMyBookFrag
-                                    //
                                     if (book.getOwner() == currentUser.getEmail()) {
-                                        Log.d("CHECK","POINT2");
+
                                         ViewMyBookFragment f = ViewMyBookFragment.newInstance(currentUser, book);
                                         Bundle bundle = new Bundle();
                                         bundle.putSerializable("VMBF_USER", currentUser);
@@ -231,7 +228,7 @@ public class ScanFragment extends Fragment  implements View.OnClickListener {
 //                dialog.show();
             }
             else{
-                Toast.makeText(getActivity(), "text", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Scan has been cancelled", Toast.LENGTH_SHORT).show();
             }
         }
         else{

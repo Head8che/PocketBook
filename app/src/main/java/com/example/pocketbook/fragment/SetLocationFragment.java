@@ -4,117 +4,136 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.pocketbook.R;
-import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.activity.LocationActivity;
-import com.example.pocketbook.activity.LoginActivity;
-import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.User;
+import com.example.pocketbook.model.Exchange;
+import com.example.pocketbook.model.MeetingDetails;
+import com.example.pocketbook.model.Request;
+import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.util.Parser;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.type.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SetLocationFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private RecyclerView requestsRecycler;
-    private RequestAdapter requestAdapter;
     private Book book;
-    private User currentUser;
-    private TextInputEditText setLocation;
-    private TextInputEditText setDate;
-    private TextInputEditText setTime;
+    private Request request;
+    private TextInputEditText layoutSetLocation;
+    private TextInputEditText layoutSetDate;
+    private TextInputEditText layoutSetTime;
+
+    private TextInputLayout layoutSetLocationContainer;
+    private TextInputLayout layoutSetDateContainer;
+    private TextInputLayout layoutSetTimeContainer;
+
     private Button confirmBtn;
     private ImageView cover;
     private String selectedDate;
     public static final int REQUEST_CODE = 11; // Used to identify the result
+    private double invalidCoord = -999.0;
     private final Calendar myCalendar = Calendar.getInstance();
     private TimePickerDialog timePickerDialog;
     private final Calendar myTime = Calendar.getInstance();
 
+    private double latitude;
+    private double longitude;
+    private String address;
+    private String meetingDate;
+    private String meetingTime;
 
+    private boolean validLocation;
+    private boolean validDate;
+    private boolean validTime;
 
+    String bookOwner;
+    String bookRequester;
 
     public SetLocationFragment() {
         // Required empty public constructor
     }
 
-    public static SetLocationFragment newInstance() {
-        SetLocationFragment fragment = new SetLocationFragment();
-        return fragment;
+    public static SetLocationFragment newInstance(Book book, Request request,
+                                                  String bookOwner, String bookRequester) {
+        SetLocationFragment layoutSetLocationFragment = new SetLocationFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("SLF_BOOK", book);
+        args.putSerializable("SLF_REQUEST", request);
+        args.putSerializable("SLF_BOOK_OWNER", bookOwner);
+        args.putSerializable("SLF_BOOK_REQUESTER", bookRequester);
+        layoutSetLocationFragment.setArguments(args);
+        return layoutSetLocationFragment;
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        validLocation = false;
+        validDate = false;
+        validTime = false;
+
+        if (getArguments() != null) {
+            this.book = (Book) getArguments().getSerializable("SLF_BOOK");
+            this.request = (Request) getArguments().getSerializable("SLF_REQUEST");
+            this.bookOwner = (String) getArguments().getSerializable("SLF_BOOK_OWNER");
+            this.bookRequester = (String) getArguments().getSerializable("SLF_BOOK_REQUESTER");
+        }
+
+        this.latitude = invalidCoord;
+        this.longitude = invalidCoord;
     }
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_set_location, container, false);
         ImageView backButton = (ImageView) view.findViewById(R.id.setLocationBackBtn);
-        setLocation = (TextInputEditText) view.findViewById(R.id.setPickup);
-        setDate = (TextInputEditText) view.findViewById(R.id.setDate);
-        setTime = (TextInputEditText) view.findViewById(R.id.setTime);
+        layoutSetLocation = (TextInputEditText) view.findViewById(R.id.setLocationField);
+        layoutSetDate = (TextInputEditText) view.findViewById(R.id.setDateField);
+        layoutSetTime = (TextInputEditText) view.findViewById(R.id.setTimeField);
         confirmBtn = (Button) view.findViewById(R.id.confirmPickupBtn);
 
+        // access the layout text containers
+        layoutSetLocationContainer = (TextInputLayout) view.findViewById(R.id.setLocationContainer);
+        layoutSetDateContainer = (TextInputLayout) view.findViewById(R.id.setDateContainer);
+        layoutSetTimeContainer = (TextInputLayout) view.findViewById(R.id.setTimeContainer);
 
-
-
-
-
-
-        TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                setTime.setText(String.valueOf(hourOfDay)+"Hours "+String.valueOf(minute)+" minutes ");
-                if (view.isShown()) {
-                    String myFormat = "HH:MM:k"; //In which you need put here
-                    myTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    myTime.set(Calendar.MINUTE, minute);
-                    @SuppressLint
-                            ("SimpleDateFormat") SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a ");
-                    setTime.setText(dateFormatter.format(myTime.getTime()));
+        TimePickerDialog.OnTimeSetListener time = (view1, hourOfDay, minute) -> {
+//                layoutSetTime.setText(String.valueOf(hourOfDay)+"Hours "+String.valueOf(minute)+" minutes ");
+            if (view1.isShown()) {
+                String myFormat = "HH:mm"; // In which you need put here
+                myTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                myTime.set(Calendar.MINUTE, minute);
+                @SuppressLint ("SimpleDateFormat") SimpleDateFormat dateFormatter
+                        = new SimpleDateFormat(myFormat);
+                layoutSetTime.setText(dateFormatter.format(myTime.getTime()));
+                if ((layoutSetTime.getText() != null) && !(layoutSetTime.getText().toString().equals(""))) {
+                    meetingTime = layoutSetTime.getText().toString();
                 }
             }
         };
 
-        setTime.setOnClickListener(new View.OnClickListener() {
+        layoutSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -124,12 +143,97 @@ public class SetLocationFragment extends Fragment {
             }
         });
 
-
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
+        // add a text field listener that validates the inputted text
+        layoutSetTime.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                // TODO: Need to Set the Location Data to the Exchange Model/Update Book Status/ Notification to the user and Decline All other Requests to this book
-                getActivity().onBackPressed();
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // if the inputted text is invalid
+                if (!(Parser.isValidMeetingTime(meetingDate, s.toString()))) {
+                    // if the inputted text is empty
+                    if (s.toString().equals("")) {
+                        layoutSetTime.setError("Input required");
+                    } else {  // if the inputted text is otherwise invalid
+                        layoutSetTime.setError("Invalid Time");
+                    }
+                    layoutSetTimeContainer.setErrorEnabled(true);
+                } else {  // if the inputted text is valid
+                    validTime = true;
+                    layoutSetTime.setError(null);
+                    layoutSetTimeContainer.setErrorEnabled(false);
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+
+        confirmBtn.setOnClickListener(v -> {
+            // TODO: Need to Notify the user of Accept and Decline all other Requests
+            if (validLocation && validDate && validTime
+                    && (latitude != invalidCoord) && (longitude != invalidCoord)) {
+                String exchangeID = UUID.randomUUID().toString();
+                MeetingDetails meetingDetails = new MeetingDetails(latitude,
+                        longitude, address, meetingDate, meetingTime);
+
+                String ownerBookStatus = (book.getStatus().equals("REQUESTED"))
+                        ? "ACCEPTED" : book.getStatus();
+                String borrowerBookStatus = (book.getStatus().equals("REQUESTED"))
+                        ? "ACCEPTED" : book.getStatus();
+
+                Exchange exchange = new Exchange(exchangeID, book.getId(), bookOwner,
+                        bookRequester, ownerBookStatus, borrowerBookStatus, meetingDetails);
+
+                if ((meetingDetails.getAddress() == null)
+                        || (exchange.getExchangeId() == null)) {
+                    Toast.makeText(getContext(), "Invalid Details",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Valid Details",
+                            Toast.LENGTH_SHORT).show();
+                    FirebaseIntegrity.pushNewExchangeToFirebase(exchange);
+                    FirebaseIntegrity.acceptBookRequest(request);
+                    Objects.requireNonNull(getActivity()).onBackPressed();
+                }
+            } else {  // if not all fields are valid
+                if (!validLocation) {
+                    String locationString = Objects.requireNonNull(layoutSetLocation
+                            .getText()).toString();
+
+                    // set an error and focus the app on the erroneous field
+                    if (locationString.equals("")) {
+                        layoutSetLocation.setError("Input required");
+                    } else {
+                        layoutSetLocation.setError("Invalid Location");
+                    }
+                    layoutSetLocationContainer.setErrorEnabled(true);
+                    layoutSetLocation.requestFocus();
+                } else if (!validDate) {
+                    String dateString = Objects.requireNonNull(layoutSetDate
+                            .getText()).toString();
+
+                    // set an error and focus the app on the erroneous field
+                    if (dateString.equals("")) {
+                        layoutSetDate.setError("Input required");
+                    } else {
+                        layoutSetDate.setError("Invalid Date");
+                    }
+                    layoutSetDateContainer.setErrorEnabled(true);
+                    layoutSetDate.requestFocus();
+                } else {
+                    String timeString = Objects.requireNonNull(layoutSetTime
+                            .getText()).toString();
+
+                    // set an error and focus the app on the erroneous field
+                    if (timeString.equals("")) {
+                        layoutSetTime.setError("Input required");
+                    } else {
+                        layoutSetTime.setError("Invalid Time");
+                    }
+                    layoutSetTimeContainer.setErrorEnabled(true);
+                    layoutSetTime.requestFocus();
+                }
             }
         });
 
@@ -139,17 +243,22 @@ public class SetLocationFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                String myFormat = "MM/dd/yy";
+                String myFormat = "yyyy/MM/dd";
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-                setDate.setText(sdf.format(myCalendar.getTime()));
+                layoutSetDate.setText(sdf.format(myCalendar.getTime()));
+
+                if ((layoutSetDate.getText() != null) && !(layoutSetDate.getText().toString().equals(""))) {
+                    meetingDate = layoutSetDate.getText().toString();
+                    validDate = true;
+                }
             }
         };
 
-        setDate.setOnClickListener(new View.OnClickListener() {
+        layoutSetDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(getActivity(), date, myCalendar
@@ -158,18 +267,69 @@ public class SetLocationFragment extends Fragment {
             }
         });
 
+        // add a text field listener that validates the inputted text
+        layoutSetDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // if the inputted text is invalid
+                if (!(Parser.isValidMeetingDate(s.toString()))) {
+                    // if the inputted text is empty
+                    if (s.toString().equals("")) {
+                        layoutSetDate.setError("Input required");
+                    } else {  // if the inputted text is otherwise invalid
+                        layoutSetDate.setError("Invalid Date");
+                    }
+                    layoutSetDateContainer.setErrorEnabled(true);
+                } else {  // if the inputted text is valid
+                    validDate = true;
+                    layoutSetDate.setError(null);
+                    layoutSetDateContainer.setErrorEnabled(false);
 
+                    if (Parser.isValidMeetingTime(s.toString(), meetingTime)) {
+                        validTime = true;
+                        layoutSetTime.setError(null);
+                        layoutSetTimeContainer.setErrorEnabled(false);
+                    }
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
-
-
-        setLocation.setOnClickListener(new View.OnClickListener() {
+        layoutSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), LocationActivity.class);
-                intent.putExtra("currentUser", currentUser);
-                startActivityForResult(intent,100);
-//                setLocation.setText("LongLat");
+                startActivityForResult(intent,REQUEST_CODE);
+//                layoutSetLocation.setText("LongLat");
             }
+        });
+
+        // add a text field listener that validates the inputted text
+        layoutSetLocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // if the inputted text is invalid
+                if (!(Parser.isValidMeetingAddress(s.toString()))) {
+                    // if the inputted text is empty
+                    if (s.toString().equals("")) {
+                        layoutSetLocation.setError("Input required");
+                    } else {  // if the inputted text is otherwise invalid
+                        layoutSetLocation.setError("Invalid Location");
+                    }
+                    layoutSetLocationContainer.setErrorEnabled(true);
+                } else {  // if the inputted text is valid
+                    validLocation = true;
+                    layoutSetLocation.setError(null);
+                    layoutSetLocationContainer.setErrorEnabled(false);
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -187,14 +347,19 @@ public class SetLocationFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 100) {
+        if (requestCode == REQUEST_CODE) {
 
             if (resultCode == Activity.RESULT_OK) {
-                double latitude = (double) data.getSerializableExtra("Lat");
-                double longitude = (double) data.getSerializableExtra("Lng");
-                String address = (String) data.getSerializableExtra("Address");
+                latitude = (double) data.getSerializableExtra("Lat");
+                longitude = (double) data.getSerializableExtra("Lng");
+                address = (String) data.getSerializableExtra("Address");
 
-                setLocation.setText(address);
+                layoutSetLocation.setText(address);
+
+                if ((layoutSetLocation.getText() != null)
+                        && !(layoutSetLocation.getText().toString().equals(""))) {
+                    validLocation = true;
+                }
 
             }
         }

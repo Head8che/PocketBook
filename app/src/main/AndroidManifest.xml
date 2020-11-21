@@ -16,7 +16,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.meetingDetails.gps" />
 
     <queries>
         <intent>
@@ -72,9 +72,6 @@
                     android:screenOrientation="fullSensor"
                     android:stateNotNeeded="true"
                     android:windowSoftInputMode="stateAlwaysHidden"
-                    />
-
-                <activity android:name=".activity.ScanActivity"
                     />
 
         <provider

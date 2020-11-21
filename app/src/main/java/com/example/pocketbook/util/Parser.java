@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1396,13 +1397,13 @@ public class Parser {
         Log.e("PARSER_VALID_MEETING", address + " is not valid!"
                 + " " + "address:" + isValidMeetingAddress(address)
                 + " " + "meetingDate:" + isValidMeetingDate(meetingDate)
-                + " " + "meetingTime:" + isValidMeetingTime(meetingTime)
+                + " " + "meetingTime:" + isValidMeetingTime(meetingDate, meetingTime)
         );
 
         // return true if all fields are valid
         return (isValidMeetingAddress(address)
                 /*&& isValidMeetingLatitude(latitude) && isValidMeetingLongitude(longitude)*/
-                && isValidMeetingDate(meetingDate) && isValidMeetingTime(meetingTime));
+                && isValidMeetingDate(meetingDate) && isValidMeetingTime(meetingDate, meetingTime));
     }
 
     public static boolean isValidMeetingObject(MeetingDetails meetingDetails) {
@@ -1424,13 +1425,13 @@ public class Parser {
         Log.e("PARSER_VALID_MEETING", address + " is not valid!"
                 + " " + "address:" + isValidMeetingAddress(address)
                 + " " + "meetingDate:" + isValidMeetingDate(meetingDate)
-                + " " + "meetingTime:" + isValidMeetingTime(meetingTime)
+                + " " + "meetingTime:" + isValidMeetingTime(meetingDate, meetingTime)
         );
 
         // return true if all fields are valid
         return (isValidMeetingAddress(address)
                 /*&& isValidMeetingLatitude(latitude) && isValidMeetingLongitude(longitude)*/
-                && isValidMeetingDate(meetingDate) && isValidMeetingTime(meetingTime));
+                && isValidMeetingDate(meetingDate) && isValidMeetingTime(meetingDate, meetingTime));
     }
 
     /**
@@ -1459,15 +1460,21 @@ public class Parser {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd",
                 Locale.CANADA);
         dateFormat.setLenient(false);
+
+        Date mDate;
+        Date currentDate;
+
         try {
-            dateFormat.parse(meetingDate);
+            mDate = dateFormat.parse(meetingDate);
+            currentDate = dateFormat.parse(dateFormat.format(new Date()));
         } catch (ParseException pe) {
             return false;
         }
-        return true;
+        return (mDate != null) && (currentDate != null)
+                && (mDate.equals(currentDate) || mDate.after(currentDate));
     }
 
-    public static boolean isValidMeetingTime(String meetingTime) {
+    public static boolean isValidMeetingTime(String meetingDate, String meetingTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm",
                 Locale.CANADA);
         dateFormat.setLenient(false);
@@ -1476,6 +1483,25 @@ public class Parser {
         } catch (ParseException pe) {
             return false;
         }
+
+        SimpleDateFormat dateTimeFormat = null;
+        if ((meetingDate != null) && !(meetingDate.equals(""))) {
+            dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm",
+                    Locale.CANADA);
+        }
+
+        try {
+            if (dateTimeFormat != null) {
+                Date mDate = dateTimeFormat.parse(meetingDate + " " + meetingTime);
+                Date currentDate = dateTimeFormat.parse(dateTimeFormat.format(new Date()));
+
+                return (mDate != null) && (currentDate != null)
+                        && (mDate.equals(currentDate) || mDate.after(currentDate));
+            }
+        } catch (ParseException pe) {
+            return false;
+        }
+
         return true;
     }
 }

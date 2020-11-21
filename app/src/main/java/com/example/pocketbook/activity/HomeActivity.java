@@ -15,13 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.example.pocketbook.fragment.HomeFragment;
-import com.example.pocketbook.fragment.NotificationsFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
@@ -29,18 +27,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.pocketbook.model.User;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
 
-import static com.example.pocketbook.util.FirebaseIntegrity.getUserFromFirestore;
 import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
 
 /**
@@ -51,7 +42,6 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private User currentUser;
     private BottomNavigationView bottomNav;
-    private Bundle extras;
 
     private int LAUNCH_ADD_BOOK_CODE = 1234;
     private int SEE_DESCRIPTION_CODE = 1111;
@@ -64,44 +54,20 @@ public class HomeActivity extends AppCompatActivity {
     String FRAG_TAG;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
+        currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
-        FRAG_TAG = "HOME_FRAGMENT";
-        currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
-        extras = intent.getExtras();
-        if (extras.containsKey("NOTI_FRAG") ) {
-            if (extras.getBoolean("NOTI_FRAG")) {
-                if (!(FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(currentUser.getEmail())))
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(currentUser.getEmail(), currentUser.getPassword());
-                onNewIntent(intent);
-            }
-        }
-        else {
         selectedFragment = HomeFragment.newInstance(currentUser);
+        FRAG_TAG = "HOME_FRAGMENT";
         getSupportFragmentManager().beginTransaction().add(R.id.container,
                 selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
-        }
-        updateToken(currentUser); //update the token for the user to send and receive notifications
-
+        updateToken(); //update the token for the user to send and receive notifications
     }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        selectedFragment = NotificationsFragment.newInstance(currentUser);
-        fragmentTransaction.replace(R.id.container, selectedFragment).commit();
-
-
-    }
-
 
 
     @Override
@@ -110,15 +76,14 @@ public class HomeActivity extends AppCompatActivity {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (count == 0) {
-            if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home || (extras.containsKey("NOTI_FRAG") && extras.getBoolean("NOTI_FRAG"))) {
+            if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home) {
                 bottomNav.setSelectedItemId(R.id.bottom_nav_home);
                 getSupportFragmentManager().beginTransaction().replace(R.id.container,
                         HomeFragment.newInstance(currentUser)).commit();
                 return;
             }
             super.onBackPressed();
-        }
-        else {
+        } else {
             getSupportFragmentManager().popBackStack();
         }
 
@@ -155,12 +120,22 @@ public class HomeActivity extends AppCompatActivity {
                             startActivityForResult(intent, LAUNCH_ADD_BOOK_CODE);
                             break;
                         case R.id.bottom_nav_scan:
-                            // showSpinnerDialog when layoutBookCondition is clicked
-                            //ISSUE need to manually set camera permissions. Android manifest permission not working
-                            //ISSUE how to test using actual isbn?
-                            //TODO get information from the isbn
-                            startActivity(new Intent(HomeActivity.this, ScanActivity.class));
+                            selectedFragment = ScanFragment.newInstance(currentUser);
+                            ScanFragment nextFrag = ScanFragment.newInstance(currentUser);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("SCAN_USER", currentUser);
+                            nextFrag.setArguments(bundle);
+                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
+                        // showSpinnerDialog when layoutBookCondition is clicked
+                        //ISSUE need to manually set camera permissions. Android manifest permission not working
+                        //ISSUE how to test using actual isbn?
+                        //TODO get information from the isbn
+//                            Intent scanIntent = new Intent(getBaseContext(), ScanActivity.class);
+//                            scanIntent.putExtra("SA_USER", currentUser);
+//                            startActivityForResult(scanIntent, SEE_DESCRIPTION_CODE);
+
+//                            startActivity(new Intent(HomeActivity.this, ScanActivity.class));
 
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
@@ -203,7 +178,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         if (!(CURRENT_TAG.equals(FRAG_TAG))
                                 && (item.getItemId() !=  R.id.bottom_nav_profile)
-                                && (item.getItemId() !=  R.id.bottom_nav_scan)) {
+                        ) {
                             // only change fragment if it is not the current fragment
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();

@@ -83,7 +83,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 if (marker != null) {
                     Intent locationData = new Intent();
-//                    locationData.putExtra("MeetingDetails", mPinnedMap);
+//                    locationData.putExtra("Location", mPinnedMap);
                     locationData.putExtra("Lat", Lat);
                     locationData.putExtra("Lng",Lng);
                     locationData.putExtra("Address", locationAddress);
@@ -245,7 +245,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    // Locates the inputted MeetingDetails from the user
+    // Locates the inputted Location from the user
     private void geoLocate(String inputtedLocation) {
         hideSoftKeyboard();
         Geocoder geocoder = new Geocoder(LocationActivity.this);
@@ -279,7 +279,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    //Current MeetingDetails of the device [Bug] // Will resolve
+    //Current Location of the device [Bug] // Will resolve
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);

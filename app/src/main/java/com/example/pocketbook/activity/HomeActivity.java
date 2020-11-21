@@ -19,6 +19,7 @@ import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.R;
+import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
@@ -119,12 +120,22 @@ public class HomeActivity extends AppCompatActivity {
                             startActivityForResult(intent, LAUNCH_ADD_BOOK_CODE);
                             break;
                         case R.id.bottom_nav_scan:
-                            // showSpinnerDialog when layoutBookCondition is clicked
-                            //ISSUE need to manually set camera permissions. Android manifest permission not working
-                            //ISSUE how to test using actual isbn?
-                            //TODO get information from the isbn
-                            startActivity(new Intent(HomeActivity.this, ScanActivity.class));
+                            selectedFragment = ScanFragment.newInstance(currentUser);
+                            ScanFragment nextFrag = ScanFragment.newInstance(currentUser);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("SCAN_USER", currentUser);
+                            nextFrag.setArguments(bundle);
+                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
+                        // showSpinnerDialog when layoutBookCondition is clicked
+                        //ISSUE need to manually set camera permissions. Android manifest permission not working
+                        //ISSUE how to test using actual isbn?
+                        //TODO get information from the isbn
+//                            Intent scanIntent = new Intent(getBaseContext(), ScanActivity.class);
+//                            scanIntent.putExtra("SA_USER", currentUser);
+//                            startActivityForResult(scanIntent, SEE_DESCRIPTION_CODE);
+
+//                            startActivity(new Intent(HomeActivity.this, ScanActivity.class));
 
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
@@ -167,7 +178,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         if (!(CURRENT_TAG.equals(FRAG_TAG))
                                 && (item.getItemId() !=  R.id.bottom_nav_profile)
-                                && (item.getItemId() !=  R.id.bottom_nav_scan)) {
+                        ) {
                             // only change fragment if it is not the current fragment
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();

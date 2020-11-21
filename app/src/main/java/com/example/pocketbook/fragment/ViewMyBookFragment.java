@@ -74,6 +74,11 @@ public class ViewMyBookFragment extends Fragment {
         ImageView backButton = (ImageView) rootView.findViewById(R.id.viewMyBookFragBackBtn);
         TextView deleteButton = (TextView) rootView.findViewById(R.id.viewMyBookFragDeleteBtn);
 
+        // TODO: update tab title
+//        if (book.getStatus().equals("ACCEPTED")) {
+//            Objects.requireNonNull(tabLayout.getTabAt(2)).setText("ACCEPTED");
+//        }
+
         // go back when backButton is clicked
         backButton.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
 

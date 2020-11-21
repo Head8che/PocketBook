@@ -161,7 +161,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             }
         });
 
-        // TODO: clicking on View Pickup Location should show pickup location page
+        // TODO: clicking on View Pickup MeetingDetails should show pickup location page
 
         // set the views' values to the values of the book being viewed
         bookTitleField.setText(book.getTitle());

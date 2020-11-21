@@ -98,6 +98,12 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         //get the requester's info from Firestore to display it to the owner
         String requesterEmail = request.getRequester();
 
+        // TODO: if request is accepted:
+        //  - change tab title from REQUESTS to ACCEPTED
+        //  - hide decline button
+        //  - set test to You Accepted Username's Request
+        //  - feat: add Cancel Accept feature to requests & cancel request to ViewBookFrag
+
         FirebaseFirestore.getInstance().collection("users").document(requesterEmail)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -118,17 +124,10 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                 });
         requestHolder.date.setText(request.getRequestDate());
 
-        // TODO: if request is accepted:
-        //  - change tab title from REQUESTS to ACCEPTED
-        //  - hide decline button
-        //  - set test to You Accepted Username's Request
-        //  - feat: add Cancel Accept feature to requests & cancel request to ViewBookFrag
-
-        //if the user already accepted a request, they can't accept or decline that request
+        // if the user already accepted a request, they can't accept or decline that request
         if (mBook.getStatus().equals("ACCEPTED")){
             requestHolder.accept.setText("Accepted");
-            requestHolder.accept.setEnabled(false);
-            requestHolder.decline.setEnabled(false);
+            requestHolder.decline.setVisibility(View.GONE);
         }
 
         View.OnClickListener profileClickListener = view -> {
@@ -160,86 +159,26 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
             @Override
             public void onClick(View view) {
 
-                Fragment someFragment = new SetLocationFragment();
-                FragmentTransaction transaction = activity
-                        .getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, someFragment ); // give your fragment
-                                                                    // container id in first param
-                transaction.addToBackStack(null);  // if written, this will be added to backstack
-                transaction.commit();
+                if (mBook.getStatus().equals("REQUESTED")) {
 
+                    String bookOwner = mBook.getOwner();
+                    Fragment nextFrag = new SetLocationFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("SLF_BOOK", mBook);
+                    bundle.putSerializable("SLF_REQUEST", request);
+                    bundle.putSerializable("SLF_BOOK_OWNER", bookOwner);
+                    bundle.putSerializable("SLF_BOOK_REQUESTER", mRequester.getEmail());
+                    nextFrag.setArguments(bundle);
+                    FragmentTransaction transaction = activity
+                            .getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, nextFrag); // give your fragment
+                    // container id in first param
+                    transaction.addToBackStack(null);  // if written, this will be added to backstack
+                    transaction.commit();
+                } else if (mBook.getStatus().equals("ACCEPTED")) {
+                    // decline a book request in Firebase
 
-//                ViewMyBookFragment nextFrag = ViewMyBookFragment
-////                        .newInstance(currentUser, book);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("VMBF_USER", currentUser);
-//                bundle.putSerializable("VMBF_BOOK", book);
-//                nextFrag.setArguments(bundle);
-//                activity.getSupportFragmentManager().beginTransaction()
-//                        .replace(activity.findViewById(R.id.container).getId(), nextFrag)
-//                        .addToBackStack(null).commit();
-
-//                if (mBook.getOwner().equals(currentUser.getEmail())) {
-//                    Log.e("OWNERIN", mBook.getOwner());
-//                    Log.d("OWNERIN", mBook.getOwner());
-//                    }
-//                    ViewMyBookFragment nextFrag = ViewMyBookFragment
-//                            .newInstance(currentUser, book);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("VMBF_USER", currentUser);
-//                    bundle.putSerializable("VMBF_BOOK", book);
-//                    nextFrag.setArguments(bundle);
-//                    activity.getSupportFragmentManager().beginTransaction()
-//                            .replace(activity.findViewById(R.id.container).getId(), nextFrag)
-//                            .addToBackStack(null).commit();
-
-
-//                Log.e("OWNERIN", mBook.getOwner());
-//                ViewMyBookFragment nextFrag = ViewMyBookFragment
-//                        .newInstance(currentUser, book);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("VMBF_USER", currentUser);
-//                bundle.putSerializable("VMBF_BOOK", book);
-//                nextFrag.setArguments(bundle);
-//                activity.getSupportFragmentManager().beginTransaction()
-//                        .replace(activity.findViewById(R.id.container).getId(), nextFrag)
-//                        .addToBackStack(null).commit();
-
-
-//                ViewMyBookFragment nextFrag = ViewMyBookFragment.newInstance(currentUser, book);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("VMBF_USER", currentUser);
-//                bundle.putSerializable("VMBF_BOOK", book);
-//                nextFrag.setArguments(bundle);
-//                activity.getSupportFragmentManager().beginTransaction()
-//                        .replace(activity.findViewById(R.id.container).getId(), nextFrag)
-//                        .addToBackStack(null).commit();
-//
-//                Fragment someFragment = new NotificationFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.container, someFragment ); // give your
-//                fragment container id in first parameter
-//                transaction.addToBackStack(null);  // if written,
-//                this transaction will be added to backstack
-//                transaction.commit();
-
-
-                // NOTE: this local setter is purely for testing;
-                //  FirebaseIntegrity will overwrite local data with Firebase data
-
-//                mBook.acceptRequest(request);
-
-                // TODO: startActivityForResult(SetLocationActivity)
-                //  once the activity returns a result:
-                //   if user sets a location, ACCEPT REQUEST; else, do nothing
-
-                // TODO: accept a book request in Firebase (method isn't done yet)
-//                FirebaseIntegrity.acceptBookRequest(request);
-
-//                notifyDataSetChanged();
-//                requestHolder.accept.setText("Accepted");
-//                requestHolder.accept.setEnabled(false);
-//                requestHolder.decline.setEnabled(false);
+                }
             }
         });
 
@@ -247,13 +186,12 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
         requestHolder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // NOTE: the local declineRequest is purely for testing; FirebaseIntegrity will
-                //  overwrite all locally set data with the appropriate Firebase data
 
 
                 // decline a book request in Firebase
                 FirebaseIntegrity.declineBookRequest(request);
 
+                // TODO: only decline if book is requested
                 //send a notification to the requester
                 FirebaseFirestore.getInstance().collection("users").document(request.getRequester())
                         .get()

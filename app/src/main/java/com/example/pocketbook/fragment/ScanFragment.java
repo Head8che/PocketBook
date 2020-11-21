@@ -108,17 +108,14 @@ public class ScanFragment extends Fragment  implements View.OnClickListener {
         // start ScanActivity appropriately based on the selected scanning dialog option
         descriptionOption.setOnClickListener(this);
 
-
         // start ScanActivity appropriately based on the selected scanning dialog option
         lendOption.setOnClickListener(this);
 
         // start ScanActivity appropriately based on the selected scanning dialog option
         borrowOption.setOnClickListener(this);
 
-
         // start ScanActivity appropriately based on the selected scanning dialog option
         returnOption.setOnClickListener(this);
-
 
         // start ScanActivity appropriately based on the selected scanning dialog option
         receiveOption.setOnClickListener(this);

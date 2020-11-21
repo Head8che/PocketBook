@@ -1394,16 +1394,17 @@ public class Parser {
         meetingDate = meetingDate.trim();
         meetingTime = meetingTime.trim();
 
-        Log.e("PARSER_VALID_MEETING", address + " is not valid!"
-                + " " + "address:" + isValidMeetingAddress(address)
-                + " " + "meetingDate:" + isValidMeetingDate(meetingDate)
-                + " " + "meetingTime:" + isValidMeetingTime(meetingDate, meetingTime)
-        );
+//        Log.e("PARSER_VALID_MEETING", address + " is not valid!"
+//                + " " + "address:" + isValidMeetingAddress(address)
+//                + " " + "meetingDate:" + isValidMeetingDate(meetingDate)
+//                + " " + "meetingTime:" + isValidMeetingTime(meetingDate, meetingTime)
+//        );
 
         // return true if all fields are valid
         return (isValidMeetingAddress(address)
                 /*&& isValidMeetingLatitude(latitude) && isValidMeetingLongitude(longitude)*/
-                && isValidMeetingDate(meetingDate) && isValidMeetingTime(meetingDate, meetingTime));
+                && isValidMeetingDate(meetingDate)
+                && isValidMeetingTime(null, meetingTime));  // only check time
     }
 
     public static boolean isValidMeetingObject(MeetingDetails meetingDetails) {
@@ -1422,16 +1423,17 @@ public class Parser {
         meetingDate = meetingDate.trim();
         meetingTime = meetingTime.trim();
 
-        Log.e("PARSER_VALID_MEETING", address + " is not valid!"
-                + " " + "address:" + isValidMeetingAddress(address)
-                + " " + "meetingDate:" + isValidMeetingDate(meetingDate)
-                + " " + "meetingTime:" + isValidMeetingTime(meetingDate, meetingTime)
-        );
+//        Log.e("PARSER_VALID_MEETING", address + " is not valid!"
+//                + " " + "address:" + isValidMeetingAddress(address)
+//                + " " + "meetingDate:" + isValidMeetingDate(meetingDate)
+//                + " " + "meetingTime:" + isValidMeetingTime(meetingDate, meetingTime)
+//        );
 
         // return true if all fields are valid
         return (isValidMeetingAddress(address)
                 /*&& isValidMeetingLatitude(latitude) && isValidMeetingLongitude(longitude)*/
-                && isValidMeetingDate(meetingDate) && isValidMeetingTime(meetingDate, meetingTime));
+                && isValidMeetingDate(meetingDate)
+                && isValidMeetingTime(null, meetingTime));  // only check time
     }
 
     /**

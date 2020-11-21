@@ -102,11 +102,18 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.Book
                 break;
 
             case "REQUESTED":
-                // if the user has already requested the book, it is not available for requesting
-                bookHolder.statusImageView.setImageResource(R.drawable.ic_requested);
-                bookHolder.statusImageView.setColorFilter(ContextCompat
-                                .getColor(activity.getBaseContext(), R.color.colorRequested),
-                        android.graphics.PorterDuff.Mode.SRC_IN);
+                // if the book has any requesters and is requested by the current user
+                if (((book.getRequesters().size() > 0)
+                        && (book.getRequesters().contains(currentUser.getEmail())))
+                        || (book.getOwner().equals(currentUser.getEmail()))) {
+
+                    // if the user has already requested the book, it is not available
+                    bookHolder.statusImageView.setImageResource(R.drawable.ic_requested);
+                    bookHolder.statusImageView.setColorFilter(ContextCompat
+                                    .getColor(activity.getBaseContext(), R.color.colorRequested),
+                            android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+
                 break;
 
             // default case is that the book is available

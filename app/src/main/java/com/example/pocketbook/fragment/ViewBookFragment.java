@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
@@ -33,7 +34,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -149,9 +152,52 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         ImageView bookCoverImageView = view.findViewById(R.id.bookCover);
         ImageView bookStatusImage = view.findViewById(R.id.viewBookBookStatusImageView);
 
-        if (!(bookStatus.equals("ACCEPTED"))) {
+        if (!(bookStatus.equals("ACCEPTED"))  // book must be accepted for the current user
+                || !(book.getRequesters().contains(currentUser.getEmail()))) {
             bookLocationField.setVisibility(View.GONE);
         }
+
+        bookLocationField.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                bookLocationField.setClickable(false);
+
+                FirebaseFirestore.getInstance()
+                        .collection("exchange")
+                        .whereEqualTo("relatedBook", book.getId())
+                        .whereEqualTo("owner", book.getOwner())
+                        .whereEqualTo("borrower", currentUser.getEmail())
+                        .get().addOnCompleteListener(task -> {
+                            if (!(task.isSuccessful())) {
+                                Log.e("VIEW_BOOK_EXCHANGE",
+                                        "Error getting exchange document!");
+                            } else {
+                                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                DocumentSnapshot document = documents.get(0);
+
+                                Exchange exchange = FirebaseIntegrity
+                                        .getExchangeFromFirestore(document);
+
+                                if (exchange != null) {
+                                    ViewLocationFragment nextFrag
+                                            = ViewLocationFragment.newInstance(exchange);
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("VBF_EXCHANGE", exchange);
+                                    nextFrag.setArguments(bundle);
+
+                                    getActivity().getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .replace(getActivity()
+                                                    .findViewById(R.id.container)
+                                                    .getId(), nextFrag)
+                                            .addToBackStack(null).commit();
+                                }
+
+                            }
+                            bookLocationField.setClickable(true);
+                        });
+            }
+        });
 
         ImageView backButton = view.findViewById(R.id.viewBookFragBackBtn);
 
@@ -239,21 +285,20 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         R.color.colorAccepted), android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
 
-
             case "REQUESTED":
-                // if the book has any requesters
-                if (book.getRequesters().size() > 0) {
+                // if the book has any requesters and is requested by the current user
+                if ((book.getRequesters().size() > 0)
+                        && (book.getRequesters().contains(currentUser.getEmail()))) {
+
                     bookStatusImage.setImageResource(R.drawable.ic_requested);
                     bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
                             R.color.colorRequested), android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    // if the book has not been requested by this user before
-                    if (book.getRequesters().contains(currentUser.getEmail())) {
-                        requestButton.setText(R.string.alreadyRequested);
-                        requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
-                                R.color.notAvailable));
-                    }
+                    requestButton.setText(R.string.alreadyRequested);
+                    requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
+                            R.color.notAvailable));
                 }
+
                 break;
 
             default:  // default case is that the book is available
@@ -283,16 +328,26 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         .show();
 
 
-                FirebaseFirestore.getInstance().collection("users").document(bookOwner.getEmail())
+                FirebaseFirestore.getInstance()
+                        .collection("users")
+                        .document(bookOwner.getEmail())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()){
-                                    String userToken = task.getResult().get("token").toString();
-                                    String msg = String.format("%s has requested %s", currentUser.getUsername(), book.getTitle());
-                                    Notification notification = new Notification(msg, currentUser.getEmail(), bookOwner.getEmail(), book.getId(), false, "BOOK_REQUESTED");
-                                    Data data = new Data(msg, "New Request", notification.getNotificationDate(),notification.getType(),R.mipmap.ic_launcher_round, notification.getReceiver());
+                                    String userToken = Objects.requireNonNull(task
+                                            .getResult().get("token")).toString();
+                                    String msg = String.format("%s has requested %s",
+                                            currentUser.getUsername(), book.getTitle());
+                                    Notification notification = new Notification(msg,
+                                            currentUser.getEmail(), bookOwner.getEmail(),
+                                            book.getId(), false, "BOOK_REQUESTED");
+                                    Data data = new Data(msg, "New Request",
+                                            notification.getNotificationDate(),
+                                            notification.getType(),
+                                            R.mipmap.ic_launcher_round,
+                                            notification.getReceiver());
                                     pushNewNotificationToFirebase(notification);
                                     sendNotification(userToken,data);
                                 }

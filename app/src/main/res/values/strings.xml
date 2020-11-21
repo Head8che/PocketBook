@@ -104,12 +104,14 @@
     <string name="profileOwned_username">profile_username</string>
     <string name="pocketbook">Pocketbook</string>
     <string name="set_pickup_location">Set Pickup Location</string>
-    <string name="confrim_pick">CONFRIM PICK</string>
     <string name="confirm_pickup">Confirm PicKup</string>
     <string name="set_date_and_time">Set Date and Time</string>
     <string name="set_location">Set Location</string>
     <string name="set_date">Set Date</string>
     <string name="set_time">Set Time</string>
+    <string name="viewLocation">View Location</string>
+    <string name="viewDate">View Date</string>
+    <string name="viewTime">View Time</string>
     <string name="map_cover">Map Cover</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

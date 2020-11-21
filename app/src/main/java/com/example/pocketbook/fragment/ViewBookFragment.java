@@ -196,6 +196,10 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                             }
                             bookLocationField.setClickable(true);
                         });
+                // getActivity().getSupportFragmentManager().beginTransaction()
+                //         .replace(getActivity().findViewById(R.id.container).getId(),
+                //                 ViewLocationFragment.newInstance())
+                //         .addToBackStack(null).commit();
             }
         });
 

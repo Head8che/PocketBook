@@ -90,7 +90,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/setPickupContainer"
+                android:id="@+id/setLocationContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -104,7 +104,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/space3">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/setPickup"
+                    android:id="@+id/setLocationField"
                     android:layout_width="325dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -122,12 +122,12 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_baseline_location"
-                app:layout_constraintEnd_toStartOf="@+id/setPickupContainer"
+                app:layout_constraintEnd_toStartOf="@+id/setLocationContainer"
                 app:layout_constraintTop_toBottomOf="@+id/space3"
                 tools:ignore="MissingConstraints" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/setDateTimeContainer"
+                android:id="@+id/setDateContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -139,12 +139,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
+                app:layout_constraintTop_toBottomOf="@+id/setLocationContainer"
                 tools:ignore="RtlSymmetry">
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/setDate"
+                    android:id="@+id/setDateField"
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -161,10 +161,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="36dp"
                 android:src="@drawable/ic_calendar"
-                app:layout_constraintEnd_toStartOf="@+id/setDateTimeContainer"
+                app:layout_constraintEnd_toStartOf="@+id/setDateContainer"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
+                app:layout_constraintTop_toBottomOf="@+id/setLocationContainer"
                 tools:ignore="MissingConstraints" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -180,12 +180,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
+                app:layout_constraintTop_toBottomOf="@+id/setLocationContainer"
                 tools:ignore="RtlSymmetry">
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/setTime"
+                    android:id="@+id/setTimeField"
                     android:layout_width="125dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -204,7 +204,7 @@
                 android:layout_marginTop="36dp"
                 android:src="@drawable/ic_baseline_datetime"
                 app:layout_constraintEnd_toStartOf="@+id/setTimeContainer"
-                app:layout_constraintTop_toBottomOf="@+id/setPickupContainer"
+                app:layout_constraintTop_toBottomOf="@+id/setLocationContainer"
                 tools:ignore="MissingConstraints" />
 
             <Button
@@ -220,7 +220,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/setDateTimeContainer" />
+                app:layout_constraintTop_toBottomOf="@+id/setDateContainer" />
 
             <Space
                 android:id="@+id/space5"

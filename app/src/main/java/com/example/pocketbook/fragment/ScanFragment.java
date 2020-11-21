@@ -231,7 +231,7 @@ public class ScanFragment extends Fragment  implements View.OnClickListener {
 //                dialog.show();
             }
             else{
-                Toast.makeText(getActivity(), "text", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Scanning has been canceled", Toast.LENGTH_SHORT).show();
             }
         }
         else{

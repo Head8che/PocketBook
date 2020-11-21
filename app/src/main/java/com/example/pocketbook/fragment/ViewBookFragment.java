@@ -149,7 +149,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         ImageView bookCoverImageView = view.findViewById(R.id.bookCover);
         ImageView bookStatusImage = view.findViewById(R.id.viewBookBookStatusImageView);
 
-        if (!(bookStatus.equals("ACCEPTED"))) {
+        if (!(bookStatus.equals("ACCEPTED"))  // book must be accepted for the current user
+                || !(book.getRequesters().contains(currentUser.getEmail()))) {
             bookLocationField.setVisibility(View.GONE);
         }
 
@@ -239,21 +240,20 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         R.color.colorAccepted), android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
 
-
             case "REQUESTED":
-                // if the book has any requesters
-                if (book.getRequesters().size() > 0) {
+                // if the book has any requesters and is requested by the current user
+                if ((book.getRequesters().size() > 0)
+                        && (book.getRequesters().contains(currentUser.getEmail()))) {
+
                     bookStatusImage.setImageResource(R.drawable.ic_requested);
                     bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
                             R.color.colorRequested), android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    // if the book has not been requested by this user before
-                    if (book.getRequesters().contains(currentUser.getEmail())) {
-                        requestButton.setText(R.string.alreadyRequested);
-                        requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
-                                R.color.notAvailable));
-                    }
+                    requestButton.setText(R.string.alreadyRequested);
+                    requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
+                            R.color.notAvailable));
                 }
+
                 break;
 
             default:  // default case is that the book is available
@@ -283,16 +283,26 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         .show();
 
 
-                FirebaseFirestore.getInstance().collection("users").document(bookOwner.getEmail())
+                FirebaseFirestore.getInstance()
+                        .collection("users")
+                        .document(bookOwner.getEmail())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 if (task.isSuccessful()){
-                                    String userToken = task.getResult().get("token").toString();
-                                    String msg = String.format("%s has requested %s", currentUser.getUsername(), book.getTitle());
-                                    Notification notification = new Notification(msg, currentUser.getEmail(), bookOwner.getEmail(), book.getId(), false, "BOOK_REQUESTED");
-                                    Data data = new Data(msg, "New Request", notification.getNotificationDate(),notification.getType(),R.mipmap.ic_launcher_round, notification.getReceiver());
+                                    String userToken = Objects.requireNonNull(task
+                                            .getResult().get("token")).toString();
+                                    String msg = String.format("%s has requested %s",
+                                            currentUser.getUsername(), book.getTitle());
+                                    Notification notification = new Notification(msg,
+                                            currentUser.getEmail(), bookOwner.getEmail(),
+                                            book.getId(), false, "BOOK_REQUESTED");
+                                    Data data = new Data(msg, "New Request",
+                                            notification.getNotificationDate(),
+                                            notification.getType(),
+                                            R.mipmap.ic_launcher_round,
+                                            notification.getReceiver());
                                     pushNewNotificationToFirebase(notification);
                                     sendNotification(userToken,data);
                                 }

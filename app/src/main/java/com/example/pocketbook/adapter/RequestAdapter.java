@@ -50,7 +50,8 @@ import retrofit2.Callback;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationToFirebase;
 
-public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAdapter.RequestHolder> {
+public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
+        RequestAdapter.RequestHolder> {
     private Book mBook;
     private User mRequester;
     private User mRequestee;
@@ -58,7 +59,8 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
     private FragmentActivity activity;
     APIService apiService;
 
-    public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Book mBook, FragmentActivity activity) {
+    public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options,
+                          Book mBook, FragmentActivity activity) {
         super(options);
         this.mBook = mBook;
         this.activity = activity;
@@ -88,7 +90,8 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
     @Override
     public RequestHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new RequestHolder(inflater.inflate(R.layout.item_request, parent, false));
+        return new RequestHolder(inflater.inflate(R.layout.item_request,
+                parent, false));
     }
 
     @Override
@@ -173,56 +176,73 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request, RequestAda
                             .getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, nextFrag); // give your fragment
                     // container id in first param
-                    transaction.addToBackStack(null);  // if written, this will be added to backstack
+                    transaction.addToBackStack(null);  // add transaction to backstack
                     transaction.commit();
                 } else if (mBook.getStatus().equals("ACCEPTED")) {
                     // decline a book request in Firebase
-
+                    // TODO: cancel accept
                 }
             }
         });
 
         //when the user taps on the decline button for a request, that request is declined
-        requestHolder.decline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        requestHolder.decline.setOnClickListener(view -> {
 
+
+            if (mBook.getStatus().equals("REQUESTED")) {
 
                 // decline a book request in Firebase
                 FirebaseIntegrity.declineBookRequest(request);
 
-                // TODO: only decline if book is requested
                 //send a notification to the requester
-                FirebaseFirestore.getInstance().collection("users").document(request.getRequester())
+                FirebaseFirestore.getInstance().collection("users")
+                        .document(request.getRequester())
                         .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()){
-                                    FirebaseFirestore.getInstance().collection("users").document(request.getRequestee())
-                                            .get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot document = task.getResult();
-                                                        mRequestee = FirebaseIntegrity.getUserFromFirestore(document);
-                                                        String userToken = task.getResult().get("token").toString();
-                                                        String msg = String.format("%s has declined your request for '%s'", mRequestee.getUsername(), mBook.getTitle());
-                                                        Notification notification = new Notification(msg, mBook.getOwner(), request.getRequester(), mBook.getId(), false, "REQUEST_DECLINED");
-                                                        Data data = new Data(msg, "Request Declined", notification.getNotificationDate(), notification.getType(), R.mipmap.ic_launcher_round, notification.getReceiver());
-                                                        pushNewNotificationToFirebase(notification);
-                                                        sendNotification(userToken, data);
-                                                    }
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                FirebaseFirestore.getInstance()
+                                        .collection("users")
+                                        .document(request.getRequestee())
+                                        .get()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                DocumentSnapshot document = task1.getResult();
+
+                                                if (document != null) {
+
+                                                    mRequestee = FirebaseIntegrity
+                                                            .getUserFromFirestore(document);
+                                                    String userToken = Objects
+                                                            .requireNonNull(document
+                                                                    .get("token")).toString();
+                                                    String msg = String
+                                                            .format("Your request for '%s' has " +
+                                                                    "been declined",
+                                                                    mBook.getTitle());
+                                                    Notification notification
+                                                            = new Notification(msg,
+                                                            mBook.getOwner(),
+                                                            request.getRequester(),
+                                                            mBook.getId(), false,
+                                                            "REQUEST_DECLINED");
+                                                    Data data = new Data(msg,
+                                                            "Request Declined",
+                                                            notification.getNotificationDate(),
+                                                            notification.getType(),
+                                                            R.mipmap.ic_launcher_round,
+                                                            notification.getReceiver());
+                                                    pushNewNotificationToFirebase(notification);
+                                                    sendNotification(userToken, data);
                                                 }
-                                            });
-                                }
+                                            }
+                                        });
                             }
                         });
             }
         });
 
     }
+
     private void sendNotification(String token, Data data) {
 
         Sender sender = new Sender(data, token);

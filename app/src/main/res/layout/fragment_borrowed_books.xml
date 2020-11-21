@@ -49,15 +49,15 @@
 
                 <TextView
                     android:id="@+id/suggested_Books"
-                    android:layout_width="360dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="245dp"
+                    android:layout_height="52dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="4sp"
-                    android:paddingHorizontal="10dp"
-                    android:text="Ready For Pickup Books"
+                    android:text="Borrowed Books"
                     android:textColor="@color/textBlack"
                     android:textSize="25dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:paddingHorizontal="10dp"/>
             </LinearLayout>
 
 

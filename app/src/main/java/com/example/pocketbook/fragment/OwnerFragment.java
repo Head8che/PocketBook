@@ -50,18 +50,19 @@ public class OwnerFragment extends Fragment {
     private static final int numColumns = 2;
     private static final int LIMIT = 20;
     private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private RecyclerView mBooksRecycler;
-    private ProfileAdapter mAdapter;
+    private Query requestedbooksQuery, ownedbooksQuery;
+    private RecyclerView mReadyForPickupBooksRecycler, mRequestedBooksRecycler, mOwnedBooksRecycler;
+    private ProfileAdapter requestedbookAdapter, ownedbookAdapter;
     private TextView profileName, userName;
-    private TextView editProfile, readyPickups;
+    private TextView editProfile, readyForPickups, requestedBooks, borrowedBooks, ownedBooks;
     private static final String USERS = "users";
     private User currentUser;
     private ScrollUpdate scrollUpdate;
     private Fragment ownerFragment = this;
     private boolean firstTimeFragLoads = true;
+    private String ownerrequestedBooks = "REQUESTED";
 
-    FirestoreRecyclerOptions<Book> options;
+    FirestoreRecyclerOptions<Book> requestedbookOptions, ownedbookOptions;
     ListenerRegistration listenerRegistration;
 
     /**
@@ -92,11 +93,16 @@ public class OwnerFragment extends Fragment {
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
-        // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+        // Query to retrieve
+        requestedbooksQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).whereEqualTo("status",ownerrequestedBooks).limit(LIMIT);
+        ownedbooksQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 
-        options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
+        requestedbookOptions = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(requestedbooksQuery, Book.class)
+                .build();
+
+        ownedbookOptions = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(ownedbooksQuery, Book.class)
                 .build();
 
         EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
@@ -117,19 +123,19 @@ public class OwnerFragment extends Fragment {
                             case ADDED:
                                 Log.d("SCROLL_UPDATE", "New doc: " + document);
 
-                                mAdapter.notifyDataSetChanged();
+                                requestedbookAdapter.notifyDataSetChanged();
                                 break;
 
                             case MODIFIED:
                                 Log.d("SCROLL_UPDATE", "Modified doc: " + document);
 
-                                mAdapter.notifyDataSetChanged();
+                                requestedbookAdapter.notifyDataSetChanged();
                                 break;
 
                             case REMOVED:
                                 Log.d("SCROLL_UPDATE", "Removed doc: " + document);
 
-                                mAdapter.notifyDataSetChanged();
+                                requestedbookAdapter.notifyDataSetChanged();
                                 break;
                         }
                     }
@@ -137,7 +143,7 @@ public class OwnerFragment extends Fragment {
             }
         };
 
-        listenerRegistration = mQuery.addSnapshotListener(dataListener);
+        listenerRegistration = requestedbooksQuery.addSnapshotListener(dataListener);
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
                 .document(currentUser.getEmail());
@@ -197,17 +203,29 @@ public class OwnerFragment extends Fragment {
             container.removeAllViews();
         }
         View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
-        mBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerBooks);
-        StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mBooksRecycler.setLayoutManager(layoutManager);
-//        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
-        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
-                .build();
-        mAdapter = new ProfileAdapter(options, currentUser,getActivity());
-        mBooksRecycler.setAdapter(mAdapter);
 
+        mRequestedBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerRequestedBooks);
+        LinearLayoutManager requestedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mRequestedBooksRecycler.setLayoutManager(requestedlayoutManager);
+        FirestoreRecyclerOptions<Book> requestedOptions = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(requestedbooksQuery, Book.class)
+                .build();
+        requestedbookAdapter = new ProfileAdapter(requestedOptions, currentUser,getActivity());
+        mRequestedBooksRecycler.setAdapter(requestedbookAdapter);
+
+        mOwnedBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerOwnedBooks);
+        LinearLayoutManager ownedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mOwnedBooksRecycler.setLayoutManager(ownedlayoutManager);
+        FirestoreRecyclerOptions<Book> ownedOptions = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(ownedbooksQuery, Book.class)
+                .build();
+        ownedbookAdapter = new ProfileAdapter(ownedOptions, currentUser,getActivity());
+        mOwnedBooksRecycler.setAdapter(ownedbookAdapter);
+
+
+
+
+        StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
 
         String first_Name = currentUser.getFirstName();
         String last_Name = currentUser.getLastName();
@@ -226,18 +244,59 @@ public class OwnerFragment extends Fragment {
                 .into(profilePicture);
 
         editProfile = v.findViewById(R.id.edit_profile_button);
-        readyPickups = v.findViewById(R.id.ViewAllReadyForPickup);
+        readyForPickups = v.findViewById(R.id.ViewAllReadyForPickup);
+        requestedBooks = v.findViewById(R.id.ViewAllRequested);
+        borrowedBooks = v.findViewById(R.id.ViewAllBorrowed);
+        ownedBooks = v.findViewById(R.id.ViewAllOwned);
+
 
 //        scrollUpdate = new ScrollUpdate(mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();
 
-        readyPickups.setOnClickListener(new View.OnClickListener() {
+        readyForPickups.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
                 Fragment someFragment = new ReadyForPickupFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+            }
+        });
+
+        requestedBooks.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+
+                RequestedBooksFragment requestedbooksfragment = RequestedBooksFragment.newInstance(currentUser);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, requestedbooksfragment ); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+            }
+        });
+
+        borrowedBooks.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                Fragment someFragment = new BorrowedBooksFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
+                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                transaction.commit();
+            }
+        });
+
+        ownedBooks.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                OwnedBookFragment ownedbookfragment = OwnedBookFragment.newInstance(currentUser);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, ownedbookfragment ); // give your fragment container id in first parameter
                 transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
                 transaction.commit();
             }
@@ -255,21 +314,23 @@ public class OwnerFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        listenerRegistration.remove();
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        listenerRegistration.remove();
+//    }
 
     @Override
     public void onStart() {
         super.onStart();
-        mAdapter.startListening();
+        requestedbookAdapter.startListening();
+        ownedbookAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mAdapter.stopListening();
+        requestedbookAdapter.stopListening();
+        ownedbookAdapter.stopListening();
     }
 }

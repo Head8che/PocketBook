@@ -230,14 +230,14 @@
 
 | User Story           | US 09.01.01                                                  |
 | -------------------- | ------------------------------------------------------------ |
-| Description          | As an owner, I want to specify a geo location on a map of where to receive a book when I accept a request on the book. |
+| Description          | As an owner, I want to specify a geo meetingDetails on a map of where to receive a book when I accept a request on the book. |
 | Rationale            | so that I can lend my book to a borrower at a specific place. |
 | Size in Story Points | 21                                                           |
 | Risk Level           | High                                                         |
 
 | User Story           | US 09.01.01                                                  |
 | -------------------- | ------------------------------------------------------------ |
-| Description          | As a borrower, I want to view the geo location of where to receive a book I will be borrowing. |
+| Description          | As a borrower, I want to view the geo meetingDetails of where to receive a book I will be borrowing. |
 | Rationale            | so that I can know where I should go to receive the book.    |
 | Size in Story Points | 21                                                           |
 | Risk Level           | High                                                         |

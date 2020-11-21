@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 
 import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Exchange;
+import com.example.pocketbook.model.MeetingDetails;
 import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
@@ -576,6 +578,33 @@ public class FirebaseIntegrity {
         }
 
     }
+    //extras.getString("receiver")
+//    public static User getUserFromFirestore(String userEmail){
+//        final User[] user = new User[1];
+//        FirebaseFirestore.getInstance().collection("users").document(userEmail)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("attempt to get user","userrrrrrrrrr");
+//                            DocumentSnapshot document = task.getResult();
+//                            user[0] = Parser.parseUser(document.getString("firstName"),document.getString("lastName"),document.getString("email")
+//                            ,document.getString("username"),document.getString("password"),document.getString("phoneNumber"),document.getString("photo"));
+//                            if (user[0]==null){
+//                                Log.d("user is null","1");
+//                            }
+//
+//                        } else {
+//                            Log.d("FAILED_TO_GET_USER_FROM_FIRESTORE", "get failed with ", task.getException());
+//                        }
+//                    }
+//                });
+//        if (user[0]==null){
+//            Log.d("user is null","2");
+//        }
+//        return user[0];
+//    }
 
 
     ///////////////////////////////// FIREBASE METHODS FOR REQUESTS ////////////////////////////////
@@ -625,46 +654,75 @@ public class FirebaseIntegrity {
 
     public static void acceptBookRequest(Request request) {
 
-        if (Parser.isValidRequestObject(request)) {
+        if (Parser.isValidRequestWithBookIdObject(request)) {
 
-            String requestee = request.getRequestee();
             String requester = request.getRequester();
-            String requestDate = request.getRequestDate();
             String requestedBook = request.getRequestedBook();
 
-            // TODO: create Exchange Model to handle accepting a request
+            FirebaseFirestore.getInstance().collection("catalogue")
+                    .document(requestedBook)
+                    .collection("requests")
+                    .get()
+                    .addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
 
-//            // if request is already in list
-//            if (requestedBook.getRequesters().contains(requester)) {
-//                return;
-//            }
-//
-//            Map<String, Object> docData = new LinkedHashMap<>();
-//            docData.put("requestee", requestee);
-//            docData.put("requester", requester);
-//            docData.put("requestDate", requestDate);
-//            docData.put("requestedBook", requestedBook.getId());
-//
-//            FirebaseFirestore.getInstance().collection("catalogue")
-//                    .document(requestedBook.getId())
-//                    .collection("requests").document(requester)
-//                    .set(docData)
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Log.d("NEW_REQUEST", "Request data successfully written!");
-//                            FirebaseIntegrity.setBookStatusFirebase(requestedBook,
-//                                    "REQUESTED");
-//                            FirebaseIntegrity.updateBookRequestersInCollection(
-//                                    "catalogue", requestedBook.getId());
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.e("NEW_REQUEST", "Error writing request data!");
-//                        }
-//                    });
+                            // if collection has documents
+                            if (!Objects.requireNonNull(task1.getResult()).isEmpty()) {
+
+                                // for each document in collection
+                                for (DocumentSnapshot document1 : task1.getResult()) {
+                                    Log.e("PRE_DEL_REQUESTER", document1.getId()
+                                            + " " + requester);
+                                    if (document1.exists()
+                                            && (!(document1.getId().equals(requester)))) {
+                                        Log.e("DEL_REQUESTER", document1.getId()
+                                                + " " + requester);
+                                        FirebaseIntegrity.declineSpecificBookRequest(request,
+                                                document1.getId());
+                                    }
+                                }
+
+                                FirebaseIntegrity.makeBookStatusAccepted(request);
+                            }
+                        }
+                    });
+        }
+    }
+
+    public static void makeBookStatusAccepted(Request request) {
+
+        if (Parser.isValidRequestWithBookIdObject(request)) {
+
+            String requestedBook = request.getRequestedBook();
+
+            FirebaseFirestore.getInstance()
+                    .collection("catalogue")
+                    .document(requestedBook)
+                    .get()
+                    .addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+
+                            DocumentSnapshot document = task2.getResult();
+
+                            // if the document exists
+                            if ((document != null) && (document.exists())) {
+
+                                ArrayList<String> requesters =
+                                        (ArrayList<String>) document.get("requesters");
+
+                                if (requesters != null) {
+
+                                    String status = "ACCEPTED";
+
+                                    FirebaseFirestore.getInstance()
+                                            .collection("catalogue")
+                                            .document(requestedBook)
+                                            .update("status", status);
+                                }
+
+                            }
+                        }
+                    });
         }
     }
 
@@ -680,25 +738,86 @@ public class FirebaseIntegrity {
                     .collection("requests")
                     .document(requester)
                     .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("NEW_REQUEST", "Request data successfully written!");
-                            FirebaseIntegrity.handleDeclineBookRequest(
-                                    "catalogue", requestedBook, requester);
-                        }
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("NEW_REQUEST", "Request data successfully written!");
+                        FirebaseIntegrity.handleDeclineBookRequest(
+                                "catalogue", requestedBook, requester);
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("NEW_REQUEST", "Error writing request data!");
-                        }
-                    });
+                    .addOnFailureListener(e -> Log.e("NEW_REQUEST",
+                            "Error writing request data!"));
         }
     }
 
+    public static void declineSpecificBookRequest(Request request, String requester) {
 
-    ///////////////////////////////// FIREBASE METHODS FOR NOTIFICATIONS ////////////////////////////////
+        if (Parser.isValidRequestWithBookIdObject(request)) {
+
+            String requestedBook = request.getRequestedBook();
+
+            FirebaseFirestore.getInstance().collection("catalogue")
+                    .document(requestedBook)
+                    .collection("requests")
+                    .document(requester)
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("NEW_REQUEST", "Request data successfully written!");
+                        FirebaseIntegrity.handleDeclineBookRequest(
+                                "catalogue", requestedBook, requester);
+                    })
+                    .addOnFailureListener(e -> Log.e("NEW_REQUEST",
+                            "Error writing request data!"));
+        }
+    }
+
+    ///////////////////////////////// FIREBASE METHODS FOR EXCHANGE ////////////////////////////////
+
+    public static void pushNewExchangeToFirebase(Exchange exchange) {
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("exchangeId", exchange.getExchangeId());
+        docData.put("owner", exchange.getOwner());
+        docData.put("borrower", exchange.getBorrower());
+        docData.put("ownerBookStatus", exchange.getOwnerBookStatus());
+        docData.put("borrowerBookStatus", exchange.getBorrowerBookStatus());
+        docData.put("meetingDetails", exchange.getMeetingDetails());
+
+        FirebaseFirestore.getInstance().collection("exchange")
+                .document(exchange.getExchangeId())
+                .set(docData)
+                .addOnSuccessListener(aVoid -> Log.d("NEW_EXCHANGE",
+                        "exchange data successfully written!"))
+                .addOnFailureListener(e -> Log.w("NEW_EXCHANGE",
+                        "Error writing exchange data!", e));
+
+    }
+
+
+    ////////////////////////////// FIREBASE METHODS FOR MeetingDetails /////////////////////////////
+
+//    public static void pushNewMeetingToFirebase(MeetingDetails meetingDetails) {
+//
+//        Map<String, Object> docData = new HashMap<>();
+//        docData.put("exchangeId", meetingDetails.getExchangeId());
+//        docData.put("latitude", meetingDetails.getLatitude());
+//        docData.put("longitude", meetingDetails.getLongitude());
+//        docData.put("address", meetingDetails.getAddress());
+//        docData.put("meetingDate", meetingDetails.getMeetingDate());
+//        docData.put("meetingTime", meetingDetails.getMeetingTime());
+//
+//        FirebaseFirestore.getInstance().collection("exchange")
+//                .document(meetingDetails.getExchangeId())
+//                .collection("meetingDetails")
+//                .document(meetingDetails.getExchangeId())
+//                .set(docData)
+//                .addOnSuccessListener(aVoid -> Log.d("NEW_MEETING",
+//                        "Meeting data successfully written!"))
+//                .addOnFailureListener(e -> Log.w("NEW_MEETING",
+//                        "Error writing Meeting data!", e));
+//
+//    }
+
+
+    /////////////////////////////// FIREBASE METHODS FOR NOTIFICATIONS /////////////////////////////
 
     /**
      * Adds a notification to Firebase
@@ -768,7 +887,6 @@ public class FirebaseIntegrity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 notifications.add(document.getId());
-                                Log.d("workkkkkkkkkkkkkkkkksssssssss",document.getId() );
                             }
                         } else {
                             Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
@@ -778,14 +896,12 @@ public class FirebaseIntegrity {
         return notifications;
     }
 
-    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position) {
+    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position, String userEmail) {
 
-        Log.d("notifications",notifications.toString());
-        Log.d("notificationsdeleeeeeeeeeeeeettttttte",notifications.get(position));
         // get an instance of the document and delete it
         FirebaseFirestore.getInstance()
                 .collection("users")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .document(userEmail)
                 .collection("notifications")
                 .document(notifications.get(position))
                 .delete()
@@ -1725,6 +1841,19 @@ public class FirebaseIntegrity {
 
     }
 
+    public static void updateToken(User currentUser){
+        //  get the current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // get the token for this instance of the app
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        //  update the user's token in Firestore
+        Token token = new Token(refreshToken);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail())
+                .update("token",token.getToken());
+        Log.d("token","updated to "+refreshToken);
+    }
+
     public static void updateToken(){
         //  get the current user
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -1737,7 +1866,6 @@ public class FirebaseIntegrity {
                 .update("token",token.getToken());
         Log.d("token","updated to "+refreshToken);
     }
-
 
 
     /*

@@ -1,0 +1,4340 @@
+[33mcommit 52adca72579da73313191918e06269a0c1ffc645[m[33m ([m[1;36mHEAD -> [m[1;32mZubier[m[33m, [m[1;31morigin/Zubier[m[33m)[m
+Merge: 3387fa7 e187f7d
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 20:06:36 2020 -0700
+
+    Merge branch 'Zubier' of https://github.com/CMPUT301F20T09/PocketBook into Zubier
+
+[33mcommit 3387fa7ad638d89335e11445e33b97d128ec79de[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 20:06:24 2020 -0700
+
+    fixing my branch
+
+[33mcommit e187f7d7229961dab6df9abc7af037cd00dbd054[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 19:57:11 2020 -0700
+
+    refact:scanning
+
+[33mcommit b006b86b0642819b641d8c01623b527ab825b6dd[m
+Merge: 504accf 4fa684d
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 19:49:24 2020 -0700
+
+    Merge branch 'Zubier' of https://github.com/CMPUT301F20T09/PocketBook into Zubier
+
+[33mcommit 504accf6f2941686014da3805b746526534fc52c[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 19:48:24 2020 -0700
+
+    Scanning Book Description
+
+[33mcommit 9e861512cd1f83c77ae45ac89ddf98f12118c094[m[33m ([m[1;31morigin/staging[m[33m, [m[1;32mstaging[m[33m)[m
+Merge: d5c1f0f 9729c88
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 20 19:02:08 2020 -0700
+
+    Merge pull request #163 from CMPUT301F20T09/Ayo
+    
+    refactor: updated Accept Book functionality
+
+[33mcommit 9729c88943591f7008a1c2f26fc9407c20b32279[m[33m ([m[1;31morigin/Ayo[m[33m)[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 20 18:09:20 2020 -0700
+
+    refactor: updated ViewMyBook tab titles
+
+[33mcommit 19c0861bc41b985c091d48c386830ace3e5c8e01[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 20 17:36:18 2020 -0700
+
+    refactor: updated Accept Request functionality
+
+[33mcommit 47f1fa63455639e49b867a94f9549f4a517c5089[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 20 13:51:43 2020 -0700
+
+    refactor: updated Set Location Layout
+
+[33mcommit d5c1f0fbefdc0bb304a3bb2e9332243619823568[m
+Merge: 7f3ad50 caac493
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Sat Nov 21 03:55:13 2020 +0400
+
+    Merge pull request #162 from CMPUT301F20T09/MahmoudAJ
+    
+    feat: you can click on a notification in the phone's notifiactions
+
+[33mcommit caac493bfc453b9809e867d2ffe36614e4b9aa75[m[33m ([m[1;31morigin/MahmoudAJ[m[33m)[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 16:33:03 2020 -0700
+
+    fix: the correct requestee username is displayed in the decline notification
+
+[33mcommit 97991e9565fc3eb69a8d19673a19e9786cb82486[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 16:22:49 2020 -0700
+
+    fix: FirebaseAuth.currentUser is updated to the user who received the notification that's clicked on
+
+[33mcommit 1971123ef7c6451ff5ff680861a00fda9b46183b[m
+Merge: 0f0b9e6 7f3ad50
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 16:06:37 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 0f0b9e63523e00d248bf3bab2f6440a5d0d08bf1[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 16:03:15 2020 -0700
+
+    refactor: removed some log debugging statements
+
+[33mcommit 28ef7f032e9e9dfe8e03be81ea078cfbb3c46311[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 16:01:20 2020 -0700
+
+    feat: the user is notified when a request is declined
+
+[33mcommit 34b647ee4c82116b3e5498da5027d819570292b5[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 15:24:38 2020 -0700
+
+    feat: clicking on a notification takes the user to the notification screen
+
+[33mcommit 7f3ad502f34d8d6037b70522748aea96daddb4b3[m
+Merge: fd2b71a 4fa684d
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Nov 20 02:23:33 2020 -0700
+
+    Merge pull request #161 from CMPUT301F20T09/Zubier
+    
+    refact: staging
+
+[33mcommit 4fa684db7c6acb963249549571d1861eea29b438[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 20 02:21:49 2020 -0700
+
+    Delete BookAdapter 2.html
+
+[33mcommit 0cda8cfe5a9c0f43a2f7c3947dc9b3636e52f0eb[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 20 02:21:36 2020 -0700
+
+    Delete BookTest 2.html
+
+[33mcommit cd7bafe025d69bb1f312b6238384ad103862f252[m
+Merge: 2631489 601e013
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 02:18:18 2020 -0700
+
+    fixing conflicts
+
+[33mcommit 601e01364fc12d25214a78bbd3979f1170b00321[m
+Merge: cb66cbb fd2b71a
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 02:14:13 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into staging
+
+[33mcommit fd2b71aa42a0082d3dd79c9a9a6c5e27089563df[m
+Merge: 03723cf c78a96d
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Fri Nov 20 02:13:41 2020 -0700
+
+    Merge pull request #160 from CMPUT301F20T09/Ayo
+    
+    refactor: moved photo stuff into PhotoHandler
+
+[33mcommit 03723cf2215bd4cd38f99ee28f14992334eea623[m
+Merge: beeeccd b24c7b4
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 20 02:09:50 2020 -0700
+
+    Merge pull request #159 from CMPUT301F20T09/MahmoudAJ
+    
+    feat: the user can delete a notification by swiping left
+
+[33mcommit 26314892e53886919b13e95b11fb2a6c85132dd2[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 02:08:27 2020 -0700
+
+    refact:Scanning
+
+[33mcommit c78a96d7e8670450d0ce8d102259783ab5126aa9[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 20 02:02:07 2020 -0700
+
+    feat: added camera permission check
+
+[33mcommit 7b2bcce101d0b0f2eb85989aa93219c392477705[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 20 01:52:02 2020 -0700
+
+    refactor: moved photo stuff into PhotoHandler
+
+[33mcommit b24c7b4e2dbce6a91aa45f9c47e89416c35b3170[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 01:25:31 2020 -0700
+
+    refactor: Notifications title and icon readjusted
+
+[33mcommit 681a789cc096353029945c0510b629746632433d[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 01:21:05 2020 -0700
+
+    refactor: smaller text and images in the notifications screen
+
+[33mcommit 46d62b3723cf1d5d5fa56a328f9827a471e5714e[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 01:15:42 2020 -0700
+
+    feat: you can delete a notification by swiping on it left
+
+[33mcommit 14d0bc28e7d1613e3312768836c125adf4d29f05[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 00:48:38 2020 -0700
+
+    updated scan
+
+[33mcommit ebf4ae7e9e44f85b30954301562743021b1a0f44[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 20 00:28:19 2020 -0700
+
+    refact:Scanning
+
+[33mcommit b0a8bd063e22e95e88442ced02c9658b3cc1b5bd[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 20 00:14:57 2020 -0700
+
+    empty commit
+
+[33mcommit a5850ea2b5ead709b4f66ccf9672e23f8142341f[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 19 23:47:28 2020 -0700
+
+    feat: ability to delete notification
+
+[33mcommit 9d85c6745dd6382085926635ce5724533cce04fc[m
+Merge: ba038b5 beeeccd
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 19 16:11:38 2020 -0700
+
+    Merge branch 'staging' into Mahmoudaj
+
+[33mcommit ba038b5a9744530cc5ae1ce72b18af86e7c451f0[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 19 16:10:38 2020 -0700
+
+    refactor: updated data class in notifications
+
+[33mcommit beeeccd4669712f443a2a1063f7b08e60bc7355c[m
+Merge: 160bbd0 9485f36
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Nov 19 15:53:22 2020 -0700
+
+    Merge pull request #158 from CMPUT301F20T09/Zubier
+    
+    Merge pull request #157 from CMPUT301F20T09/staging
+
+[33mcommit cb66cbbd86862cbeb09ced4dac98aa14447a5b9b[m
+Merge: 3486d91 160bbd0
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 19 14:45:17 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Staging
+
+[33mcommit 9485f365a50f5c539a2a8307e6bab9f1cb90047c[m
+Merge: c9b1a75 160bbd0
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 19 14:44:14 2020 -0700
+
+    Merge pull request #157 from CMPUT301F20T09/staging
+
+[33mcommit 160bbd04d953640e2d022800cb0887b11216d700[m
+Merge: 03ffd27 c9b1a75
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 19 14:44:02 2020 -0700
+
+    Merge branch 'Zubier' into staging
+
+[33mcommit 03ffd270192d7402fff977a8f46ed28d0547b729[m
+Merge: c4ed29e 93aeda0
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 19 14:42:52 2020 -0700
+
+    Merge pull request #156 from CMPUT301F20T09/MahmoudAJ
+    
+    feat: notifications are displayed in the app
+
+[33mcommit c9b1a75e93d657f293dbed0efe5141a5b800edfa[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 19 14:40:55 2020 -0700
+
+    refact:Profile/Location
+
+[33mcommit 93aeda0327332ae1f732c88cbd5e8ff0af9c905a[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 19 14:03:13 2020 -0700
+
+    feat: notifications stack in the phone's notifications instead of getting overwritten
+
+[33mcommit 0b6f023d2437d91419ada15abead8250cd5b8639[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 19 11:02:12 2020 -0700
+
+    Fixed Camera Issue
+
+[33mcommit 6d7aff5041e2433f061a7a6e62275b1eb23ed574[m
+Merge: c46a371 c4ed29e
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 21:39:59 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit c46a371dd5ba5a436c26c153aba8e35d98079976[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 21:27:57 2020 -0700
+
+    feat: all notifications will become seen when the user opens the notification screen
+
+[33mcommit 3486d9191d0cd8cb85fb3a8955cc76082b51796d[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 18 21:02:56 2020 -0700
+
+    fixed bug
+
+[33mcommit 58202dcc6cacbee62974cf821229f63f495d3d42[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 19:22:52 2020 -0700
+
+    feat: notifications are displayed in the app in the notification fragment
+
+[33mcommit 8fb6f8b17c8e3d3bb5cb2382cf27c5eeceb2e890[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 18:55:29 2020 -0700
+
+    refactor: request notifications are pushed to firebase
+
+[33mcommit 66ff617aa7c641df6a7edd17fd9bb27ba7862d85[m
+Merge: 8f40f51 c4ed29e
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Nov 18 17:47:59 2020 -0700
+
+    Merge pull request #154 from CMPUT301F20T09/staging
+
+[33mcommit c4ed29efc7f693ecdf6d23371a401648183c38d2[m
+Merge: 6f86058 4d9d193
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Nov 18 17:47:02 2020 -0700
+
+    Merge pull request #153 from CMPUT301F20T09/Ayo
+    
+    feat: added click functionality to profiles
+
+[33mcommit 8f40f51db9dfbb0491558a1229e0705a9fef4bd7[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 18 16:30:59 2020 -0700
+
+    refact:Location
+
+[33mcommit 83afbd2e453804110fb96b8c1acec4b6720a8f50[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 13:30:42 2020 -0700
+
+    refactor: new update token function in FirebaseIntegrity
+
+[33mcommit 4d9d193b92107258b1771d9e359769d780319427[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 18 12:16:48 2020 -0700
+
+    feat: added click functionality to profiles
+
+[33mcommit 6f86058190c4d628584b521df35429d39882b5d5[m
+Merge: 0c2bd11 1832a13
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Nov 18 03:21:10 2020 -0700
+
+    Merge pull request #151 from CMPUT301F20T09/MahmoudAJ
+    
+    feat: the user receives a notification when a book gets requested
+
+[33mcommit e8d9ef87781fafde1af38be9d02157e5de43b2e8[m
+Merge: 70f637f 0c2bd11
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Nov 18 01:11:28 2020 -0700
+
+    Merge pull request #152 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 1832a131d74f34c35bf56d6fe57fdd5977c75f39[m
+Merge: 819b0da 0c2bd11
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 00:44:29 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 0c2bd116d322b81c2ee135b1c33b98a2e3f613a3[m
+Merge: c39fe97 70f637f
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Wed Nov 18 00:43:36 2020 -0700
+
+    Merge pull request #150 from CMPUT301F20T09/Zubier
+    
+    refact: Location
+
+[33mcommit 819b0da08d5b4ddbc61661f5a482f6304537f6ed[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 18 00:40:45 2020 -0700
+
+    feat: the user receives a notification when a book is requested by another user
+
+[33mcommit 70f637f07971a04318ae78fbc9e88da945db0e98[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Tue Nov 17 22:42:47 2020 -0700
+
+    refact: Location
+
+[33mcommit 483f374f1803ae74fdf89f9b3a70d9e4c396b23a[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 17 19:25:18 2020 -0700
+
+    testing notifications functionality
+
+[33mcommit c39fe97455c2911e71287c9868f5f00f0771e7cc[m
+Merge: e5bc400 7f549ae
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Tue Nov 17 15:54:19 2020 -0700
+
+    Merge pull request #149 from CMPUT301F20T09/Della
+    
+    feat: implemented scanning
+
+[33mcommit 5138650f651a7c3f0b53d6da8e864cc19ea86794[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 17 15:51:52 2020 -0700
+
+    feat: added a "Notifications" package with Data and Token classes
+
+[33mcommit e5bc400138200fdd2438c981b705f355bd8fc067[m
+Merge: 9f71a30 111bdcc
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 17 15:48:15 2020 -0700
+
+    Merge pull request #148 from CMPUT301F20T09/Ayo
+    
+    feat: added javadocs
+
+[33mcommit 7f549aebaec10b7aef95aa13309a9f90c859c547[m[33m ([m[1;31morigin/Della[m[33m)[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 17 15:45:55 2020 -0700
+
+    feat: implemented scanning
+
+[33mcommit a8ba71ee145475f4f2fed85caf6e9b61e3bceb0f[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 17 15:44:35 2020 -0700
+
+    feat: added new retrofit2 implementaion in build.gradle, might be useful for notifications, will remove if not
+
+[33mcommit 111bdcc4b3fd15ee528613eb2768bd0050d98ac0[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Nov 17 12:52:40 2020 -0700
+
+    feat: added javadocs
+
+[33mcommit 1fe80442e742aa47cdf6f7736951f648286b42b2[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Tue Nov 17 03:50:03 2020 -0700
+
+    Calender Dialog
+
+[33mcommit 9f71a3006af88cc170123f9424bbfa019e0ae424[m
+Merge: deb8f84 565eb3d
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Tue Nov 17 01:01:12 2020 -0700
+
+    Merge pull request #147 from CMPUT301F20T09/MahmoodF
+    
+    feat: Created the layout for the owner info
+
+[33mcommit 565eb3d16f2dcc55b5f452e73bf37d80175acba2[m
+Merge: 7b18874 deb8f84
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Tue Nov 17 11:48:08 2020 +0400
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit 7b1887484356b6334c4eaee4aacdb791e2e5000a[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Tue Nov 17 11:46:04 2020 +0400
+
+    feat: Created the layout for the owner Info
+
+[33mcommit deb8f8408f705c7a34b927834a52c1d0ede6504b[m
+Merge: 5e3a617 cfc594a
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Nov 16 22:46:35 2020 -0700
+
+    Merge pull request #146 from CMPUT301F20T09/Ayo
+    
+    feat: added Location and Exchange models
+
+[33mcommit 43dad6dd6acdfdfc2d6b49d0fb78b04c2da298a2[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Mon Nov 16 22:44:27 2020 -0700
+
+    Pinned Locations return an address(title)
+
+[33mcommit cfc594acb325a597ca3e1415ec812711e6bad012[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 16 19:13:12 2020 -0700
+
+    feat: added Location and Exchange models
+
+[33mcommit 5e3a617407e4b9eb0eea81e03269256be27078a0[m
+Merge: cbe588e 124381b
+Author: Della <humanita.1999@gmail.com>
+Date:   Mon Nov 16 17:13:33 2020 -0700
+
+    Merge pull request #145 from CMPUT301F20T09/Zubier
+    
+    refact: Maps/Notification
+
+[33mcommit 124381bb9c8ad7499960185bbf67c99a6b0748cd[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Mon Nov 16 16:56:54 2020 -0700
+
+    fixed conflict
+
+[33mcommit 84df3a3ed4b1de3e599e87a01802837be7d78f56[m
+Merge: 7f4ad84 fd2fac4
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Nov 16 16:18:25 2020 -0700
+
+    Merge pull request #144 from CMPUT301F20T09/Zubier1
+
+[33mcommit fd2fac4ad6fe1785a858f428b083170f93929b50[m
+Merge: cbe588e 7f4ad84
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Nov 16 16:17:23 2020 -0700
+
+    Merge branch 'Zubier' into Zubier1
+
+[33mcommit 7f4ad8497d0bede5c3fa1e6a575f6a73017e5652[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Mon Nov 16 16:00:34 2020 -0700
+
+    refact: Maps/Notificaiton
+
+[33mcommit cbe588e692bf1a5b9c9ddfa22e769c9d527efe8d[m
+Merge: d5e718a 10c0215
+Author: Della <humanita.1999@gmail.com>
+Date:   Mon Nov 16 15:43:06 2020 -0700
+
+    Merge pull request #140 from CMPUT301F20T09/Ayo
+    
+    refactor: updated EditProfileActivity test
+
+[33mcommit 10c0215b8669987491cb4e3be9577436aba823d5[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 16 15:38:26 2020 -0700
+
+    fixed merge conflicts
+
+[33mcommit 3d35424df7be5fec0e8fa5279277ba6cf54b58ce[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 16 14:56:36 2020 -0700
+
+    feat: added Scan dialog popup
+
+[33mcommit 69e66b86377b897e1e408ae53c68060fe0076fb5[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 16 14:13:14 2020 -0700
+
+    refactor: added ViewBookFragment test
+
+[33mcommit f31d9e61e448466dfb8a1ba06085d42b09000935[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Nov 15 14:36:18 2020 -0700
+
+    refactor: added ViewMyBookFragment test
+
+[33mcommit 90cb3a80fba0f8a7f18c3ed9c9b974dbad2b381d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Nov 15 11:20:54 2020 -0700
+
+    refactor: added phone number field to User
+
+[33mcommit 1eb97f579c4f353bb67b7abee0a075d32e6ff310[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Nov 15 00:56:56 2020 -0700
+
+    refactor: updated LoginActivity test
+
+[33mcommit eb1b38b2c76222cb66df452d31f8bda88881d1d1[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Nov 14 23:21:12 2020 -0700
+
+    refactor: updated EditBookActivity test
+
+[33mcommit 10ff1599cb017850ef9d816bc2509892c9fba6ab[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Nov 14 21:31:41 2020 -0700
+
+    fix: fixed app crash on request bug
+
+[33mcommit d3c9a8dc58f3dcf4e2cffeb6adf0bc13eff3f186[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Nov 14 18:40:46 2020 -0700
+
+    refactor: updated AddBookActivity test
+
+[33mcommit 6dc32e413fb91e2883adc93105f01e7117c58d7b[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Nov 14 16:54:10 2020 -0700
+
+    refactor: updated EditProfileActivity test
+
+[33mcommit d5e718a5e697023e9b49b297a63fa092c8e2b5a2[m
+Merge: 3d9a486 8cb143a
+Author: Della <humanita.1999@gmail.com>
+Date:   Mon Nov 16 15:04:15 2020 -0700
+
+    Merge pull request #142 from CMPUT301F20T09/Eden
+    
+    Search wtih Tabs
+
+[33mcommit 3d9a4861e20b9f2a4db742b01fa34254c7badc33[m
+Merge: 67b0477 59060ba
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Nov 16 15:03:27 2020 -0700
+
+    Merge pull request #143 from CMPUT301F20T09/MahmoodF
+    
+    fix: fixed the scrolling issue in the user profile
+
+[33mcommit 59060ba4cc58e1bb81ef116fdeee395c6b1b2e25[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Mon Nov 16 22:27:42 2020 +0400
+
+    fix: fixed the scrolling issue in the user profile
+
+[33mcommit 8cb143a1a64c6c156f1522a9b3c9acbb26e5f111[m[33m ([m[1;31morigin/Eden[m[33m)[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Mon Nov 16 09:05:30 2020 -0700
+
+    fix: gradle upgrade + feat: clickable books
+
+[33mcommit 3c94289fc474e9a3d534c54cc7587baba73d4426[m
+Merge: 6b1da75 67b0477
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Mon Nov 16 07:45:21 2020 -0700
+
+    fix: merge conflict
+
+[33mcommit 6b1da75ff744b4b98673978b30ac99de30a7dbdd[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Mon Nov 16 07:36:29 2020 -0700
+
+    feat: search functionality
+
+[33mcommit 3bc658b81f86472d6bf07bda3f3091ae5ffdca59[m
+Merge: 3c29b4c 67b0477
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Sat Nov 14 12:16:22 2020 -0700
+
+    Merge pull request #139 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 67b047758678d07006bf2360c5ac177ef5c7b120[m
+Merge: 30be30b 2e33ddb
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Sat Nov 14 12:15:39 2020 -0700
+
+    Merge pull request #137 from CMPUT301F20T09/Ayo
+    
+    refactor: moved Firebase stuff out of Model classes
+
+[33mcommit 2e33ddbbffe5d5fea28be7b257de24f78d222e6b[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Nov 14 12:12:43 2020 -0700
+
+    refactor: updated SignUpActivity test
+
+[33mcommit 3c29b4ce887f3f9714450d6c1eca386f664daff8[m
+Merge: 0047950 30be30b
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Sat Nov 14 11:18:39 2020 -0700
+
+    Merge pull request #138 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit a88c39f4452b5bb88c0da95effe0e4bab5dc7b65[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 13 06:27:07 2020 -0700
+
+    refactor: updated Login layout
+
+[33mcommit 75cb6bce7a4420f2da36ce10ddd5a0c0ccfeb52d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 13 05:21:40 2020 -0700
+
+    refactor: updated Profile tab scroll
+
+[33mcommit 0900feb2d2c13f882310407940b23b9348a584ee[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 13 05:03:12 2020 -0700
+
+    refactor: updated EditProfileActivity layout
+
+[33mcommit c9995e1bd1fa608354ee2b98ab198c5020db6e9f[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 13 01:27:16 2020 -0700
+
+    refactor: updated Model tests
+
+[33mcommit a72590c704cb2fbebfa67b849ac9573403e735b4[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 12 17:08:36 2020 -0700
+
+    refactor: updated request decline functionality
+
+[33mcommit 05d7f07dd93f8934f582121d788f2da6b87f57b6[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 12 14:20:46 2020 -0700
+
+    refactor: moved Firebase stuff out of Model classes
+
+[33mcommit 30be30bb025807b68558ed75261b85db00654bb5[m
+Merge: ddbd9fe 85d3445
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 12 02:31:28 2020 -0700
+
+    Merge pull request #135 from CMPUT301F20T09/Ayo
+    
+    refactor: updated Parser and FirebaseIntegrity
+
+[33mcommit 85d344577ccc7d326086c0dab1b2a54c1d929480[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 12 02:13:49 2020 -0700
+
+    refactor: added live listeners to fragments
+
+[33mcommit 0047950efd3d8b4b2f4d3356614fd4b05b0a773c[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 11 04:39:24 2020 -0700
+
+    minor updates
+
+[33mcommit 8d44f682decdc0b91c6463119a16146022eb4d1b[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 11 04:30:45 2020 -0700
+
+    refactor: updated Parser and FirebaseIntegrity
+
+[33mcommit ddbd9fe6e4a766b25bb880b9b89102c6262ee78d[m
+Merge: d110872 142088f
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Tue Nov 10 14:56:06 2020 -0700
+
+    Merge pull request #134 from CMPUT301F20T09/Ayo
+    
+    feat: added Parser tests
+
+[33mcommit 142088f71fcd5d7e19062c1bed566512d7c000ca[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 9 16:14:53 2020 -0700
+
+    refactor: removed book lists from User
+
+[33mcommit d61c4acedcc682eb2c9acf767ee5ff64ecb4c9b0[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 9 15:15:34 2020 -0700
+
+    refactor: added null validation to User book list validation in Parser
+
+[33mcommit c41723c85a2346b347a1c1e84e0e1456325df35d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 9 15:10:51 2020 -0700
+
+    feat: added User validation to Parser
+
+[33mcommit e4069c29348430fb9591675f688b0df00f3cbea8[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Nov 8 00:42:03 2020 -0700
+
+    feat: added Parser tests
+
+[33mcommit b2d829e0c8f6492f2f36de450ac7fabd7b5fae5a[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 12:45:19 2020 -0700
+
+    fix/refact
+
+[33mcommit 25f18d4bbafb6b88bd7d6b456fe3656ff8e4cfd7[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 6 12:35:19 2020 -0700
+
+    refactor: added some more comments to BookList
+
+[33mcommit d1108724396fbba198d304447c5421cee016e309[m
+Merge: c4aeeaf bb2c6d7
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 16:07:48 2020 -0700
+
+    Merge pull request #132 from CMPUT301F20T09/Zubier
+    
+    Moving into doc
+
+[33mcommit bb2c6d7bb690a31a2bff88cdd623574b39c6747a[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 16:06:48 2020 -0700
+
+    Moving into doc
+
+[33mcommit c4aeeaf9921d9287d2e2fae58064d9fc66bb952f[m
+Merge: 1054ad1 c773c9c
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 16:02:31 2020 -0700
+
+    Merge pull request #130 from CMPUT301F20T09/Zubier
+    
+    Moving into doc
+
+[33mcommit 1054ad1fa000799448ee2ca9d0cdea9eaa8dcc1d[m
+Merge: 1ad41ef e9a092f
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Fri Nov 6 16:01:31 2020 -0700
+
+    Merge pull request #129 from CMPUT301F20T09/MahmoudAJ
+    
+    fix java doc
+
+[33mcommit c773c9c3ec8a83981f84f27e075601e06d2f4e3f[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 16:01:26 2020 -0700
+
+    Moving into doc
+
+[33mcommit e9a092fcfc6f38c0749ba82b903fe0e81f482aff[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 15:58:33 2020 -0700
+
+    fix java doc
+
+[33mcommit 1ad41efb6fd8025e7e906656e604ceb157adaeed[m
+Merge: 83f1525 b855ebd
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 15:55:08 2020 -0700
+
+    Merge pull request #128 from CMPUT301F20T09/Zubier
+    
+    StoryBoard
+
+[33mcommit b855ebdd72a46a592628e575931879094dd61ec6[m
+Merge: 7a35b52 83f1525
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 6 15:54:31 2020 -0700
+
+    Merge branch 'staging' into Zubier
+
+[33mcommit 7a35b52fb6ece5e00cc405b8cc7480860f5a9ac1[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 15:52:45 2020 -0700
+
+    StoryBoard
+
+[33mcommit 83f15252ef3834025456d1c6206ba2e9de212db6[m
+Merge: 976538f 8575df3
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Nov 6 15:39:44 2020 -0700
+
+    Merge pull request #127 from CMPUT301F20T09/Zubier
+    
+    StoryboardV2
+
+[33mcommit 8575df36a14c63319e02ae8124b2bf75ba43d8f0[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 6 15:38:35 2020 -0700
+
+    StoryboardV2
+
+[33mcommit 976538f44b6fbd26afd2126b19b24bc35ce33c9c[m
+Merge: ba2b49c b662b81
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Nov 6 15:38:14 2020 -0700
+
+    Merge pull request #126 from CMPUT301F20T09/Della
+    
+    doc: added documentation for model classes
+
+[33mcommit ba2b49c8c1c0f49b2a1e32d32995160e1ae427ef[m
+Merge: c283529 5364d3d
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Nov 6 15:35:23 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into staging
+    merge into local
+
+[33mcommit b662b811c69e4fac143feeb5cf2265910e592c52[m
+Merge: 8cc5433 5364d3d
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 15:35:15 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit c2835290d05f0df4b7e2f116d25e0ce4c74b1541[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Nov 6 15:35:00 2020 -0700
+
+    feat: toggle for search
+
+[33mcommit 8cc543336945c4b1b744da920e267d98f0d3c50b[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 15:32:37 2020 -0700
+
+    doc: added comments and documentationa across model files
+
+[33mcommit 5364d3dbc7b7804f52d6251e297807d060c6bc87[m
+Merge: 7253c71 74c2e11
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 15:27:27 2020 -0700
+
+    Merge pull request #125 from CMPUT301F20T09/MahmoudAJ
+    
+    fix: a bug where the wrong request would get confirmed and it would d…
+
+[33mcommit 74c2e119df28c9bd137a8e845603390e11ae1b63[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 15:24:57 2020 -0700
+
+    fix: a bug where the wrong request would get confirmed and it would disappear
+
+[33mcommit 7253c71c6f31c713194aaedc57a654789516a97a[m
+Merge: a589844 6fdec15
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Nov 6 14:12:29 2020 -0700
+
+    Merge pull request #124 from CMPUT301F20T09/MahmoudAJ
+    
+    fix: fixed bug preventing user from requesting a book that has been requested by a different user + added UI tests for fragments
+
+[33mcommit 6fdec15d01a2cd98ac5a73f398c272de6846aed0[m
+Merge: 7396177 a589844
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 14:02:58 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 73961773206cc777eca834e9e7d669a95265eeac[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 14:01:08 2020 -0700
+
+    test: ViewBookFragment
+
+[33mcommit a589844b91b9dcf40f5e635d0a2354baa6146c46[m
+Merge: 0c09245 f4aacac
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Fri Nov 6 23:24:04 2020 +0300
+
+    Merge pull request #123 from CMPUT301F20T09/Zubier
+    
+    Fix/Refactor
+
+[33mcommit c6929f2a0451e0fd791ca7eec246983d0f61d99a[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 13:14:54 2020 -0700
+
+    fix: book status icons in the HomeFragment and ViewBookFragment are more consistent (except when the HomeFragment first loads up)
+
+[33mcommit f4aacac28c1b8dd56fd73ea26212aea61001cc31[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 13:10:46 2020 -0700
+
+    Activity classes documented
+
+[33mcommit 9bc4074393d40b8a801acd4720926a06c3bf92a3[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 12:58:36 2020 -0700
+
+    fix: fixed bug preventing the user from requesting a book that has been requested by another user
+
+[33mcommit af4d0843e1d640c2beaace9f8c3c18a97b630e23[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 12:45:19 2020 -0700
+
+    fix/refact
+
+[33mcommit 1411badd7474bae581b50c2a5e4300b0ddd5732b[m
+Merge: 3322c40 0c09245
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 12:17:32 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Zubier
+
+[33mcommit 3322c40d4d142f1b0b6747275b5ecd60dc25292a[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 12:15:28 2020 -0700
+
+    UI tests
+
+[33mcommit 0c09245e876bb51edc0b62ba3f899c9d51673478[m
+Merge: e3d59ba dbc8ef3
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 12:13:00 2020 -0700
+
+    Merge pull request #122 from CMPUT301F20T09/MahmoodF
+    
+    Test: Updated User Test
+
+[33mcommit dbc8ef3cb688681205582831220fa9e87df3ccd7[m
+Merge: 8a91cf1 e3d59ba
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Nov 6 21:52:25 2020 +0300
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit 8a91cf1f6ea39c6b9129e73f5a8a72e5f3d075c2[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Nov 6 21:51:44 2020 +0300
+
+    Test: Updated User Test
+
+[33mcommit e3d59ba7c3e245fdccaaa5ebb02a4522777c2bce[m
+Merge: b42802f 1ca8d48
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Fri Nov 6 11:39:13 2020 -0700
+
+    Merge pull request #121 from CMPUT301F20T09/Della
+    
+    test and doc: completed Unit Tests for RequestList
+
+[33mcommit 1ca8d48b19c9b8c225835c5e697099a3b1040982[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 10:43:34 2020 -0700
+
+    doc: added some comments
+
+[33mcommit 0238f952d78fc34fbcc3fac8089b3d514f6d6917[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 10:27:19 2020 -0700
+
+    doc: added instructions to run individual tests
+
+[33mcommit 1c461f4ce88738cf13018117c25e6e5ffb4e4050[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 10:23:44 2020 -0700
+
+    test: RequestList passes all tests
+
+[33mcommit edabe8fddc98dbf1d22a97c323a984b8298a0a0f[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 09:10:30 2020 -0700
+
+    fix: fixed FirebaseApp initializer errors by creating constructors in model classes only for testing. These model classes do not initialize Firebase.
+
+[33mcommit 764af07735b1dcf36c5b561460d0e2de943c0bfb[m
+Merge: c3edee9 b42802f
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Nov 6 08:08:40 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 2610ed4e1d690ee4dd3cb53ea7bc8ff5ae72631b[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 07:27:39 2020 -0700
+
+    fix: the decline button is disabled after a user accepts a request
+
+[33mcommit 250b47be546038187b230f8e69a30490550e4db6[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 06:41:37 2020 -0700
+
+    test: viewMyBookRequestsFragment
+
+[33mcommit 8ba2c3f3e9b2957c4c17e145789750a44229ffaf[m
+Merge: cf4b05d b42802f
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 04:53:03 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit cf4b05db20fc6abbf8fc07e99b5886b46e86d4c7[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 04:51:52 2020 -0700
+
+    test: working on UI test for ViewMyBookRequestsFragment
+
+[33mcommit b42802fee3a6d4bcfe094300f838ef5deb34a98d[m
+Merge: 02b85d5 a37c8c9
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Fri Nov 6 04:45:14 2020 -0700
+
+    Merge pull request #120 from CMPUT301F20T09/Ayo
+    
+    refactor: updated build gradle for tests
+
+[33mcommit a37c8c9cec085d8c4597579e63f00ce0c67e742f[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 6 04:37:34 2020 -0700
+
+    refactor: updated build gradle for tests
+
+[33mcommit 02b85d5ffc2dad379458f43886b944f5a2c7defb[m
+Merge: 2c5b90e fab6bdc
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Nov 6 04:01:00 2020 -0700
+
+    Merge pull request #119 from CMPUT301F20T09/Zubier
+    
+    files update
+
+[33mcommit fab6bdc3de5e21bdef37cc85fbfcda3296cf016b[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 03:54:40 2020 -0700
+
+    files update
+
+[33mcommit 2c5b90e598fb823d97c8edd36606309ac200c586[m
+Merge: 5948fdf 2a7dd2c
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 6 03:47:05 2020 -0700
+
+    Merge pull request #117 from CMPUT301F20T09/Ayo
+    
+    refactor: updated BookTest
+
+[33mcommit 5948fdf437a54655445ce51a28a72ee4640426bb[m
+Merge: ba02d9e 0c26afe
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Nov 6 03:45:50 2020 -0700
+
+    Merge pull request #118 from CMPUT301F20T09/Zubier
+    
+    Zubier
+
+[33mcommit 0c26afe5af009e58250e4a7d5ed6938bbd98a4f4[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 03:25:16 2020 -0700
+
+    fixed branch bug/issue
+
+[33mcommit 2a7dd2c5fc6e725e8e1f0bc6a67fbbdd112e88c7[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 6 02:46:01 2020 -0700
+
+    refactor: updated BookTest
+
+[33mcommit 59bf642bf310c6b78bb980c24f0b7071c66fc77a[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 02:38:53 2020 -0700
+
+    Resolving Bug
+
+[33mcommit bb5d953ad4a87604fb13c57b8988b79fe0343503[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 6 01:45:29 2020 -0700
+
+    refactor: updated Book and User
+
+[33mcommit 59287d0dc36ddeedec8fbf4771b9b75b18cd1272[m
+Merge: 1d3873e ba02d9e
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 01:14:52 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Zubier
+
+[33mcommit d24a97c0d6153f1c45494bcd79eee5d68b16b464[m
+Merge: a5cbe6a ba02d9e
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 01:04:32 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit a5cbe6a6401328594a47ea2d09201d975aad9fbd[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Fri Nov 6 01:03:32 2020 -0700
+
+    test: workin on viebookfragment ui test
+
+[33mcommit ba02d9e8ad6f7ebeb4f3026ba9af1e5533a19703[m
+Merge: 0315e4c d8c4a5b
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 6 00:59:08 2020 -0700
+
+    Merge pull request #116 from CMPUT301F20T09/Ayo
+    
+    refactor: added toolbar to ViewBookFragment
+
+[33mcommit d8c4a5b13d1d7be0776e78177a959e9932c40a72[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 6 00:50:13 2020 -0700
+
+    refactor: added toolbar to ViewBookFragment
+
+[33mcommit 1d3873ece94e6c6e0e86230bdfdb2bb75c9f00ac[m
+Merge: d7145d5 0315e4c
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 00:47:04 2020 -0700
+
+    refactor/feat/test/doc/fix
+
+[33mcommit d7145d5c8a95ba91b213d295727d10e83fb7d880[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 00:35:14 2020 -0700
+
+    Home UI Test
+
+[33mcommit dcab78190f04715ef04c9a5ea097ac1c47fb5887[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Nov 6 00:34:03 2020 -0700
+
+    Home UI Test
+
+[33mcommit 53a1c5e2706eb393295b1392e133a1a31aead07c[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Nov 6 00:13:14 2020 -0700
+
+    featt: started BookTest
+
+[33mcommit 0315e4c399c9e607ab00e4a71fcabf40cdc3c2e9[m
+Merge: 2d3b3db ee8ad4b
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 6 00:04:55 2020 -0700
+
+    Merge pull request #115 from CMPUT301F20T09/MahmoudAJ
+    
+    Mahmoud aj
+
+[33mcommit 2d3b3db8d73320ff24c05908258690655b737bb5[m
+Merge: f844d9a 6d3e46f
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Nov 6 00:02:07 2020 -0700
+
+    Merge pull request #114 from CMPUT301F20T09/Ayo
+    
+    refactor: renamed SignUpActivityUITest
+
+[33mcommit ee8ad4b9df46904cb7c23de33c9fe5763e084b20[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 23:04:16 2020 -0700
+
+    refactor + fix: added username field in viewBookFragment + requesting bug fixes
+
+[33mcommit 2bef8c4acf349ce4e5546932800c6935c84f771f[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 5 22:46:30 2020 -0700
+
+    UI Testing for profile
+
+[33mcommit 6d3e46f04d45843eae970a9d15ccbcf8be05b957[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 22:40:36 2020 -0700
+
+    refactor: renamed SignUpActivityUITest
+
+[33mcommit c3edee91e156c5c8a4572cbd851d5922c1c985dd[m
+Merge: 1e3132b f844d9a
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Nov 5 22:33:29 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 1e3132b25e416e4536d1db9e83cde298830b56f5[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Nov 5 22:33:17 2020 -0700
+
+    fix: used a newer Junit version
+
+[33mcommit 5849d29ab0fe89d3b983e4dd80ba9c7c37ab8076[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Nov 5 22:31:43 2020 -0700
+
+    fix: error in running test
+
+[33mcommit d3581b703a638b92d0ad0d7e6e9ccf8d1332f986[m
+Merge: ae57722 f844d9a
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 21:52:15 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit f844d9ae5314c97b72e510fe0e92639ecb349c65[m
+Merge: e14849a 2e86d10
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Thu Nov 5 21:05:06 2020 -0700
+
+    Merge pull request #113 from CMPUT301F20T09/Ayo
+    
+    refactor: added toolbar to HomeFragment
+
+[33mcommit ae577223bf7c95ee40581e14f1b61dc3f618df92[m
+Merge: 69ff04a e14849a
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 21:00:48 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 69ff04afb34feb58e2f51e1d44cbc96b931d3d14[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 20:57:34 2020 -0700
+
+    doc: added documentation to RequestAdapter
+
+[33mcommit 2e86d10e8cd03b3dab2ac4cd00ac3b96e3b1e7b3[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 19:57:19 2020 -0700
+
+    refactor: added toolbar to HomeFragment
+
+[33mcommit e14849ab01adde710ae024872c3c136ba06c5b3c[m
+Merge: 6c74a3b 0986cb3
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 19:31:22 2020 -0700
+
+    Merge pull request #111 from CMPUT301F20T09/Ayo
+    
+    refactor: added titles and icons to catalogue
+
+[33mcommit 6c74a3b83491bc460cfaf06f9fd0fa596db9a08c[m
+Merge: 199e5b4 486f482
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 19:30:06 2020 -0700
+
+    Merge pull request #110 from CMPUT301F20T09/MahmoudAJ
+    
+    fix: when a request is accepetd all other requests are declined
+
+[33mcommit 3ac6fcd6118b719fd973ee5cbd0b610f7d2356c7[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 19:23:58 2020 -0700
+
+    doc: added documentation to ViewMyBookRequestsFragment
+
+[33mcommit 0a339df6bc428bd0cf7b1551e89c2a75f0758260[m
+Merge: 01d3d22 99e9b84
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 19:15:48 2020 -0700
+
+    Merge pull request #112 from CMPUT301F20T09/Zubier-q
+    
+    Staging
+
+[33mcommit 99e9b8415db386905ae2cb5ebc4ccf656405adc3[m
+Merge: 199e5b4 01d3d22
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 19:15:40 2020 -0700
+
+    Merge branch 'Zubier' into Zubier-q
+
+[33mcommit 0986cb3081cdc12617193c360d2c7d4834b590d9[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 19:11:23 2020 -0700
+
+    refactor: added titles and icons to catalogue
+
+[33mcommit 486f482cf0aabb3b91c919642ce2634fdc179af8[m
+Merge: b4580af 199e5b4
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Nov 5 18:55:04 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit b4580afe573640697c40903c9fcd0da1e038492e[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 18:53:36 2020 -0700
+
+    doc: added documentation to ViewBookFragment
+
+[33mcommit 199e5b42e70f9afd8dee6d964f85ce6e9e3a4e37[m
+Merge: b6a950b 39a1c14
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 18:40:49 2020 -0700
+
+    Merge pull request #109 from CMPUT301F20T09/Ayo
+    
+    refactor: home fragment only shows other people's books
+
+[33mcommit 01d3d22cb8e194206d9c6f1dc8dc2b70dfbf0667[m
+Merge: af62952 b6a950b
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 5 18:39:18 2020 -0700
+
+    Resolving Merge conflict
+
+[33mcommit bb878795561e51e325aedebf6a2b631a4c51192e[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 18:18:44 2020 -0700
+
+    fix: when a request is accepetd all other requests are declined
+
+[33mcommit 39a1c142a826f0270eeea787adb60b53d8a6b2b2[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 17:17:25 2020 -0700
+
+    refactor: Book objects now have photo UUIDs
+
+[33mcommit 76526a9858c3f167813d6a04d47006b920bc788e[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 16:56:20 2020 -0700
+
+    refactor: home fragment only shows other people's books
+
+[33mcommit b6a950b9ad902977ef2ff88d14a3d3157cd7b227[m
+Merge: 7a03dba a8fd70e
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 16:26:15 2020 -0700
+
+    Merge pull request #108 from CMPUT301F20T09/Ayo
+    
+    fix: access owner profile page on first click
+
+[33mcommit 7a03dbac5d413c70862fc0ba1e9c00064743138e[m
+Merge: 5fd8f67 e0c012e
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Thu Nov 5 16:25:35 2020 -0700
+
+    Merge pull request #107 from CMPUT301F20T09/MahmoodF
+    
+    Testing and Documentation
+
+[33mcommit a8fd70e13c3aa046c758ae46139ada6820bc35e6[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 16:21:32 2020 -0700
+
+    fix: access owner profile page on first click
+
+[33mcommit e0c012e728a94a8b09356ad9557d001a0b5b3cb8[m
+Merge: 1e02a49 5fd8f67
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Nov 6 02:06:52 2020 +0300
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit 5fd8f6711af6e0c61e5d4faad6e073ffef91a3fe[m
+Merge: 4530c3a 40a0358
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Nov 5 15:54:34 2020 -0700
+
+    Merge pull request #106 from CMPUT301F20T09/Ayo
+    
+    feat: added AddBookActivity tests
+
+[33mcommit 1e02a49820f13c74833c5fc651e76a9fdcf530b8[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Nov 6 01:39:31 2020 +0300
+
+    Testing and Documentation
+    
+    Test: Finished UI testing for signup
+    Test: Junit Testing for the user profile
+    Doc: Login, SignUp, HomeActivity, EditProfileActivity, Profile Fragment, Owner Fragment, HomeFrogment, User Model
+
+[33mcommit af62952ff23f62cfed5b584fc505c2005cc9c14e[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 5 14:59:21 2020 -0700
+
+    Tests
+
+[33mcommit 40a0358a99cf58fc3ac2c22ce3314c41b7b22d0a[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 14:43:17 2020 -0700
+
+    feat: added AddBookActivity tests
+
+[33mcommit 4530c3abf03d4d6d3e005e88d612f6b120447660[m
+Merge: 09ec86b 48274d4
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Thu Nov 5 14:43:20 2020 -0700
+
+    Merge pull request #105 from CMPUT301F20T09/Ayo
+    
+    refactor: replaced AddFragment with AddBookActivity
+
+[33mcommit 66c629bf4c7b4e7ffa4e416e2f285a27ebd2d9d4[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Nov 5 12:01:52 2020 -0700
+
+    test: started coding RequestListTest. Error encountered: 'Error running 'RequestListTest (1)': Command line is too long. Shorten command line for RequestListTest (1) or also for Android JUnit default configuration.'
+
+[33mcommit 48274d419eb13b494791bd8f2ed970a4f0932c3f[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 11:51:36 2020 -0700
+
+    refactor: refactored user to currentUser
+
+[33mcommit 532e488fcabee4a94d12159fffa5b682b4b570a6[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 11:42:40 2020 -0700
+
+    refactor: replaced AddFragment with AddBookActivity
+
+[33mcommit 8cc9fd63c732ec30d3696fc4cf98bc4c5bb637e0[m
+Merge: 9de3369 09ec86b
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Nov 5 12:03:07 2020 +0300
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit 09ec86b00ca1df41f2295154e690917136b91e86[m
+Merge: 323b724 881d672
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Thu Nov 5 11:58:21 2020 +0300
+
+    Merge pull request #103 from CMPUT301F20T09/Ayo
+    
+    refactor: added query to manifest
+
+[33mcommit 323b724bdbf521ce37fb208a85200a3bdea635cb[m
+Merge: bb46a90 69b9700
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Thu Nov 5 11:57:23 2020 +0300
+
+    Merge pull request #102 from CMPUT301F20T09/Zubier
+    
+    Zubier
+
+[33mcommit 881d672dee470e9102ac4dc1e2a03b6f7861560c[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Nov 5 01:51:00 2020 -0700
+
+    refactor: added query to manifest
+
+[33mcommit 69b9700c980f633d610f7e7dd9670fedd44373de[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 5 01:01:52 2020 -0700
+
+    minor change in layout
+
+[33mcommit 4698f542d95114b4b76c9fe205105577892ee7b7[m
+Merge: ea0a85a bb46a90
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 5 00:51:45 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Zubier
+
+[33mcommit bb46a907a97014e0f7d4e250fba896fc6e5aac88[m
+Merge: e325e45 e681e77
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Nov 5 00:50:02 2020 -0700
+
+    Merge pull request #101 from CMPUT301F20T09/MahmoudAJ
+    
+    added new uml
+
+[33mcommit e681e77caefa59179117165a8a5bad897cb9b9b3[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Nov 5 00:45:52 2020 -0700
+
+    fix: fixed issue "Android resource linking failed"
+
+[33mcommit ea0a85a9d9ba5ba45bbe9943e5c974dcc0dbd328[m
+Merge: 858f872 e325e45
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Nov 5 00:31:05 2020 -0700
+
+    Merge branch 'staging' into Zubier
+
+[33mcommit 858f87291a6e2e666ea915aa3228c5b87a5cb2a7[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 23:52:59 2020 -0700
+
+    SignUp/Login String Prototype
+
+[33mcommit 3a2e9f8adbd88d6d76e33bc98ed1100e5197856e[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 23:48:54 2020 -0700
+
+    Save button functionalities update
+
+[33mcommit 038f103d99a1b7c4d3e6ba2813d680172fd89722[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 23:43:14 2020 -0700
+
+    Save button functionalities update
+
+[33mcommit 0e81a78e7bd8926d155c48786769237df755cd83[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 23:37:36 2020 -0700
+
+    profile functionalities
+
+[33mcommit 7b5f8ad33f9bcab6e9403f6fdda219145c83d2b0[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 4 22:52:51 2020 -0700
+
+    added new uml
+
+[33mcommit e5630c0a9cf0646e92cadc212cd1f16ec721df66[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 22:07:11 2020 -0700
+
+    funcationality changes
+
+[33mcommit e325e45c08e14e4666e12cd8e60e58b68896c8a4[m
+Merge: 641c815 b92c78c
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Wed Nov 4 21:56:10 2020 -0700
+
+    Merge pull request #99 from CMPUT301F20T09/Ayo
+    
+    refactor: added choose photo functionality to EditBookActivity
+
+[33mcommit 641c81525e0ccd01ab84e8facff04b6342eca0ed[m
+Merge: 9fe1dfc 10452ed
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Wed Nov 4 21:55:43 2020 -0700
+
+    Merge pull request #100 from CMPUT301F20T09/Della
+    
+    feat: added ImageAdder but it needs refactoring to fit in with EditBookActivity
+
+[33mcommit 10452edb6c99e4278e2f2fb92dfbfe20239ad589[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Nov 4 21:47:38 2020 -0700
+
+    refactor: increased the width of editText fields
+
+[33mcommit 02ddca68e77d1bd7bdc9e50189a746f73c0adfe0[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Nov 4 21:01:28 2020 -0700
+
+    feat: created ImageAdder interface and implemented it in AddFragment and EditProfileFragment
+
+[33mcommit b92c78c96299681ffa118ac10beaab692fd8057e[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 20:59:54 2020 -0700
+
+    fix: fixed return to HomeFragment on delete in ViewMyBookFragment
+
+[33mcommit c36da1836f9108e01bcd8e024993e0c8dcc74faf[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 20:37:28 2020 -0700
+
+    refactor: added remove photo option to EditBookActivity
+
+[33mcommit 7d51b51cd2097c0c47a95f002db9da59749f6cfc[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 18:55:43 2020 -0700
+
+    refactor: added choose photo functionality to EditBookActivity
+
+[33mcommit f5fc97c666bc1c0d321c56dbe5977c169d506c99[m
+Merge: a719986 9fe1dfc
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 17:17:16 2020 -0700
+
+    fixing merge conflict
+
+[33mcommit a7199869d7cb3ab9f7727e41fd8140e4cc9b8de2[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 17:12:15 2020 -0700
+
+    Minor updates
+
+[33mcommit 9fe1dfcbfd69bae12c437b72662c9298a955fee9[m
+Merge: ec65217 6429929
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Thu Nov 5 03:09:15 2020 +0300
+
+    Merge pull request #97 from CMPUT301F20T09/Ayo
+    
+    refactor: replaced condition text with string resources
+
+[33mcommit 6429929b9a478d178ee7ef538558e0696d2bfb3d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 17:08:03 2020 -0700
+
+    refactor: updated adding a user to Firebase
+
+[33mcommit 2644d66fd5ad82136af9431187631384d1f9c69b[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 15:16:33 2020 -0700
+
+    refactor: added take photo functionality to EditBookActivity
+
+[33mcommit a0db6dc02245d1c2d0ea79e26a8a3521c44206c0[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 14:38:27 2020 -0700
+
+    minor bug fixed
+
+[33mcommit 4c11be324d2552f65f656465f8b07ee04f09491c[m
+Merge: 8f05724 b6512ed
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 14:21:10 2020 -0700
+
+    'changes'
+
+[33mcommit 8f05724be062df2256093113fc6e47c2825ba8b7[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 14:18:55 2020 -0700
+
+    minor update
+
+[33mcommit b6512ed514b6e3f103d1cafb760c895a1b146164[m
+Merge: a5fba83 35a3c6d
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Nov 4 14:17:06 2020 -0700
+
+    Merge pull request #98 from CMPUT301F20T09/Zubier-1
+    
+    Staging
+
+[33mcommit 35a3c6d0011323ca396037b6aabb7b26eb333de9[m
+Merge: ec65217 a5fba83
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Nov 4 14:16:55 2020 -0700
+
+    Merge branch 'Zubier' into Zubier-1
+
+[33mcommit 03bef58f57cf5563460b64df9b1d22c05c942583[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 11:22:30 2020 -0700
+
+    feat: added choose book photo dialog
+
+[33mcommit 09e776cd406bc4dfff2b2c144315f91f5343cd87[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 10:41:46 2020 -0700
+
+    refactor: replaced condition text with string resources
+
+[33mcommit ec65217cd9e0d9ea9002b283ae2485cd0f1a6f21[m
+Merge: 57bd43d 490216a
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Nov 4 19:26:22 2020 +0300
+
+    Merge pull request #96 from CMPUT301F20T09/Ayo
+    
+    refactor: added condition spinner to EditBookActivity
+
+[33mcommit 490216a1ca2b49bf2e593adf4c1e335bdfc87165[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 03:11:30 2020 -0700
+
+    refactor: added condition spinner to EditBookActivity
+
+[33mcommit a5fba83ecdbfa2b2f442a439039d56f68b4df7a7[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Nov 4 03:46:02 2020 -0700
+
+    profile bug fixed
+
+[33mcommit 9de336944efb0e95fad6cfe051b3b1c0d1d308c5[m
+Merge: a2cfae4 57bd43d
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Nov 4 12:29:12 2020 +0300
+
+    Merge pull request #95 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 57bd43d0342d091293e51bfd01b0f7ff0906c86b[m
+Merge: 2d8df1d 1f6a3c8
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Nov 4 12:28:36 2020 +0300
+
+    Merge pull request #92 from CMPUT301F20T09/MahmoudAJ
+    
+    fix: a book shows it's not available for requesting if it is borrowed (except the top right icon for now)
+
+[33mcommit 2d8df1df0c980409a464e77f576efcb55827c71d[m
+Merge: 9fc22c7 a2cfae4
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Wed Nov 4 02:26:32 2020 -0700
+
+    Merge pull request #94 from CMPUT301F20T09/MahmoodF
+    
+    Mahmood f
+
+[33mcommit a2cfae4d3ba038c379b6522f132e13c7fef699d4[m
+Merge: 8e7fcbe 9fc22c7
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Nov 4 12:20:53 2020 +0300
+
+    Merge pull request #93 from CMPUT301F20T09/staging
+    
+    MahmoodF
+
+[33mcommit 1f6a3c848e961dcb5dca641d52bef233e94efa11[m
+Merge: bebbd93 9fc22c7
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Wed Nov 4 01:25:14 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 9fc22c78731c3b73bc4364ffa69e429f7b561258[m
+Merge: b25daf0 f5a291a
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Wed Nov 4 01:24:40 2020 -0700
+
+    Merge pull request #91 from CMPUT301F20T09/Ayo
+    
+    refactor: added save functionality to EditBookActivity
+
+[33mcommit f5a291aab980677f81fe7a6988e7f1d6ed32c6e4[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Nov 4 01:04:55 2020 -0700
+
+    refactor: added save functionality to EditBookActivity
+
+[33mcommit bebbd93db5640e6d096eb6066d9fefa9f7da5586[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Nov 4 01:01:57 2020 -0700
+
+    fix: a book shows it's not available for requesting if it is borrowed
+
+[33mcommit b25daf0d70da68da16ebb6d10f9697346cd1521c[m
+Merge: 34b62dc d8d3f76
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 3 22:12:28 2020 -0700
+
+    Merge pull request #90 from CMPUT301F20T09/MahmoudAJ
+    
+    Mahmoud aj
+
+[33mcommit d8d3f76d812171234b2ab98597e6f999d1fd9cc3[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 3 21:59:37 2020 -0700
+
+    fix: the app doesn't crash after clicking on edit
+
+[33mcommit f5e0cf89ab42d28be9f4d500a8661442681608d9[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 3 19:35:39 2020 -0700
+
+    fix: bookISBN in viewBookFragment changed to bookIsbn
+
+[33mcommit 581053f1597efb144be36b1655bc2a5fbcf6297f[m
+Merge: 27037a2 34b62dc
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Tue Nov 3 18:37:09 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 34b62dca797ee266cf646c3c9474a8c86b594daa[m
+Merge: 1738923 011e7ec
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Tue Nov 3 18:34:43 2020 -0700
+
+    Merge pull request #86 from CMPUT301F20T09/Ayo
+    
+    refactor: updated EditBookActivity layout
+
+[33mcommit 173892373d067280bf0e210bc378445eca78308a[m
+Merge: e356ce7 fc19193
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Tue Nov 3 18:34:11 2020 -0700
+
+    Merge pull request #87 from CMPUT301F20T09/Della
+    
+    feat: ImageAdder interface
+
+[33mcommit 27037a2e8af1325165eb420c80b982f52c4e2a48[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 3 18:31:01 2020 -0700
+
+    fix: load the correct photo of the book's owner in ViewBookFragment
+
+[33mcommit fc19193a319ad01bc7c375e684cb22d61feba9db[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 3 17:37:38 2020 -0700
+
+    feat: created ImageAdder interface so that it would be reusable.
+
+[33mcommit 53532f4b0a88b1ed2ba7f1f0a30ba6451ff65e06[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 3 17:33:15 2020 -0700
+
+    refactor: rearranged widgets and changed layout
+
+[33mcommit 011e7ec4bf3f7bd70c4f84d8e984e6eff5872cac[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Nov 3 16:21:01 2020 -0700
+
+    refactor: added page title to EditBookActivity
+
+[33mcommit 5f8062f13d3e445ba66896893f96fbe711fd524a[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Nov 3 16:11:31 2020 -0700
+
+    refactor: added cancel functionality to EditBookActivity
+
+[33mcommit fccca1eae656e35d0b7319ea15c3ca9b042ec642[m
+Merge: 29ede6a e356ce7
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 3 15:09:51 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 29ede6a5bb1ddc420ed9970d683757129ae549ab[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 3 15:09:39 2020 -0700
+
+    fix: fixed empty data entry when Adding Books
+
+[33mcommit 95180d12f4a8f55922a351bdf86bb7187311824d[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 3 14:37:26 2020 -0700
+
+    fix: the requesters profile photo is displayed in the reaquests tab
+
+[33mcommit 605b63e067e6986a92395e3bc73aa05d9abc15db[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Nov 3 12:59:44 2020 -0700
+
+    refactor: updated EditBookActivity layout
+
+[33mcommit 8e7fcbe4088c26a716436316f8196be4e140b423[m
+Merge: 96ade3f e356ce7
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Tue Nov 3 22:43:06 2020 +0300
+
+    Merge pull request #85 from CMPUT301F20T09/staging
+    
+    MahmoodF
+
+[33mcommit bfab3700f94f2f89f9c3f8cac7bdd159c89183f9[m
+Merge: 1de1b6d e356ce7
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 3 04:29:28 2020 -0700
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 1de1b6de52e1e6196799af68c0de2306361a73fa[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Nov 3 04:27:47 2020 -0700
+
+    feat: ability to view and decline requests of an owned book
+
+[33mcommit e356ce719bfa6d226a65bbec203b0d91b7339aa8[m
+Merge: 04f07b2 7fb4828
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Tue Nov 3 01:17:48 2020 -0700
+
+    Merge pull request #84 from CMPUT301F20T09/Della
+    
+    feat: added Spinner widget and finished Parser.
+
+[33mcommit aa27c5394db114a90ff3393808c3b48f3f590b32[m
+Merge: 7fb4828 04f07b2
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Nov 3 00:03:22 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit a93965156686d812b29c9bcdcd519bda5c50e838[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Mon Nov 2 22:47:45 2020 -0700
+
+    bug fix/ EditProfileFragment to Activity
+
+[33mcommit e64b743d926bbb2b1069f84beaa17c6ef1c535d2[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Mon Nov 2 16:18:22 2020 -0700
+
+    minor update w/ bug
+
+[33mcommit 04f07b272a1435ab4c73ae63d5bd8e1cf60c87d5[m
+Merge: 948dfe7 7e8e246
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Tue Nov 3 00:45:52 2020 +0300
+
+    Merge pull request #83 from CMPUT301F20T09/MahmoudAJ
+    
+    fix: book ISBN is shown properly
+
+[33mcommit 948dfe7919d0bb1aae0e7ba982156328063f4969[m
+Merge: 481c567 f63b57f
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Mon Nov 2 14:39:29 2020 -0700
+
+    Merge pull request #82 from CMPUT301F20T09/Ayo
+    
+    refactor: replaced ViewMyBookActivity with ViewMyBookFragment
+
+[33mcommit 7e8e2465b09d33f0c2caf2ea5456c3f0258b11b6[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Mon Nov 2 14:37:18 2020 -0700
+
+    fix: book ISBN is shown properly
+
+[33mcommit f63b57fb5c33a16bef0e97364c972a623250b188[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Nov 2 02:58:40 2020 -0700
+
+    refactor: replaced EditBookFragment with EditBookActivity
+
+[33mcommit 7fb482845e05715cd3aa4b5e6aed08acc6195763[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Nov 1 21:31:51 2020 -0700
+
+    feat: finished Parser
+
+[33mcommit 7d5887805611583a4e4947043b9f7f47deee3c24[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Nov 1 20:33:17 2020 -0700
+
+    feat: added Spinner widget to spcify condition of book
+
+[33mcommit 2d42c26e801fa6926f83cc5cd9d3d7598d96b65e[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Nov 1 16:07:31 2020 -0700
+
+    refactor: updated layout of add fragment
+
+[33mcommit 84548fff14239fac9ef7e6817d092c2bfeb8f74e[m
+Merge: bc6e012 481c567
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Nov 1 13:48:10 2020 -0700
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit c1a471a0daedcfb1c83b308d2fbea3e8b3af3e0b[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Nov 1 10:33:18 2020 -0700
+
+    refactor: replaced ViewMyBookActivity with ViewMyBookFragment
+
+[33mcommit 96ade3f3a7c72925612f2df1a2c0436c71bf7d35[m
+Merge: ddf5806 481c567
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Sun Nov 1 16:59:24 2020 +0300
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit ddf58060248b0598c008d4cd3b2e32c00d3c7b56[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Sun Nov 1 16:55:46 2020 +0300
+
+    Delete Parser 3.java
+    
+    I had duplicate parser files
+
+[33mcommit 6950053f3019cf9441ea4b3bb5adcf283663c711[m
+Merge: b5cafc9 eeda75b
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Sun Nov 1 16:47:03 2020 +0300
+
+    Merge branch 'MahmoodF' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit b5cafc9db8967a407a2dda7fbfbd9303b38ece8c[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Sun Nov 1 16:46:58 2020 +0300
+
+    Create Parser 3.java
+
+[33mcommit 66b2b3121a58369b3e3f87477b445a7a7393c9e5[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit ae638c07299ae08997bc0e1bb5233b424df2372e[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 55cff50f13eb1c6866ab63acfb4ffe9f16c52b9d[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 971675062ca9cdabb6c08b9b6c0420c47fd0dca9[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 20e0f46b3ed466acafdb57a04b86992efaf3e542[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 29c0467afe61937fd66f1aedc209b8b6cdd74fb0[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 93a459a1ca172254877828689a45576dcfef7580[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit fbbd50cc05a27f8348bdddebb7fa1094d4f172d7[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit c5c1d94b74aa48908d20a53e13716813d42f7221[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit dbe4cf8c77facb206d0e17690c70a6ed34cbad4b[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 2fcaf641580cd8476cade826917ab44f18cb97ec[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit b6222eb528d7d223775416cdc69f1338ddbeb2f9[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 3b49c63e360f1a35b0a002016d36c916539f36f2[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit a5bbf58d8198f2c38a7a20e629ebdaa60a21d2a8[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:08:17 2020 -0600
+
+    updated BookList and BookList test
+
+[33mcommit 0c63eda138a3cb88ee7fdfeecff2140fcabe6617[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit a9edebfc04f0e19a419e3daa9ec73f927abad201[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit fed96b46c9e83c96bbe8739d82e8ac53fbaf9f23[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 00b72c588b535cbb3c56a9c4f851ecae48fe7ac7[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 62e28e36a199b1c00a0bb12794106be734705458[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit b0703e0e9c99dac04229a5d3e36359076cd18495[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 88b7eadc270894a9c2eedf62a01c1c4262c28daa[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit ca6f789af68894f00345724200cb92dbcf6e0d04[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 481c567a42b26a66ce6fde70399ac8a4bc0ac309[m
+Merge: f6c5c90 86fa940
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Sun Nov 1 01:03:37 2020 -0700
+
+    Merge pull request #80 from CMPUT301F20T09/Ayo
+    
+    refactor: migrated Model files to new schema
+
+[33mcommit 86fa940dc2fed047ba8559c611ecba0d4875d389[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Nov 1 01:36:22 2020 -0600
+
+    refactor: migrated Model files to new schema
+
+[33mcommit bc6e012ff7364888f5978f65f0bf0abdda0b08d7[m
+Merge: 298d57a f6c5c90
+Author: Della <humanita.1999@gmail.com>
+Date:   Sat Oct 31 18:21:22 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 298d57adce4f688d86859aabc00443cb44c20bb9[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sat Oct 31 18:01:12 2020 -0600
+
+    fix: merge to latest version of staging
+
+[33mcommit f6c5c906ec7dabefa59b0a220b230055a8a3bf79[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Sat Oct 31 00:03:58 2020 -0600
+
+    slight update
+
+[33mcommit 7c65da3b1365932e9f411964ec75fc28e741b00c[m
+Merge: 88b3391 ea82a75
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Oct 30 21:33:14 2020 -0600
+
+    Merge pull request #78 from CMPUT301F20T09/Ayo
+    
+    fix: replaced setBook with individual setters
+
+[33mcommit ea82a7565358edc47d544180e66651c6ad62767f[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Oct 30 21:30:52 2020 -0600
+
+    fix: replaced setBook with individual setters
+
+[33mcommit 88b339186c09a0a4698db1825b9fe8ec3a159fb8[m
+Merge: ccc9669 ce5eb3c
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Fri Oct 30 21:14:07 2020 -0600
+
+    Merge pull request #77 from CMPUT301F20T09/Della
+    
+    fix: resolved merge conflicts
+
+[33mcommit ce5eb3ce9dc6a77df204d064f8a2820f537c7dfa[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Oct 30 21:13:53 2020 -0600
+
+    Update Book.java
+
+[33mcommit d1914f39349ac52966f9b83656c8c0c428111d98[m
+Merge: d4cca30 f5c17a8
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Oct 30 20:30:04 2020 -0600
+
+    Merge branch 'Della' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit d4cca308f450a1936052f15d81e4565cbcede2a0[m
+Merge: c4f51c1 ccc9669
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Oct 30 20:19:45 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit c4f51c150069c926a2453d94b232bc3c5953fd36[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Oct 30 20:05:19 2020 -0600
+
+    fix: edit to Parser
+
+[33mcommit ccc9669291aeb99df5bc0657bba849b55dccdc11[m
+Merge: 814e99a 7e40bfb
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Oct 30 14:15:56 2020 -0600
+
+    Merge pull request #76 from CMPUT301F20T09/Eden
+    
+    Partial search functionality + Utility function
+
+[33mcommit 7e40bfb70653964ba123bff887bd5bf5cfaee233[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Oct 30 14:09:41 2020 -0600
+
+    fix: added author to keyword and removed comment
+
+[33mcommit 160feb65f439cc838ee446675faff38bf2c622bc[m
+Merge: 864f2e8 814e99a
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Oct 30 12:19:59 2020 -0600
+
+    fix: merge conflict + utility function for scrolling and updating
+
+[33mcommit 864f2e8c1508bc58c0e395f387b97ddb2c3c5c33[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Oct 30 12:03:25 2020 -0600
+
+    feat: partial search functionality
+
+[33mcommit eeda75b1ab66b71d5f72d1e6917b344fa317582c[m
+Merge: ea3c9a2 3ecd4e1
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Oct 30 18:28:01 2020 +0300
+
+    Merge branch 'MahmoodF' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit ea3c9a2022d3ee7554020ec9567963ecf45e9bb9[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Oct 30 18:18:32 2020 +0300
+
+    Update
+
+[33mcommit ccafd35eb20655f7ac90d25e980adadbfca318a5[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 8a6d695112fd934dba3933660e11b5b57ddebb06[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 9da884c82c97c349552bbc2246471169a11a8280[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit ae645cc8fdffd1fa382aba750c1de45a1e79e4a2[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 61aa13228cc167d8a08ad174edf4e89676d5379d[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit e0e817001ba11069e102151fc2df33a54513b621[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 3b5091af1e713069ab431ce6948bddf230bd02cf[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit f396c9bc7fa2189f95a9c85c35f89f52da4de160[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 365bc7bf5fabbc73c07c4fb0e4aa9d2f40b2eba1[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 0ef433d4779c9358c335b471538610dba688af38[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 814e99a3a144cd6b889ced3015360925165e0e3f[m
+Merge: 0fb7882 3ecd4e1
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Fri Oct 30 09:26:25 2020 -0600
+
+    Merge pull request #74 from CMPUT301F20T09/MahmoodF
+    
+    Mahmood f
+
+[33mcommit 3ecd4e1c2645993f1c162c96812401e7cdd75085[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Oct 30 18:18:32 2020 +0300
+
+    Update
+
+[33mcommit 8779d05eb51df285d580e2fcc6b6de651bd3a827[m
+Merge: 75cf532 0fb7882
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Oct 30 18:12:58 2020 +0300
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+    
+    revert
+
+[33mcommit 75cf532f0dda4a7b526ab95d15b40229708e46a6[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 940120f8f4ff01af43c9543d9202239780456abc[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 443fe6bb859dc09870fdb9e356f06d75c45c7b04[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit f52efc95c7ee5de38aa60961b554e0daeb7ecd90[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 8fda8961a5c352a70ae4cdecab378a0cf2a3f9ae[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 5b754787cf9c9f394e4143a5611996289f8b808e[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit d089466739b5f59e1ce85a0dba231f150c0bbae6[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit f9b8f3fea7602e6307dcf7d8f1f9aae69b1ad88f[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 9253bfc103797e722adffa5866476c671b629ef6[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 330f36e8cc89ab887f8ff19cfd6dcb8ce61f998c[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 11248dd3ff3d3167fd1e242ec31282f258b52d99[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit c8dbf8dc1f1d9bae6d60d6b6512dc914c658f771[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 617654fa4e6f6f21f30363a06389a6da4f29ee37[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit c7bf0e52583722cf937a8fc081405c5ce302430a[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 14:46:54 2020 -0600
+
+    fix and refactor: viewBookFragment code and functionality refinement, still has some bugs
+
+[33mcommit 7f032b5e46030a92ddd60f9c4ecce05ae1a5d1bc[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:08:17 2020 -0600
+
+    updated BookList and BookList test
+
+[33mcommit 6f57a357cf78ef5673cf6abe61af4c2463fe01aa[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 47270b717aa66ad3856603eff6c9cf04e50b903e[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 8cf23f891de7f2ce9afa067da3482ea421f1ba10[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit e691cce1a01cfe3c3f84f57b6b405f795ea0269f[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 45cc62802873484e3e41917ccb283003b96c944b[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 82a5a945277e3eb448dab7e0889f055282c7027c[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit aca5e87c56e6ac988bb6e299ef2cd9796fdccf23[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 68fbad7f1fc5db5b9c5a48481778f232625a6ca2[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 808872aadb0f67f859815778e840bab19e8908a3[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 27 15:15:20 2020 -0600
+
+    fix: removed RequestHandler from util in test directory. Probably misplaced.
+
+[33mcommit 0da10b4105f927734f860a05be02440b8e20db9d[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 22:31:16 2020 -0600
+
+    fix: changed collection pasth in viewbookfragment to catalogue instaed of books
+
+[33mcommit 6320feecbe91aa36bd4cee0e2b5675486bf0ddd3[m
+Merge: 05a4c04 c375b0e
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Oct 30 16:40:54 2020 +0300
+
+    Merge branch 'MahmoodF' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit 05a4c04d1f78c400f3b17a46fa421260e468d0a7[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 16ac5bcb5830e63cf99f11cd1c9a30d1148811b0[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 9234c5dae17b8a7465f173ee145323d7e1cc19df[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit d75a350f2fa1b20407a3f89834af884b09daba8e[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 14:46:54 2020 -0600
+
+    fix and refactor: viewBookFragment code and functionality refinement, still has some bugs
+
+[33mcommit 3b65b3911c8f4f8b0c51fc0490dfc278d23157fb[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:08:17 2020 -0600
+
+    updated BookList and BookList test
+
+[33mcommit d702f97e48b5c09d01125d62f6ed633837cb21bc[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 060bdd724c4c078593d4439206327f98ad5cd162[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 11ccd3e219e3e2ef9c2b7dd5a1a1c87ede8f439d[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 22d190bc53df536f55626c63d594fcd928687da9[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit cd8c0825d808495889b7bea25d59b144640bd3dd[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 32372d5fc689df15029959c168a3487f2ca6a0d8[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 81a54b1608a511ef0175e7e4c406e2e09b3a4b38[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 9f8ea68f1f6be569f9f88f7db030c4b20a9a73aa[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit b524f28c554c6bff6114c4c5928205ff03f53f15[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 27 15:15:20 2020 -0600
+
+    fix: removed RequestHandler from util in test directory. Probably misplaced.
+
+[33mcommit c375b0edf7b400c69c33daa45e284f84605788c1[m
+Merge: f0952c3 0fb7882
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Fri Oct 30 16:11:09 2020 +0300
+
+    Merge pull request #73 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 0fb7882f795735069f3ebd06f05298fb9cd69177[m
+Merge: 2a8fed2 b92d617
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 29 22:41:31 2020 -0600
+
+    Merge pull request #71 from CMPUT301F20T09/MahmoudAJ
+    
+    pull request
+
+[33mcommit b92d617f63c88b6102be2ed6cd315ead86eac11a[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 22:31:16 2020 -0600
+
+    fix: changed collection pasth in viewbookfragment to catalogue instaed of books
+
+[33mcommit d9ebcd1063695b3ef3463627db9028768656d5d5[m
+Merge: 004093c 2a8fed2
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 22:08:07 2020 -0600
+
+    fix: fixed merge conflict
+
+[33mcommit 004093c6a439d6740053db57b1387d18a318ca34[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 22:05:21 2020 -0600
+
+    feat: files needed for search
+
+[33mcommit 7187ca16d410d3300f4f28acaf71a4a70aa58c59[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 22:01:02 2020 -0600
+
+    feat: search capabilities + recyclerview util function
+
+[33mcommit 2a8fed2a20da8f03aac8824e076384378957322b[m
+Merge: 2a62ba3 9538816
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Thu Oct 29 20:47:46 2020 -0600
+
+    Merge pull request #70 from CMPUT301F20T09/Zubier
+    
+    Zubier
+
+[33mcommit 9538816a663b2194e471849467d7ba470d81828f[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 29 20:45:42 2020 -0600
+
+    refact
+
+[33mcommit f3954be15d3e0432cb415cd56b27ab8cbb823c1d[m
+Merge: 1871061 2a62ba3
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 29 19:51:24 2020 -0600
+
+    feat/refactor: Profile/Camera/Img
+
+[33mcommit 18710610852b565f9b9bc2c7900c6d17570a9ae7[m
+Merge: 5353a92 b7c3e34
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 29 19:47:33 2020 -0600
+
+    refactor/feat: US2/US0
+
+[33mcommit 5353a928397f1c7397f94e39e776a641a174ce06[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 29 19:39:55 2020 -0600
+
+    feat/refactor: Profile/Camera/Img
+
+[33mcommit 5f8fa7c433c1c5924075902ca8a4adbdb851e214[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 18:47:39 2020 -0600
+
+    added back Book and User models
+
+[33mcommit 7254d99a33237c29bbfabbfbd00f003b243e4691[m
+Merge: 4068de3 2a62ba3
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 18:45:36 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Eden
+    fix: other fix
+
+[33mcommit 2a62ba31783fe57ace7c2dc33f4542a39f97b857[m
+Merge: 5aac286 dbd89d7
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 29 18:39:19 2020 -0600
+
+    Merge pull request #69 from CMPUT301F20T09/Ayo
+    
+    refactor: added option to show login after splash screen
+
+[33mcommit dbd89d7f48050bd557056b7a188cce5a7625a07e[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 18:31:10 2020 -0600
+
+    refactor: added option to show login after splash screen
+
+[33mcommit 4068de3121c3e5359533601be9c1a0e62e32ef28[m
+Merge: fcf7ad7 5aac286
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 18:17:58 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Eden
+    fix: merge conflicts resolved
+
+[33mcommit 5aac28627eb69a4de689fc5c24a45d289a6a2085[m
+Merge: 297ce64 e6c5d8f
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Thu Oct 29 18:16:27 2020 -0600
+
+    Merge pull request #67 from CMPUT301F20T09/Ayo
+    
+    fix: resolved all merge conflicts with staging
+
+[33mcommit e6c5d8fcc42c9739da448692c3a981fc6aa5e9ff[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 18:10:14 2020 -0600
+
+    refactor: renamed profilePicture to profileImageUrl
+
+[33mcommit 1622bedfc81d56dd270006ed73ce358be8f6bc2b[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 18:05:36 2020 -0600
+
+    fixed merge conflict with staging
+
+[33mcommit 7de69709f6e08c0598b28243f5eac98ac1f82de2[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 15:16:11 2020 -0600
+
+    created Splash Screen
+
+[33mcommit b5731375834b17785c42069306176eef4320e691[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 02:49:06 2020 +0300
+
+    Edited the user class and sign up class
+    
+    refactor: added the first & last name fields to the sign up page
+    refactor: added the first & last name fields to the user class and created new getters and setters
+
+[33mcommit fcf7ad7cf99fb896595ffbad990850be6372ed49[m
+Merge: 5619f9f 297ce64
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 29 17:50:09 2020 -0600
+
+    fix: fixing a bunch of stuff
+
+[33mcommit b7c3e34a5e95e3adf3df19afff1125dd11097aa4[m
+Merge: 9e114a4 297ce64
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 29 17:35:33 2020 -0600
+
+    Merge pull request #66 from CMPUT301F20T09/staging
+    
+    minor update
+
+[33mcommit 297ce64903cf41db9bfd808ca41f8cd32a1acc47[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 29 17:34:19 2020 -0600
+
+    minor update
+
+[33mcommit f0952c3a048d2ec426249ab9232cc803d4c17bf0[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit bd7191488403e305add7162d175196e9b36c64a2[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 071ee1c7346b38b8395a3af975d7df8e6603de9d[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 3b642929c20e42c9f79a067b1efadd895369e323[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 14:46:54 2020 -0600
+
+    fix and refactor: viewBookFragment code and functionality refinement, still has some bugs
+
+[33mcommit aef639539c1874824e973249921968d95246dd65[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:08:17 2020 -0600
+
+    updated BookList and BookList test
+
+[33mcommit 11545e8f429773baf1103cee468ddba5af265522[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 9f9fa090821d6319b86a11b0177e9de8f24755a8[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 36fdc0f877cda592af1342955f564e6beb1aabed[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit b7270002ea8aab3b12f6f83eddde7de826402793[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 35b807a00b069052dc392f81569c509136194083[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 92ff3ebb43a4494c9fc0dfc2c77f3c66f9816162[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 249d05d47c36b4c958a469465671a69255a2de1e[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit 21823d4fb6bb7cbfa3d0173498a03e829b2662d8[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit f4746a513f10331cd2e6ed3ad62f4e0b18526249[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 27 15:15:20 2020 -0600
+
+    fix: removed RequestHandler from util in test directory. Probably misplaced.
+
+[33mcommit 9e114a4aebc9e51ce03846c7dc8eb8d69a87c088[m
+Merge: d18db96 4420e3d
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Oct 29 16:08:06 2020 -0600
+
+    Merge pull request #65 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 4420e3df1996de92bb7a5f76f38e7bbd563f8cb4[m
+Merge: 5c65d29 d18db96
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 29 16:06:33 2020 -0600
+
+    Merge branch 'Zubier' into staging
+
+[33mcommit f5c17a831be9e5801e23cc58da5576e7c2d17488[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 14:46:54 2020 -0600
+
+    fix and refactor: viewBookFragment code and functionality refinement, still has some bugs
+
+[33mcommit 23d8919670c4b69fa0df3cc7f4968028dee5f3b0[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 14:08:23 2020 -0600
+
+    created EditBookFragment
+
+[33mcommit 6ff162248328d5c112a1d69e741fb5e9a90b7a71[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:59:41 2020 -0600
+
+    implemented ViewMyBook delete functionality
+
+[33mcommit d83ccd6f6faefcec4df8efe0bf8d81e0e434a749[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 21:20:42 2020 +0300
+
+    Users could add pictures to the profile
+    
+    feat: Users could add a profile picture from the gallery or the camera when signing up
+    feat: when a picture is selected the picture is added to the storge and it is saved as username.jpg in the cloud
+
+[33mcommit a5bd6d3ca04e58097abf275edc07af45dba1f220[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:08:17 2020 -0600
+
+    updated BookList and BookList test
+
+[33mcommit 8d0731123a474ed1905552ba0722433a975b51c9[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 02:42:23 2020 -0600
+
+    created OwnedBooksFragment
+
+[33mcommit 1422c462aaa299d27f9c53fc0824062b03136d44[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 02:49:06 2020 +0300
+
+    Edited the user class and sign up class
+    
+    refactor: added the first & last name fields to the sign up page
+    refactor: added the first & last name fields to the user class and created new getters and setters
+
+[33mcommit 5c65d29ff879f05848561b0afd107c124d96dc78[m
+Merge: 24f7970 6e49bd3
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Thu Oct 29 15:07:15 2020 -0600
+
+    Merge pull request #62 from CMPUT301F20T09/MahmoudAJ
+    
+    fix and refactor: viewBookFragment code and functionality refinement,…
+
+[33mcommit 6e49bd32230a80b1191f3f7d3e213e59a5845217[m
+Merge: 95b072c 24f7970
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Thu Oct 29 15:07:05 2020 -0600
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 24f79709bcc63529fd3d58a4530fbc53ce59456b[m
+Merge: bf443b2 664cf68
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Oct 29 15:02:57 2020 -0600
+
+    Merge pull request #59 from CMPUT301F20T09/Ayo
+    
+     updated BookList and BookList test
+
+[33mcommit bf443b2a436e2bb6a7457ff24d43bb63c8bf2c26[m
+Merge: 096be3a 8c31996
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Oct 29 14:58:13 2020 -0600
+
+    Merge pull request #60 from CMPUT301F20T09/MahmoodF
+    
+    Updated the sign up page & added the photo functionality
+
+[33mcommit d18db968392895f06bb9c12f2d1c7c411d7cec4d[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 29 14:56:25 2020 -0600
+
+    feat/refactor: Profile/EditProfileFragment
+
+[33mcommit 95b072ca28847442ca8beb9f6e8d0c3d0efcf3e9[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 14:46:54 2020 -0600
+
+    fix and refactor: viewBookFragment code and functionality refinement, still has some bugs
+
+[33mcommit fead61dde41a088ba3713cb2e01058c7a71b03ec[m
+Merge: 421261d 096be3a
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:13:15 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 421261d7e9040bb2364f7c276ccefd12eb7e9508[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 29 14:12:33 2020 -0600
+
+    fix: added book as an arg to Book for AddBook functionality. Created a constructor without id for the purpose of adding books.
+
+[33mcommit 664cf68193a684a5cea83c8b7e2327f5254e5093[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 14:08:23 2020 -0600
+
+    created EditBookFragment
+
+[33mcommit b83ebb73912cd7ad04b03b3b5a2ad1760cc2a78c[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:59:41 2020 -0600
+
+    implemented ViewMyBook delete functionality
+
+[33mcommit 8c319969ef3498fd1bfb5a61ea8725467d4594d8[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 21:20:42 2020 +0300
+
+    Users could add pictures to the profile
+    
+    feat: Users could add a profile picture from the gallery or the camera when signing up
+    feat: when a picture is selected the picture is added to the storge and it is saved as username.jpg in the cloud
+
+[33mcommit b875e1b0ad50a18c4f42e7274eb855b26a97fb47[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 12:08:17 2020 -0600
+
+    updated BookList and BookList test
+
+[33mcommit 4ea4948e60e82108482e64ca37f62c8aca7257bd[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 29 02:42:23 2020 -0600
+
+    created OwnedBooksFragment
+
+[33mcommit 13469a5be8f32cd7b85088b708d2ee4690d18111[m
+Merge: a481cf0 462318f
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 17:53:34 2020 +0300
+
+    Merge branch 'MahmoodF' of https://github.com/CMPUT301F20T09/PocketBook into MahmoodF
+
+[33mcommit a481cf023c6d9e085aca306b5164bdef8dd9d396[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 02:49:06 2020 +0300
+
+    Edited the user class and sign up class
+    
+    refactor: added the first & last name fields to the sign up page
+    refactor: added the first & last name fields to the user class and created new getters and setters
+
+[33mcommit 096be3a567ed5d0c6550960ea78233df2635ba58[m
+Merge: f515664 a31b559
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Thu Oct 29 16:25:00 2020 +0300
+
+    Merge pull request #58 from CMPUT301F20T09/MahmoudAJ
+    
+    Mahmoud aj
+
+[33mcommit a31b559c8ed28c2ca1858a65db3c5ce115bd9a87[m
+Merge: bcfdb76 f515664
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 01:16:39 2020 -0600
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit bcfdb76790b5cedb49ae306afa28375c40c01547[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Thu Oct 29 01:15:24 2020 -0600
+
+    feat: you can now request a book (partially complete)
+
+[33mcommit f53231d78993e795a484bdb64ca7ba7aea0eefe9[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 22:42:49 2020 -0600
+
+    feat: added imageButton. pending: transfer data between AddBook and ViewMyBook fragments
+
+[33mcommit 734600899f390dfc4721bf156d57b303e351ee81[m
+Merge: 7cd2059 f515664
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:55:59 2020 -0600
+
+    fix: forgot to add Parser initialization
+
+[33mcommit 7cd2059d984c11b9c5d9b05d10d860abead2f75b[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 20:53:24 2020 -0600
+
+    fix: Integrated Parser into Book model
+
+[33mcommit d9fe2a5505f8d763bdb0d05a56df0c56c5d28892[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 20:50:08 2020 -0600
+
+    feat: new request class
+
+[33mcommit 2199d981a0823f7dfec8892e13996cb0ed5ff4b4[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 20:49:12 2020 -0600
+
+    feat: new request objects class
+
+[33mcommit f515664aa6e8cf4b8a8062e71023aafc04ceb17a[m
+Merge: 2c34658 eb34337
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Wed Oct 28 20:48:34 2020 -0600
+
+    Merge pull request #57 from CMPUT301F20T09/MahmoudAJ
+    
+    Mahmoud aj
+
+[33mcommit eb3433705a855fa4ef6e9c443e8bc45f6f10178d[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 20:06:20 2020 -0600
+
+    fix: a request fragment should pop up when you click on a book in the catalogue
+
+[33mcommit fc8c42d57af8240cbf5d6b8b27a6b6fd51ff5811[m
+Merge: c387ca9 2c34658
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 19:37:48 2020 -0600
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit b60a0093f5ffd6c37291e2ea74f6117b980fce57[m
+Merge: c482959 2c34658
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 19:01:48 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit c48295935d2a65bfec36708bd9b2565321145512[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 18:57:59 2020 -0600
+
+    feat: Created AddFragment and Parser to validate input text.
+
+[33mcommit 2c346587f56dca22b19ff0feee038e7440decf24[m
+Merge: ab55a69 13d484b
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Wed Oct 28 18:41:39 2020 -0600
+
+    Merge pull request #55 from CMPUT301F20T09/Ayo
+    
+    feat: added some functionality to HomeActivity.
+
+[33mcommit c387ca9c24bd17c8c5c1f1e50c80c835b19e9c4d[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 18:34:51 2020 -0600
+
+    feat: you can view a book's info (exceot book cover for now) when you tap on it on the catalogue
+    note: added new attributes id and condition to book class with a new constructor
+
+[33mcommit 09dbb7d876baa75d57ee1b8c7eb6c6b3463d46b5[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Oct 28 18:23:54 2020 -0600
+
+    profile changes
+
+[33mcommit 462318f2d3c89ba2fe8c770d2dbd7915aa493f22[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 29 02:49:06 2020 +0300
+
+    Edited the user class and sign up class
+    
+    refactor: added the first & last name fields to the sign up page
+    refactor: added the first & last name fields to the user class and created new getters and setters
+
+[33mcommit 68e7d59cd0ad251fc5ea775cfb585db6404c152e[m
+Merge: c1401eb ab55a69
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 28 16:08:44 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 13d484b338bb6f8cb141addf33b793407f77b4ef[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Oct 28 16:07:15 2020 -0600
+
+    refactor: changed the ViewMyBookActivity toolbar
+
+[33mcommit 44aa35eb9fb1d4d93c2e2b4f560a0f10784486dc[m
+Merge: e5c8b22 ab55a69
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 12:54:45 2020 -0600
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit ba39a2035c818106a553ee4e1e841ab6392a4fea[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Oct 28 06:05:06 2020 -0600
+
+    feat: added some functionality to HomeActivity.
+
+[33mcommit e5c8b2267173dbc8321bca6a2d40acf76fe0d6e5[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Wed Oct 28 00:47:46 2020 -0600
+
+    feat: you can click on a book in the catalog to go to a viewbook fragment, still neads refinement
+
+[33mcommit ab55a692b8ef4318abd211b72bc27a366d9ac786[m
+Merge: d032bc8 dfbe385
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Tue Oct 27 20:49:40 2020 -0600
+
+    Merge pull request #54 from CMPUT301F20T09/Ayo
+    
+    fix: changed CatalogueActivity to HomeActivity
+
+[33mcommit c1401eb26ec62a578ebad1bcb4d8047de920286a[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 27 19:10:01 2020 -0600
+
+    Update BookListTest.java
+
+[33mcommit a96fe4c44ab78f94b524cdee10bd1f1635a7009c[m
+Merge: 57f34c2 d032bc8
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 27 19:07:12 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit dfbe385d665fe4e2dd7dd94be9df9a2dddb1d91f[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 27 18:46:11 2020 -0600
+
+    fix: changed CatalogueActivity to HomeActivity
+
+[33mcommit d032bc8cd487fde9806aa43c951580fc71230539[m
+Merge: a1dd418 07fb975
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Oct 28 01:48:51 2020 +0300
+
+    Merge pull request #53 from CMPUT301F20T09/Zubier
+    
+    Zubier
+
+[33mcommit a1dd41861d597abeb93b8cb273d3bec549793fe5[m
+Merge: 3822e94 e1c2a1a
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Oct 28 01:29:50 2020 +0300
+
+    Merge pull request #51 from CMPUT301F20T09/MahmoudAJ
+    
+    Mahmoud aj
+
+[33mcommit 07fb975dfd79e47c4b48480f1a99c69f9f89d582[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Tue Oct 27 16:14:38 2020 -0600
+
+    BookList should work
+
+[33mcommit 94421a3b01bceb2d9203e4daf096dee7ddfd802a[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Tue Oct 27 15:40:31 2020 -0600
+
+    BookList Changes
+
+[33mcommit e1c2a1a02f985b19a3eab45d3a93e858bc4c24be[m
+Merge: 46bd96e 3822e94
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Oct 27 15:25:16 2020 -0600
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 57f34c29392ee419717782f71b602c38963f1149[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 27 15:15:20 2020 -0600
+
+    fix: removed RequestHandler from util in test directory. Probably misplaced.
+
+[33mcommit 46bd96e93788baf35e9ac07ba8c1e32abc9f09b4[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Tue Oct 27 15:13:13 2020 -0600
+
+    feat: added ViewBookActivity and a corresponding xml file
+    fix: fixed issue in main activity that prevented the app from running
+    added a temporary default user profile image asset
+
+[33mcommit 3822e94558ff8706f903abb40ccac7658c5dfe17[m
+Merge: 36ad74c e9d3895
+Author: Head8che <hagi@ualberta.ca>
+Date:   Tue Oct 27 14:24:27 2020 -0600
+
+    Merge branch 'Zubier' into staging
+
+[33mcommit e9d3895a5665c494535920a54a5175c7ffd2d801[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Tue Oct 27 14:12:27 2020 -0600
+
+    Resolving issues
+
+[33mcommit 36ad74c5ea225985aac134c716af9d5d567257c4[m
+Merge: 6952a7d 7fd97ab
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Oct 26 23:53:43 2020 -0600
+
+    Merge pull request #45 from CMPUT301F20T09/Ayo
+    
+    refactor: worked on ViewMyBookActivity Firebase integration
+
+[33mcommit 7fd97abaa267c6bc97771d3f7e5c0e014a7d4491[m
+Merge: b58da65 6952a7d
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Oct 26 23:53:11 2020 -0600
+
+    Merge branch 'staging' into Ayo
+
+[33mcommit 6952a7df60f7c118249ef2d83f6e4890f411d9b6[m
+Merge: 767ccfd c744172
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Mon Oct 26 21:15:27 2020 -0600
+
+    Merge pull request #47 from CMPUT301F20T09/MahmoodF
+    
+    Created a login and sign up activities
+
+[33mcommit da8d3ff947914cc4438c7a060e99171f8d4e4dc5[m
+Merge: 58b96f2 c744172
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Oct 26 18:22:58 2020 -0600
+
+    Merge pull request #48 from CMPUT301F20T09/MahmoodF
+
+[33mcommit 58b96f28e0a84303b3128ab9cef88a789fb21c40[m
+Merge: ce3cb47 bab3ca5
+Author: Head8che <hagi@ualberta.ca>
+Date:   Mon Oct 26 17:27:32 2020 -0600
+
+    Merge branch 'Zubier' of https://github.com/CMPUT301F20T09/PocketBook into Zubier
+
+[33mcommit ce3cb47cf3ff6d4d245a59e5f600afaa0a3fb262[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 22 15:33:10 2020 -0600
+
+    Delete PocketBook_StoryBoard.overflow
+
+[33mcommit c744172acb00e5f0a0b9717b57e7e2db1af12736[m
+Merge: 767ccfd 8e92345
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Tue Oct 27 01:14:40 2020 +0300
+
+    Merge branch 'MahmoodF' into staging
+
+[33mcommit 8e9234545dffd20bb1b9c839e727979b3fc4e9ed[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Tue Oct 27 00:50:31 2020 +0300
+
+    Created a login and sign up activites
+    
+    feat: created the login and sign up layouts
+    feat: connected the app to the database this include reading and writing to the database
+    feat: The user could login or sign up to the app and the user data will be added to the database
+    feat: The user information are validated when they login or sign up, the database is also checked
+    feat: Added the user attributes to the user class and created constructors, setters, and getters
+    fix: commented out parts of the MainActivity for now
+
+[33mcommit 5619f9f5b9fd5f9c7ac340d18a88f63062d72dd9[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Mon Oct 26 01:20:07 2020 -0600
+
+    fix: storing user's id instead of whole User obj
+
+[33mcommit b58da65e8c97ab96674cfe934da77ac455a0fcb4[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Oct 26 00:35:28 2020 -0600
+
+    fix: commented out 'User' code that interfered with ViewMyBook functionality.
+
+[33mcommit ae732b02418d2d8acb80ba7c8035c8bb2dc4bf6d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Oct 26 00:17:31 2020 -0600
+
+    refactor: worked on  ViewMyBookActivity Firebase integration
+
+[33mcommit 767ccfd9ad17493d3f61f0200dae7587d0b93c6f[m
+Merge: ab52796 b20ebd2
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Mon Oct 26 00:13:59 2020 -0600
+
+    Merge pull request #43 from CMPUT301F20T09/Ayo
+    
+    feat: cleaned up ViewMyBookActivity
+
+[33mcommit ab52796e5954194fd6e1630e09532a519787b508[m
+Merge: 65ed9d4 06336f2
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Mon Oct 26 00:12:36 2020 -0600
+
+    Merge pull request #44 from CMPUT301F20T09/Della
+    
+    fix: updated BookList, Book and User classes
+
+[33mcommit 06336f2a4809f64aa53f21819f102942e4746ab8[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Oct 25 23:35:15 2020 -0600
+
+    refactor: Replaced Strings for Book and Request statuses to use enums
+
+[33mcommit 6c4a4fb6ed64c5f591f0a4f562e9b4d307df54b5[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Oct 25 23:17:52 2020 -0600
+
+    feat: Delete book functionality. test: Delete book and Delete Exception
+
+[33mcommit 81d2c3927d9d6eb3024d79b719ce6db7ee15bde6[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Sun Oct 25 23:06:30 2020 -0600
+
+    fix: updated BookList, Book and User classes to work inside the models directory. Passes the add test case.
+
+[33mcommit b20ebd2762826dc48d834c2c2d830b1cade31f83[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Oct 25 14:45:34 2020 -0600
+
+    refactor: upgraded layout in ViewMyBookActivity
+
+[33mcommit 20554b432626f717db2a3ae3b90a403bb458c78e[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Oct 25 09:16:39 2020 -0600
+
+    refactor: changed button style in ViewMyBookActivity
+
+[33mcommit 753e81ae2e304daead485c2423d94010a80487c4[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Oct 25 05:04:51 2020 -0600
+
+    added default book image to ViewMyBookActivity
+
+[33mcommit d50f5c2832f59c0e946e25fd184a7acd8b65be0d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Oct 24 23:03:27 2020 -0600
+
+    cleaned up ViewMyBookActivity
+
+[33mcommit 65ed9d42eb91150f3a680d557d7a35d4b708f8e7[m
+Merge: 5e52e81 8731a3c
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Oct 23 13:38:31 2020 -0600
+
+    Merge pull request #42 from CMPUT301F20T09/Eden
+    
+    CardView added + Notification class created
+
+[33mcommit 8731a3c94ed7d014f1de16991b250178b5581956[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Oct 23 10:53:50 2020 -0600
+
+    fix: removed useless textview
+
+[33mcommit fd417d1dcba66dd4158f180af85cc664ac326d0a[m
+Merge: 87faf9b 5e52e81
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Fri Oct 23 10:52:55 2020 -0600
+
+    fix: merge conflict
+
+[33mcommit 5e52e815c80909270905ff2bf05d09cf5b27b74e[m
+Merge: 154ca97 4208e97
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Fri Oct 23 13:13:50 2020 +0300
+
+    Merge pull request #40 from CMPUT301F20T09/Ayo
+    
+    feat: added bottom nav icons
+
+[33mcommit 87faf9bf6ad74c3e841f411ef579639a3541a764[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 22 20:11:14 2020 -0600
+
+    feat: added book cards
+
+[33mcommit 4208e9715a6f92c74da0652ca8266971702e5343[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 22 19:08:19 2020 -0600
+
+    added bottom nav
+
+[33mcommit fbd00a6d86ef0f0f6a8d34dbf5988d3af0584005[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 22 18:51:26 2020 -0600
+
+    feat: added id field to user
+
+[33mcommit 54d03c06c04d42f4f9209afbb18d5f5aa771d4d1[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 22 17:17:50 2020 -0600
+
+    added bottom nav icons
+
+[33mcommit bab3ca5539d575bebb9d87d30364b96ff632cfcd[m
+Merge: 7af0a52 154ca97
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 22 15:42:55 2020 -0600
+
+    Merge pull request #39 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 154ca9740646e496d3977f4507cda80fc13b4fab[m
+Merge: 89af16f 121d7d0
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Thu Oct 22 15:35:51 2020 -0600
+
+    Merge pull request #38 from CMPUT301F20T09/Ayo
+    
+    removed .idea and .gradle
+
+[33mcommit 121d7d0f083c34ae9df1699d0d0d91f36d9d01bc[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 22 15:34:40 2020 -0600
+
+    removed .idea and .gradle
+
+[33mcommit 7af0a5214fbc574ed5c637d785e2748a0f15503d[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 22 15:33:10 2020 -0600
+
+    Delete PocketBook_StoryBoard.overflow
+
+[33mcommit 89af16f8946f2a23a4a2f99154f7c10e901f7d79[m
+Merge: 3d38017 2074a78
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Thu Oct 22 15:27:17 2020 -0600
+
+    Merge pull request #37 from CMPUT301F20T09/Ayo
+    
+    Ayo
+
+[33mcommit 2074a787b7bd252e2ca9e6066286a683768805e0[m
+Merge: 913b647 3d38017
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 22 15:22:27 2020 -0600
+
+    Merge branch 'staging' into Ayo
+
+[33mcommit 913b6472b738a3d4d26302d85153508113b4fefc[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 22 15:17:01 2020 -0600
+
+    removed .idea and .gradle
+
+[33mcommit 79cd5c53b2c511cbbc33538fbd7c00229cc77ab6[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 22 10:26:43 2020 -0600
+
+    .idea file
+
+[33mcommit d0a2788ca97ee0118325675c1b7487237b84b755[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 22 09:44:47 2020 -0600
+
+    fix: Fixed assertThrow error
+
+[33mcommit ca91ab26d6c522c756bc7320e8f6d36c70056d6c[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 20 14:51:47 2020 -0600
+
+    Started working on user stories. Encountered an error in BookListTest for assertThrows.
+
+[33mcommit 3d38017073ffbf8367e9dc9523b4838feb798aa3[m
+Merge: 2cde060 c600324
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Oct 22 15:12:57 2020 -0600
+
+    Merge pull request #36 from CMPUT301F20T09/Ayo
+    
+    updated logo
+
+[33mcommit 2cde060fae4ca003f2cf7bef432164a656ad9f6f[m
+Merge: a25c90c 2433440
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 22 15:10:56 2020 -0600
+
+    Merge pull request #34 from CMPUT301F20T09/Della
+    
+    Started working on user stories.
+
+[33mcommit c600324c7fe65d98cf37ef48174423c4d5b386c6[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 22 14:59:32 2020 -0600
+
+    updated logo
+
+[33mcommit 2433440b6cb7a2eda8a628e4f7a870c9faa368c0[m
+Merge: 1dbde41 1e4de66
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 22 10:29:08 2020 -0600
+
+    Merge branch 'Della' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit 1dbde4137b5546e59310db575b891a0679cbc83d[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 22 10:26:43 2020 -0600
+
+    .idea file
+
+[33mcommit 741944eea3ccb7d3e34a67b3edd3ba3d157fe62c[m
+Merge: afcd6ea a25c90c
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 22 10:04:05 2020 -0600
+
+    Merge branch 'staging' of https://github.com/CMPUT301F20T09/PocketBook into Della
+
+[33mcommit afcd6ea4ce487cd4950e2ff387d88ef6cabad26b[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 22 09:44:47 2020 -0600
+
+    fix: Fixed assertThrow error
+
+[33mcommit 1e4de663e0b14df06084f25f0b6f75242ac68b0d[m
+Merge: adebe1d a25c90c
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Wed Oct 21 20:49:45 2020 -0600
+
+    Merge branch 'staging' into Della
+
+[33mcommit a25c90cb93d6923b1eb6f53e3d06d1650401490f[m
+Merge: a082826 3df8338
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Wed Oct 21 00:52:24 2020 -0600
+
+    Merge pull request #35 from CMPUT301F20T09/Ayo
+    
+    created ViewMyBookActivity
+
+[33mcommit 3df8338ead3e317289f20f721771b714ed11a746[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Tue Oct 20 23:01:36 2020 -0600
+
+    Update build.gradle
+
+[33mcommit ca7645aa3269e28d569cc06858a070a6e01067e9[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 22:42:29 2020 -0600
+
+    updated .gitignore
+
+[33mcommit e5e9a26d4912ab0d2262d59d1356346d82854767[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 22:40:52 2020 -0600
+
+    updated .gitignore and MainActivity
+
+[33mcommit d6a34fd38d28e2b1635e667192cf9b5e0fbcee5d[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 22:13:10 2020 -0600
+
+    updated .gitignore
+
+[33mcommit 4332aee0b277e9c34f9303548c470811b8c5cfe3[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 16:19:14 2020 -0600
+
+    created ViewMyBookActivity
+
+[33mcommit f622ad1d97716b2ac8c054afbe6f489584e755b6[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Tue Oct 20 15:28:59 2020 -0600
+
+    fixes. working app displaying lists of books
+
+[33mcommit 96cdc601a259fe040bb6879753be46677b6a1ff5[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 22:31:01 2020 -0600
+
+    updated .gitignore and resolved conflicts
+
+[33mcommit 324f26bf94a721a3c85a5e17da466988d9b0a31a[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 22:13:10 2020 -0600
+
+    updated .gitignore
+
+[33mcommit f238abb5cbc6e9f9989e1b614d528dddc2b91ed8[m
+Merge: e680ea4 a082826
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 21:26:12 2020 -0600
+
+    fixed staging merge conflict
+
+[33mcommit e680ea4ab5c18b51a9c718b2fc4bd8aa26f42e0a[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 16:19:14 2020 -0600
+
+    created ViewMyBookActivity
+
+[33mcommit 2deb8bd0c9d83b5149c132ceee263aa765a0b168[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Tue Oct 20 15:28:59 2020 -0600
+
+    fixes. working app displaying lists of books
+
+[33mcommit 658b2ef7784ec9bc5ac1b885a022683028be2133[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Mon Oct 19 13:11:20 2020 -0600
+
+    working prototype of Recyclerview
+
+[33mcommit 945f41750cd349383806b3e35d6edd72a15eff6a[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Sun Oct 18 00:05:32 2020 -0600
+
+    Added the firebase schema in docs
+
+[33mcommit 2a4676b48cc92a582b200847dcc322ebf276b4f5[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Sat Oct 17 23:10:51 2020 -0600
+
+    Revert "Added firebase to the project"
+    
+    This reverts commit 3446be0329f46c67a9a8f7855fac85bf442952af.
+
+[33mcommit 6de49a632d6053f2c1cb2ff690df41f9259863ba[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Sat Oct 17 18:40:42 2020 -0600
+
+    Added firebase to the project
+
+[33mcommit 1e5be52f6716afb225b5d7c87be95eef792e9459[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Oct 16 13:16:47 2020 -0600
+
+    Added Overflow file
+
+[33mcommit c2eaae956581f912891c0da12014e5bb164c2a56[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 20:41:37 2020 -0600
+
+    created ViewMyBookActivity
+
+[33mcommit adebe1d56c20a07fb4e29288db5df2367dd33920[m
+Merge: 387d0d2 a082826
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Tue Oct 20 20:06:54 2020 -0600
+
+    Merge branch 'staging' into Della
+
+[33mcommit a082826f3f7e517c8e1fceb54064919c2866689c[m
+Merge: 3dd635c 01b44aa
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Tue Oct 20 20:04:33 2020 -0600
+
+    Merge pull request #33 from CMPUT301F20T09/Eden
+    
+    Eden
+
+[33mcommit 161fda883c957613774f988f7eab8664e19f1e38[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 20 16:19:14 2020 -0600
+
+    created ViewMyBookActivity
+
+[33mcommit 01b44aa41463c47ddc4f29abb7082a1fc3374d5f[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Tue Oct 20 15:28:59 2020 -0600
+
+    fixes. working app displaying lists of books
+
+[33mcommit 387d0d2399c0722bf3d0e97ec8580c344c18a4b1[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Tue Oct 20 14:51:47 2020 -0600
+
+    Started working on user stories. Encountered an error in BookListTest for assertThrows.
+
+[33mcommit f777ffef7393e11ae193096099f7f84953ac5c17[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Mon Oct 19 13:11:20 2020 -0600
+
+    working prototype of Recyclerview
+
+[33mcommit 3dd635cffc8db9b9cefaee3e4fbe72e9beb850aa[m
+Merge: 9032a69 086a90c
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Sun Oct 18 22:25:38 2020 -0600
+
+    Merge pull request #31 from CMPUT301F20T09/MahmoudAJ
+
+[33mcommit 086a90c9003ce8355edd805b0ed20720d63905e6[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Sun Oct 18 00:05:32 2020 -0600
+
+    Added the firebase schema in docs
+
+[33mcommit ab11fd4760f003534505afa381c44b7e5683b507[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Sat Oct 17 23:10:51 2020 -0600
+
+    Revert "Added firebase to the project"
+    
+    This reverts commit 3446be0329f46c67a9a8f7855fac85bf442952af.
+
+[33mcommit 3446be0329f46c67a9a8f7855fac85bf442952af[m
+Author: Mahmoud Abu Jayyab <abujayya@ualberta.ca>
+Date:   Sat Oct 17 18:40:42 2020 -0600
+
+    Added firebase to the project
+
+[33mcommit 21e059112c3feef99dbf9b56c207d6c8a62b5c3c[m
+Merge: 7664a82 9032a69
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Oct 16 14:03:10 2020 -0600
+
+    Merge pull request #30 from CMPUT301F20T09/staging
+    
+    updated storyboard and uml
+
+[33mcommit 9032a69675335987cd8f58753f1a56be7c888858[m
+Merge: adc9165 327e778
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Oct 16 14:01:21 2020 -0600
+
+    Merge pull request #29 from CMPUT301F20T09/Ayo
+    
+    updated uml arrow directions
+
+[33mcommit adc9165080171cc9ac6acee9eff8387395be2926[m
+Merge: 5801d4d c3023f6
+Author: Della <humanita.1999@gmail.com>
+Date:   Fri Oct 16 13:53:45 2020 -0600
+
+    Merge pull request #28 from CMPUT301F20T09/Zubier
+    
+    Added Overflow file
+
+[33mcommit 327e77871b0058377b4ae133864c67c992bccbe0[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Oct 16 13:48:05 2020 -0600
+
+    updated uml arrow directions
+
+[33mcommit 5801d4d71799bc7f3399722d724a873532ed4470[m
+Merge: 06bc451 b150323
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Oct 16 13:29:44 2020 -0600
+
+    Merge pull request #27 from CMPUT301F20T09/Ayo
+    
+    updated uml and adjusted storyboard size
+
+[33mcommit b1503232ce52e059340eda8a900f0fca99323670[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Fri Oct 16 13:24:48 2020 -0600
+
+    updated uml and adjusted storyboard size
+
+[33mcommit c3023f6b715bf7e383e2bbdfe96b233312b3b8eb[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Oct 16 13:16:47 2020 -0600
+
+    Added Overflow file
+
+[33mcommit 7664a8271e879dd201e7f1b1ebd69b4103dcfac3[m
+Merge: c8bf49f 06bc451
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Oct 16 04:51:54 2020 -0600
+
+    Merge pull request #26 from CMPUT301F20T09/staging
+    
+    Staging
+
+[33mcommit 06bc451e475306f755e3edb09b38ac11c7bcc8e4[m
+Merge: 4cb8243 83087e7
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Oct 16 04:19:50 2020 -0600
+
+    Merge pull request #25 from CMPUT301F20T09/Della
+    
+    -Edited sketch images in mockup with frames from figma. Updated image…
+
+[33mcommit 4cb824391650b87d3398eb218924691491529b7e[m
+Merge: d42eac6 27bb8c1
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Fri Oct 16 00:11:11 2020 -0600
+
+    Merge pull request #24 from CMPUT301F20T09/Eden
+    
+    cleaned up gitignores
+
+[33mcommit 83087e79c1285cf84ba1631059a9edbcb9868598[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 15 23:58:03 2020 -0600
+
+    -Edited sketch images in mockup with frames from figma. Updated images are labelled as 10.1 and 12.1 in the Mockups directory. \n- There is an issue in the Home screen where the words before 'Sign Up' are not visible. \n- Regarding the wiki, I am not sure how to display the Storyboard sequence as a page in the wiki. \n- As of now, User Interface Mockups and Storyboard Sequence links in the wiki are directed to the files in the staging branch, awaiting approval before merging into master and updating the wiki pages.
+
+[33mcommit 27bb8c17f54a2bb0dff513fa85efa4af6791af64[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 15 18:12:56 2020 -0600
+
+    cleaned up gitignores
+
+[33mcommit d42eac6ba610b3a3d4bdc07ade0a5728f57ea6ad[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 15 17:35:41 2020 -0600
+
+    app/gitignore
+
+[33mcommit c8bf49fb6c196807a0eedbd2155b825fcdf0ee8d[m
+Merge: 983005b dce6e08
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 15 17:31:14 2020 -0600
+
+    Merge pull request #23 from CMPUT301F20T09/staging
+    
+    master<-Staging
+    (v1)
+
+[33mcommit dce6e086d8ee679e11f2798a070ee31367130679[m
+Merge: 2455d28 17d7c34
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Fri Oct 16 02:05:48 2020 +0300
+
+    Merge pull request #22 from CMPUT301F20T09/Zubier
+    
+    StoryBoard/SrcCode
+
+[33mcommit 2455d28d14b7113da8cf7f97dbae56f4d3c730a3[m
+Merge: 89ed9f4 756eb97
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 15 16:30:33 2020 -0600
+
+    Merge pull request #21 from CMPUT301F20T09/Della
+    
+    Made minor edits to crc_cards.md. Added stereotypes, a few attributes…
+
+[33mcommit 17d7c34a08e4c8feeb5146e2ed1b469d50c1ce15[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 15 16:27:58 2020 -0600
+
+    Updated format/size
+
+[33mcommit 756eb97657a5762d6b1b87e85e1279d38aa2c84d[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 15 14:21:55 2020 -0600
+
+    Edited bookState to belonging back into requestHandler
+
+[33mcommit 1d0ec169107b6c579e369cf27b5ffda991a463fc[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 15 14:01:25 2020 -0600
+
+    StoryBoard/SrcCode
+
+[33mcommit 41ff280ea36031d4d21ebca7bbc2252dbeeb90de[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 14 22:25:06 2020 -0600
+
+    Made minor edits to crc_cards.md. Added stereotypes, a few attributes and modified some. Added Request, Catalogue and Search classes.
+
+[33mcommit 89ed9f422f0d1b354a0b6df130d77a7edf4ee8d7[m
+Merge: b6f90d1 782f33a
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Wed Oct 14 19:31:20 2020 +0300
+
+    Merge pull request #20 from CMPUT301F20T09/Ayo
+    
+    added preliminary mockup file
+
+[33mcommit 782f33a604074f474b0375f21fb425912aa1c6d4[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Oct 14 04:41:38 2020 -0600
+
+    added first draft of uml
+
+[33mcommit 0961b9018e739a6603338d90f663ab7f156ddc01[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 13 23:01:25 2020 -0600
+
+    updated mockups with figma counterparts
+
+[33mcommit 044cf4e626776f21de32e9f8864bacd0b5b352af[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Oct 12 18:27:58 2020 -0600
+
+    fixed markdown spacing
+
+[33mcommit 9693084e560c283dfa3e557b48aad10eb80ffe08[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Mon Oct 12 14:31:44 2020 -0600
+
+    added preliminary mockup file
+
+[33mcommit b6f90d1c1230c5f346b59f008f776f041b3739d7[m
+Merge: 40ab6bb 0f324d1
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Mon Oct 12 02:25:33 2020 -0600
+
+    Merge pull request #19 from CMPUT301F20T09/Ayo
+    
+    added rationales to user stories and folder with hand drawn mockups
+
+[33mcommit 0f324d1a1de8c45e0ba86b3ae2801584de91b785[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Oct 11 01:29:45 2020 -0600
+
+    removed 301_user_stories.txt
+
+[33mcommit b1f9c57d876fae58b3f13c2d64bd9ec54cb61ebe[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sun Oct 11 00:01:28 2020 -0600
+
+    updated mockup filenames
+
+[33mcommit e24de20cc1ebbff27cabe5c018a60cb57c4b4412[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Oct 10 19:04:41 2020 -0600
+
+    removed .DS_Store and added .gitignore
+
+[33mcommit 514c9488c97caf97aae129a5a42c57d946ed3fbe[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Oct 10 17:34:38 2020 -0600
+
+    added folder with hand drawn mockups
+
+[33mcommit 43a30194c96503e1a7e382679028bcfa5ad21a75[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Oct 10 15:55:03 2020 -0600
+
+    added rationales to user stories
+
+[33mcommit 40ab6bba09114bf6babf6c41f845ca719750e3b5[m
+Merge: d221877 2d66a4a
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Fri Oct 9 22:36:31 2020 +0300
+
+    Merge pull request #17 from CMPUT301F20T09/Ayo
+    
+    updated user story sizes and risk levels
+
+[33mcommit d2218775a0b56005a8b40c7c9c3f66f69d3e91c4[m
+Merge: 4d0fe48 c117e2a
+Author: thefreezer <thefreezer17@gmail.com>
+Date:   Fri Oct 9 11:51:40 2020 -0600
+
+    Merge pull request #18 from CMPUT301F20T09/Zubier
+    
+    Complied all CRC Cards into one
+
+[33mcommit c117e2a35c34355cda917484ec2eba210d5222c3[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Fri Oct 9 01:28:43 2020 -0600
+
+    Complied all CRC Cards into one
+
+[33mcommit 2d66a4a01aa297e19ef0ac3821b03ff32ee9f3fe[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 8 17:28:22 2020 -0600
+
+    updated user story sizes and risk levels
+
+[33mcommit 4d0fe48710e778599c8236a173e7eed8e6c98395[m
+Merge: 3e6726c 1a72f24
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 8 17:20:10 2020 -0600
+
+    Merge pull request #16 from CMPUT301F20T09/MahmoudAJ
+    
+    Create crc_cards.txt
+
+[33mcommit 1a72f24ed8b1aac24e413ad264ae1b5ce617f8bf[m
+Merge: 7de52c8 3e6726c
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Thu Oct 8 17:18:02 2020 -0600
+
+    Merge branch 'staging' into MahmoudAJ
+
+[33mcommit 7de52c8fe1fe0aa2485d2097bc574dc7dccd9b08[m
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Oct 8 16:11:53 2020 -0600
+
+    Create crc_cards.txt
+
+[33mcommit 3e6726c969fbb59d5a9509a198bb838155e693b6[m
+Merge: cb56bc5 b9e6f3a
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Fri Oct 9 00:48:12 2020 +0300
+
+    Merge pull request #15 from CMPUT301F20T09/Eden
+    
+    accepting_borrowing card added
+
+[33mcommit cb56bc56de772d9050ca75176c72deee53032f00[m
+Merge: c5005d0 bd2e887
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 8 15:08:04 2020 -0600
+
+    Merge pull request #14 from CMPUT301F20T09/MahmoodF
+    
+    Crc cards for Photographs & Location
+
+[33mcommit c5005d0a7840e3f2d24c5f40229302185f16e339[m
+Merge: b1ad4a0 a107e92
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Thu Oct 8 21:22:44 2020 +0300
+
+    Merge pull request #13 from CMPUT301F20T09/Zubier
+    
+    StoryBoard_text Update
+
+[33mcommit a107e92a340ada3bdfa5db226f458e9af8aa14f9[m
+Merge: f321e02 b1ad4a0
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 8 12:21:30 2020 -0600
+
+    Merge remote-tracking branch 'origin/staging' into Zubier
+
+[33mcommit b9e6f3a2b6201e7a57d029079b7c4e53d84be731[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 8 05:03:39 2020 -0600
+
+    accepting_borrowing card added
+
+[33mcommit bd2e88714683bbea3ae792b470b615e5b1d30841[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 8 13:38:19 2020 +0300
+
+    Added CRC Cards
+    
+    Created CRC Cards for Photographs and Location
+
+[33mcommit 7d421d8b474786eaa587eb1c69541547bf31a302[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Thu Oct 8 13:00:57 2020 +0300
+
+    Create Photographs_crc_card.pdf
+
+[33mcommit f321e02caac10cf3cf4c5b5a5aaee0514cf8b86b[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Thu Oct 8 01:10:42 2020 -0600
+
+    Returning n Borrower Card
+
+[33mcommit 6d818022e53bd579fa51e941b2fed49d3fa2bd84[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Oct 7 23:32:49 2020 -0600
+
+    Crc_card_returning
+
+[33mcommit b1ad4a0dda8b8f65915cdef980fb96f7072b5ff1[m
+Merge: 677246b 046d456
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Oct 7 21:22:45 2020 -0600
+
+    Merge pull request #11 from CMPUT301F20T09/Ayo
+    
+    added owner and user crc cards
+
+[33mcommit 677246bf6c66737a2cecd6c712b34b5be0572baa[m
+Merge: e2b1042 d4dab07
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Wed Oct 7 19:10:17 2020 -0600
+
+    Merge pull request #12 from CMPUT301F20T09/Della
+    
+    Created crc cards for Searching and Requesting
+
+[33mcommit 4c2884cbed30548fbaaa929eceecd066af635bdc[m
+Author: Head8che <hagi@ualberta.ca>
+Date:   Wed Oct 7 19:05:17 2020 -0600
+
+    StoryBoard_text Update
+
+[33mcommit d4dab07d4a439a50e8a65ee1050fae7498a79f1e[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Wed Oct 7 17:31:27 2020 -0600
+
+    Created crc cards for Searching and Requesting
+
+[33mcommit 046d45675d61f76b2816d9e1425cb7e553af5b05[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Wed Oct 7 17:30:58 2020 -0600
+
+    added owner and user crc cards
+
+[33mcommit e2b1042ee7269dcad9bb491c4d1be68c8bac70cc[m
+Merge: 983005b 91d28a2
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Tue Oct 6 21:01:35 2020 -0600
+
+    Merge pull request #10 from CMPUT301F20T09/Ayo
+    
+    added text storyboard and text user stories files
+
+[33mcommit 91d28a232246e123aa2bdf5de25290d76d91d4a0[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 6 20:37:33 2020 -0600
+
+    added text user stories file
+
+[33mcommit f941d928412efe9f9356328f284d1d0c6f9b5000[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Tue Oct 6 20:23:12 2020 -0600
+
+    added text storyboard file
+
+[33mcommit 983005b3bd5c6973b2ec8f09842e4ef175efe5ab[m
+Merge: 9bd50d6 c151b95
+Author: Head8che <hagi@ualberta.ca>
+Date:   Sun Oct 4 20:56:13 2020 -0600
+
+    Merge branch 'staging'
+
+[33mcommit c151b956bef1132cfd62f69504bd73cfcfcc41cb[m
+Merge: 1583d82 7b1affe
+Author: Head8che <hagi@ualberta.ca>
+Date:   Sun Oct 4 20:53:58 2020 -0600
+
+    Merge branch 'Ayo' into staging
+
+[33mcommit 1583d82902247543a8b102039a9edc82204d39cc[m
+Merge: d950368 a0ffee4
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Sun Oct 4 12:08:00 2020 -0600
+
+    Merge pull request #9 from CMPUT301F20T09/MahmoodF
+    
+    Github Username Changed
+
+[33mcommit a0ffee4e01bb8c50ac87625eb5ad4d466de47f58[m
+Author: MahmoodFalmaz <55035694+MahmoodFalmaz@users.noreply.github.com>
+Date:   Sun Oct 4 20:13:46 2020 +0300
+
+    My Github username was wrong, I changed it.
+
+[33mcommit aa6cf5ddfbfd0aa26edf37c7216157b0aa0c75cf[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Sun Oct 4 16:52:49 2020 +0300
+
+    Update .DS_Store
+
+[33mcommit 7b1affeb809e802793d7fdb470fb5d6338be410a[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Sat Oct 3 05:13:30 2020 -0600
+
+    added README file
+
+[33mcommit 9bd50d6818a81346de68f25ba9d7b76569967e52[m
+Merge: fb8d969 d950368
+Author: aakindel <a.akindele01@gmail.com>
+Date:   Fri Oct 2 16:22:59 2020 -0600
+
+    Merge pull request #6 from CMPUT301F20T09/staging
+    
+    Merging staging to main
+
+[33mcommit d9503687441142ab459770a0c7f9f58eded94d22[m
+Merge: 4ebfaea 73d8605
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 1 22:31:35 2020 -0600
+
+    Merge pull request #5 from CMPUT301F20T09/Eden
+    
+    Eden
+
+[33mcommit 73d8605adb3e79995cfb99e1c9364636ecdb44a7[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 1 22:28:11 2020 -0600
+
+    added name
+
+[33mcommit 4c6e5c1001cd1a584ed1146bf3c1127c8a7dd66f[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 1 22:24:25 2020 -0600
+
+    resolved conflict
+
+[33mcommit 726075df667dace2b61cfa9c8ce4d7cf10cd6724[m
+Merge: 6e546b5 4ebfaea
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 1 22:23:00 2020 -0600
+
+    something here
+
+[33mcommit 4ebfaea394c45a0ce43f4d4a80a26cd6e5d2d11e[m
+Merge: b399b21 3dad0d2
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 1 22:15:54 2020 -0600
+
+    Merge pull request #3 from CMPUT301F20T09/Della
+    
+    merging Della branch into staging
+
+[33mcommit 6e546b5c2cfd1ed9639d7660387e956717aa5257[m
+Author: thefreezer <edengrac@ualberta.ca>
+Date:   Thu Oct 1 22:13:03 2020 -0600
+
+    added name
+
+[33mcommit 3dad0d279d1aad28c84c8794af3b5af8c841d404[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 1 22:12:04 2020 -0600
+
+    added name & ccid #2
+
+[33mcommit 406b4cbdf8db2718bc72db7e64bd06947f9247a1[m
+Merge: b2c4e0e fb8d969
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 1 22:09:47 2020 -0600
+
+    Merge branch 'main' into Della
+
+[33mcommit b2c4e0ebe201633fefd8953c941da0b4ca52ca69[m
+Author: Della <humanita.1999@gmail.com>
+Date:   Thu Oct 1 22:07:04 2020 -0600
+
+    added name and ccid
+
+[33mcommit b399b21ccbf28d49bed81d00224323a967e26734[m
+Merge: 28612e1 7212f13
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 1 22:01:32 2020 -0600
+
+    Merge pull request #1 from CMPUT301F20T09/Ayo
+    
+    create file for CRC cards
+
+[33mcommit 7212f13778f531c2ff7ecae4edf1905199cdfa57[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 1 21:40:27 2020 -0600
+
+    created file for CRC cards
+
+[33mcommit fb8d9695710d4aac8097e32f959ef5cb3b47143f[m
+Author: MahmoodFalmaz <falmaz@ualberta.ca>
+Date:   Fri Oct 2 03:06:52 2020 +0300
+
+    added ccid and github
+
+[33mcommit 28612e1bba1b869e5b628a5cf40e130bbe1c4188[m
+Author: Ayo Akindele <a.akindele01@gmail.com>
+Date:   Thu Oct 1 16:20:13 2020 -0600
+
+    added ccid and username
+
+[33mcommit 07025056152bd4b2cc1bd5477da8d29d5d251cb2[m
+Author: MahmoudAJ <60022403+MahmoudAJ2000@users.noreply.github.com>
+Date:   Thu Oct 1 16:10:10 2020 -0600
+
+    Update team.txt
+
+[33mcommit 600d5a456f2072e128a3c9786d047942b0315a5b[m
+Author: Zubier <35211370+Head8che@users.noreply.github.com>
+Date:   Thu Oct 1 16:08:40 2020 -0600
+
+    Creating team.txt

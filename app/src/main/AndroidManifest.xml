@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+        <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature
@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
 
 
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.meetingDetails.gps" />
 
     <queries>
         <intent>
@@ -70,11 +70,14 @@
 
         </activity>
 
-        <activity android:name=".activity.CaptureScanActivity"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            />
+                <activity android:name=".activity.CaptureScanActivity"
+                    android:screenOrientation="fullSensor"
+                    android:stateNotNeeded="true"
+                    android:windowSoftInputMode="stateAlwaysHidden"
+                    />
+
+                <activity android:name=".activity.ScanActivity"
+                    />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -85,7 +88,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <service android:name=".notifications.MyFirebaseIdService"
+        <service android:name=".notifications.FirebaseIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -93,7 +96,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".notifications.MyFirebaseMessaging"
+        <service android:name=".notifications.FirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

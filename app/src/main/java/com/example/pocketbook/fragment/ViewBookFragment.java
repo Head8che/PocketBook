@@ -154,6 +154,15 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
             bookLocationField.setVisibility(View.GONE);
         }
 
+        bookLocationField.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(getActivity().findViewById(R.id.container).getId(),
+                                ViewLocationFragment.newInstance())
+                        .addToBackStack(null).commit();
+            }
+        });
+
         ImageView backButton = view.findViewById(R.id.viewBookFragBackBtn);
 
         backButton.setOnClickListener(v -> {

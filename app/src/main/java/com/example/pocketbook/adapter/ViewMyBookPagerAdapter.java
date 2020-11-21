@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.pocketbook.fragment.ViewMyBookBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookRequestsFragment;
-import com.google.android.material.tabs.TabItem;
 
 public class ViewMyBookPagerAdapter extends FragmentPagerAdapter {
 
@@ -37,8 +36,7 @@ public class ViewMyBookPagerAdapter extends FragmentPagerAdapter {
                 nextFrag.setArguments(bundle);
                 return nextFrag;
             case 1:
-                ViewMyBookRequestsFragment requestsFrag
-                        = ViewMyBookRequestsFragment.newInstance(this.book);
+                ViewMyBookRequestsFragment requestsFrag = ViewMyBookRequestsFragment.newInstance(this.book);
                 Bundle requestsBundle = new Bundle();
                 requestsBundle.putSerializable("VMBPA_BOOK", this.book);
                 requestsFrag.setArguments(requestsBundle);

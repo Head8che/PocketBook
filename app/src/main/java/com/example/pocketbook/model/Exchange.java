@@ -1,17 +1,15 @@
 package com.example.pocketbook.model;
 
 import com.example.pocketbook.util.Parser;
-
 import java.io.Serializable;
 
 public class Exchange implements Serializable {
-    private String exchangeId;
-    private String relatedBook;
+    private String id;
     private String owner;
     private String borrower;
     private String ownerBookStatus;
     private String borrowerBookStatus;
-    private MeetingDetails meetingDetails;
+    private Location location;
 
     /**
      * Empty Constructor for Firestore to auto-create new object
@@ -20,42 +18,37 @@ public class Exchange implements Serializable {
 
     /**
      *
-     * @param exchangeId exchange exchangeId
-     * @param relatedBook related book Id
+     * @param id exchange id
      * @param owner owner involved in the exchange
      * @param borrower borrower involved in the exchange
      * @param ownerBookStatus book status for the owner
      * @param borrowerBookStatus book status for the borrower
-     * @param meetingDetails meetingDetails for the exchange
+     * @param location location for the exchange
      */
-    public Exchange(String exchangeId, String relatedBook, String owner, String borrower,
-                    String ownerBookStatus, String borrowerBookStatus,
-                    MeetingDetails meetingDetails) {
+    public Exchange(String id, String owner, String borrower,
+                    String ownerBookStatus, String borrowerBookStatus, Location location) {
 
         // if non-optional fields are not null
-        if ((exchangeId != null) && (relatedBook != null) && (owner != null)
-                && (borrower != null) && (ownerBookStatus != null)
-                && (borrowerBookStatus != null) && (meetingDetails != null)) {
+        if ((id != null) && (owner != null) && (borrower != null) && (ownerBookStatus != null)
+                && (borrowerBookStatus != null) && (location != null)) {
 
             // trim all values
-            exchangeId = exchangeId.trim();
-            relatedBook = relatedBook.trim();
+            id = id.trim();
             owner = owner.trim().toLowerCase();  // lowercase email
             borrower = borrower.trim().toLowerCase();  // lowercase email
             ownerBookStatus = ownerBookStatus.trim().toUpperCase();  // uppercase status
             borrowerBookStatus = borrowerBookStatus.trim().toUpperCase();  // uppercase status
 
             // only sets Exchange data if the data is valid
-            if (Parser.isValidExchangeData(exchangeId, relatedBook, owner, borrower,
-                    ownerBookStatus, borrowerBookStatus, meetingDetails)) {
+            if (true/*Parser.isValidExchangeData(id, owner, borrower,
+                    ownerBookStatus, borrowerBookStatus, location)*/) {
 
-                this.exchangeId = exchangeId;
-                this.relatedBook = relatedBook;
+                this.id = id;
                 this.owner = owner;
                 this.borrower = borrower;
                 this.ownerBookStatus = ownerBookStatus;  // ["AVAILABLE", "BORROWED", "ACCEPTED"]
                 this.borrowerBookStatus = borrowerBookStatus;  // same as ownerBookStatus
-                this.meetingDetails = meetingDetails;
+                this.location = location;
 
             }
         }
@@ -63,19 +56,11 @@ public class Exchange implements Serializable {
     }
 
     /**
-     * Getter method for exchangeId
-     * @return exchangeId as String
+     * Getter method for id
+     * @return id as String
      */
-    public String getExchangeId()
-    { return this.exchangeId;
-    }
-
-    /**
-     * Getter method for relatedBook
-     * @return relatedBook as String
-     */
-    public String getRelatedBook()
-    { return this.relatedBook;
+    public String getId()
+    { return this.id;
     }
 
     /**
@@ -84,14 +69,6 @@ public class Exchange implements Serializable {
      */
     public String getOwner()
     { return this.owner;
-    }
-
-    /**
-     * Getter method for borrower
-     * @return borrower as String
-     */
-    public String getBorrower()
-    { return this.borrower;
     }
 
     /**
@@ -111,10 +88,10 @@ public class Exchange implements Serializable {
     }
 
     /**
-     * Getter method for meetingDetails
-     * @return meetingDetails as String
+     * Getter method for location
+     * @return location as String
      */
-    public MeetingDetails getMeetingDetails()
-    { return this.meetingDetails;
+    public Location getLocation()
+    { return this.location;
     }
 }

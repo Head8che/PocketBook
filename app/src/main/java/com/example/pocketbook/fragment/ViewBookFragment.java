@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
@@ -33,7 +34,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -156,10 +159,43 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
         bookLocationField.setOnClickListener(v -> {
             if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(getActivity().findViewById(R.id.container).getId(),
-                                ViewLocationFragment.newInstance())
-                        .addToBackStack(null).commit();
+                bookLocationField.setClickable(false);
+
+                FirebaseFirestore.getInstance()
+                        .collection("exchange")
+                        .whereEqualTo("relatedBook", book.getId())
+                        .whereEqualTo("owner", book.getOwner())
+                        .whereEqualTo("borrower", currentUser.getEmail())
+                        .get().addOnCompleteListener(task -> {
+                            if (!(task.isSuccessful())) {
+                                Log.e("VIEW_BOOK_EXCHANGE",
+                                        "Error getting exchange document!");
+                            } else {
+                                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                DocumentSnapshot document = documents.get(0);
+
+                                Exchange exchange = FirebaseIntegrity
+                                        .getExchangeFromFirestore(document);
+
+                                if (exchange != null) {
+                                    ViewLocationFragment nextFrag
+                                            = ViewLocationFragment.newInstance(exchange);
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("VBF_EXCHANGE", exchange);
+                                    nextFrag.setArguments(bundle);
+
+                                    getActivity().getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .replace(getActivity()
+                                                    .findViewById(R.id.container)
+                                                    .getId(), nextFrag)
+                                            .addToBackStack(null).commit();
+                                }
+
+                            }
+                            bookLocationField.setClickable(true);
+                        });
             }
         });
 

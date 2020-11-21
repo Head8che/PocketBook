@@ -103,8 +103,9 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.Book
 
             case "REQUESTED":
                 // if the book has any requesters and is requested by the current user
-                if ((book.getRequesters().size() > 0)
-                        && (book.getRequesters().contains(currentUser.getEmail()))) {
+                if (((book.getRequesters().size() > 0)
+                        && (book.getRequesters().contains(currentUser.getEmail())))
+                        || (book.getOwner().equals(currentUser.getEmail()))) {
 
                     // if the user has already requested the book, it is not available
                     bookHolder.statusImageView.setImageResource(R.drawable.ic_requested);

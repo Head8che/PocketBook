@@ -777,6 +777,7 @@ public class FirebaseIntegrity {
         docData.put("exchangeId", exchange.getExchangeId());
         docData.put("owner", exchange.getOwner());
         docData.put("borrower", exchange.getBorrower());
+        docData.put("relatedBook", exchange.getRelatedBook());
         docData.put("ownerBookStatus", exchange.getOwnerBookStatus());
         docData.put("borrowerBookStatus", exchange.getBorrowerBookStatus());
         docData.put("meetingDetails", exchange.getMeetingDetails());
@@ -789,6 +790,45 @@ public class FirebaseIntegrity {
                 .addOnFailureListener(e -> Log.w("NEW_EXCHANGE",
                         "Error writing exchange data!", e));
 
+    }
+
+    public static Exchange getExchangeFromFirestore(DocumentSnapshot document) {
+        String exchangeId = document.getString("exchangeId");
+        String relatedBook = document.getString("relatedBook");
+        String owner = document.getString("owner");
+        String borrower = document.getString("borrower");
+        String ownerBookStatus = document.getString("ownerBookStatus");
+        String borrowerBookStatus = document.getString("borrowerBookStatus");
+        HashMap<String, Object> meetingDetailsMap
+                = (HashMap<String, Object>) document.get("meetingDetails");
+
+        Log.e("GET_EXCHANGE", "meetingMap is: " + meetingDetailsMap);
+        if (meetingDetailsMap == null) {
+            return null;
+        }
+
+        double latitude = (double) meetingDetailsMap.get("latitude");
+        double longitude = (double) meetingDetailsMap.get("longitude");
+        String address = (String) meetingDetailsMap.get("address");
+        String meetingDate = (String) meetingDetailsMap.get("meetingDate");
+        String meetingTime = (String) meetingDetailsMap.get("meetingTime");
+
+        MeetingDetails meetingDetails = (Parser.isValidMeetingData(latitude,
+                longitude, address, meetingDate, meetingTime)) ? new MeetingDetails(latitude,
+                longitude, address, meetingDate, meetingTime) : null;
+
+        if (meetingDetails == null) {
+            return null;
+        }
+
+//        Log.e("GET_DOC_FIRE_FROM_OBJECT", Parser.parseBook(id, title, author, isbn, owner,
+//                status, comment, condition, photo, requesters) + " " + id);
+
+        // return a valid Exchange variable
+        return (Parser.isValidExchangeData(exchangeId, relatedBook, owner, borrower,
+                ownerBookStatus, borrowerBookStatus, meetingDetails)) ? new Exchange(exchangeId,
+                relatedBook, owner, borrower, ownerBookStatus,
+                borrowerBookStatus, meetingDetails) : null;
     }
 
 
@@ -833,41 +873,37 @@ public class FirebaseIntegrity {
         docData.put("type", notification.getType());
         docData.put("notificationDate", notification.getNotificationDate());
 
-        FirebaseFirestore.getInstance().collection("users").document(notification.getReceiver())
-                .collection("notifications").document(notification.getNotificationDate())
+        FirebaseFirestore.getInstance().collection("users")
+                .document(notification.getReceiver())
+                .collection("notifications")
+                .document(notification.getNotificationDate())
                 .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("NEW_NOTIFICATION", "Notification data successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("NEW_NOTIFICATION", "Error writing notification data!", e);
-                    }
-                });
+                .addOnSuccessListener(aVoid -> Log.d("NEW_NOTIFICATION",
+                        "Notification data successfully written!"))
+                .addOnFailureListener(e -> Log.w("NEW_NOTIFICATION",
+                        "Error writing notification data!", e));
 
     }
 
     public static void setAllNotificationsToSeenTrue(User currentUser){
-        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail())
                 .collection("notifications")
                 .whereEqualTo("seen",false)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
-                                        .collection("notifications").document(document.getId())
-                                        .update("seen",true);
-                            }
-                        } else {
-                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            FirebaseFirestore.getInstance()
+                                    .collection("users")
+                                    .document(currentUser.getEmail())
+                                    .collection("notifications")
+                                    .document(document.getId())
+                                    .update("seen",true);
                         }
+                    } else {
+                        Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED",
+                                "Error getting documents: ", task.getException());
                     }
                 });
 
@@ -875,28 +911,28 @@ public class FirebaseIntegrity {
 
     public static ArrayList<String> getAllNotificationsForCurrentUserFromFirebase(User currentUser){
 
-
         ArrayList<String> notifications = new ArrayList<>();
 
-        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail())
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail())
                 .collection("notifications")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                notifications.add(document.getId());
-                            }
-                        } else {
-                            Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED", "Error getting documents: ", task.getException());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            notifications.add(document.getId());
                         }
+                    } else {
+                        Log.d("UPDATE_ALL_NOTI_TO_SEEN_TRUE_FAILED",
+                                "Error getting documents: ", task.getException());
                     }
                 });
+
         return notifications;
     }
 
-    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,int position, String userEmail) {
+    public static void deleteNotificationFromFirebase(ArrayList<String> notifications,
+                                                      int position, String userEmail) {
 
         // get an instance of the document and delete it
         FirebaseFirestore.getInstance()
@@ -976,13 +1012,14 @@ public class FirebaseIntegrity {
         String phoneNumber = document.getString("phoneNumber");
         String photo = document.getString("photo");
 
-        Log.e("GET_DOC_FIRE_USER_FROM_OBJECT", Parser.parseUser(firstName, lastName, email,
+        Log.e("GET_DOC_FIRE_USER_FROM_OBJECT", Parser.parseUser(firstName,
+                lastName, email,
                 username, password, phoneNumber, photo) + " " + email);
 
 //        return new User(firstName, lastName, email, username, password, phoneNumber, photo);
 
         return Parser.parseUser(firstName, lastName, email,
-                username, password, phoneNumber, photo);  // this assumes that Firebase users are valid
+                username, password, phoneNumber, photo);  // this assumes valid Firebase users
     }
 
     public static ArrayList<String> getBookKeywords (String title, String author, String isbn) {
@@ -1033,20 +1070,28 @@ public class FirebaseIntegrity {
                                             if (task1.isSuccessful()) {
 
                                                 // if collection has documents
-                                                if (!Objects.requireNonNull(task1.getResult()).isEmpty()) {
+                                                if (!Objects.requireNonNull(task1
+                                                        .getResult()).isEmpty()) {
 
                                                     // for each document in collection
-                                                    for (DocumentSnapshot document1 : task1.getResult()) {
+                                                    for (DocumentSnapshot document1 : task1
+                                                            .getResult()) {
                                                         if (document1.exists()) {
                                                             requesters.add(document1.getId());
                                                         }
                                                     }
 
-                                                    FirebaseFirestore.getInstance().collection(collectionName)
-                                                            .document(document.getId()).update("requesters", requesters);
+                                                    FirebaseFirestore.getInstance()
+                                                            .collection(collectionName)
+                                                            .document(document.getId())
+                                                            .update("requesters",
+                                                                    requesters);
                                                 } else {  // no requests
-                                                    FirebaseFirestore.getInstance().collection("catalogue")
-                                                            .document(document.getId()).update("requesters", new ArrayList<>());
+                                                    FirebaseFirestore.getInstance()
+                                                            .collection("catalogue")
+                                                            .document(document.getId())
+                                                            .update("requesters",
+                                                                    new ArrayList<>());
                                                 }
                                             }
                                         });
@@ -1326,7 +1371,8 @@ public class FirebaseIntegrity {
 
         FirebaseIntegrity.chainSetSubcollectionDocumentFromObject(collectionName, docID,
                 subcollectionName, subcollectionDocID,
-                subMapObject, objectType, null, null, false);
+                subMapObject, objectType, null, null,
+                false);
 
     }
 
@@ -1396,7 +1442,8 @@ public class FirebaseIntegrity {
                                     HashMap<String, Object> subMapObject;
 
                                     if (objectType.equals("User")) {
-                                        subMapObject = getNotificationMapObjectFromSnapshot(document);
+                                        subMapObject = getNotificationMapObjectFromSnapshot(
+                                                document);
                                     } else {
                                         // get a HashMap object of the book's data
                                         // HashMap is Parser-verified, so data is valid

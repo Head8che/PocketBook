@@ -251,7 +251,8 @@ public class SetLocationFragment extends Fragment {
 
                 layoutSetDate.setText(sdf.format(myCalendar.getTime()));
 
-                if ((layoutSetDate.getText() != null) && !(layoutSetDate.getText().toString().equals(""))) {
+                if ((layoutSetDate.getText() != null)
+                        && !(layoutSetDate.getText().toString().equals(""))) {
                     meetingDate = layoutSetDate.getText().toString();
                     validDate = true;
                 }
@@ -285,7 +286,8 @@ public class SetLocationFragment extends Fragment {
                     layoutSetDate.setError(null);
                     layoutSetDateContainer.setErrorEnabled(false);
 
-                    if (Parser.isValidMeetingTime(s.toString(), meetingTime)) {
+                    if ((meetingTime != null)
+                            && (Parser.isValidMeetingTime(s.toString(), meetingTime))) {
                         validTime = true;
                         layoutSetTime.setError(null);
                         layoutSetTimeContainer.setErrorEnabled(false);
@@ -332,12 +334,7 @@ public class SetLocationFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backButton.setOnClickListener(v -> getActivity().onBackPressed());
 
         return view;
     }

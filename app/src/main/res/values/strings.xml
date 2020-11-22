@@ -16,6 +16,8 @@
     <string name="added_by_text">Added By: %1$s</string>
     <string name="condition_text">Condition: %1$s</string>
     <string name="comment_text">Comment: %1$s</string>
+    <string name="borrowed_book_text">Borrower: %1$s</string>
+    <string name="owned_book_text">Owner: %1$s</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>

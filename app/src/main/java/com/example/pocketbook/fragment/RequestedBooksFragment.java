@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -45,7 +45,7 @@ public class RequestedBooksFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private RecyclerView mBooksRecycler;
-    private BookAdapter mAdapter;
+    private ViewAllBookAdapter mAdapter;
     private User currentUser;
     private Fragment requestFragment = this;
     private boolean firstTimeFragLoads = true;
@@ -167,7 +167,7 @@ public class RequestedBooksFragment extends Fragment {
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
-        mAdapter = new BookAdapter(options, currentUser, getActivity());
+        mAdapter = new ViewAllBookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
         ImageView backButton = rootView.findViewById(R.id.requestedBooksFragBackBtn);

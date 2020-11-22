@@ -24,6 +24,7 @@ import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.util.KeyboardHandler;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -144,17 +145,6 @@ public class SearchMainFragment extends Fragment {
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
     }
 
-    boolean isKeyboardShowing = false;
-    void onKeyboardVisibilityChanged(boolean keyboardIsShowing) {
-        if(keyboardIsShowing) {
-            Objects.requireNonNull(getActivity())
-                    .findViewById(R.id.bottomNavigationView).setVisibility(View.GONE);
-        } else {
-            Objects.requireNonNull(getActivity())
-                    .findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -162,43 +152,8 @@ public class SearchMainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_search_main,
                 container, false);
 
-        /*
-          KEYBOARD CODE SOURCE: https://stackoverflow.com/questions/4745988/
-          how-do-i-detect-if-software-keyboard-is-visible-on-android-device-or-not
-         */
-        // ContentView is the root view of the layout of this activity/fragment
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-
-                        Rect r = new Rect();
-                        rootView.getWindowVisibleDisplayFrame(r);
-                        int screenHeight = rootView.getRootView().getHeight();
-
-                        // r.bottom is the position above soft keypad or device button.
-                        // if keypad is shown, the r.bottom is smaller than that before.
-                        int keypadHeight = screenHeight - r.bottom;
-
-                        Log.d(TAG, "keypadHeight = " + keypadHeight);
-
-                        if (keypadHeight > screenHeight * 0.15) {
-                            // 0.15 ratio is perhaps enough to determine keypad height.
-                            // keyboard is opened
-                            if (!isKeyboardShowing) {
-                                isKeyboardShowing = true;
-                                onKeyboardVisibilityChanged(true);
-                            }
-                        }
-                        else {
-                            // keyboard is closed
-                            if (isKeyboardShowing) {
-                                isKeyboardShowing = false;
-                                onKeyboardVisibilityChanged(false);
-                            }
-                        }
-                    }
-                });
+        KeyboardHandler keyboardHandler = new KeyboardHandler(rootView, getActivity());
+        keyboardHandler.hideViewOnKeyboardUp(R.id.bottomNavigationView);
 
         return rootView;
     }

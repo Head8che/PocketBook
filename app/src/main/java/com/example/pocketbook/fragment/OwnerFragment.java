@@ -268,41 +268,29 @@ public class OwnerFragment extends Fragment {
 
         Log.e("OWN", mOwnedBooksRecycler.getChildCount() + " " + ownedBookAdapter.getItemCount());
 
-        // hide views if they have no content
+        // initially hide views if they have no content
         if (readyForPickupOptions.getSnapshots().size() == 0) {
             titleReadyForPickups.setVisibility(View.GONE);
             mReadyForPickupBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleReadyForPickups.setVisibility(View.VISIBLE);
-            mReadyForPickupBooksRecycler.setVisibility(View.VISIBLE);
         }
         if (requestedOptions.getSnapshots().size() == 0) {
             titleRequested.setVisibility(View.GONE);
             mRequestedBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleRequested.setVisibility(View.VISIBLE);
-            mRequestedBooksRecycler.setVisibility(View.VISIBLE);
         }
         if (borrowedOptions.getSnapshots().size() == 0) {
             titleBorrowed.setVisibility(View.GONE);
             mBorrowedBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleBorrowed.setVisibility(View.VISIBLE);
-            mBorrowedBooksRecycler.setVisibility(View.VISIBLE);
         }
         if (ownedOptions.getSnapshots().size() == 0) {
             titleOwned.setVisibility(View.GONE);
             mOwnedBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleOwned.setVisibility(View.VISIBLE);
-            mOwnedBooksRecycler.setVisibility(View.VISIBLE);
         }
 
         viewAllReadyForPickups.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                Fragment someFragment = new ReadyForPickupFragment();
+                Fragment someFragment = ReadyForPickupFragment.newInstance(currentUser);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
                 transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
@@ -327,7 +315,7 @@ public class OwnerFragment extends Fragment {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                Fragment someFragment = new BorrowedBooksFragment();
+                Fragment someFragment = BorrowedBooksFragment.newInstance(currentUser);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
                 transaction.addToBackStack(null);  // if written, this transaction will be added to backstack

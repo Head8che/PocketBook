@@ -2,16 +2,49 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/requestedBooksFragToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="3dp"
+        app:title="">
+
+        <ImageView
+            android:id="@+id/requestedBooksFragBackBtn"
+            android:layout_width="33dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/back"
+            app:tint="@color/colorUnselected">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/requestedBooksPageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="?actionBarSize"
+            android:padding="@dimen/appbar_padding"
+            android:textSize="18sp"
+            android:text="@string/requested"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textColor="@color/textBlack" />
+
+    </androidx.appcompat.widget.Toolbar>
+
 
     <ScrollView
-        android:id="@+id/scrollview"
+        android:id="@+id/requestedBooksScrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="?actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,53 +56,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/requestedBooksRecyclerBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark" />
-
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/viewMyBookFragToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:elevation="0dp"
-                app:title="">
-
-            </androidx.appcompat.widget.Toolbar>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/suggested_Books"
-                    android:layout_width="245dp"
-                    android:layout_height="52dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="4sp"
-                    android:text="Requested Books"
-                    android:textColor="@color/textBlack"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:paddingHorizontal="10dp"/>
-            </LinearLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_books"
-                android:layout_width="match_parent"
-                android:layout_height="658dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="?actionBarSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
+                app:layout_constraintStart_toStartOf="parent" />
 
         </LinearLayout>
     </ScrollView>

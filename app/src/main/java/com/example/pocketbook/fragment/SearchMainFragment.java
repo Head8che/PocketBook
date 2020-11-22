@@ -146,14 +146,12 @@ public class SearchMainFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_search_main,
                 container, false);
-
-        KeyboardHandler keyboardHandler = new KeyboardHandler(rootView, getActivity());
-        keyboardHandler.hideViewOnKeyboardUp(R.id.bottomNavigationView);
 
         return rootView;
     }
@@ -165,7 +163,7 @@ public class SearchMainFragment extends Fragment {
         mBooksRecycler.setLayoutManager(new LinearLayoutManager(v.getContext()));
 
         mAdapter = new LinearBookAdapter(options, currentUser, getActivity());
-        mBooksRecycler.setAdapter(mAdapter);
+        mBooksRecycler.setAdapter(null);
     }
 
     public void updateQuery(String newText){
@@ -174,6 +172,11 @@ public class SearchMainFragment extends Fragment {
 
         newText = newText.toLowerCase();
 
+        if (newText.equals("")) {
+            mBooksRecycler.setAdapter(null);
+            return;
+        }
+
         if(pos == 0) { // searching all books
             mQuery = mFirestore.collection("catalogue")
                     .whereArrayContains("keywords", newText);
@@ -181,7 +184,7 @@ public class SearchMainFragment extends Fragment {
         else { // searching in available books only
             // TODO: create AvailableOrRequested variable in Firebase and Book Model
             mQuery = mFirestore.collection("catalogue")
-                    .whereEqualTo("status", "AVAILABLE")
+                    .whereEqualTo("nonExchange", true)
                     .whereArrayContains("keywords", newText);
         }
         // Stop listening

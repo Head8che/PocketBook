@@ -209,7 +209,7 @@ public class AddBookActivity extends AppCompatActivity {
 
                     // if all booleans are good, pushNewBook
                     Book book = Parser.parseBook(bookId, title, author, isbn,
-                            currentUser.getEmail(), "AVAILABLE", comment,
+                            currentUser.getEmail(), "AVAILABLE", true, comment,
                             condition, "", new ArrayList<>());
 
                     if (photoHandler.getCurrentPhotoPath() != null) {  // if the user changed their book cover

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +22,14 @@ import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.adapter.SearchStateAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.KeyboardHandler;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class SearchFragment extends Fragment{
 
@@ -70,7 +74,8 @@ public class SearchFragment extends Fragment{
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
             container.removeAllViews();
         }
@@ -80,24 +85,29 @@ public class SearchFragment extends Fragment{
     }
 
     @Override
-    public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
         searchStateAdapter = new SearchStateAdapter(this, currentUser);
-        tabLayout = v.findViewById(R.id.searchFragTabLayout);
-        pager = v.findViewById(R.id.searchFragPager);
+        tabLayout = rootView.findViewById(R.id.searchFragTabLayout);
+        pager = rootView.findViewById(R.id.searchFragPager);
         pager.setAdapter(searchStateAdapter);
 
         new TabLayoutMediator(tabLayout, pager, (tab, position) -> {
             if(position == 0)  tab.setText("All");
-            else tab.setText("Owned");
+            else tab.setText("Non-Exchange");
         }).attach();
 
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView = v.findViewById(R.id.searchView);
+        SearchManager searchManager = (SearchManager) getActivity()
+                .getSystemService(Context.SEARCH_SERVICE);
+        searchView = rootView.findViewById(R.id.searchView);
 
         // Assumes current activity is the searchable activity
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        KeyboardHandler keyboardHandler = new KeyboardHandler(rootView, getActivity());
+        keyboardHandler.hideViewOnKeyboardUp(R.id.bottomNavigationView);
+
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -105,7 +115,11 @@ public class SearchFragment extends Fragment{
                 // calling the update query of the active fragment
                 // and updating the Firebase query
                 FragmentManager fm = getChildFragmentManager();
-                Fragment f = (SearchMainFragment) fm.findFragmentByTag("f"+ pager.getCurrentItem()); // android automatically assigns tags to newly created fragments
+
+                // android automatically assigns tags to newly created fragments
+                Fragment f = (SearchMainFragment)
+                        fm.findFragmentByTag("f"+ pager.getCurrentItem());
+
                 if(f != null)
                     ((SearchMainFragment) f).updateQuery(newText);
                 return true;

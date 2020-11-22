@@ -21,6 +21,7 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.util.KeyboardHandler;
 import com.example.pocketbook.util.Parser;
 import com.example.pocketbook.util.PhotoHandler;
 import com.google.android.material.textfield.TextInputEditText;
@@ -194,7 +195,10 @@ public class EditBookActivity extends AppCompatActivity {
                 .into(layoutBookCover);
 
         // go back when cancelButton is clicked
-        cancelButton.setOnClickListener(v -> onBackPressed());
+        cancelButton.setOnClickListener(v -> {
+            KeyboardHandler.hideKeyboard(EditBookActivity.this);
+            onBackPressed();
+        });
 
         // when saveButton is clicked
         saveButton.setOnClickListener(v -> {
@@ -246,6 +250,7 @@ public class EditBookActivity extends AppCompatActivity {
                         }
                     }
                 }
+                KeyboardHandler.hideKeyboard(EditBookActivity.this);
                 finish();
             } else {
                 if (!validTitle) {

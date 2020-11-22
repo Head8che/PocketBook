@@ -29,6 +29,7 @@ import com.example.pocketbook.notifications.Data;
 import com.example.pocketbook.notifications.Response;
 import com.example.pocketbook.notifications.Sender;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -294,9 +295,28 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                     bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
                             R.color.colorRequested), android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    requestButton.setText(R.string.alreadyRequested);
+                    requestButton.setText(R.string.cancelRequest);
+                    requestButton.setTextColor(ContextCompat.getColor(getContext(),
+                            R.color.textWhite));
                     requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
-                            R.color.notAvailable));
+                            R.color.colorAccent));
+
+                    requestButton.setOnClickListener(view1 -> {
+
+                        // display a message confirming that the book has been requested
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Request canceled!")
+                                .setMessage("You have canceled your request for "
+                                        + book.getTitle() + "!")
+                                .show();
+
+                        FirebaseIntegrity.deleteBookRequest(book.getId(), currentUser.getEmail());
+
+                        // go back to the previous fragment
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    });
                 }
 
                 break;

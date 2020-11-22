@@ -737,6 +737,22 @@ public class FirebaseIntegrity {
         }
     }
 
+    public static void deleteBookRequest(String requestedBook, String requester) {
+
+        FirebaseFirestore.getInstance().collection("catalogue")
+                .document(requestedBook)
+                .collection("requests")
+                .document(requester)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("DELETE_REQUEST", "Request data successfully written!");
+                    FirebaseIntegrity.handleDeclineBookRequest(
+                            "catalogue", requestedBook, requester);
+                })
+                .addOnFailureListener(e -> Log.e("DELETE_REQUEST",
+                        "Error writing request data!"));
+    }
+
     public static void declineBookRequest(Request request) {
 
         if (Parser.isValidRequestWithBookIdObject(request)) {
@@ -750,11 +766,11 @@ public class FirebaseIntegrity {
                     .document(requester)
                     .delete()
                     .addOnSuccessListener(aVoid -> {
-                        Log.d("NEW_REQUEST", "Request data successfully written!");
+                        Log.d("DECLINE_REQUEST", "Request data successfully written!");
                         FirebaseIntegrity.handleDeclineBookRequest(
                                 "catalogue", requestedBook, requester);
                     })
-                    .addOnFailureListener(e -> Log.e("NEW_REQUEST",
+                    .addOnFailureListener(e -> Log.e("DECLINE_REQUEST",
                             "Error writing request data!"));
         }
     }

@@ -121,7 +121,6 @@ public class SearchFragment extends Fragment{
                         fm.findFragmentByTag("f"+ pager.getCurrentItem());
 
                 if(f != null)
-                    Log.e("UPDATE_QUERY", newText);
                     ((SearchMainFragment) f).updateQuery(newText);
                 return true;
             }

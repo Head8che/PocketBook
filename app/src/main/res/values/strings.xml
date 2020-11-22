@@ -94,6 +94,7 @@
     <string name="notAvailable">Not Available</string>
     <string name="alreadyRequested">Already Requested!</string>
     <string name="cancelRequest">CANCEL REQUEST</string>
+    <string name="cancelAccept">CANCEL ACCEPT</string>
     <string name="viewPickupLocation">View Pickup Location</string>
     <string name="long_description">Long description</string>
     <string name="status">Status</string>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.Objects;
 
@@ -29,6 +32,7 @@ public class ViewMyBookFragment extends Fragment {
 
     private Book book;
     private User currentUser;
+    ListenerRegistration listenerRegistration;
 
     public ViewMyBookFragment() {
         // Required empty public constructor
@@ -56,6 +60,33 @@ public class ViewMyBookFragment extends Fragment {
             this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
             this.book = (Book) getArguments().getSerializable("VMBF_BOOK");
         }
+
+        listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
+                .document(book.getId()).addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                        return;
+                    }
+
+                    if ((snapshot != null) && snapshot.exists()) {
+                        book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .detach(ViewMyBookFragment.this)
+                                .attach(ViewMyBookFragment.this)
+                                .commitAllowingStateLoss();
+                    } else {
+                        if ( getActivity() == null) {
+                            getParentFragmentManager().beginTransaction()
+                                    .detach(ViewMyBookFragment.this).commitAllowingStateLoss();
+                        } else {
+                            getActivity().getFragmentManager().popBackStack();
+                        }
+                    }
+
+
+                });
     }
 
     @Override
@@ -131,5 +162,11 @@ public class ViewMyBookFragment extends Fragment {
                 })
                 .setNegativeButton("cancel", (dialog, which) -> dialog.dismiss())
                 .create();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listenerRegistration.remove();
     }
 }

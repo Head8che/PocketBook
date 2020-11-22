@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -28,6 +30,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -164,6 +168,7 @@ public class OwnedBookFragment extends Fragment {
         }
 
         View v = inflater.inflate(R.layout.fragment_owned_book, container, false);
+        ImageView backButton = (ImageView) v.findViewById(R.id.viewOwnedBookBackBtn);
         mBooksRecycler = v.findViewById(R.id.owned_recycler_books);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
@@ -171,6 +176,9 @@ public class OwnedBookFragment extends Fragment {
                 .build();
         mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
+
+        // go back when backButton is clicked
+        backButton.setOnClickListener(view -> Objects.requireNonNull(getActivity()).onBackPressed());
 
         return v;
 

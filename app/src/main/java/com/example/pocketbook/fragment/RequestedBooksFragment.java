@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 
 /**
@@ -168,12 +172,15 @@ public class RequestedBooksFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_requested_books, container, false);
         mBooksRecycler = v.findViewById(R.id.recycler_books);
+        ImageView backButton = (ImageView) v.findViewById(R.id.viewRequestedBookBackBtn);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
         mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
+
+        backButton.setOnClickListener(view -> Objects.requireNonNull(getActivity()).onBackPressed());
 
         return v;
 

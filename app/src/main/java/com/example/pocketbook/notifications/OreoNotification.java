@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
 
-import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.pocketbook.R;
 
 
 public class OreoNotification extends ContextWrapper {
@@ -50,6 +52,7 @@ public class OreoNotification extends ContextWrapper {
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(Integer.parseInt(icon))
+                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent))
                 .setGroup(group)
                 .setContentIntent(pendingIntent);
             }

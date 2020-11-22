@@ -254,7 +254,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
                                                             "Request Declined",
                                                             notification.getNotificationDate(),
                                                             notification.getType(),
-                                                            R.mipmap.ic_launcher_round,
+                                                            R.drawable.ic_logo_vector,
                                                             notification.getReceiver());
                                                     pushNewNotificationToFirebase(notification);
                                                     sendNotification(userToken, data);

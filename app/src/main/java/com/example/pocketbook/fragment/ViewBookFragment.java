@@ -425,7 +425,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                     Data data = new Data(msg, "New Request",
                                             notification.getNotificationDate(),
                                             notification.getType(),
-                                            R.mipmap.ic_launcher_round,
+                                            R.drawable.ic_logo_vector,
                                             notification.getReceiver());
                                     pushNewNotificationToFirebase(notification);
                                     sendNotification(userToken,data);

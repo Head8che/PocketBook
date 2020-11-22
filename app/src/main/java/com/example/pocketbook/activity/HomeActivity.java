@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,6 +110,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
+        Log.e("COUNT", count + "");
 
         if (count == 0) {
             if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home
@@ -119,6 +121,9 @@ public class HomeActivity extends AppCompatActivity {
                 return;
             }
             super.onBackPressed();
+        } else if ((count == 1)  // if there's only one frag (the Home Frag)
+                && (getSupportFragmentManager().getBackStackEntryCount() == 1)) {
+            finish();
         }
         else {
             getSupportFragmentManager().popBackStack();

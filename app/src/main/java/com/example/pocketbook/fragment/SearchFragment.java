@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class SearchFragment extends Fragment{
 
@@ -88,7 +91,7 @@ public class SearchFragment extends Fragment{
 
         new TabLayoutMediator(tabLayout, pager, (tab, position) -> {
             if(position == 0)  tab.setText("All");
-            else tab.setText("Owned");
+            else tab.setText("Non-Exchange");
         }).attach();
 
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -107,6 +110,7 @@ public class SearchFragment extends Fragment{
                 FragmentManager fm = getChildFragmentManager();
                 Fragment f = (SearchMainFragment) fm.findFragmentByTag("f"+ pager.getCurrentItem()); // android automatically assigns tags to newly created fragments
                 if(f != null)
+                    Log.e("UPDATE_QUERY", newText);
                     ((SearchMainFragment) f).updateQuery(newText);
                 return true;
             }

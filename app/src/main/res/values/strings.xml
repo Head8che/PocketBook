@@ -13,13 +13,14 @@
     <string name="scan">Scan</string>
     <string name="profile">Profile</string>
     <string name="isbn_text">ISBN: %1$s</string>
+    <string name="added_by_text">Added By: %1$s</string>
     <string name="condition_text">Condition: %1$s</string>
     <string name="comment_text">Comment: %1$s</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>
     <string name="request">request</string>
-    <string name="search_hint">Title, Author, ISBN</string>
+    <string name="search_hint">Title, Author or ISBN</string>
 
     <string name="email_password"><![CDATA[Email & Password]]></string>
     <string name="click_here_to_add_your_profile_picture">Click here to add your profile picture.</string>

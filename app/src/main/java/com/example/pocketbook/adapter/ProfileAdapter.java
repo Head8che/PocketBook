@@ -50,7 +50,6 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     private User bookOwner;
     private FragmentActivity activity;
     private FirebaseAuth mAuth;
-    private LinearBookAdapter.OnBookSelectedListener mListener;
 
     public ProfileAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
                           FragmentActivity activity) {

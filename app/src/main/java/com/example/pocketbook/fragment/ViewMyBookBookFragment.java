@@ -69,36 +69,31 @@ public class ViewMyBookBookFragment extends Fragment {
         }
 
         listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
-                .document(book.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("VMBBF_LISTENER", "Listen failed.", e);
-                    return;
-                }
-
-                if ((snapshot != null) && snapshot.exists()) {
-                    book = FirebaseIntegrity.getBookFromFirestore(snapshot);
-
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .detach(ViewMyBookBookFragment.this)
-                            .attach(ViewMyBookBookFragment.this)
-                            .commitAllowingStateLoss();
-                } else {
-                    if ( getActivity() == null) {
-                        getParentFragmentManager().beginTransaction()
-                                .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
-                    } else {
-                        getActivity().getFragmentManager().popBackStack();
+                .document(book.getId()).addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                        return;
                     }
-                }
+
+                    if ((snapshot != null) && snapshot.exists()) {
+                        book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .detach(ViewMyBookBookFragment.this)
+                                .attach(ViewMyBookBookFragment.this)
+                                .commitAllowingStateLoss();
+                    } else {
+                        if ( getActivity() == null) {
+                            getParentFragmentManager().beginTransaction()
+                                    .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
+                        } else {
+                            getActivity().getFragmentManager().popBackStack();
+                        }
+                    }
 
 
-            }
-
-        });
+                });
     }
 
     @Override
@@ -147,34 +142,34 @@ public class ViewMyBookBookFragment extends Fragment {
                                             .whereEqualTo("owner", book.getOwner())
                                             .whereEqualTo("borrower", requester)
                                             .get().addOnCompleteListener(task1 -> {
-                                        if (!(task1.isSuccessful())) {
-                                            Log.e("VIEW_BOOK_EXCHANGE",
-                                                    "Error getting exchange document!");
-                                        } else {
-                                            List<DocumentSnapshot> documents = task1.getResult().getDocuments();
-                                            DocumentSnapshot document = documents.get(0);
+                                                if (!(task1.isSuccessful())) {
+                                                    Log.e("VIEW_BOOK_EXCHANGE",
+                                                            "Error getting exchange document!");
+                                                } else {
+                                                    List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                                    DocumentSnapshot document = documents.get(0);
 
-                                            Exchange exchange = FirebaseIntegrity
-                                                    .getExchangeFromFirestore(document);
+                                                    Exchange exchange = FirebaseIntegrity
+                                                            .getExchangeFromFirestore(document);
 
-                                            if (exchange != null) {
-                                                ViewLocationFragment nextFrag
-                                                        = ViewLocationFragment.newInstance(exchange);
+                                                    if (exchange != null) {
+                                                        ViewLocationFragment nextFrag
+                                                                = ViewLocationFragment.newInstance(exchange);
 
-                                                Bundle bundle = new Bundle();
-                                                bundle.putSerializable("VBF_EXCHANGE", exchange);
-                                                nextFrag.setArguments(bundle);
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putSerializable("VBF_EXCHANGE", exchange);
+                                                        nextFrag.setArguments(bundle);
 
-                                                getActivity().getSupportFragmentManager()
-                                                        .beginTransaction()
-                                                        .replace(getActivity()
-                                                                .findViewById(R.id.container)
-                                                                .getId(), nextFrag)
-                                                        .addToBackStack(null).commit();
-                                            }
+                                                        getActivity().getSupportFragmentManager()
+                                                                .beginTransaction()
+                                                                .replace(getActivity()
+                                                                        .findViewById(R.id.container)
+                                                                        .getId(), nextFrag)
+                                                                .addToBackStack(null).commit();
+                                                    }
 
-                                        }
-                                        bookLocationField.setClickable(true);
+                                                }
+                                                bookLocationField.setClickable(true);
                                     });
                                 }
                             });

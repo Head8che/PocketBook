@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +25,12 @@ import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.firebase.ui.common.ChangeEventType;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,24 +53,30 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     private User bookOwner;
     private FragmentActivity activity;
     private FirebaseAuth mAuth;
+    private FirestoreRecyclerOptions<Book> options;
+    private LinearLayout rowTitle;
+    private RecyclerView rowRecycler;
 
     public ProfileAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
-                          FragmentActivity activity) {
+                          FragmentActivity activity, LinearLayout rowTitle, RecyclerView rowRecycler) {
         super(options);
+        this.options = options;
         this.currentUser = currentUser;
         this.activity = activity;
+        this.rowTitle = rowTitle;
+        this.rowRecycler = rowRecycler;
     }
 
     static class BookHolder extends RecyclerView.ViewHolder {
-//        TextView bookTitle;
-//        TextView bookAuthor;
+        TextView bookTitle;
+        TextView bookAuthor;
         ImageView bookCoverImageView;
 //        ImageView statusImageView;
 
         public BookHolder(@NonNull View itemView) {
             super(itemView);
-//            bookTitle = itemView.findViewById(R.id.itemBookTitle);
-//            bookAuthor = itemView.findViewById(R.id.itemBookAuthor);
+            bookTitle = itemView.findViewById(R.id.profileAdapterItemBookTitle);
+            bookAuthor = itemView.findViewById(R.id.profileAdapterItemBookAuthor);
             bookCoverImageView = itemView.findViewById(R.id.item_book_cover);
 //            statusImageView = itemView.findViewById(R.id.itemBookStatus);
 
@@ -85,45 +94,14 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     protected void onBindViewHolder(@NonNull BookHolder bookHolder,
                                     int position, @NonNull Book book) {
 
-//        bookHolder.bookTitle.setText(book.getTitle());
-//        bookHolder.bookAuthor.setText(book.getAuthor());
+        bookHolder.bookTitle.setText(book.getTitle());
+        bookHolder.bookAuthor.setText(book.getAuthor());
+
+//        Log.e("BIND", options.getSnapshots().size() + "");
 
         GlideApp.with(Objects.requireNonNull(activity.getBaseContext()))
                 .load(FirebaseIntegrity.getBookCover(book))
                 .into(bookHolder.bookCoverImageView);
-
-//        switch (book.getStatus().toUpperCase()) {
-//
-//            // if the book is borrowed or accepted, it is not available for requesting
-//            case "BORROWED":
-//                bookHolder.statusImageView.setImageResource(R.drawable.ic_borrowed);
-//                bookHolder.statusImageView.setColorFilter(ContextCompat
-//                                .getColor(activity.getBaseContext(), R.color.colorBorrowed),
-//                        android.graphics.PorterDuff.Mode.SRC_IN);
-//                break;
-//
-//            case "ACCEPTED":
-//                bookHolder.statusImageView.setImageResource(R.drawable.ic_accepted);
-//                bookHolder.statusImageView.setColorFilter(ContextCompat
-//                                .getColor(activity.getBaseContext(), R.color.colorAccepted),
-//                        android.graphics.PorterDuff.Mode.SRC_IN);
-//                break;
-//
-//            case "REQUESTED":
-//                // if the user has already requested the book, it is not available for requesting
-//                bookHolder.statusImageView.setImageResource(R.drawable.ic_requested);
-//                bookHolder.statusImageView.setColorFilter(ContextCompat
-//                                .getColor(activity.getBaseContext(), R.color.colorRequested),
-//                        android.graphics.PorterDuff.Mode.SRC_IN);
-//                break;
-//
-//            // default case is that the book is available
-//            default:
-//                bookHolder.statusImageView.setImageResource(R.drawable.ic_available);
-//                bookHolder.statusImageView.setColorFilter(ContextCompat
-//                                .getColor(activity.getBaseContext(), R.color.colorAvailable),
-//                        android.graphics.PorterDuff.Mode.SRC_IN);
-//        }
 
         bookHolder.itemView.setOnClickListener(v -> {
             if (book.getOwner().equals(currentUser.getEmail())) {
@@ -159,5 +137,19 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
             }
         });
 
+    }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        int dataSize = options.getSnapshots().size();
+        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
+        if (dataSize > 0) {
+            rowTitle.setVisibility(View.VISIBLE);
+            rowRecycler.setVisibility(View.VISIBLE);
+        } else {
+            rowTitle.setVisibility(View.GONE);
+            rowRecycler.setVisibility(View.GONE);
+        }
     }
 }

@@ -278,12 +278,71 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
             case "ACCEPTED":
                 requestButton.setClickable(false);
-                requestButton.setText(R.string.notAvailable);
-                requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
-                        R.color.notAvailable));
+
                 bookStatusImage.setImageResource(R.drawable.ic_accepted);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
                         R.color.colorAccepted), android.graphics.PorterDuff.Mode.SRC_IN);
+
+                requestButton.setText(R.string.cancelRequest);
+                requestButton.setTextColor(ContextCompat.getColor(getContext(),
+                        R.color.textWhite));
+                requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
+                        R.color.colorAccent));
+
+                requestButton.setOnClickListener(view1 -> {
+
+                    // display a message confirming that the book has been requested
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Request canceled!")
+                            .setMessage("You have canceled your request for "
+                                    + book.getTitle() + "!")
+                            .show();
+
+                    requestButton.setClickable(false);
+
+                    FirebaseFirestore.getInstance()
+                            .collection("catalogue")
+                            .document(book.getId())
+                            .collection("requests")
+                            .get()
+                            .addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
+                                if (task.isSuccessful()) {
+                                    // get 1st request; there should only be one request
+                                    String requester = task.getResult().getDocuments().get(0).getId();
+
+                                    FirebaseFirestore.getInstance()
+                                            .collection("exchange")
+                                            .whereEqualTo("relatedBook", book.getId())
+                                            .whereEqualTo("owner", book.getOwner())
+                                            .whereEqualTo("borrower", requester)
+                                            .get().addOnCompleteListener(task1 -> {
+                                                if (!(task1.isSuccessful())) {
+                                                    Log.e("VIEW_BOOK_EXCHANGE",
+                                                            "Error getting exchange document!");
+                                                } else {
+                                                    List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                                    DocumentSnapshot document = documents.get(0);
+
+                                                    FirebaseFirestore.getInstance()
+                                                            .collection("exchange")
+                                                            .document(document.getId())
+                                                            .delete();
+
+                                                    FirebaseIntegrity.deleteBookRequest(book.getId(),
+                                                            requester);
+
+                                                }
+                                                requestButton.setClickable(true);
+                                    });
+                                }
+                            });
+
+                    // go back to the previous fragment
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
+                });
+
                 break;
 
             case "REQUESTED":
@@ -366,7 +425,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                     Data data = new Data(msg, "New Request",
                                             notification.getNotificationDate(),
                                             notification.getType(),
-                                            R.mipmap.ic_launcher_round,
+                                            R.drawable.ic_logo_vector,
                                             notification.getReceiver());
                                     pushNewNotificationToFirebase(notification);
                                     sendNotification(userToken,data);

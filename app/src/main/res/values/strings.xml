@@ -94,6 +94,7 @@
     <string name="notAvailable">Not Available</string>
     <string name="alreadyRequested">Already Requested!</string>
     <string name="cancelRequest">CANCEL REQUEST</string>
+    <string name="cancelAccept">CANCEL ACCEPT</string>
     <string name="viewPickupLocation">View Pickup Location</string>
     <string name="long_description">Long description</string>
     <string name="status">Status</string>
@@ -115,8 +116,12 @@
     <string name="viewDate">View Date</string>
     <string name="viewTime">View Time</string>
     <string name="map_cover">Map Cover</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="viewAll">View All</string>
+    <string name="readyForPickup">Ready For Pickup</string>
+    <string name="requested">Requested Books</string>
+    <string name="borrowed">Borrowed Books</string>
+    <string name="owned">Owned Books</string>
 
     <string name="backbutton">BackButton</string>
     <string name="Notifications">TextView</string>

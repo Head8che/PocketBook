@@ -128,36 +128,47 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/TitleBarReadyForPickupOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="12dp"
-                    android:text="Ready for pickup"
+                    android:text="@string/readyForPickup"
                     android:textColor="@color/textBlack"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
-                    android:id="@+id/ViewAllReadyForPickup"
-                    android:layout_width="239dp"
+                    android:id="@+id/ViewAllReadyForPickupOwner"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="view All >" />
+                    android:layout_marginEnd="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/viewAll" />
 
 
             </LinearLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profileOwnerRecyclerBooks"
+                android:id="@+id/profileOwnerRecyclerReadyForPickupBooks"
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
                 android:scrollbars="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -165,26 +176,35 @@
                 app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
             <LinearLayout
+                android:id="@+id/TitleBarRequestedOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="12dp"
-                    android:text="Requested           "
+                    android:text="@string/requested"
                     android:textColor="@color/textBlack"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
-                    android:id="@+id/ViewAllRequested"
-                    android:layout_width="239dp"
+                    android:id="@+id/ViewAllRequestedOwner"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="view All >" />
+                    android:layout_marginEnd="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/viewAll" />
 
 
             </LinearLayout>
@@ -195,6 +215,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
                 android:scrollbars="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -202,26 +224,35 @@
                 app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
             <LinearLayout
+                android:id="@+id/TitleBarBorrowedOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="12dp"
-                    android:text="Borrowed             "
+                    android:text="@string/borrowed"
                     android:textColor="@color/textBlack"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
-                    android:id="@+id/ViewAllBorrowed"
-                    android:layout_width="239dp"
+                    android:id="@+id/ViewAllBorrowedOwner"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="view All >" />
+                    android:layout_marginEnd="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/viewAll" />
 
 
             </LinearLayout>
@@ -232,6 +263,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
                 android:scrollbars="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -239,26 +272,35 @@
                 app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
             <LinearLayout
+                android:id="@+id/TitleBarOwnedOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="12dp"
-                    android:text="Owned                  "
+                    android:text="@string/owned"
                     android:textColor="@color/textBlack"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
-                    android:id="@+id/ViewAllOwned"
-                    android:layout_width="239dp"
+                    android:id="@+id/ViewAllOwnedOwner"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="view All >" />
+                    android:layout_marginEnd="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/viewAll" />
 
 
             </LinearLayout>
@@ -269,6 +311,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
                 android:scrollbars="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

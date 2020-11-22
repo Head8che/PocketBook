@@ -119,9 +119,9 @@
 
     <string name="viewAll">View All</string>
     <string name="readyForPickup">Ready For Pickup</string>
-    <string name="requested">Requested</string>
-    <string name="borrowed">Borrowed</string>
-    <string name="owned">Owned</string>
+    <string name="requested">Requested Books</string>
+    <string name="borrowed">Borrowed Books</string>
+    <string name="owned">Owned Books</string>
 
     <string name="backbutton">BackButton</string>
     <string name="Notifications">TextView</string>

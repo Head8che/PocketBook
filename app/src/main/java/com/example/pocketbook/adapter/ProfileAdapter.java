@@ -68,15 +68,15 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     }
 
     static class BookHolder extends RecyclerView.ViewHolder {
-//        TextView bookTitle;
-//        TextView bookAuthor;
+        TextView bookTitle;
+        TextView bookAuthor;
         ImageView bookCoverImageView;
 //        ImageView statusImageView;
 
         public BookHolder(@NonNull View itemView) {
             super(itemView);
-//            bookTitle = itemView.findViewById(R.id.itemBookTitle);
-//            bookAuthor = itemView.findViewById(R.id.itemBookAuthor);
+            bookTitle = itemView.findViewById(R.id.profileAdapterItemBookTitle);
+            bookAuthor = itemView.findViewById(R.id.profileAdapterItemBookAuthor);
             bookCoverImageView = itemView.findViewById(R.id.item_book_cover);
 //            statusImageView = itemView.findViewById(R.id.itemBookStatus);
 
@@ -94,8 +94,8 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     protected void onBindViewHolder(@NonNull BookHolder bookHolder,
                                     int position, @NonNull Book book) {
 
-//        bookHolder.bookTitle.setText(book.getTitle());
-//        bookHolder.bookAuthor.setText(book.getAuthor());
+        bookHolder.bookTitle.setText(book.getTitle());
+        bookHolder.bookAuthor.setText(book.getAuthor());
 
 //        Log.e("BIND", options.getSnapshots().size() + "");
 

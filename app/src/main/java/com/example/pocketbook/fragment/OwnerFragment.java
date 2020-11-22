@@ -202,11 +202,14 @@ public class OwnerFragment extends Fragment {
         String first_Name = currentUser.getFirstName();
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();
+        String user_Email = currentUser.getEmail();
         ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
         TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
         TextView UserName = (TextView) v.findViewById(R.id.user_name);
+        TextView Email = (TextView) v.findViewById(R.id.profileEmail);
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
+        Email.setText(user_Email);
 
         GlideApp.with(Objects.requireNonNull(getContext()))
                 .load(userProfilePicture)

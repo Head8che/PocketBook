@@ -1,7 +1,6 @@
 package com.example.pocketbook.util;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -24,30 +22,36 @@ import com.example.pocketbook.fragment.SetLocationFragment;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.Objects;
 
 public class ScanHandler {
 
-    public AlertDialog alertDialog;
-    Activity activity;
-    User currentUser;
-    FragmentManager fragmentManager;
-    public String userSelection;
+    private AlertDialog alertDialog;
+    private Activity activity;
+    private User currentUser;
+    private FragmentManager fragmentManager;
+    private String userSelection;
 
     public ScanHandler(Activity activity, FragmentManager fragmentManager, User currentUser) {
         this.activity = activity;
         this.fragmentManager = fragmentManager;
         this.currentUser = currentUser;
+    }
+
+    public void dismissAlertDialog() {
+        if (this.alertDialog != null) {
+            this.alertDialog.dismiss();
+        }
+    }
+
+    public String getUserSelection() {
+        return userSelection;
     }
 
     /**
@@ -76,19 +80,19 @@ public class ScanHandler {
 
                 HomeActivity homeActivity = ((HomeActivity) activity);
 
-                switch (homeActivity.FRAG_TAG) {
+                switch (homeActivity.getFragTag()) {
                     case "HOME_FRAGMENT":
-                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                        homeActivity.getBottomNav().setSelectedItemId(R.id.bottom_nav_home);
                         break;
                     case "SEARCH_FRAGMENT":
-                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_search);
+                        homeActivity.getBottomNav().setSelectedItemId(R.id.bottom_nav_search);
                         break;
                     default:
-                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_profile);
+                        homeActivity.getBottomNav().setSelectedItemId(R.id.bottom_nav_profile);
                         break;
                 }
             }
-            if (alertDialog != null) {alertDialog.dismiss();}
+            dismissAlertDialog();
         });
 
         alertDialog.setOnCancelListener(dialog -> {
@@ -96,19 +100,19 @@ public class ScanHandler {
 
                 HomeActivity homeActivity = ((HomeActivity) activity);
 
-                switch (homeActivity.FRAG_TAG) {
+                switch (homeActivity.getFragTag()) {
                     case "HOME_FRAGMENT":
-                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                        homeActivity.getBottomNav().setSelectedItemId(R.id.bottom_nav_home);
                         break;
                     case "SEARCH_FRAGMENT":
-                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_search);
+                        homeActivity.getBottomNav().setSelectedItemId(R.id.bottom_nav_search);
                         break;
                     default:
-                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_profile);
+                        homeActivity.getBottomNav().setSelectedItemId(R.id.bottom_nav_profile);
                         break;
                 }
             }
-            if (alertDialog != null) {alertDialog.dismiss();}
+            dismissAlertDialog();
         });
 
         // scan code appropriately based on the selected scanning dialog option
@@ -181,7 +185,7 @@ public class ScanHandler {
                                     bundle.putSerializable("VMBF_USER", currentUser);
                                     bundle.putSerializable("VMBF_BOOK", book);
                                     f.setArguments(bundle);
-                                    if (alertDialog != null) {alertDialog.dismiss();}
+                                    dismissAlertDialog();
                                     fragmentManager.beginTransaction()
                                             .replace(R.id.container, f)
                                             .addToBackStack(null).commit();
@@ -206,7 +210,7 @@ public class ScanHandler {
                                             bundle.putSerializable("BA_BOOK", book);
                                             bundle.putSerializable("BA_BOOKOWNER", bookOwner);
                                             nextFrag.setArguments(bundle);
-                                            if (alertDialog != null) {alertDialog.dismiss();}
+                                            dismissAlertDialog();
                                             fragmentManager.beginTransaction()
                                                     .replace(R.id.container, nextFrag)
                                                     .addToBackStack(null).commit();
@@ -236,10 +240,10 @@ public class ScanHandler {
                             Toast.makeText(activity, "No Results Found for ISBN: "
                                     + scannedIsbn, Toast.LENGTH_SHORT)
                                     .show();
-                            if (alertDialog != null) {alertDialog.dismiss();}
+                            dismissAlertDialog();
                         } else {
 
-                            if (alertDialog != null) {alertDialog.dismiss();}
+                            dismissAlertDialog();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -296,13 +300,13 @@ public class ScanHandler {
                     if (task.isSuccessful()) {
                         Log.e("SIZE", String.valueOf(task.getResult().size()));
                         if (task.getResult().size() == 0) {
-                            if (alertDialog != null) {alertDialog.dismiss();}
+                            dismissAlertDialog();
                             Toast.makeText(activity, "No Results Found for ISBN: "
                                     + scannedIsbn, Toast.LENGTH_SHORT)
                                     .show();
                         } else {
 
-                            if (alertDialog != null) {alertDialog.dismiss();}
+                            dismissAlertDialog();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -374,7 +378,7 @@ public class ScanHandler {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        if (alertDialog != null) {alertDialog.dismiss();}
+                        dismissAlertDialog();
                         Log.e("SIZE", String.valueOf(task.getResult().size()));
                         if (task.getResult().size() == 0) {
                             Toast.makeText(activity, "No Results Found for ISBN: "
@@ -382,7 +386,7 @@ public class ScanHandler {
                                     .show();
                         } else {
 
-                            if (alertDialog != null) {alertDialog.dismiss();}
+                            dismissAlertDialog();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -453,7 +457,7 @@ public class ScanHandler {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        if (alertDialog != null) {alertDialog.dismiss();}
+                        dismissAlertDialog();
                         Log.e("SIZE", String.valueOf(task.getResult().size()));
                         if (task.getResult().size() == 0) {
                             Toast.makeText(activity, "No Results Found for ISBN: "
@@ -461,7 +465,7 @@ public class ScanHandler {
                                     .show();
                         } else {
 
-                            if (alertDialog != null) {alertDialog.dismiss();}
+                            dismissAlertDialog();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 

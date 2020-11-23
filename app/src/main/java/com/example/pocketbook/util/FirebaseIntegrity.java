@@ -975,6 +975,27 @@ public class FirebaseIntegrity {
                     }
                 });
     }
+    public static void setNotificationCounterNumber(NotificationCounter notificationCounter, User currentUser) {
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail()).collection("notifications")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        int counter = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if (document.get("seen").toString().equals("false")){
+                                counter++;
+                            }
+                        }
+                        notificationCounter.setNotificationNumberCounterInTextView(counter);
+                    } else {
+                        Log.d("UPDATE_NOTIFICATION_COUNTER_FAILED", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+    }
+
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
 
@@ -1017,8 +1038,16 @@ public class FirebaseIntegrity {
         String isbn = document.getString("isbn");
         String owner = document.getString("owner");
         String status = document.getString("status");
+        Log.e("GET_BOOK", id + " " + title + " " + author);
+        String nonExchangeString;
+        nonExchangeString = Objects.requireNonNull(document.get("nonExchange")).toString();
+        boolean nonExchange;
+        if (nonExchangeString.equals("false"))
+            nonExchange = false;
+        else{
+            nonExchange =  true;
+        }
 //        Log.e("GET_BOOK", id + " " + title + " " + author);
-        boolean nonExchange = (Boolean) document.getBoolean("nonExchange");
         String comment = document.getString("comment");
         String condition = document.getString("condition");
         String photo = document.getString("photo");

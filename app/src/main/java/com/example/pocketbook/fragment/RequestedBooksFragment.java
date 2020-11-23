@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -43,14 +45,12 @@ public class RequestedBooksFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private RecyclerView mBooksRecycler;
-    private BookAdapter mAdapter;
+    private ViewAllBookAdapter mAdapter;
     private User currentUser;
     private Fragment requestFragment = this;
     private boolean firstTimeFragLoads = true;
-    private String ownerrequestedBooks = "REQUESTED";
 
     FirestoreRecyclerOptions<Book> options;
-    ListenerRegistration listenerRegistration;
 
     public static RequestedBooksFragment newInstance(User user) {
         RequestedBooksFragment requestedbooksfragment = new RequestedBooksFragment();
@@ -71,7 +71,9 @@ public class RequestedBooksFragment extends Fragment {
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
         // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).whereEqualTo("status",ownerrequestedBooks).limit(LIMIT);
+        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",
+                currentUser.getEmail()).whereEqualTo("status", "REQUESTED")
+                .limit(LIMIT);
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -115,46 +117,39 @@ public class RequestedBooksFragment extends Fragment {
             }
         };
 
-        listenerRegistration = mQuery.addSnapshotListener(dataListener);
-
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
                 .document(currentUser.getEmail());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("VMBBF_LISTENER", "Listen failed.", e);
+        docRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.e("VMBBF_LISTENER", "Listen failed.", e);
+                return;
+            }
+
+            if ((snapshot != null) && snapshot.exists()) {
+                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                if (currentUser == null) {
                     return;
                 }
 
-                if ((snapshot != null) && snapshot.exists()) {
-                    currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
-
-                    if (currentUser == null) {
-                        return;
-                    }
-
-                    // TODO: Add isAdded to other listeners
-                    // if fragment can have a manager; tests crash without this line
-                    if ((!firstTimeFragLoads) && requestFragment.isAdded()) {
-                        getParentFragmentManager()
-                                .beginTransaction()
-                                .detach(RequestedBooksFragment.this)
-                                .attach(RequestedBooksFragment.this)
-                                .setTransition(FragmentTransaction.TRANSIT_NONE)
-                                .addToBackStack(null)
-                                .commitAllowingStateLoss();
-                    } else {
-                        firstTimeFragLoads = false;
-                    }
-                }
-                else if (requestFragment.isAdded()) {
-                    getParentFragmentManager().beginTransaction()
-                            .detach(RequestedBooksFragment.this).commitAllowingStateLoss();
+                // TODO: Add isAdded to other listeners
+                // if fragment can have a manager; tests crash without this line
+                if ((!firstTimeFragLoads) && requestFragment.isAdded()) {
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .detach(RequestedBooksFragment.this)
+                            .attach(RequestedBooksFragment.this)
+                            .setTransition(FragmentTransaction.TRANSIT_NONE)
+                            .addToBackStack(null)
+                            .commitAllowingStateLoss();
+                } else {
+                    firstTimeFragLoads = false;
                 }
             }
-
+            else if (requestFragment.isAdded()) {
+                getParentFragmentManager().beginTransaction()
+                        .detach(RequestedBooksFragment.this).commitAllowingStateLoss();
+            }
         });
     }
 
@@ -166,23 +161,25 @@ public class RequestedBooksFragment extends Fragment {
             container.removeAllViews();
         }
 
-        View v = inflater.inflate(R.layout.fragment_requested_books, container, false);
-        mBooksRecycler = v.findViewById(R.id.recycler_books);
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
+        View rootView = inflater.inflate(R.layout.fragment_requested_books, container, false);
+        mBooksRecycler = rootView.findViewById(R.id.requestedBooksRecyclerBooks);
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
-        mAdapter = new BookAdapter(options, currentUser, getActivity());
+        mAdapter = new ViewAllBookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
-        return v;
+        ImageView backButton = rootView.findViewById(R.id.requestedBooksFragBackBtn);
 
-    }
+        backButton.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        listenerRegistration.remove();
+        return rootView;
+
     }
 
     @Override

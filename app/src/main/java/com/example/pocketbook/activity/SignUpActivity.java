@@ -1,6 +1,8 @@
 package com.example.pocketbook.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -464,9 +466,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                 currentUser.getFirstName()),
                                         Toast.LENGTH_SHORT).show();
 
-                                // go to HomeActivity
+                                // go to OnBoardingActivity
                                 Intent intent = new Intent(getApplicationContext(),
-                                        HomeActivity.class);
+                                        OnBoardingActivity.class);
                                 intent.putExtra("CURRENT_USER", currentUser);
                                 startActivity(intent);
                                 finish();  // finish the current activity
@@ -513,9 +515,9 @@ public class SignUpActivity extends AppCompatActivity {
                                             currentUser.getFirstName()),
                                     Toast.LENGTH_SHORT).show();
 
-                            // go to HomeActivity
+                            // go to OnBoardingActivity
                             Intent intent = new Intent(getApplicationContext(),
-                                    HomeActivity.class);
+                                    OnBoardingActivity.class);
                             intent.putExtra("CURRENT_USER", currentUser);
                             startActivity(intent);
                             finish();  // finish the current activity

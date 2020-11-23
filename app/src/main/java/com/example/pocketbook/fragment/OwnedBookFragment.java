@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -163,16 +165,24 @@ public class OwnedBookFragment extends Fragment {
             container.removeAllViews();
         }
 
-        View v = inflater.inflate(R.layout.fragment_owned_book, container, false);
-        mBooksRecycler = v.findViewById(R.id.owned_recycler_books);
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), numColumns));
+        View rootView = inflater.inflate(R.layout.fragment_owned_book, container, false);
+        mBooksRecycler = rootView.findViewById(R.id.ownedBooksRecyclerBooks);
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
         mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
-        return v;
+        ImageView backButton = rootView.findViewById(R.id.ownedBooksFragBackBtn);
+
+        backButton.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        return rootView;
 
     }
 

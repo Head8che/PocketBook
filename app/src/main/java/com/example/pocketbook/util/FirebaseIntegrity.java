@@ -1017,7 +1017,7 @@ public class FirebaseIntegrity {
         String isbn = document.getString("isbn");
         String owner = document.getString("owner");
         String status = document.getString("status");
-        Log.e("GET_BOOK", id + " " + title + " " + author);
+//        Log.e("GET_BOOK", id + " " + title + " " + author);
         boolean nonExchange = (Boolean) document.getBoolean("nonExchange");
         String comment = document.getString("comment");
         String condition = document.getString("condition");

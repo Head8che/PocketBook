@@ -105,7 +105,7 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
 
         bookHolder.itemView.setOnClickListener(v -> {
             if (book.getOwner().equals(currentUser.getEmail())) {
-                Log.e("OWNERIN", book.getOwner());
+//                Log.e("OWNERIN", book.getOwner());
                 ViewMyBookFragment nextFrag = ViewMyBookFragment
                         .newInstance(currentUser, book);
                 Bundle bundle = new Bundle();
@@ -143,7 +143,7 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     public void onDataChanged() {
         super.onDataChanged();
         int dataSize = options.getSnapshots().size();
-        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
+//        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
         if (dataSize > 0) {
             rowTitle.setVisibility(View.VISIBLE);
             rowRecycler.setVisibility(View.VISIBLE);

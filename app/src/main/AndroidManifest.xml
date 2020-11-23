@@ -77,11 +77,6 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyAuHw4wNX8nFZ5IVahC5J4lYEX1s5Msey8" />
         </activity>
-        <activity
-            android:name=".activity.CaptureScanActivity"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

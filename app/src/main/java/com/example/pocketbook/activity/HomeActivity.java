@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.pocketbook.fragment.NotificationsFragment;
+import com.example.pocketbook.util.ScanHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,7 +28,6 @@ import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.R;
-import com.example.pocketbook.fragment.ScanFragment;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
@@ -38,6 +38,8 @@ import com.example.pocketbook.model.User;
 import static com.example.pocketbook.util.FirebaseIntegrity.getUserFromFirestore;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Objects;
 
@@ -63,6 +65,8 @@ public class HomeActivity extends AppCompatActivity {
     Fragment selectedFragment;
     String FRAG_TAG;
 
+    ScanHandler scanHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
+        scanHandler = new ScanHandler(HomeActivity.this,
+                getSupportFragmentManager(), currentUser);
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
 
@@ -162,12 +168,13 @@ public class HomeActivity extends AppCompatActivity {
                             startActivityForResult(intent, LAUNCH_ADD_BOOK_CODE);
                             break;
                         case R.id.bottom_nav_scan:
-                            selectedFragment = ScanFragment.newInstance(currentUser);
-                            ScanFragment nextFrag = ScanFragment.newInstance(currentUser);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("SCAN_USER", currentUser);
-                            nextFrag.setArguments(bundle);
-                            FRAG_TAG = "SCAN_FRAGMENT";
+//                            selectedFragment = ScanFragment.newInstance(currentUser);
+//                            ScanFragment nextFrag = ScanFragment.newInstance(currentUser);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("SCAN_USER", currentUser);
+//                            nextFrag.setArguments(bundle);
+                            scanHandler.showScanningSpinnerDialog();
+//                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
                         // showSpinnerDialog when layoutBookCondition is clicked
                         //ISSUE need to manually set camera permissions. Android manifest permission not working
@@ -236,6 +243,14 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        String scannedIsbn = null;
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        if ((result != null) && (result.getContents() != null)){
+            scannedIsbn = result.getContents();
+            Log.e("SCAN", scannedIsbn);
+        }
+
         if (requestCode == LAUNCH_ADD_BOOK_CODE) {
             bottomNav.setSelectedItemId(R.id.bottom_nav_home);
 
@@ -250,6 +265,10 @@ public class HomeActivity extends AppCompatActivity {
                 nextFrag.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(findViewById(R.id.container)
                         .getId(), nextFrag).addToBackStack(null).commit();
+            }
+        } else if (scanHandler.userSelection.equals("SEE_DESCRIPTION_CODE")) {
+            if (scannedIsbn != null) {
+                scanHandler.handleSeeDescription(scannedIsbn);
             }
         }
     }

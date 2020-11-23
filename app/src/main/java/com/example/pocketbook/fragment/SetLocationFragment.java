@@ -34,6 +34,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationRequestAccepted;
+
 public class SetLocationFragment extends Fragment {
 
     private Book book;
@@ -203,7 +205,7 @@ public class SetLocationFragment extends Fragment {
 
                     // set an error and focus the app on the erroneous field
                     if (locationString.equals("")) {
-                        layoutSetLocation.setError("Input required");
+                        layoutSetLocation.setError("Input Required");
                     } else {
                         layoutSetLocation.setError("Invalid Location");
                     }
@@ -215,7 +217,7 @@ public class SetLocationFragment extends Fragment {
 
                     // set an error and focus the app on the erroneous field
                     if (dateString.equals("")) {
-                        layoutSetDate.setError("Input required");
+                        layoutSetDate.setError("Input Required");
                     } else {
                         layoutSetDate.setError("Invalid Date");
                     }
@@ -227,7 +229,7 @@ public class SetLocationFragment extends Fragment {
 
                     // set an error and focus the app on the erroneous field
                     if (timeString.equals("")) {
-                        layoutSetTime.setError("Input required");
+                        layoutSetTime.setError("Input Required");
                     } else {
                         layoutSetTime.setError("Invalid Time");
                     }
@@ -236,6 +238,7 @@ public class SetLocationFragment extends Fragment {
                 }
             }
             // notify user
+            sendNotificationRequestAccepted(request,book);
         });
 
 

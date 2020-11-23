@@ -93,6 +93,39 @@ public class NotificationHandler {
     });
     }
 
+    public static void sendNotificationRequestAccepted(Request request, Book book){
+        FirebaseFirestore.getInstance().collection("users")
+                .document(request.getRequester())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseFirestore.getInstance()
+                                .collection("users")
+                                .document(request.getRequestee())
+                                .get()
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        DocumentSnapshot document = task1.getResult();
+                                        if (document != null){
+                                            User requestee = FirebaseIntegrity.getUserFromFirestore(document);
+                                            String userToken = verifyReceiverTokenNotNull(document);
+                                            String msg = String.format("Your request for '%s' has " + "been accepted", book.getTitle());
+                                            Notification notification = new Notification(msg, book.getOwner(), request.getRequester(), book.getId(), false, "REQUEST_ACCEPTED");
+                                            Data data = new Data(msg,
+                                                    "Request Accepted",
+                                                    notification.getNotificationDate(),
+                                                    notification.getType(),
+                                                    R.drawable.ic_logo_vector,
+                                                    notification.getReceiver());
+                                            pushNewNotificationToFirebase(notification);
+                                            sendNotification(userToken, data);
+                                        }
+                                    }
+                                });
+                    }
+                });
+    }
+
     private static void sendNotification(String token,Data data) {
 
         Sender sender = new Sender(data, token);

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,13 @@ import com.example.pocketbook.model.MeetingDetails;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.Parser;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,7 +44,7 @@ import java.util.UUID;
 
 import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationRequestAccepted;
 
-public class SetLocationFragment extends Fragment {
+public class SetLocationFragment extends Fragment implements OnMapReadyCallback {
 
     private Book book;
     private Request request;
@@ -69,6 +77,11 @@ public class SetLocationFragment extends Fragment {
 
     String bookOwner;
     String bookRequester;
+
+    GoogleMap googleMap = null;
+    private LatLng mPinnedMap;
+    Marker marker;
+    SupportMapFragment mapFrag;
 
     public SetLocationFragment() {
         // Required empty public constructor
@@ -119,6 +132,12 @@ public class SetLocationFragment extends Fragment {
         layoutSetLocationContainer = (TextInputLayout) view.findViewById(R.id.setLocationContainer);
         layoutSetDateContainer = (TextInputLayout) view.findViewById(R.id.setDateContainer);
         layoutSetTimeContainer = (TextInputLayout) view.findViewById(R.id.setTimeContainer);
+
+        if (this.googleMap == null) {
+            mapFrag = (SupportMapFragment)
+                    getChildFragmentManager().findFragmentById(R.id.setLocationFragMap);
+            mapFrag.getMapAsync(this);
+        }
 
         TimePickerDialog.OnTimeSetListener time = (view1, hourOfDay, minute) -> {
 //                layoutSetTime.setText(String.valueOf(hourOfDay)+"Hours "+String.valueOf(minute)+" minutes ");
@@ -330,6 +349,7 @@ public class SetLocationFragment extends Fragment {
                     validLocation = true;
                     layoutSetLocation.setError(null);
                     layoutSetLocationContainer.setErrorEnabled(false);
+                    onMapReady(googleMap);
                 }
             }
             @Override
@@ -343,6 +363,60 @@ public class SetLocationFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        if (this.googleMap != null) {
+
+            if ((address != null) && (latitude != invalidCoord) && (longitude != invalidCoord)) {
+
+                Log.e("ADDRESS", address + " " + latitude + " " + longitude);
+
+                if (marker != null) {
+                    marker.remove();
+                }
+                mPinnedMap = new LatLng(latitude, longitude);
+
+                MarkerOptions options = new MarkerOptions()
+                        .draggable(true)
+                        .title(address)
+                        .position(mPinnedMap);
+
+                if (this.googleMap != null) {
+                    marker = this.googleMap.addMarker(options);
+                }
+
+                marker.setTitle(address);
+
+            } else {
+
+                String antarctica = "Antarctica";
+                double antLat = -82.862755;
+                double antLng = 135.0;
+
+                Log.e("ADDRESS", "Antarctica" + " " + antLat + " " + antLng);
+
+                if (marker != null) {
+                    marker.remove();
+                }
+                mPinnedMap = new LatLng(antLat, antLng);
+
+                MarkerOptions options = new MarkerOptions()
+                        .draggable(true)
+                        .title(antarctica)
+                        .position(mPinnedMap);
+
+                if (this.googleMap != null) {
+                    marker = this.googleMap.addMarker(options);
+                }
+
+                marker.setTitle(antarctica);
+
+            }
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mPinnedMap,15));
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -246,8 +246,8 @@ public class HomeActivity extends AppCompatActivity {
         String scannedIsbn = null;
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
-        scanHandler.alertDialog.dismiss();
         if ((result != null) && (result.getContents() != null)){
+            scanHandler.alertDialog.dismiss();
             scannedIsbn = result.getContents();
             Log.e("SCAN", scannedIsbn);
         }
@@ -267,25 +267,33 @@ public class HomeActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(findViewById(R.id.container)
                         .getId(), nextFrag).addToBackStack(null).commit();
             }
-        } else if (scanHandler.userSelection.equals("SEE_DESCRIPTION_CODE")) {
-            if (scannedIsbn != null) {
-                scanHandler.handleSeeDescription(scannedIsbn);
-            }
-        } else if (scanHandler.userSelection.equals("LEND_BOOK_CODE")) {
-            if (scannedIsbn != null) {
-                scanHandler.handleLendBook(scannedIsbn);
-            }
-        } else if (scanHandler.userSelection.equals("BORROW_BOOK_CODE")) {
-            if (scannedIsbn != null) {
-                scanHandler.handleBorrowBook(scannedIsbn);
-            }
-        } else if (scanHandler.userSelection.equals("RETURN_BOOK_CODE")) {
-            if (scannedIsbn != null) {
-                scanHandler.handleReturnBook(scannedIsbn);
-            }
-        } else if (scanHandler.userSelection.equals("RECEIVE_BOOK_CODE")) {
-            if (scannedIsbn != null) {
-                scanHandler.handleReceiveBook(scannedIsbn);
+        }  else if (scanHandler.userSelection != null) {
+            switch (scanHandler.userSelection) {
+                case "SEE_DESCRIPTION_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleSeeDescription(scannedIsbn);
+                    }
+                    break;
+                case "LEND_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleLendBook(scannedIsbn);
+                    }
+                    break;
+                case "BORROW_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleBorrowBook(scannedIsbn);
+                    }
+                    break;
+                case "RETURN_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleReturnBook(scannedIsbn);
+                    }
+                    break;
+                case "RECEIVE_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleReceiveBook(scannedIsbn);
+                    }
+                    break;
             }
         }
     }

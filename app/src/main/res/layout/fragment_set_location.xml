@@ -63,24 +63,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-
-                <ImageView
-                    android:id="@+id/mapLayout"
+                <fragment
+                    android:id="@+id/setLocationFragMap"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/map_cover"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_streets" />
+                    android:layout_height="match_parent" />
 
-                <ImageView
-                    android:id="@+id/mapCover"
-                    android:layout_width="108dp"
-                    android:layout_height="150dp"
-                    android:layout_marginStart="27dp"
-                    android:layout_marginTop="50dp"
-                    android:contentDescription="@string/map_cover"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_googlemaps" />
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/mapLayout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:contentDescription="@string/map_cover"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:src="@drawable/ic_streets" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/mapCover"-->
+<!--                    android:layout_width="108dp"-->
+<!--                    android:layout_height="150dp"-->
+<!--                    android:layout_marginStart="27dp"-->
+<!--                    android:layout_marginTop="50dp"-->
+<!--                    android:contentDescription="@string/map_cover"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:src="@drawable/ic_googlemaps" />-->
             </androidx.cardview.widget.CardView>
 
             <Space

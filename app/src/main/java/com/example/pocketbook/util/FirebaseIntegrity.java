@@ -1039,7 +1039,14 @@ public class FirebaseIntegrity {
         String owner = document.getString("owner");
         String status = document.getString("status");
         Log.e("GET_BOOK", id + " " + title + " " + author);
-        boolean nonExchange = (Boolean) document.getBoolean("nonExchange");
+        String nonExchangeString;
+        nonExchangeString = Objects.requireNonNull(document.get("nonExchange")).toString();
+        boolean nonExchange;
+        if (nonExchangeString.equals("false"))
+            nonExchange = false;
+        else{
+            nonExchange =  true;
+        }
         String comment = document.getString("comment");
         String condition = document.getString("condition");
         String photo = document.getString("photo");

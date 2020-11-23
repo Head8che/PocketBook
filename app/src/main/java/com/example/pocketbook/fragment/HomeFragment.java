@@ -32,6 +32,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -110,26 +111,43 @@ public class HomeFragment extends Fragment {
                         switch (dc.getType()) {
                             case ADDED:
                                 Log.d("SCROLL_UPDATE", "New doc: " + document);
-
                                 mAdapter.notifyDataSetChanged();
                                 break;
 
                             case MODIFIED:
                                 Log.d("SCROLL_UPDATE", "Modified doc: " + document);
-
                                 mAdapter.notifyDataSetChanged();
                                 break;
 
                             case REMOVED:
                                 Log.d("SCROLL_UPDATE", "Removed doc: " + document);
-
                                 mAdapter.notifyDataSetChanged();
                                 break;
                         }
                     }
+
                 }
             }
+
         };
+
+        mFirestore.collection("users").document(currentUser.getEmail()).collection("notifications")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.w(TAG, "listen:error", error);
+                            return;
+                        }
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                case REMOVED:
+                                    setNotificationCounterNumber(notificationCounter, currentUser);
+                                    break;
+                            }
+                        }
+                    }});
 
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
     }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import static com.example.pocketbook.util.FirebaseIntegrity.deleteNotificationFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.getAllNotificationsForCurrentUserFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.setAllNotificationsToSeenTrue;
+import static com.example.pocketbook.util.FirebaseIntegrity.setNotificationCounterNumber;
 
 public class NotificationsFragment extends Fragment {
 
@@ -104,19 +105,12 @@ public class NotificationsFragment extends Fragment {
                     DocumentSnapshot document = dc.getDocument();
                     switch (dc.getType()) {
                             case ADDED:
-                                Log.d("NOTIFICATION_SCROLL_UPDATE", "New doc: " + document);
-                                notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
-                                notificationAdapter.notifyDataSetChanged();
-                                break;
-
-                            case MODIFIED:
-                                Log.d("NOTIFICATION_SCROLL_UPDATE", "Modified doc: " + document);
+                                Log.d("SCROLL_UPDATE", "New doc: " + document);
                                 notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;
 
                             case REMOVED:
-                                Log.d("NOTIFICATION_SCROLL_UPDATE", "Removed doc: " + document);
                                 notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;

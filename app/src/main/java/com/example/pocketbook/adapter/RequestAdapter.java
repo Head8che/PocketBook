@@ -49,6 +49,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationRequestDeclined;
 import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationToFirebase;
 
 public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
@@ -63,6 +64,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
     public RequestAdapter(@NonNull FirestoreRecyclerOptions<Request> options,
                           Book mBook, FragmentActivity activity) {
         super(options);
+        this.mBook = mBook;
         this.mBook = mBook;
         this.activity = activity;
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
@@ -129,7 +131,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
         requestHolder.date.setText(request.getRequestDate());
 
         // if the user already accepted a request, they can't accept or decline that request
-        if (mBook.getStatus().equals("ACCEPTED")){
+        if (mBook.getStatus().equals("ACCEPTED")) {
             requestHolder.accept.setText(R.string.cancelAccept);
             requestHolder.decline.setVisibility(View.GONE);
             requestHolder.decline.setClickable(false);
@@ -218,74 +220,12 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
 
                 // decline a book request in Firebase
                 FirebaseIntegrity.declineBookRequest(request);
+                sendNotificationRequestDeclined( request,  mBook);
 
-                //send a notification to the requester
-                FirebaseFirestore.getInstance().collection("users")
-                        .document(request.getRequester())
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                FirebaseFirestore.getInstance()
-                                        .collection("users")
-                                        .document(request.getRequestee())
-                                        .get()
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) {
-                                                DocumentSnapshot document = task1.getResult();
 
-                                                if (document != null) {
-
-                                                    mRequestee = FirebaseIntegrity
-                                                            .getUserFromFirestore(document);
-                                                    String userToken = Objects
-                                                            .requireNonNull(document
-                                                                    .get("token")).toString();
-                                                    String msg = String
-                                                            .format("Your request for '%s' has " +
-                                                                    "been declined",
-                                                                    mBook.getTitle());
-                                                    Notification notification
-                                                            = new Notification(msg,
-                                                            mBook.getOwner(),
-                                                            request.getRequester(),
-                                                            mBook.getId(), false,
-                                                            "REQUEST_DECLINED");
-                                                    Data data = new Data(msg,
-                                                            "Request Declined",
-                                                            notification.getNotificationDate(),
-                                                            notification.getType(),
-                                                            R.drawable.ic_logo_vector,
-                                                            notification.getReceiver());
-                                                    pushNewNotificationToFirebase(notification);
-                                                    sendNotification(userToken, data);
-                                                }
-                                            }
-                                        });
-                            }
-                        });
             }
         });
 
     }
 
-    private void sendNotification(String token, Data data) {
-
-        Sender sender = new Sender(data, token);
-        apiService.sendNotification(sender).enqueue((new Callback<Response>() {
-
-            @Override
-            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                if (response.code() == 200) {
-                    if (response.body().success != 1) {
-                        Log.d("FAILED_TO_SEND_NOTIFICATION","0");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Response> call, Throwable t) {
-
-            }
-        }));
-    }
 }

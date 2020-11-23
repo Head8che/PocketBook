@@ -44,6 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationBookRequested;
 import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationToFirebase;
 
 
@@ -61,7 +62,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
     ListenerRegistration listenerRegistration;
 
-    APIService apiService;
+
 
     /**
      * create a new instance of the ViewBookFragment
@@ -121,7 +122,7 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
                 });
 
-        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
 
     }
 
@@ -407,31 +408,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         .show();
 
 
-                FirebaseFirestore.getInstance()
-                        .collection("users")
-                        .document(bookOwner.getEmail())
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()){
-                                    String userToken = Objects.requireNonNull(task
-                                            .getResult().get("token")).toString();
-                                    String msg = String.format("%s has requested %s",
-                                            currentUser.getUsername(), book.getTitle());
-                                    Notification notification = new Notification(msg,
-                                            currentUser.getEmail(), bookOwner.getEmail(),
-                                            book.getId(), false, "BOOK_REQUESTED");
-                                    Data data = new Data(msg, "New Request",
-                                            notification.getNotificationDate(),
-                                            notification.getType(),
-                                            R.drawable.ic_logo_vector,
-                                            notification.getReceiver());
-                                    pushNewNotificationToFirebase(notification);
-                                    sendNotification(userToken,data);
-                                }
-                            }
-                        });
+                //notify user
+                sendNotificationBookRequested(currentUser, book);
 
                 // go back to the previous fragment
                 if (getActivity() != null) {
@@ -449,24 +427,5 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     }
 
 
-    private void sendNotification(String token,Data data) {
 
-        Sender sender = new Sender(data, token);
-        apiService.sendNotification(sender).enqueue((new Callback<Response>() {
-
-            @Override
-            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                if (response.code() == 200) {
-                    if (response.body().success != 1) {
-                        Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Response> call, Throwable t) {
-
-            }
-        }));
-    }
 }

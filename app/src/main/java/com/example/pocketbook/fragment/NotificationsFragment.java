@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import static com.example.pocketbook.util.FirebaseIntegrity.deleteNotificationFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.getAllNotificationsForCurrentUserFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.setAllNotificationsToSeenTrue;
+import static com.example.pocketbook.util.FirebaseIntegrity.setNotificationCounterNumber;
 
 public class NotificationsFragment extends Fragment {
 
@@ -104,19 +105,12 @@ public class NotificationsFragment extends Fragment {
                     DocumentSnapshot document = dc.getDocument();
                     switch (dc.getType()) {
                             case ADDED:
-                                Log.d("NOTIFICATION_SCROLL_UPDATE", "New doc: " + document);
-                                notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
-                                notificationAdapter.notifyDataSetChanged();
-                                break;
-
-                            case MODIFIED:
-                                Log.d("NOTIFICATION_SCROLL_UPDATE", "Modified doc: " + document);
+                                Log.d("SCROLL_UPDATE", "New doc: " + document);
                                 notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;
 
                             case REMOVED:
-                                Log.d("NOTIFICATION_SCROLL_UPDATE", "Removed doc: " + document);
                                 notifications = getAllNotificationsForCurrentUserFromFirebase(currentUser);
                                 notificationAdapter.notifyDataSetChanged();
                                 break;
@@ -179,7 +173,8 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter.stopListening();
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
+    // Item touch helper to implement enable swiping on notifications
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -188,6 +183,7 @@ public class NotificationsFragment extends Fragment {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            // delete notification when the user swipes on it
             deleteNotificationFromFirebase(notifications, viewHolder.getAdapterPosition(),currentUser.getEmail());
             notificationAdapter.notifyDataSetChanged();
         }

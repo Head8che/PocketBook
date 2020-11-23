@@ -40,12 +40,46 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true" />
 
-        <include
-            layout="@layout/item_notification_counter"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/fragmentHomeNotiIconImageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_notification" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fragmentHomeNotiNumberContainerCardView"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/colorAccent"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintEnd_toEndOf="@+id/fragmentHomeNotiIconImageView"
+                app:layout_constraintTop_toTopOf="@+id/fragmentHomeNotiIconImageView">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/fragmentHomeCounterTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/textWhite"
+                        android:textSize="10sp"
+                        android:layout_gravity="center"/>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/homeFragmentPageTitle"

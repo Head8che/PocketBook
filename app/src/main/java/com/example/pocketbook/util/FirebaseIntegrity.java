@@ -948,6 +948,27 @@ public class FirebaseIntegrity {
                     }
                 });
     }
+    public static void setNotificationCounterNumber(NotificationCounter notificationCounter, User currentUser) {
+        FirebaseFirestore.getInstance().collection("users").document(currentUser.getEmail()).collection("notifications")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        int counter = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if (document.get("seen").toString().equals("false")){
+                                counter++;
+                            }
+                        }
+                        notificationCounter.setNotificationNumberCounterInTextView(counter);
+                    } else {
+                        Log.d("UPDATE_NOTIFICATION_COUNTER_FAILED", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+    }
+
 
     /////////////////////////////////// GENERAL FIREBASE METHODS ///////////////////////////////////
 

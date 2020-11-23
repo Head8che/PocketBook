@@ -21,15 +21,21 @@ import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.example.pocketbook.util.NotificationCounter;
 import com.example.pocketbook.util.ScrollUpdate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import static com.example.pocketbook.util.FirebaseIntegrity.setNotificationCounterNumber;
 
 /**
  * Home Page fragment that contains a wide range of books on the platform
@@ -42,6 +48,7 @@ public class HomeFragment extends Fragment {
     private Query mQuery;
     private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
+    private NotificationCounter notificationCounter;
 
     private User currentUser;
 
@@ -158,6 +165,8 @@ public class HomeFragment extends Fragment {
                 transaction.commit();
             }
         });
+        notificationCounter = new NotificationCounter(v);
+        setNotificationCounterNumber(notificationCounter,currentUser);
 
         return v;
     }

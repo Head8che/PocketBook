@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="174dp"
+    android:layout_height="335dp"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itemBookV2Card"
+        android:layout_width="@dimen/medium_book_width"
+        android:layout_height="@dimen/medium_book_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
+
+        <ImageView
+            android:id="@+id/itemBookV2BookCoverImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/book_cover_image"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_scan" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/itemBookV2Title"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemBookV2Card"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:height="20dp"
+        android:singleLine="true"
+        android:gravity="start"
+        android:text="@string/book_title_that_is_really_long"
+        android:textColor="@color/textBlack"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/itemBookV2Author"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemBookV2Title"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="0dp"
+        android:singleLine="true"
+        android:height="20dp"
+        android:gravity="start"
+        android:text="@string/book_author"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/itemBookV2Status"
+        android:layout_width="27dp"
+        android:layout_height="47dp"
+        android:layout_below="@+id/itemBookV2Card"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@id/itemBookV2Title"
+        android:contentDescription="@string/book_cover_image"
+        android:paddingTop="6dp"
+        android:src="@drawable/ic_available"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemBookV2Author"
+        app:layout_constraintTop_toBottomOf="@+id/itemBookV2Card"
+        app:tint="@color/colorAvailable" />
+
+    <TextView
+        android:id="@+id/itemBookV2User"
+        android:layout_width="wrap_content"
+        android:maxWidth="162dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemBookV2Author"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:singleLine="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="6dp"
+        android:textAlignment="center"
+        android:letterSpacing="0.05"
+        android:background="@drawable/round_border"
+        android:gravity="center_horizontal"
+        android:text="Borrowed by: owenrogers"
+        android:textColor="@color/textBlack"
+        android:textStyle="bold"
+        android:textSize="11sp" />
+
+</RelativeLayout>

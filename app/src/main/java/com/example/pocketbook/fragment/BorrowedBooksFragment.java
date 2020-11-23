@@ -1,14 +1,37 @@
 package com.example.pocketbook.fragment;
 
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
+import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.User;
+import com.example.pocketbook.util.FirebaseIntegrity;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +40,157 @@ import com.example.pocketbook.R;
  */
 public class BorrowedBooksFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int numColumns = 2;
+    private static final int LIMIT = 20;
+    private FirebaseFirestore mFirestore;
+    private Query mQuery;
+    private RecyclerView mBooksRecycler;
+    private BookAdapter mAdapter;
+    private User currentUser;
+    private Fragment requestFragment = this;
+    private boolean firstTimeFragLoads = true;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    FirestoreRecyclerOptions<Book> options;
 
-    public BorrowedBooksFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BorrowedBooksFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BorrowedBooksFragment newInstance(String param1, String param2) {
-        BorrowedBooksFragment fragment = new BorrowedBooksFragment();
+    public static BorrowedBooksFragment newInstance(User user) {
+        BorrowedBooksFragment borrowedBooksfragment = new BorrowedBooksFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        args.putSerializable("PF_USER", user);
+        borrowedBooksfragment.setArguments(args);
+        return borrowedBooksfragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.currentUser = (User) getArguments().getSerializable("PF_USER");
         }
+
+        // Initialize Firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        // Query to retrieve all books
+        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",
+                currentUser.getEmail()).whereEqualTo("status", "BORROWED")
+                .limit(LIMIT);
+
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
+
+        EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
+            if (snapshots != null) {
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    if (error != null) {
+                        Log.e("SCROLL_UPDATE_ERROR", "Listen failed.", error);
+                        return;
+                    }
+
+                    DocumentSnapshot document = dc.getDocument();
+
+                    Book book = FirebaseIntegrity.getBookFromFirestore(document);
+
+                    if (book != null) {
+
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Log.d("SCROLL_UPDATE", "New doc: " + document);
+
+                                mAdapter.notifyDataSetChanged();
+                                break;
+
+                            case MODIFIED:
+                                Log.d("SCROLL_UPDATE", "Modified doc: " + document);
+
+                                mAdapter.notifyDataSetChanged();
+                                break;
+
+                            case REMOVED:
+                                Log.d("SCROLL_UPDATE", "Removed doc: " + document);
+
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                }
+            }
+        };
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail());
+        docRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.e("VMBBF_LISTENER", "Listen failed.", e);
+                return;
+            }
+
+            if ((snapshot != null) && snapshot.exists()) {
+                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                if (currentUser == null) {
+                    return;
+                }
+
+                // TODO: Add isAdded to other listeners
+                // if fragment can have a manager; tests crash without this line
+                if ((!firstTimeFragLoads) && requestFragment.isAdded()) {
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .detach(BorrowedBooksFragment.this)
+                            .attach(BorrowedBooksFragment.this)
+                            .setTransition(FragmentTransaction.TRANSIT_NONE)
+                            .addToBackStack(null)
+                            .commitAllowingStateLoss();
+                } else {
+                    firstTimeFragLoads = false;
+                }
+            }
+            else if (requestFragment.isAdded()) {
+                getParentFragmentManager().beginTransaction()
+                        .detach(BorrowedBooksFragment.this).commitAllowingStateLoss();
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
+
+        View rootView = inflater.inflate(R.layout.fragment_borrowed_books, container, false);
+        mBooksRecycler = rootView.findViewById(R.id.borrowedBooksRecyclerBooks);
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
+        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
+        mAdapter = new BookAdapter(options, currentUser, getActivity());
+        mBooksRecycler.setAdapter(mAdapter);
+
+        ImageView backButton = rootView.findViewById(R.id.borrowedBooksFragBackBtn);
+
+        backButton.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        return rootView;
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_borrowed_books, container, false);
+    public void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
     }
 }

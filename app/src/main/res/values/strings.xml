@@ -16,6 +16,8 @@
     <string name="added_by_text">Added By: %1$s</string>
     <string name="condition_text">Condition: %1$s</string>
     <string name="comment_text">Comment: %1$s</string>
+    <string name="borrowed_book_text">Borrower: %1$s</string>
+    <string name="owned_book_text">Owner: %1$s</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>
@@ -131,6 +133,18 @@
     <string name="location_pickup">Location Pickup</string>
     <string name="date_of_pickup">Date of Pickup</string>
     <string name="time_of_pickup">Time of Pickup</string>
+
+    <string name="firstOnBoardingSlideTitle">Welcome to Pocketbook</string>
+    <string name="secondOnBoardingSlideTitle">Exchange</string>
+    <string name="thirdOnBoardingSlideTitle">Get Started</string>
+
+    <string name="firstOnBoardingSlideDescription">Share the books you love and borrow the books you\'re going to love! </string>
+    <string name="secondOnBoardingSlideDescription">When you request to borrow an available book, that book becomes requested.
+    After the book owner accepts your request, the book is accepted. Once you and the owner exchange the book, it becomes borrowed.
+        And when you return the book, it becomes available!</string>
+    <string name="thirdOnBoardingSlideDescription">Add your favorite book to the platform and make someone\'s day!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

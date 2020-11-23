@@ -64,6 +64,17 @@ android:orientation="vertical">
                     android:src="@mipmap/ic_user_foreground" />
 
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/profileNewSignOut"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:src="@drawable/ic_sign_out"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- CODE SOURCE: https://www.taimoorsikander.com/onboarding-screen-android-studio-city-guide-app-part-3/-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/slider_image"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="64dp"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_sign_out" />
+
+    <TextView
+        android:id="@+id/slider_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="TextView"
+        android:textSize="24sp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/slider_image" />
+
+    <TextView
+        android:id="@+id/slider_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Slide Text"
+        android:textColor="@color/colorUnselected"
+        android:textSize="14sp"
+        android:letterSpacing="0.02"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/slider_heading" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

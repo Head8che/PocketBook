@@ -15,10 +15,12 @@ import android.widget.Toast;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.activity.EditProfileActivity;
+import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.example.pocketbook.util.ScrollUpdate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -204,12 +207,24 @@ public class ProfileFragment extends Fragment {
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();
         // TODO: obtain user_photo from firebase
-        String user_Pic = currentUser.getPhoto();
+        ImageView signOut = (ImageView) v.findViewById(R.id.profileNewSignOut);
         ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
         TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
         TextView UserName = (TextView) v.findViewById(R.id.user_name);
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
+
+        signOut.setColorFilter(ContextCompat
+                        .getColor(Objects.requireNonNull(getActivity()).getBaseContext(),
+                                R.color.colorAccent),
+                android.graphics.PorterDuff.Mode.SRC_IN);
+
+        signOut.setOnClickListener(v1 -> {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+            FirebaseAuth.getInstance().signOut();
+            Objects.requireNonNull(getActivity()).finishAffinity();
+        });
 
         GlideApp.with(Objects.requireNonNull(getContext()))
                 .load(userProfilePicture)

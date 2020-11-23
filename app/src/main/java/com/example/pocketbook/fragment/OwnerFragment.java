@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditProfileActivity;
+import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.adapter.ProfileAdapter;
 import com.example.pocketbook.model.Book;
@@ -30,6 +32,7 @@ import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.ScrollUpdate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -203,6 +206,7 @@ public class OwnerFragment extends Fragment {
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();
         String user_Email = currentUser.getEmail();
+        ImageView signOut = (ImageView) v.findViewById(R.id.profileExistingSignOut);
         ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
         TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
         TextView UserName = (TextView) v.findViewById(R.id.user_name);
@@ -210,6 +214,18 @@ public class OwnerFragment extends Fragment {
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
         Email.setText(user_Email);
+
+        signOut.setColorFilter(ContextCompat
+                        .getColor(Objects.requireNonNull(getActivity()).getBaseContext(),
+                                R.color.colorAccent),
+                android.graphics.PorterDuff.Mode.SRC_IN);
+
+        signOut.setOnClickListener(v1 -> {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+            FirebaseAuth.getInstance().signOut();
+            Objects.requireNonNull(getActivity()).finishAffinity();
+        });
 
         GlideApp.with(Objects.requireNonNull(getContext()))
                 .load(userProfilePicture)
@@ -268,41 +284,29 @@ public class OwnerFragment extends Fragment {
 
         Log.e("OWN", mOwnedBooksRecycler.getChildCount() + " " + ownedBookAdapter.getItemCount());
 
-        // hide views if they have no content
+        // initially hide views if they have no content
         if (readyForPickupOptions.getSnapshots().size() == 0) {
             titleReadyForPickups.setVisibility(View.GONE);
             mReadyForPickupBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleReadyForPickups.setVisibility(View.VISIBLE);
-            mReadyForPickupBooksRecycler.setVisibility(View.VISIBLE);
         }
         if (requestedOptions.getSnapshots().size() == 0) {
             titleRequested.setVisibility(View.GONE);
             mRequestedBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleRequested.setVisibility(View.VISIBLE);
-            mRequestedBooksRecycler.setVisibility(View.VISIBLE);
         }
         if (borrowedOptions.getSnapshots().size() == 0) {
             titleBorrowed.setVisibility(View.GONE);
             mBorrowedBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleBorrowed.setVisibility(View.VISIBLE);
-            mBorrowedBooksRecycler.setVisibility(View.VISIBLE);
         }
         if (ownedOptions.getSnapshots().size() == 0) {
             titleOwned.setVisibility(View.GONE);
             mOwnedBooksRecycler.setVisibility(View.GONE);
-        } else {
-            titleOwned.setVisibility(View.VISIBLE);
-            mOwnedBooksRecycler.setVisibility(View.VISIBLE);
         }
 
         viewAllReadyForPickups.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                Fragment someFragment = new ReadyForPickupFragment();
+                Fragment someFragment = ReadyForPickupFragment.newInstance(currentUser);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
                 transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
@@ -327,7 +331,7 @@ public class OwnerFragment extends Fragment {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                Fragment someFragment = new BorrowedBooksFragment();
+                Fragment someFragment = BorrowedBooksFragment.newInstance(currentUser);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, someFragment ); // give your fragment container id in first parameter
                 transaction.addToBackStack(null);  // if written, this transaction will be added to backstack

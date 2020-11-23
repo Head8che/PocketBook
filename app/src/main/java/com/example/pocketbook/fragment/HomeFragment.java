@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment {
             transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
             transaction.commit();
         });
-        notificationCounter = new NotificationCounter(v);
+        notificationCounter = new NotificationCounter(rootView);
         setNotificationCounterNumber(notificationCounter,currentUser);
 
         return rootView;

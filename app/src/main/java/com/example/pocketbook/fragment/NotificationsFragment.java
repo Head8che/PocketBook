@@ -179,7 +179,8 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter.stopListening();
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
+    // Item touch helper to implement enable swiping on notifications
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -188,6 +189,7 @@ public class NotificationsFragment extends Fragment {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            // delete notification when the user swipes on it
             deleteNotificationFromFirebase(notifications, viewHolder.getAdapterPosition(),currentUser.getEmail());
             notificationAdapter.notifyDataSetChanged();
         }

@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,63 +21,51 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
+import com.example.pocketbook.fragment.ViewProfileFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.firebase.ui.common.ChangeEventType;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-
-import com.example.pocketbook.model.Book;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.google.firebase.firestore.Query;
-
 import java.util.Objects;
 
-public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapter.BookHolder> {
+public class ViewAllBookAdapter extends
+        FirestoreRecyclerAdapter<Book, ViewAllBookAdapter.BookHolder> {
+
     private User currentUser;
     private User bookOwner;
     private FragmentActivity activity;
     private FirebaseAuth mAuth;
-    private FirestoreRecyclerOptions<Book> options;
-    private LinearLayout rowTitle;
-    private RecyclerView rowRecycler;
 
-    public ProfileAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
-                          FragmentActivity activity, LinearLayout rowTitle, RecyclerView rowRecycler) {
+    public ViewAllBookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
+                       FragmentActivity activity) {
         super(options);
-        this.options = options;
         this.currentUser = currentUser;
         this.activity = activity;
-        this.rowTitle = rowTitle;
-        this.rowRecycler = rowRecycler;
     }
 
     static class BookHolder extends RecyclerView.ViewHolder {
         TextView bookTitle;
         TextView bookAuthor;
         ImageView bookCoverImageView;
-//        ImageView statusImageView;
+        ImageView statusImageView;
+        TextView otherUser;
 
         public BookHolder(@NonNull View itemView) {
             super(itemView);
-            bookTitle = itemView.findViewById(R.id.profileAdapterItemBookTitle);
-            bookAuthor = itemView.findViewById(R.id.profileAdapterItemBookAuthor);
-            bookCoverImageView = itemView.findViewById(R.id.item_book_cover);
-//            statusImageView = itemView.findViewById(R.id.itemBookStatus);
+            bookTitle = itemView.findViewById(R.id.itemBookV2Title);
+            bookAuthor = itemView.findViewById(R.id.itemBookV2Author);
+            bookCoverImageView = itemView.findViewById(R.id.itemBookV2BookCoverImageView);
+            statusImageView = itemView.findViewById(R.id.itemBookV2Status);
+            otherUser = itemView.findViewById(R.id.itemBookV2User);
 
         }
     }
@@ -87,7 +74,7 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     @Override
     public BookHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new BookHolder(inflater.inflate(R.layout.profile_adapter, parent, false));
+        return new BookHolder(inflater.inflate(R.layout.item_book_v2, parent, false));
     }
 
     @Override
@@ -97,15 +84,92 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
 
-//        Log.e("BIND", options.getSnapshots().size() + "");
-
         GlideApp.with(Objects.requireNonNull(activity.getBaseContext()))
                 .load(FirebaseIntegrity.getBookCover(book))
                 .into(bookHolder.bookCoverImageView);
 
+        switch (book.getStatus().toUpperCase()) {
+
+            // if the book is borrowed or accepted, it is not available for requesting
+            case "BORROWED":
+
+                // OWNER TAB
+                if (currentUser.getEmail().equals(book.getOwner())) {
+                    // TODO: Set the Other User text to the book borrower
+                    bookHolder.otherUser.setVisibility(View.GONE);
+
+                } else  { // BORROWER TAB
+
+                        // Set the Other User text to the book owner
+                        bookHolder.otherUser.setText(activity.getResources()
+                                .getString(R.string.owned_book_text, book.getOwner()));
+
+                }
+
+                bookHolder.statusImageView.setImageResource(R.drawable.ic_borrowed);
+                bookHolder.statusImageView.setColorFilter(ContextCompat
+                                .getColor(activity.getBaseContext(), R.color.colorBorrowed),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+
+                break;
+
+            case "ACCEPTED":
+
+                // OWNER TAB
+                if (currentUser.getEmail().equals(book.getOwner())) {
+                    // TODO: Set the Other User text to the book requester
+                    bookHolder.otherUser.setVisibility(View.GONE);
+
+                } else  { // BORROWER TAB
+
+                    // Set the Other User text to the book owner
+                    bookHolder.otherUser.setText(activity.getResources()
+                            .getString(R.string.owned_book_text, book.getOwner()));
+
+                }
+
+                bookHolder.statusImageView.setImageResource(R.drawable.ic_accepted);
+                bookHolder.statusImageView.setColorFilter(ContextCompat
+                                .getColor(activity.getBaseContext(), R.color.colorAccepted),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+
+            case "REQUESTED":
+
+                // OWNER TAB
+                if (currentUser.getEmail().equals(book.getOwner())) {
+                    // TODO: Set the Other User text to the book requester
+                    bookHolder.otherUser.setVisibility(View.GONE);
+
+                } else  { // BORROWER TAB
+
+                    // Set the Other User text to the book owner
+                    bookHolder.otherUser.setText(activity.getResources()
+                            .getString(R.string.owned_book_text, book.getOwner()));
+
+                }
+
+                // if the user has already requested the book, it is not available
+                bookHolder.statusImageView.setImageResource(R.drawable.ic_requested);
+                bookHolder.statusImageView.setColorFilter(ContextCompat
+                                .getColor(activity.getBaseContext(), R.color.colorRequested),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+
+
+
+                break;
+
+            // default case is that the book is available
+            default:
+                bookHolder.statusImageView.setImageResource(R.drawable.ic_available);
+                bookHolder.statusImageView.setColorFilter(ContextCompat
+                                .getColor(activity.getBaseContext(), R.color.colorAvailable),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+
         bookHolder.itemView.setOnClickListener(v -> {
             if (book.getOwner().equals(currentUser.getEmail())) {
-//                Log.e("OWNERIN", book.getOwner());
+                Log.e("OWNERIN", book.getOwner());
                 ViewMyBookFragment nextFrag = ViewMyBookFragment
                         .newInstance(currentUser, book);
                 Bundle bundle = new Bundle();
@@ -135,21 +199,8 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
                     }
                 });
             }
+
         });
 
-    }
-
-    @Override
-    public void onDataChanged() {
-        super.onDataChanged();
-        int dataSize = options.getSnapshots().size();
-//        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
-        if (dataSize > 0) {
-            rowTitle.setVisibility(View.VISIBLE);
-            rowRecycler.setVisibility(View.VISIBLE);
-        } else {
-            rowTitle.setVisibility(View.GONE);
-            rowRecycler.setVisibility(View.GONE);
-        }
     }
 }

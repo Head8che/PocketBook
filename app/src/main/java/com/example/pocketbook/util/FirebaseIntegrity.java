@@ -1047,6 +1047,7 @@ public class FirebaseIntegrity {
         else{
             nonExchange =  true;
         }
+//        Log.e("GET_BOOK", id + " " + title + " " + author);
         String comment = document.getString("comment");
         String condition = document.getString("condition");
         String photo = document.getString("photo");

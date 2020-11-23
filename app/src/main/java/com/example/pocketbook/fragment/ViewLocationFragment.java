@@ -1,7 +1,10 @@
 package com.example.pocketbook.fragment;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,25 @@ import com.example.pocketbook.activity.LocationActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.model.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class ViewLocationFragment extends Fragment {
+import java.io.IOException;
+import java.util.List;
+
+public class ViewLocationFragment extends Fragment implements OnMapReadyCallback {
 
     Exchange exchange;
+    GoogleMap googleMap = null;
+    private LatLng mPinnedMap;
+    Marker marker;
+    SupportMapFragment mapFrag;
 
     public ViewLocationFragment() {
         // Required empty public constructor
@@ -61,6 +78,12 @@ public class ViewLocationFragment extends Fragment {
         layoutViewDate.setText(exchange.getMeetingDetails().getMeetingDate());
         layoutViewTime.setText(exchange.getMeetingDetails().getMeetingTime());
 
+        if (this.googleMap == null) {
+            mapFrag = (SupportMapFragment)
+                    getChildFragmentManager().findFragmentById(R.id.viewLocationFragMap);
+            mapFrag.getMapAsync(this);
+        }
+
 //        layoutViewLocation.setOnClickListener(v -> {
 //            Intent intent = new Intent(getContext(), LocationActivity.class);
 //            startActivity(intent);
@@ -71,4 +94,34 @@ public class ViewLocationFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        if (this.googleMap != null) {
+
+            String address = exchange.getMeetingDetails().getAddress();
+            double latitude = exchange.getMeetingDetails().getLatitude();
+            double longitude = exchange.getMeetingDetails().getLongitude();
+
+            Log.e("ADDRESS", address + " " + latitude + " " + longitude);
+
+            if (marker != null) {
+                marker.remove();
+            }
+            mPinnedMap = new LatLng(latitude, longitude);
+
+            MarkerOptions options = new MarkerOptions()
+                    .draggable(true)
+                    .title(address)
+                    .position(mPinnedMap);
+
+            if (this.googleMap != null) {
+                marker = this.googleMap.addMarker(options);
+            }
+
+            marker.setTitle(address);
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mPinnedMap,15));
+        }
+    }
 }

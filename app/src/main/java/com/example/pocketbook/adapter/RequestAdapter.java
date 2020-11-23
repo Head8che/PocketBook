@@ -140,6 +140,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
 
         // if the user already accepted a request, they can't accept or decline that request
         if (mBook.getStatus().equals("ACCEPTED")){
+            requestHolder.accept.setVisibility(View.VISIBLE);
             requestHolder.accept.setText(R.string.cancelAccept);
             requestHolder.decline.setVisibility(View.GONE);
             requestHolder.decline.setClickable(false);
@@ -175,6 +176,40 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
             });
         }
 
+        // when the user taps on the accept button for a request,
+        // the request is accepted and they can't decline that request
+        if (mBook.getStatus().equals("REQUESTED")) {
+            requestHolder.accept.setVisibility(View.VISIBLE);
+            requestHolder.decline.setVisibility(View.VISIBLE);
+
+            requestHolder.accept.setText(R.string.accept);
+
+            requestHolder.accept.setOnClickListener(view -> {
+
+                String bookOwner = mBook.getOwner();
+                Fragment nextFrag = new SetLocationFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("SLF_BOOK", mBook);
+                bundle.putSerializable("SLF_REQUEST", request);
+                bundle.putSerializable("SLF_BOOK_OWNER", bookOwner);
+                bundle.putSerializable("SLF_BOOK_REQUESTER", mRequester.getEmail());
+                nextFrag.setArguments(bundle);
+                FragmentTransaction transaction = activity
+                        .getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, nextFrag); // give your fragment
+                // container id in first param
+                transaction.addToBackStack(null);  // add transaction to backstack
+                transaction.commit();
+            });
+            requestHolder.decline.setOnClickListener(view -> {
+
+                // decline a book request in Firebase
+                FirebaseIntegrity.declineBookRequest(request);
+                sendNotificationRequestDeclined( request,  mBook);
+
+            });
+        }
+
         View.OnClickListener profileClickListener = view -> {
             FirebaseFirestore.getInstance().collection("users")
                     .document(mBook.getOwner())
@@ -197,42 +232,6 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
 
         requestHolder.userProfile.setOnClickListener(profileClickListener);
         requestHolder.username.setOnClickListener(profileClickListener);
-
-        // when the user taps on the accept button for a request,
-        // the request is accepted and they can't decline that request
-        if (mBook.getStatus().equals("REQUESTED")) {
-            requestHolder.accept.setOnClickListener(view -> {
-
-                String bookOwner = mBook.getOwner();
-                Fragment nextFrag = new SetLocationFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("SLF_BOOK", mBook);
-                bundle.putSerializable("SLF_REQUEST", request);
-                bundle.putSerializable("SLF_BOOK_OWNER", bookOwner);
-                bundle.putSerializable("SLF_BOOK_REQUESTER", mRequester.getEmail());
-                nextFrag.setArguments(bundle);
-                FragmentTransaction transaction = activity
-                        .getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, nextFrag); // give your fragment
-                // container id in first param
-                transaction.addToBackStack(null);  // add transaction to backstack
-                transaction.commit();
-            });
-        }
-
-        //when the user taps on the decline button for a request, that request is declined
-        requestHolder.decline.setOnClickListener(view -> {
-
-
-            if (mBook.getStatus().equals("REQUESTED")) {
-
-                // decline a book request in Firebase
-                FirebaseIntegrity.declineBookRequest(request);
-                sendNotificationRequestDeclined( request,  mBook);
-
-
-            }
-        });
 
     }
 

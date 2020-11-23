@@ -138,6 +138,8 @@ public class ViewMyBookFragment extends Fragment {
             Objects.requireNonNull(tabLayout.getTabAt(1)).setText("ACCEPTED");
         } else if (book.getStatus().equals("BORROWED")) {
             Objects.requireNonNull(tabLayout.getTabAt(1)).setText("BORROWED");
+        } else {
+            Objects.requireNonNull(tabLayout.getTabAt(1)).setText("REQUESTS");
         }
 
         return rootView;

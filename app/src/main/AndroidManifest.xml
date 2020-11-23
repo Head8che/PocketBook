@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pocketbook">
 
     <supports-screens
@@ -41,8 +42,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activity.OnBoardingActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:replace="screenOrientation">
+        <activity android:name=".activity.CaptureActivityPortrait"
+            android:screenOrientation="sensorPortrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".activity.OnBoardingActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

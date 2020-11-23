@@ -1,6 +1,7 @@
 package com.example.pocketbook.util;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.pocketbook.R;
+import com.example.pocketbook.activity.CaptureActivityPortrait;
+import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
@@ -64,6 +67,46 @@ public class ScanHandler {
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
 
+        alertDialog.setOnDismissListener(dialog -> {
+            if (activity.getClass().equals(HomeActivity.class)) {
+
+                HomeActivity homeActivity = ((HomeActivity) activity);
+
+                switch (homeActivity.FRAG_TAG) {
+                    case "HOME_FRAGMENT":
+                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                        break;
+                    case "SEARCH_FRAGMENT":
+                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_search);
+                        break;
+                    default:
+                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_profile);
+                        break;
+                }
+            }
+            alertDialog.dismiss();
+        });
+
+        alertDialog.setOnCancelListener(dialog -> {
+            if (activity.getClass().equals(HomeActivity.class)) {
+
+                HomeActivity homeActivity = ((HomeActivity) activity);
+
+                switch (homeActivity.FRAG_TAG) {
+                    case "HOME_FRAGMENT":
+                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+                        break;
+                    case "SEARCH_FRAGMENT":
+                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_search);
+                        break;
+                    default:
+                        homeActivity.bottomNav.setSelectedItemId(R.id.bottom_nav_profile);
+                        break;
+                }
+            }
+            alertDialog.dismiss();
+        });
+
         // scan code appropriately based on the selected scanning dialog option
         descriptionOption.setOnClickListener(v -> {
             userSelection = "SEE_DESCRIPTION_CODE";
@@ -98,7 +141,9 @@ public class ScanHandler {
 
     private void scanCode() {
         IntentIntegrator integrator = new IntentIntegrator(activity);
-        integrator.setOrientationLocked(false);
+        integrator.setCaptureActivity(CaptureActivityPortrait.class);
+        integrator.setCameraId(0);
+        integrator.setOrientationLocked(true);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scanning Code");
         integrator.setBarcodeImageEnabled(true);

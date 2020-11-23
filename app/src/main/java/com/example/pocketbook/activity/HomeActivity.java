@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG ="MainActivity";
     private FirebaseFirestore mFirestore;
     private User currentUser;
-    private BottomNavigationView bottomNav;
+    public BottomNavigationView bottomNav;
     private Bundle extras;
 
     private int LAUNCH_ADD_BOOK_CODE = 1234;
@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
     private int RECEIVE_BOOK_CODE = 5555;
 
     Fragment selectedFragment;
-    String FRAG_TAG;
+    public String FRAG_TAG;
 
     ScanHandler scanHandler;
 

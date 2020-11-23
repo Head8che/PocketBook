@@ -13,11 +13,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.CaptureActivityPortrait;
 import com.example.pocketbook.activity.HomeActivity;
+import com.example.pocketbook.fragment.SetLocationFragment;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
@@ -85,7 +88,7 @@ public class ScanHandler {
                         break;
                 }
             }
-            alertDialog.dismiss();
+            if (alertDialog != null) {alertDialog.dismiss();}
         });
 
         alertDialog.setOnCancelListener(dialog -> {
@@ -105,7 +108,7 @@ public class ScanHandler {
                         break;
                 }
             }
-            alertDialog.dismiss();
+            if (alertDialog != null) {alertDialog.dismiss();}
         });
 
         // scan code appropriately based on the selected scanning dialog option
@@ -178,7 +181,7 @@ public class ScanHandler {
                                     bundle.putSerializable("VMBF_USER", currentUser);
                                     bundle.putSerializable("VMBF_BOOK", book);
                                     f.setArguments(bundle);
-                                    alertDialog.dismiss();
+                                    if (alertDialog != null) {alertDialog.dismiss();}
                                     fragmentManager.beginTransaction()
                                             .replace(R.id.container, f)
                                             .addToBackStack(null).commit();
@@ -203,7 +206,7 @@ public class ScanHandler {
                                             bundle.putSerializable("BA_BOOK", book);
                                             bundle.putSerializable("BA_BOOKOWNER", bookOwner);
                                             nextFrag.setArguments(bundle);
-                                            alertDialog.dismiss();
+                                            if (alertDialog != null) {alertDialog.dismiss();}
                                             fragmentManager.beginTransaction()
                                                     .replace(R.id.container, nextFrag)
                                                     .addToBackStack(null).commit();
@@ -233,51 +236,44 @@ public class ScanHandler {
                             Toast.makeText(activity, "No Results Found for ISBN: "
                                     + scannedIsbn, Toast.LENGTH_SHORT)
                                     .show();
+                            if (alertDialog != null) {alertDialog.dismiss();}
                         } else {
+
+                            if (alertDialog != null) {alertDialog.dismiss();}
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 // retrieving the book
                                 Book book = FirebaseIntegrity.getBookFromFirestore(document);
 
-                                FirebaseFirestore.getInstance()
-                                        .collection("exchange")
-                                        .whereEqualTo("owner", currentUser.getEmail())
-                                        .whereEqualTo("ownerBookStatus", "ACCEPTED")
-                                        .get() // get only 1 book with given isbn
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) {
-                                                Log.e("SIZE",
-                                                        String.valueOf(task1.getResult().size()));
-                                                if (task1.getResult().size() == 0) {
-                                                    Toast.makeText(activity,
-                                                            "No Results Found for ISBN: "
-                                                            + scannedIsbn, Toast.LENGTH_SHORT)
-                                                            .show();
-                                                } else {
+                                if (book != null) {
 
-                                                    for (QueryDocumentSnapshot document1
-                                                            : task1.getResult()) {
+                                    if (!book.getStatus().equals("ACCEPTED")) {
+                                        Toast.makeText(activity, scannedIsbn
+                                                        + " is not an accepted book!",
+                                                Toast.LENGTH_SHORT)
+                                                .show();
+                                        return;
+                                    }
 
-                                                        FirebaseFirestore.getInstance()
-                                                                .collection("exchange")
-                                                                .document(document1.getId())
-                                                                .update("ownerBookStatus",
-                                                                        "BORROWED");
-
-                                                            FirebaseIntegrity
-                                                                    .setBookStatusFirebase(book,
-                                                                    "BORROWED");
-
-                                                    }
-                                                }
-                                            } else {
-                                                Log.e("ScanHandler",
-                                                        "Error getting documents: ",
-                                                        task1.getException());
-                                            }
-
-                                        });
+                                    String bookOwner = book.getOwner();
+                                    Fragment nextFrag = new SetLocationFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("SLF_BOOK", book);
+                                    bundle.putSerializable("SLF_BOOK_OWNER", bookOwner);
+                                    bundle.putSerializable("SLF_CURRENT_USER", currentUser);
+                                    nextFrag.setArguments(bundle);
+                                    FragmentTransaction transaction = fragmentManager
+                                            .beginTransaction();
+                                    transaction.replace(R.id.container, nextFrag);
+                                    // container id in first param
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                } else {
+                                    Toast.makeText(activity, "Please re-scan the ISBN",
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
                             }
                         }
                     } else {
@@ -287,6 +283,48 @@ public class ScanHandler {
 
                 });
 
+    }
+
+    public void lendBookAfterSetLocation(Book book) {
+        FirebaseFirestore.getInstance()
+                .collection("exchange")
+                .whereEqualTo("owner", currentUser.getEmail())
+                .whereEqualTo("ownerBookStatus", "ACCEPTED")
+                .get() // get only 1 book with given isbn
+                .addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Log.e("SIZE",
+                                String.valueOf(task1.getResult().size()));
+                        if (task1.getResult().size() == 0) {
+                            Toast.makeText(activity,
+                                    "No Results Found for ISBN: "
+                                            + book.getISBN(), Toast.LENGTH_SHORT)
+                                    .show();
+                            if (alertDialog != null) {alertDialog.dismiss();}
+                        } else {
+                            if (alertDialog != null) {alertDialog.dismiss();}
+                            for (QueryDocumentSnapshot document1
+                                    : task1.getResult()) {
+
+                                FirebaseFirestore.getInstance()
+                                        .collection("exchange")
+                                        .document(document1.getId())
+                                        .update("ownerBookStatus",
+                                                "BORROWED");
+
+                                FirebaseIntegrity
+                                        .setBookStatusFirebase(book,
+                                                "BORROWED");
+
+                            }
+                        }
+                    } else {
+                        Log.e("ScanHandler",
+                                "Error getting documents: ",
+                                task1.getException());
+                    }
+
+                });
     }
 
     public void handleBorrowBook(String scannedIsbn) {
@@ -300,10 +338,13 @@ public class ScanHandler {
                     if (task.isSuccessful()) {
                         Log.e("SIZE", String.valueOf(task.getResult().size()));
                         if (task.getResult().size() == 0) {
+                            if (alertDialog != null) {alertDialog.dismiss();}
                             Toast.makeText(activity, "No Results Found for ISBN: "
                                     + scannedIsbn, Toast.LENGTH_SHORT)
                                     .show();
                         } else {
+
+                            if (alertDialog != null) {alertDialog.dismiss();}
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -374,12 +415,15 @@ public class ScanHandler {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        if (alertDialog != null) {alertDialog.dismiss();}
                         Log.e("SIZE", String.valueOf(task.getResult().size()));
                         if (task.getResult().size() == 0) {
                             Toast.makeText(activity, "No Results Found for ISBN: "
                                     + scannedIsbn, Toast.LENGTH_SHORT)
                                     .show();
                         } else {
+
+                            if (alertDialog != null) {alertDialog.dismiss();}
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -449,12 +493,15 @@ public class ScanHandler {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        if (alertDialog != null) {alertDialog.dismiss();}
                         Log.e("SIZE", String.valueOf(task.getResult().size()));
                         if (task.getResult().size() == 0) {
                             Toast.makeText(activity, "No Results Found for ISBN: "
                                     + scannedIsbn, Toast.LENGTH_SHORT)
                                     .show();
                         } else {
+
+                            if (alertDialog != null) {alertDialog.dismiss();}
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -468,6 +515,7 @@ public class ScanHandler {
                                 FirebaseFirestore.getInstance()
                                         .collection("exchange")
                                         .whereEqualTo("owner", currentUser.getEmail())
+                                        .whereEqualTo("relatedBook", book.getId())
                                         .whereEqualTo("borrowerBookStatus", "AVAILABLE")
                                         .get()
                                         .addOnCompleteListener(task1 -> {

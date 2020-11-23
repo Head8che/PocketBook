@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -24,8 +25,10 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.model.MeetingDetails;
 import com.example.pocketbook.model.Request;
+import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.Parser;
+import com.example.pocketbook.util.ScanHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,14 +38,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationRequestAccepted;
+import static com.example.pocketbook.notifications
+        .NotificationHandler.sendNotificationRequestAccepted;
 
 public class SetLocationFragment extends Fragment implements OnMapReadyCallback {
 
@@ -77,6 +85,7 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
 
     String bookOwner;
     String bookRequester;
+    private User currentUser;
 
     GoogleMap googleMap = null;
     private LatLng mPinnedMap;
@@ -88,12 +97,14 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     }
 
     public static SetLocationFragment newInstance(Book book, Request request,
-                                                  String bookOwner, String bookRequester) {
+                                                  String bookOwner, String bookRequester,
+                                                  User currentUser) {
         SetLocationFragment layoutSetLocationFragment = new SetLocationFragment();
         Bundle args = new Bundle();
         args.putSerializable("SLF_BOOK", book);
         args.putSerializable("SLF_REQUEST", request);
         args.putSerializable("SLF_BOOK_OWNER", bookOwner);
+        args.putSerializable("SLF_CURRENT_USER", currentUser);
         args.putSerializable("SLF_BOOK_REQUESTER", bookRequester);
         layoutSetLocationFragment.setArguments(args);
         return layoutSetLocationFragment;
@@ -111,6 +122,7 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
             this.book = (Book) getArguments().getSerializable("SLF_BOOK");
             this.request = (Request) getArguments().getSerializable("SLF_REQUEST");
             this.bookOwner = (String) getArguments().getSerializable("SLF_BOOK_OWNER");
+            this.currentUser = (User) getArguments().getSerializable("SLF_CURRENT_USER");
             this.bookRequester = (String) getArguments().getSerializable("SLF_BOOK_REQUESTER");
         }
 
@@ -127,6 +139,11 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
         layoutSetDate = (TextInputEditText) view.findViewById(R.id.setDateField);
         layoutSetTime = (TextInputEditText) view.findViewById(R.id.setTimeField);
         confirmBtn = (Button) view.findViewById(R.id.confirmPickupBtn);
+
+        TextView setLocationTitle = (TextView) view.findViewById(R.id.setLocationTitle);
+        if (currentUser != null) {
+            setLocationTitle.setText(R.string.setReturnLocation);
+        }
 
         // access the layout text containers
         layoutSetLocationContainer = (TextInputLayout) view.findViewById(R.id.setLocationContainer);
@@ -194,28 +211,108 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
             // TODO: Need to Notify the user of Accept and Decline all other Requests
             if (validLocation && validDate && validTime
                     && (latitude != invalidCoord) && (longitude != invalidCoord)) {
-                String exchangeID = UUID.randomUUID().toString();
-                MeetingDetails meetingDetails = new MeetingDetails(latitude,
-                        longitude, address, meetingDate, meetingTime);
 
-                String ownerBookStatus = (book.getStatus().equals("REQUESTED"))
-                        ? "ACCEPTED" : book.getStatus();
-                String borrowerBookStatus = (book.getStatus().equals("REQUESTED"))
-                        ? "ACCEPTED" : book.getStatus();
+                if (book.getStatus().equals("REQUESTED")) {
+                    String exchangeID = UUID.randomUUID().toString();
+                    MeetingDetails meetingDetails = new MeetingDetails(latitude,
+                            longitude, address, meetingDate, meetingTime);
 
-                Exchange exchange = new Exchange(exchangeID, book.getId(), bookOwner,
-                        bookRequester, ownerBookStatus, borrowerBookStatus, meetingDetails);
+                    String ownerBookStatus = (book.getStatus().equals("REQUESTED"))
+                            ? "ACCEPTED" : book.getStatus();
+                    String borrowerBookStatus = (book.getStatus().equals("REQUESTED"))
+                            ? "ACCEPTED" : book.getStatus();
 
-                if ((meetingDetails.getAddress() == null)
-                        || (exchange.getExchangeId() == null)) {
-                    Toast.makeText(getContext(), "Invalid Details",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Valid Details",
-                            Toast.LENGTH_SHORT).show();
-                    FirebaseIntegrity.pushNewExchangeToFirebase(exchange);
-                    FirebaseIntegrity.acceptBookRequest(request);
-                    Objects.requireNonNull(getActivity()).onBackPressed();
+                    Exchange exchange = new Exchange(exchangeID, book.getId(), bookOwner,
+                            bookRequester, ownerBookStatus, borrowerBookStatus, meetingDetails);
+
+                    if ((meetingDetails.getAddress() == null)
+                            || (exchange.getExchangeId() == null)) {
+                        Toast.makeText(getContext(), "Invalid Details",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Valid Details",
+                                Toast.LENGTH_SHORT).show();
+                        FirebaseIntegrity.pushNewExchangeToFirebase(exchange);
+                        FirebaseIntegrity.acceptBookRequest(request);
+                        Objects.requireNonNull(getActivity()).onBackPressed();
+
+                        // notify user
+                        sendNotificationRequestAccepted(request, book);
+                    }
+                } else if (book.getStatus().equals("ACCEPTED")) {
+                    if (currentUser != null) {
+
+                        FirebaseFirestore.getInstance()
+                                .collection("exchange")
+                                .whereEqualTo("owner", currentUser.getEmail())
+                                .whereEqualTo("relatedBook", book.getId())
+                                .whereEqualTo("ownerBookStatus", "ACCEPTED")
+                                .get() // get only 1 book with given isbn
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        Log.e("SIZE",
+                                                String.valueOf(task1.getResult().size()));
+                                        if (task1.getResult().size() == 0) {
+                                            Toast.makeText(getContext(),
+                                                    "No Results Found for ISBN: "
+                                                            + book.getISBN(), Toast.LENGTH_SHORT)
+                                                    .show();
+                                        } else {
+
+                                            for (QueryDocumentSnapshot document1
+                                                    : task1.getResult()) {
+
+                                                MeetingDetails meetingDetails = new MeetingDetails(latitude,
+                                                        longitude, address, meetingDate, meetingTime);
+
+                                                if (meetingDetails.getAddress() == null) {
+                                                    Toast.makeText(getContext(),
+                                                            "Invalid Details",
+                                                            Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getContext(),
+                                                            "Valid Details",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                    Map<String, Object> docData = new HashMap<>();
+                                                    docData.put("address",
+                                                            meetingDetails.getAddress());
+                                                    docData.put("latitude",
+                                                            meetingDetails.getLatitude());
+                                                    docData.put("longitude",
+                                                            meetingDetails.getLongitude());
+                                                    docData.put("meetingDate",
+                                                            meetingDetails.getMeetingDate());
+                                                    docData.put("meetingTime",
+                                                            meetingDetails.getMeetingTime());
+
+                                                    FirebaseFirestore.getInstance()
+                                                            .collection("exchange")
+                                                            .document(document1.getId())
+                                                            .update("ownerBookStatus",
+                                                                    "BORROWED",
+                                                                    "meetingDetails",
+                                                                    docData);
+
+                                                    FirebaseIntegrity
+                                                            .setBookStatusFirebase(book,
+                                                                    "BORROWED");
+
+                                                    Objects.requireNonNull(getActivity())
+                                                            .onBackPressed();
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                });
+                        ScanHandler scanHandler = new ScanHandler(getActivity(),
+                                getParentFragmentManager(), currentUser);
+
+                        scanHandler.lendBookAfterSetLocation(book);
+                    }
+
                 }
             } else {  // if not all fields are valid
                 if (!validLocation) {
@@ -256,8 +353,6 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
                     layoutSetTime.requestFocus();
                 }
             }
-            // notify user
-            sendNotificationRequestAccepted(request,book);
         });
 
 

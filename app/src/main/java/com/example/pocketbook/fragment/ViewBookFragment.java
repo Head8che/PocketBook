@@ -154,52 +154,59 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         ImageView bookCoverImageView = view.findViewById(R.id.bookCover);
         ImageView bookStatusImage = view.findViewById(R.id.viewBookBookStatusImageView);
 
-        if (!(bookStatus.equals("ACCEPTED"))  // book must be accepted for the current user
-                || !(book.getRequesters().contains(currentUser.getEmail()))) {
+        // book must be accepted or borrowed for the current user
+        if ((book.getStatus().equals("ACCEPTED") || book.getStatus().equals("BORROWED"))
+                && (book.getRequesters().contains(currentUser.getEmail()))) {
+
+            if (book.getStatus().equals("BORROWED")) {
+                bookLocationField.setText(R.string.viewReturnLocation);
+            }
+
+            bookLocationField.setVisibility(View.VISIBLE);
+            bookLocationField.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    bookLocationField.setClickable(false);
+
+                    FirebaseFirestore.getInstance()
+                            .collection("exchange")
+                            .whereEqualTo("relatedBook", book.getId())
+                            .whereEqualTo("owner", book.getOwner())
+                            .whereEqualTo("borrower", currentUser.getEmail())
+                            .get().addOnCompleteListener(task -> {
+                        if (!(task.isSuccessful())) {
+                            Log.e("VIEW_BOOK_EXCHANGE",
+                                    "Error getting exchange document!");
+                        } else {
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                            DocumentSnapshot document = documents.get(0);
+
+                            Exchange exchange = FirebaseIntegrity
+                                    .getExchangeFromFirestore(document);
+
+                            if (exchange != null) {
+                                ViewLocationFragment nextFrag
+                                        = ViewLocationFragment.newInstance(exchange);
+
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("VBF_EXCHANGE", exchange);
+                                nextFrag.setArguments(bundle);
+
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(getActivity()
+                                                .findViewById(R.id.container)
+                                                .getId(), nextFrag)
+                                        .addToBackStack(null).commit();
+                            }
+
+                        }
+                        bookLocationField.setClickable(true);
+                    });
+                }
+            });
+        } else {
             bookLocationField.setVisibility(View.GONE);
         }
-
-        bookLocationField.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                bookLocationField.setClickable(false);
-
-                FirebaseFirestore.getInstance()
-                        .collection("exchange")
-                        .whereEqualTo("relatedBook", book.getId())
-                        .whereEqualTo("owner", book.getOwner())
-                        .whereEqualTo("borrower", currentUser.getEmail())
-                        .get().addOnCompleteListener(task -> {
-                            if (!(task.isSuccessful())) {
-                                Log.e("VIEW_BOOK_EXCHANGE",
-                                        "Error getting exchange document!");
-                            } else {
-                                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                                DocumentSnapshot document = documents.get(0);
-
-                                Exchange exchange = FirebaseIntegrity
-                                        .getExchangeFromFirestore(document);
-
-                                if (exchange != null) {
-                                    ViewLocationFragment nextFrag
-                                            = ViewLocationFragment.newInstance(exchange);
-
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("VBF_EXCHANGE", exchange);
-                                    nextFrag.setArguments(bundle);
-
-                                    getActivity().getSupportFragmentManager()
-                                            .beginTransaction()
-                                            .replace(getActivity()
-                                                    .findViewById(R.id.container)
-                                                    .getId(), nextFrag)
-                                            .addToBackStack(null).commit();
-                                }
-
-                            }
-                            bookLocationField.setClickable(true);
-                        });
-            }
-        });
 
         ImageView backButton = view.findViewById(R.id.viewBookFragBackBtn);
 

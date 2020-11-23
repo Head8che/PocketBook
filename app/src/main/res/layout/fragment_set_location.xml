@@ -220,7 +220,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
                 android:background="@color/colorAccent"
-                android:text="@string/confirm_pickup"
+                android:text="@string/confirmDetails"
                 android:textColor="@color/textWhite"
                 android:textSize="24sp"
                 android:textStyle="bold"

@@ -120,7 +120,12 @@ public class ViewMyBookBookFragment extends Fragment {
         TextView layoutBookCondition = (TextView) rootView.findViewById(R.id.viewMyBookConditionTextView);
         TextView layoutBookComment = (TextView) rootView.findViewById(R.id.viewMyBookCommentTextView);
 
-        if (book.getStatus().equals("ACCEPTED")) {
+        if ((book.getStatus().equals("ACCEPTED") || book.getStatus().equals("BORROWED"))) {
+
+            if (book.getStatus().equals("BORROWED")) {
+                bookLocationField.setText(R.string.viewReturnLocation);
+            }
+
             bookLocationField.setVisibility(View.VISIBLE);
             bookLocationField.setOnClickListener(v -> {
                 if (getActivity() != null) {

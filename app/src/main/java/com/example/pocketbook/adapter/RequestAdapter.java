@@ -131,7 +131,15 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
         requestHolder.date.setText(request.getRequestDate());
 
         // if the user already accepted a request, they can't accept or decline that request
-        if (mBook.getStatus().equals("ACCEPTED")) {
+        if (mBook.getStatus().equals("BORROWED")) {
+            requestHolder.accept.setVisibility(View.GONE);
+            requestHolder.accept.setClickable(false);
+            requestHolder.decline.setVisibility(View.GONE);
+            requestHolder.decline.setClickable(false);
+        }
+
+        // if the user already accepted a request, they can't accept or decline that request
+        if (mBook.getStatus().equals("ACCEPTED")){
             requestHolder.accept.setText(R.string.cancelAccept);
             requestHolder.decline.setVisibility(View.GONE);
             requestHolder.decline.setClickable(false);

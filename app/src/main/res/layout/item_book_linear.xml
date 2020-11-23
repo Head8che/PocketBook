@@ -2,13 +2,14 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/book_card"
+        android:id="@+id/itemBookLinearCard"
         android:layout_width="@dimen/small_book_width"
         android:layout_height="@dimen/small_book_height"
         app:cardCornerRadius="4dp"
@@ -16,56 +17,74 @@
         android:layout_margin="10dp">
 
         <ImageView
-            android:id="@+id/item_book_cover"
+            android:id="@+id/itemBookLinearCardCover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
             android:contentDescription="@string/book_cover_image"
             android:src="@drawable/ic_scan" />
 
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/item_book_title"
-        android:layout_width="wrap_content"
+        android:id="@+id/itemBookLinearTitle"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:layout_marginTop="12dp"
         android:layout_marginStart="5dp"
         android:text="@string/title"
-        android:layout_toEndOf="@id/book_card"
+        android:layout_toEndOf="@id/itemBookLinearCard"
         android:textStyle="bold"
+        android:textColor="@color/textBlack"
         android:textSize="15sp"/>
 
     <TextView
-        android:id="@+id/item_book_owner"
+        android:id="@+id/itemBookLinearAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/item_book_description"
+        android:layout_below="@+id/itemBookLinearTitle"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="25dp"
-        android:layout_toEndOf="@id/book_card"
-        android:text="@string/owned_by_you" />
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/itemBookLinearCard"
+        android:textStyle="bold"
+        android:text="@string/book_author" />
+
+    <ImageView
+        android:id="@+id/itemBookLinearStatus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/itemBookLinearCard"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="7dp"
+        android:contentDescription="@string/book_cover_image"
+        android:paddingTop="6dp"
+        android:src="@drawable/ic_available"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemBookLinearAuthor"
+        app:layout_constraintTop_toBottomOf="@+id/itemBookLinearCard"
+        app:tint="@color/colorAvailable" />
 
     <TextView
-        android:id="@+id/item_book_description"
+        android:id="@+id/itemBookLinearIsbn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/itemBookLinearAuthor"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@id/book_card"
-        android:layout_below="@id/item_book_title"
-        android:text="@string/long_description"
-        android:maxLength="70"/>
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/itemBookLinearCard"
+        android:text="@string/isbn" />
 
     <TextView
-        android:id="@+id/item_book_status"
+        android:id="@+id/itemBookLinearOwner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/book_card"
+        android:layout_below="@+id/itemBookLinearIsbn"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="122dp"
-        android:layout_toEndOf="@+id/book_card"
-        android:text="@string/status"
-        android:textSize="15sp"/>
+        android:layout_marginTop="32dp"
+        android:layout_toEndOf="@id/itemBookLinearCard"
+        android:text="@string/owner" />
 
 </RelativeLayout>

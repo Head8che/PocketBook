@@ -208,13 +208,24 @@ public class FirebaseIntegrity {
     }
 
     public static void setBookDataFirebase(Book book, String bookFieldName, String bookFieldValue) {
-        FirebaseFirestore.getInstance().collection("catalogue")
-                .document(book.getId())
+        DocumentReference documentReference = FirebaseFirestore.getInstance()
+                .collection("catalogue")
+                .document(book.getId());
+
+        documentReference
                 .update(bookFieldName, bookFieldValue)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("SET_BOOK", "Book data successfully written!");
+                        if (bookFieldName.equals("status")) {
+                            if ((bookFieldValue.equals("AVAILABLE"))
+                                    || (bookFieldValue.equals("REQUESTED"))) {
+                                documentReference.update("nonExchange", true);
+                            } else {
+                                documentReference.update("nonExchange", false);
+                            }
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -726,6 +737,22 @@ public class FirebaseIntegrity {
         }
     }
 
+    public static void deleteBookRequest(String requestedBook, String requester) {
+
+        FirebaseFirestore.getInstance().collection("catalogue")
+                .document(requestedBook)
+                .collection("requests")
+                .document(requester)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("DELETE_REQUEST", "Request data successfully written!");
+                    FirebaseIntegrity.handleDeclineBookRequest(
+                            "catalogue", requestedBook, requester);
+                })
+                .addOnFailureListener(e -> Log.e("DELETE_REQUEST",
+                        "Error writing request data!"));
+    }
+
     public static void declineBookRequest(Request request) {
 
         if (Parser.isValidRequestWithBookIdObject(request)) {
@@ -739,11 +766,11 @@ public class FirebaseIntegrity {
                     .document(requester)
                     .delete()
                     .addOnSuccessListener(aVoid -> {
-                        Log.d("NEW_REQUEST", "Request data successfully written!");
+                        Log.d("DECLINE_REQUEST", "Request data successfully written!");
                         FirebaseIntegrity.handleDeclineBookRequest(
                                 "catalogue", requestedBook, requester);
                     })
-                    .addOnFailureListener(e -> Log.e("NEW_REQUEST",
+                    .addOnFailureListener(e -> Log.e("DECLINE_REQUEST",
                             "Error writing request data!"));
         }
     }
@@ -1011,6 +1038,8 @@ public class FirebaseIntegrity {
         String isbn = document.getString("isbn");
         String owner = document.getString("owner");
         String status = document.getString("status");
+        Log.e("GET_BOOK", id + " " + title + " " + author);
+        boolean nonExchange = (Boolean) document.getBoolean("nonExchange");
         String comment = document.getString("comment");
         String condition = document.getString("condition");
         String photo = document.getString("photo");
@@ -1021,7 +1050,7 @@ public class FirebaseIntegrity {
 
         // this assumes that Firebase books are valid
         return Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo, requesters);
+                status, nonExchange, comment, condition, photo, requesters);
     }
 
     public static User getUserFromFirestore(DocumentSnapshot document) {

@@ -46,6 +46,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
 
     FirestoreRecyclerOptions<Request> options;
     ListenerRegistration listenerRegistration;
+    ListenerRegistration bookListenerRegistration;
 
 
     public ViewMyBookRequestsFragment() {
@@ -122,6 +123,33 @@ public class ViewMyBookRequestsFragment extends Fragment {
         };
 
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
+
+        bookListenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
+                .document(book.getId()).addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                        return;
+                    }
+
+                    if ((snapshot != null) && snapshot.exists()) {
+                        book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .detach(ViewMyBookRequestsFragment.this)
+                                .attach(ViewMyBookRequestsFragment.this)
+                                .commitAllowingStateLoss();
+                    } else {
+                        if ( getActivity() == null) {
+                            getParentFragmentManager().beginTransaction()
+                                    .detach(ViewMyBookRequestsFragment.this).commitAllowingStateLoss();
+                        } else {
+                            getActivity().getFragmentManager().popBackStack();
+                        }
+                    }
+
+
+                });
     }
 
     @Override
@@ -145,6 +173,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         listenerRegistration.remove();
+        bookListenerRegistration.remove();
     }
 
     @Override

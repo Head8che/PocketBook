@@ -3,6 +3,7 @@ package com.example.pocketbook.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -19,15 +20,20 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -63,36 +69,31 @@ public class ViewMyBookBookFragment extends Fragment {
         }
 
         listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
-                .document(book.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("VMBBF_LISTENER", "Listen failed.", e);
-                    return;
-                }
-
-                if ((snapshot != null) && snapshot.exists()) {
-                    book = FirebaseIntegrity.getBookFromFirestore(snapshot);
-
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .detach(ViewMyBookBookFragment.this)
-                            .attach(ViewMyBookBookFragment.this)
-                            .commitAllowingStateLoss();
-                } else {
-                    if ( getActivity() == null) {
-                        getParentFragmentManager().beginTransaction()
-                                .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
-                    } else {
-                        getActivity().getFragmentManager().popBackStack();
+                .document(book.getId()).addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                        return;
                     }
-                }
+
+                    if ((snapshot != null) && snapshot.exists()) {
+                        book = FirebaseIntegrity.getBookFromFirestore(snapshot);
+
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .detach(ViewMyBookBookFragment.this)
+                                .attach(ViewMyBookBookFragment.this)
+                                .commitAllowingStateLoss();
+                    } else {
+                        if ( getActivity() == null) {
+                            getParentFragmentManager().beginTransaction()
+                                    .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
+                        } else {
+                            getActivity().getFragmentManager().popBackStack();
+                        }
+                    }
 
 
-            }
-
-        });
+                });
     }
 
     @Override
@@ -111,12 +112,72 @@ public class ViewMyBookBookFragment extends Fragment {
         String bookComment = book.getComment();
 
         TextView layoutBookTitle = (TextView) rootView.findViewById(R.id.viewMyBookBookTitleTextView);
+        TextView bookLocationField = (TextView) rootView.findViewById(R.id.viewMyBookViewPickupLocation);
         TextView layoutBookAuthor = (TextView) rootView.findViewById(R.id.viewMyBookAuthorTextView);
         TextView layoutBookISBN = (TextView) rootView.findViewById(R.id.viewMyBookISBNTextView);
         ImageView layoutBookCover = (ImageView) rootView.findViewById(R.id.viewMyBookBookCoverImageView);
         ImageView layoutBookStatus = (ImageView) rootView.findViewById(R.id.viewBookBookStatusImageView);
         TextView layoutBookCondition = (TextView) rootView.findViewById(R.id.viewMyBookConditionTextView);
         TextView layoutBookComment = (TextView) rootView.findViewById(R.id.viewMyBookCommentTextView);
+
+        if (book.getStatus().equals("ACCEPTED")) {
+            bookLocationField.setVisibility(View.VISIBLE);
+            bookLocationField.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    bookLocationField.setClickable(false);
+
+                    FirebaseFirestore.getInstance()
+                            .collection("catalogue")
+                            .document(book.getId())
+                            .collection("requests")
+                            .get()
+                            .addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
+                                if (task.isSuccessful()) {
+                                    // get 1st request; there should only be one request
+                                    String requester = task.getResult().getDocuments().get(0).getId();
+
+                                    FirebaseFirestore.getInstance()
+                                            .collection("exchange")
+                                            .whereEqualTo("relatedBook", book.getId())
+                                            .whereEqualTo("owner", book.getOwner())
+                                            .whereEqualTo("borrower", requester)
+                                            .get().addOnCompleteListener(task1 -> {
+                                                if (!(task1.isSuccessful())) {
+                                                    Log.e("VIEW_BOOK_EXCHANGE",
+                                                            "Error getting exchange document!");
+                                                } else {
+                                                    List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                                    DocumentSnapshot document = documents.get(0);
+
+                                                    Exchange exchange = FirebaseIntegrity
+                                                            .getExchangeFromFirestore(document);
+
+                                                    if (exchange != null) {
+                                                        ViewLocationFragment nextFrag
+                                                                = ViewLocationFragment.newInstance(exchange);
+
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putSerializable("VBF_EXCHANGE", exchange);
+                                                        nextFrag.setArguments(bundle);
+
+                                                        getActivity().getSupportFragmentManager()
+                                                                .beginTransaction()
+                                                                .replace(getActivity()
+                                                                        .findViewById(R.id.container)
+                                                                        .getId(), nextFrag)
+                                                                .addToBackStack(null).commit();
+                                                    }
+
+                                                }
+                                                bookLocationField.setClickable(true);
+                                    });
+                                }
+                            });
+                }
+            });
+        } else {
+            bookLocationField.setVisibility(View.GONE);
+        }
 
         layoutBookTitle.setText(bookTitle);
         layoutBookAuthor.setText(bookAuthor);

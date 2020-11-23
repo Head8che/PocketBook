@@ -13,13 +13,14 @@
     <string name="scan">Scan</string>
     <string name="profile">Profile</string>
     <string name="isbn_text">ISBN: %1$s</string>
+    <string name="added_by_text">Added By: %1$s</string>
     <string name="condition_text">Condition: %1$s</string>
     <string name="comment_text">Comment: %1$s</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>
     <string name="request">request</string>
-    <string name="search_hint">Title, Author, ISBN</string>
+    <string name="search_hint">Title, Author or ISBN</string>
 
     <string name="email_password"><![CDATA[Email & Password]]></string>
     <string name="click_here_to_add_your_profile_picture">Click here to add your profile picture.</string>
@@ -92,6 +93,8 @@
     <string name="owned_by_you">Owned by You</string>
     <string name="notAvailable">Not Available</string>
     <string name="alreadyRequested">Already Requested!</string>
+    <string name="cancelRequest">CANCEL REQUEST</string>
+    <string name="cancelAccept">CANCEL ACCEPT</string>
     <string name="viewPickupLocation">View Pickup Location</string>
     <string name="long_description">Long description</string>
     <string name="status">Status</string>
@@ -113,8 +116,12 @@
     <string name="viewDate">View Date</string>
     <string name="viewTime">View Time</string>
     <string name="map_cover">Map Cover</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="viewAll">View All</string>
+    <string name="readyForPickup">Ready For Pickup</string>
+    <string name="requested">Requested Books</string>
+    <string name="borrowed">Borrowed Books</string>
+    <string name="owned">Owned Books</string>
 
     <string name="backbutton">BackButton</string>
     <string name="Notifications">TextView</string>

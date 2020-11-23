@@ -14,6 +14,7 @@ public class Book implements Serializable {
     private String comment;
     private String condition;
     private String photo;
+    private boolean nonExchange;
     private ArrayList<String> requesters;
 
 
@@ -35,7 +36,8 @@ public class Book implements Serializable {
      * @param photo photo string of book by owner
      * @param requesters ArrayList of user emails that have requested the book
      */
-    public Book(String id, String title, String author, String isbn, String owner, String status,
+    public Book(String id, String title, String author,
+                String isbn, String owner, String status, boolean nonExchange,
                 String comment, String condition, String photo, ArrayList<String> requesters) {
 
         // if non-optional fields are not null
@@ -64,6 +66,7 @@ public class Book implements Serializable {
                 this.isbn = isbn;
                 this.owner = owner;
                 this.status = status;  // one of ["AVAILABLE", "REQUESTED", "ACCEPTED", "BORROWED"]
+                this.nonExchange = nonExchange;
                 this.comment = comment;
                 this.condition = condition;  // one of ["GREAT", "GOOD", "FAIR", "ACCEPTABLE"]
                 this.photo = photo;
@@ -120,6 +123,12 @@ public class Book implements Serializable {
      * @return status as String
      */
     public String getStatus() { return this.status; }
+
+    /**
+     * Getter method for nonExchange
+     * @return nonExchange as boolean
+     */
+    public boolean getNonExchange() { return this.nonExchange; }
 
     /**
      * Getter method for photo

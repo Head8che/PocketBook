@@ -1,10 +1,12 @@
 package com.example.pocketbook.fragment;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -67,6 +69,7 @@ public class HomeFragment extends Fragment {
         homeFragment.setArguments(args);
         return homeFragment;
     }
+
     /**
      * Obtains and create the information/data required for this screen.
      * @param savedInstanceState
@@ -145,30 +148,27 @@ public class HomeFragment extends Fragment {
 
         mAdapter = new BookAdapter(options, currentUser, getActivity());
 
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
-        Button notificationBtn = (Button) v.findViewById(R.id.homeFragmentNotificationBtn);
-        mBooksRecycler = v.findViewById(R.id.recycler_books);
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        Button notificationBtn = (Button) rootView.findViewById(R.id.homeFragmentNotificationBtn);
+        mBooksRecycler = rootView.findViewById(R.id.recycler_books);
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), NUM_COLUMNS));
 
         mBooksRecycler.setAdapter(mAdapter);
 
 //        scrollUpdate = new ScrollUpdate(catalogue, mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();
 
-        notificationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NotificationsFragment nextFragment = NotificationsFragment.newInstance(currentUser);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, nextFragment ); // give your fragment container id in first parameter
-                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
-                transaction.commit();
-            }
+        notificationBtn.setOnClickListener(v -> {
+            NotificationsFragment nextFragment = NotificationsFragment.newInstance(currentUser);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, nextFragment ); // give your fragment container id in first parameter
+            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+            transaction.commit();
         });
         notificationCounter = new NotificationCounter(v);
         setNotificationCounterNumber(notificationCounter,currentUser);
 
-        return v;
+        return rootView;
     }
 
     @Override

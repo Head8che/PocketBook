@@ -42,6 +42,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -129,8 +130,39 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
 
         // if the user already accepted a request, they can't accept or decline that request
         if (mBook.getStatus().equals("ACCEPTED")){
-            requestHolder.accept.setText("Accepted");
+            requestHolder.accept.setText(R.string.cancelAccept);
             requestHolder.decline.setVisibility(View.GONE);
+            requestHolder.decline.setClickable(false);
+
+            requestHolder.accept.setOnClickListener(view -> {
+                requestHolder.accept.setClickable(false);
+
+                FirebaseFirestore.getInstance()
+                        .collection("exchange")
+                        .whereEqualTo("relatedBook", mBook.getId())
+                        .whereEqualTo("owner", mBook.getOwner())
+                        .whereEqualTo("borrower", mRequester.getEmail())
+                        .get().addOnCompleteListener(task1 -> {
+                    if (!(task1.isSuccessful())) {
+                        Log.e("VIEW_BOOK_EXCHANGE",
+                                "Error getting exchange document!");
+                    } else {
+                        List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+
+                        String docID = documents.get(0).getId();
+
+                        FirebaseFirestore.getInstance()
+                                .collection("exchange")
+                                .document(docID)
+                                .delete();
+
+                        FirebaseIntegrity.deleteBookRequest(mBook.getId(),
+                                mRequester.getEmail());
+
+                        requestHolder.accept.setClickable(true);
+                    }
+                });
+            });
         }
 
         View.OnClickListener profileClickListener = view -> {
@@ -158,32 +190,25 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
 
         // when the user taps on the accept button for a request,
         // the request is accepted and they can't decline that request
-        requestHolder.accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if (mBook.getStatus().equals("REQUESTED")) {
+            requestHolder.accept.setOnClickListener(view -> {
 
-                if (mBook.getStatus().equals("REQUESTED")) {
-
-                    String bookOwner = mBook.getOwner();
-                    Fragment nextFrag = new SetLocationFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("SLF_BOOK", mBook);
-                    bundle.putSerializable("SLF_REQUEST", request);
-                    bundle.putSerializable("SLF_BOOK_OWNER", bookOwner);
-                    bundle.putSerializable("SLF_BOOK_REQUESTER", mRequester.getEmail());
-                    nextFrag.setArguments(bundle);
-                    FragmentTransaction transaction = activity
-                            .getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container, nextFrag); // give your fragment
-                    // container id in first param
-                    transaction.addToBackStack(null);  // add transaction to backstack
-                    transaction.commit();
-                } else if (mBook.getStatus().equals("ACCEPTED")) {
-                    // decline a book request in Firebase
-                    // TODO: cancel accept
-                }
-            }
-        });
+                String bookOwner = mBook.getOwner();
+                Fragment nextFrag = new SetLocationFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("SLF_BOOK", mBook);
+                bundle.putSerializable("SLF_REQUEST", request);
+                bundle.putSerializable("SLF_BOOK_OWNER", bookOwner);
+                bundle.putSerializable("SLF_BOOK_REQUESTER", mRequester.getEmail());
+                nextFrag.setArguments(bundle);
+                FragmentTransaction transaction = activity
+                        .getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, nextFrag); // give your fragment
+                // container id in first param
+                transaction.addToBackStack(null);  // add transaction to backstack
+                transaction.commit();
+            });
+        }
 
         //when the user taps on the decline button for a request, that request is declined
         requestHolder.decline.setOnClickListener(view -> {
@@ -229,7 +254,7 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
                                                             "Request Declined",
                                                             notification.getNotificationDate(),
                                                             notification.getType(),
-                                                            R.mipmap.ic_launcher_round,
+                                                            R.drawable.ic_logo_vector,
                                                             notification.getReceiver());
                                                     pushNewNotificationToFirebase(notification);
                                                     sendNotification(userToken, data);

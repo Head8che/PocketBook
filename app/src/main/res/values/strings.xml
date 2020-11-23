@@ -143,6 +143,8 @@
     After the book owner accepts your request, the book is accepted. Once you and the owner exchange the book, it becomes borrowed.
         And when you return the book, it becomes available!</string>
     <string name="thirdOnBoardingSlideDescription">Add your favorite book to the platform and make someone\'s day!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

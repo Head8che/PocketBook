@@ -285,48 +285,6 @@ public class ScanHandler {
 
     }
 
-    public void lendBookAfterSetLocation(Book book) {
-        FirebaseFirestore.getInstance()
-                .collection("exchange")
-                .whereEqualTo("owner", currentUser.getEmail())
-                .whereEqualTo("ownerBookStatus", "ACCEPTED")
-                .get() // get only 1 book with given isbn
-                .addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        Log.e("SIZE",
-                                String.valueOf(task1.getResult().size()));
-                        if (task1.getResult().size() == 0) {
-                            Toast.makeText(activity,
-                                    "No Results Found for ISBN: "
-                                            + book.getISBN(), Toast.LENGTH_SHORT)
-                                    .show();
-                            if (alertDialog != null) {alertDialog.dismiss();}
-                        } else {
-                            if (alertDialog != null) {alertDialog.dismiss();}
-                            for (QueryDocumentSnapshot document1
-                                    : task1.getResult()) {
-
-                                FirebaseFirestore.getInstance()
-                                        .collection("exchange")
-                                        .document(document1.getId())
-                                        .update("ownerBookStatus",
-                                                "BORROWED");
-
-                                FirebaseIntegrity
-                                        .setBookStatusFirebase(book,
-                                                "BORROWED");
-
-                            }
-                        }
-                    } else {
-                        Log.e("ScanHandler",
-                                "Error getting documents: ",
-                                task1.getException());
-                    }
-
-                });
-    }
-
     public void handleBorrowBook(String scannedIsbn) {
         // exchange, borrower=currentUser, owner=book.getOwner(),isbn=isbn,ownerBookStatus=BORROWED
 
@@ -359,6 +317,7 @@ public class ScanHandler {
                                         .collection("exchange")
                                         .whereEqualTo("borrower", currentUser.getEmail())
                                         .whereEqualTo("owner", book.getOwner())
+                                        .whereEqualTo("relatedBook", book.getId())
                                         .whereEqualTo("ownerBookStatus", "BORROWED")
                                         .get()
                                         .addOnCompleteListener(task1 -> {
@@ -434,6 +393,7 @@ public class ScanHandler {
                                         .collection("exchange")
                                         .whereEqualTo("borrower", currentUser.getEmail())
                                         .whereEqualTo("owner", book.getOwner())
+                                        .whereEqualTo("relatedBook", book.getId())
                                         .whereEqualTo("borrowerBookStatus", "BORROWED")
                                         .get() // get only 1 book with given isbn
                                         .addOnCompleteListener(task1 -> {

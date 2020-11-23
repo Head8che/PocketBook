@@ -307,10 +307,6 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
                                         }
                                     }
                                 });
-                        ScanHandler scanHandler = new ScanHandler(getActivity(),
-                                getParentFragmentManager(), currentUser);
-
-                        scanHandler.lendBookAfterSetLocation(book);
                     }
 
                 }

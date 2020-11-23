@@ -235,6 +235,7 @@ public class SetLocationFragment extends Fragment {
                     layoutSetTime.requestFocus();
                 }
             }
+            // notify user
         });
 
 

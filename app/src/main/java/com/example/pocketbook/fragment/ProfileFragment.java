@@ -2,13 +2,19 @@ package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowMetrics;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +26,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -64,6 +71,8 @@ public class ProfileFragment extends Fragment {
     private ScrollUpdate scrollUpdate;
     private Fragment profileFragment = this;
 
+    private int itemCount;
+
     FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
@@ -90,6 +99,7 @@ public class ProfileFragment extends Fragment {
 
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("PF_USER");
+            this.itemCount = 0;
         }
 
         // Initialize Firestore
@@ -120,6 +130,7 @@ public class ProfileFragment extends Fragment {
                         switch (dc.getType()) {
                             case ADDED:
                                 Log.d("SCROLL_UPDATE", "New doc: " + document);
+                                itemCount += 1;
 
                                 mAdapter.notifyDataSetChanged();
                                 break;
@@ -132,6 +143,7 @@ public class ProfileFragment extends Fragment {
 
                             case REMOVED:
                                 Log.d("SCROLL_UPDATE", "Removed doc: " + document);
+                                itemCount -= 1;
 
                                 mAdapter.notifyDataSetChanged();
                                 break;
@@ -193,7 +205,7 @@ public class ProfileFragment extends Fragment {
             container.removeAllViews();
         }
         View v = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
-        mBooksRecycler = v.findViewById(R.id.recycler_books);
+        mBooksRecycler = v.findViewById(R.id.profileNewRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
@@ -206,13 +218,30 @@ public class ProfileFragment extends Fragment {
         String first_Name = currentUser.getFirstName();
         String last_Name = currentUser.getLastName();
         String user_Name = currentUser.getUsername();
+        String user_Email = currentUser.getEmail();
+
         // TODO: obtain user_photo from firebase
         ImageView signOut = (ImageView) v.findViewById(R.id.profileNewSignOut);
-        ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
-        TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
-        TextView UserName = (TextView) v.findViewById(R.id.user_name);
+        ImageView profilePicture = (ImageView) v.findViewById(R.id.profileNewProfilePicture);
+        TextView ProfileName = (TextView) v.findViewById(R.id.profileNewFullName);
+        TextView Email = (TextView) v.findViewById(R.id.profileNewEmail);
+        TextView UserName = (TextView) v.findViewById(R.id.profileNewUsername);
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
+        Email.setText(user_Email);
+
+        int rowCount = (int) Math.ceil((double) itemCount / NUM_COLUMNS);
+        int recyclerSizeInDp = (rowCount * (295 + 40));  // rows * (bookHeight + padding)
+
+        DisplayMetrics displayMetrics = Objects
+                .requireNonNull(getContext()).getResources().getDisplayMetrics();
+        int recyclerSize = Math.round(recyclerSizeInDp
+                * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+
+        mBooksRecycler.setMinimumHeight(recyclerSize);
+
+//        Log.e("ADAPTER_COUNT", mAdapter.getItemCount() + " item: " + itemCount);
+//        Log.e("RECYLCER_SIZE", 10000 + " recyclerSize: " + recyclerSize);
 
         signOut.setColorFilter(ContextCompat
                         .getColor(Objects.requireNonNull(getActivity()).getBaseContext(),
@@ -231,7 +260,7 @@ public class ProfileFragment extends Fragment {
                 .circleCrop()
                 .into(profilePicture);
 
-        editProfile = v.findViewById(R.id.edit_profile_button);
+        editProfile = v.findViewById(R.id.profileNewEditBtn);
 
 //        scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
 //        scrollUpdate.load();

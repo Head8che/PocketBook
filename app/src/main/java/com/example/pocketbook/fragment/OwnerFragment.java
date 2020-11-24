@@ -207,10 +207,10 @@ public class OwnerFragment extends Fragment {
         String user_Name = currentUser.getUsername();
         String user_Email = currentUser.getEmail();
         ImageView signOut = (ImageView) v.findViewById(R.id.profileExistingSignOut);
-        ImageView profilePicture = (ImageView) v.findViewById(R.id.profile_image);
-        TextView ProfileName = (TextView) v.findViewById(R.id.profileName);
-        TextView UserName = (TextView) v.findViewById(R.id.user_name);
-        TextView Email = (TextView) v.findViewById(R.id.profileEmail);
+        ImageView profilePicture = (ImageView) v.findViewById(R.id.profileExistingProfilePicture);
+        TextView ProfileName = (TextView) v.findViewById(R.id.profileExistingFullName);
+        TextView UserName = (TextView) v.findViewById(R.id.profileExistingUsername);
+        TextView Email = (TextView) v.findViewById(R.id.profileExistingEmail);
         ProfileName.setText(first_Name + ' ' + last_Name);
         UserName.setText(user_Name);
         Email.setText(user_Email);
@@ -237,7 +237,7 @@ public class OwnerFragment extends Fragment {
         LinearLayout titleBorrowed = v.findViewById(R.id.TitleBarBorrowedOwner);
         LinearLayout titleOwned = v.findViewById(R.id.TitleBarOwnedOwner);
 
-        TextView layoutEditProfile = v.findViewById(R.id.edit_profile_button);
+        TextView layoutEditProfile = v.findViewById(R.id.profileExistingEditBtn);
         TextView viewAllReadyForPickups = v.findViewById(R.id.ViewAllReadyForPickupOwner);
         TextView viewAllRequestedBooks = v.findViewById(R.id.ViewAllRequestedOwner);
         TextView viewAllBorrowedBooks = v.findViewById(R.id.ViewAllBorrowedOwner);

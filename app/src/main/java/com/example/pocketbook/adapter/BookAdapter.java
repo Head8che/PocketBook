@@ -1,7 +1,5 @@
 package com.example.pocketbook.adapter;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -21,19 +19,13 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.ViewBookFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
-import com.example.pocketbook.fragment.ViewProfileFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
 
@@ -41,7 +33,6 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.Book
     private User currentUser;
     private User bookOwner;
     private FragmentActivity activity;
-    private FirebaseAuth mAuth;
 
     public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
                        FragmentActivity activity) {
@@ -159,5 +150,10 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.Book
 
         });
 
+    }
+
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
     }
 }

@@ -50,7 +50,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String receiver = remoteMessage.getData().get("receiver");
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
-        //functionality to click on a notification
+        // functionality to click on a notification
         if (receiver != null) {
             FirebaseFirestore.getInstance().collection("users").document(receiver)
                     .get()
@@ -97,7 +97,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String icon = remoteMessage.getData().get("icon");
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
-        //TODO: add functionality to click on a notification
 
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())

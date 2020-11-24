@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
@@ -153,6 +154,8 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
                         Fragment profileNewFragment = ProfileNewFragment.newInstance(currentUser);
+                        ArrayList<String> a = new ArrayList<String>();
+                        a.add("owen@gmail.com");
                         Fragment profileExistingFragment = ProfileExistingFragment.newInstance(currentUser);
 
                         FirebaseFirestore.getInstance()

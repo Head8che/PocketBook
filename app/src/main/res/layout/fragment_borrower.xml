@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <ScrollView
-        android:id="@+id/ownerFragmentScrollView"
+        android:id="@+id/borrowerFragmentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/TitleBarReadyForPickupOwner"
+                android:id="@+id/TitleBarReadyForPickupBorrower"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -41,7 +41,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/ViewAllReadyForPickupOwner"
+                    android:id="@+id/ViewAllReadyForPickupBorrower"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
@@ -54,7 +54,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profileOwnerRecyclerReadyForPickupBooks"
+                android:id="@+id/profileBorrowerRecyclerReadyForPickupBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -67,7 +67,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
             <LinearLayout
-                android:id="@+id/TitleBarRequestedOwner"
+                android:id="@+id/TitleBarRequestedBorrower"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -89,7 +89,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/ViewAllRequestedOwner"
+                    android:id="@+id/ViewAllRequestedBorrower"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
@@ -102,7 +102,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profileOwnerRecyclerRequestedBooks"
+                android:id="@+id/profileBorrowerRecyclerRequestedBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -115,7 +115,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
             <LinearLayout
-                android:id="@+id/TitleBarBorrowedOwner"
+                android:id="@+id/TitleBarBorrowedBorrower"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -137,7 +137,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/ViewAllBorrowedOwner"
+                    android:id="@+id/ViewAllBorrowedBorrower"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
@@ -150,7 +150,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profileOwnerRecyclerBorrowedBooks"
+                android:id="@+id/profileBorrowerRecyclerBorrowedBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -162,53 +162,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
-            <LinearLayout
-                android:id="@+id/TitleBarOwnedOwner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/owned"
-                    android:textColor="@color/textBlack"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/ViewAllOwnedOwner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="0dp"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/colorAccent"
-                    android:text="@string/viewAll" />
-
-
-            </LinearLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profileOwnerRecyclerOwnedBooks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileTabLayout" />
 
             <Space
                 android:id="@+id/space5"

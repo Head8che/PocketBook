@@ -1,45 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:id="@+id/coordLayout"
-tools:context=".activity.HomeActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:id="@+id/profileExistingScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-        <RelativeLayout
-            android:id="@+id/profileExistingFragmentToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:elevation="5dp">
-
-            <TextView
-                android:id="@+id/profileExistingFullName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:letterSpacing="0.02"
-                android:minHeight="?actionBarSize"
-                android:padding="@dimen/appbar_padding"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/firstlastname"
-                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:textColor="@color/textBlack"
-                android:textSize="18sp" />
-        </RelativeLayout>
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.465">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+
+            <RelativeLayout
+                android:id="@+id/profileExistingFragmentToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:elevation="5dp">
+
+
+                <TextView
+                    android:id="@+id/profileExistingFullName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:letterSpacing="0.02"
+                    android:minHeight="?actionBarSize"
+                    android:padding="@dimen/appbar_padding"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/firstlastname"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                    android:textColor="@color/textBlack"
+                    android:textSize="18sp" />
+
+
+            </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -77,6 +96,7 @@ tools:context=".activity.HomeActivity">
                     android:layout_height="27dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
+                    app:tint="@color/colorAccent"
                     android:src="@drawable/ic_sign_out"
                     android:contentDescription="@string/signOut"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -127,35 +147,50 @@ tools:context=".activity.HomeActivity">
                 android:textStyle="bold"
                 android:textSize="16sp" />
 
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:elevation="0dp"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/profileExistingTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    app:tabSelectedTextColor="@color/colorAccent"
+                    app:tabTextColor="@color/colorUnselected"
+                    app:elevation="0dp">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/profileExistingOwnerTab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/owner" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/profileExistingBorrowerTab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/borrower" />
+                </com.google.android.material.tabs.TabLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/profileExistingViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:windowBackground="@color/colorPrimary"
+                android:background="@color/colorPrimary"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileExistingScrollView" />
+
+
         </LinearLayout>
+    </ScrollView>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/profileExistingTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
-        app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextColor="@color/colorUnselected">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/profileExistingOwnerTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/owner" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/profileExistingBorrowerTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/borrower" />
-    </com.google.android.material.tabs.TabLayout>
-
-</com.google.android.material.appbar.AppBarLayout>
-
-<androidx.viewpager.widget.ViewPager
-    android:id="@+id/profileExistingViewPager"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

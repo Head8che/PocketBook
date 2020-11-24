@@ -100,6 +100,11 @@ public class ViewMyBookBookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // clear the container before starting the fragment
+        if (container != null) {
+            container.removeAllViews();
+        }
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_my_book_book, container, false);
 

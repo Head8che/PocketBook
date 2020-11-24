@@ -48,9 +48,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String group = remoteMessage.getData().get("group");
         String icon = remoteMessage.getData().get("icon");
         String receiver = remoteMessage.getData().get("receiver");
-
         RemoteMessage.Notification notification = remoteMessage.getNotification();
-        // functionality to click on a notification
         if (receiver != null) {
             FirebaseFirestore.getInstance().collection("users").document(receiver)
                     .get()
@@ -60,13 +58,14 @@ public class FirebaseMessaging extends FirebaseMessagingService {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 User user = getUserFromFirestore(document);
+
+                                // functionality to click on a notification
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.putExtra("NOTI_FRAG", true);
                                 intent.putExtra("CURRENT_USER", user);
                                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
                                 OreoNotification oreoNotification = new OreoNotification(getApplicationContext());
                                 Notification.Builder builder = oreoNotification.getOreoNotification(title, body, icon, group, pendingIntent);

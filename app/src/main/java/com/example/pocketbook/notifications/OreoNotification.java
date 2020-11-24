@@ -53,7 +53,6 @@ public class OreoNotification extends ContextWrapper {
                 .setContentText(body)
                 .setSmallIcon(Integer.parseInt(icon))
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent))
-                .setGroup(group)
                 .setContentIntent(pendingIntent);
             }
 }

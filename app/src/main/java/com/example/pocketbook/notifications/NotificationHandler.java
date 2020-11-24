@@ -26,7 +26,7 @@ import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationT
 
 public class NotificationHandler {
 
-    private static APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+    private static final APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
     // verify if the user has a valid token
     private static String verifyReceiverTokenNotNull(DocumentSnapshot documentSnapshot){
@@ -39,13 +39,7 @@ public class NotificationHandler {
     }
 
     // check if the receiver of the notification is logged in
-    private static boolean checkLoggedInUser(String receiver){
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail().trim();
-        if (!(currentUser.equals(receiver.trim()))){
-            return false;
-        }
-        return true;
-    }
+
 
     public static void sendNotificationBookRequested(User currentUser,Book book){
         String msg = String.format("%s has requested '%s'",
@@ -53,93 +47,79 @@ public class NotificationHandler {
         Notification notification = new Notification(msg,
                 currentUser.getEmail(), book.getOwner(),
                 book.getId(), false, "BOOK_REQUESTED");
-        // notify the user through the phone and in-app if they are logged in
-        if (checkLoggedInUser(book.getOwner())){
-            FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(book.getOwner())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                String userToken = verifyReceiverTokenNotNull(task.getResult());
-                                if (userToken!=null) {
-                                    Data data = new Data(msg, "New Request",
-                                            notification.getNotificationDate(),
-                                            notification.getType(),
-                                            R.drawable.ic_logo_vector,
-                                            notification.getReceiver());
-                                    pushNewNotificationToFirebase(notification);
-                                    sendNotification(userToken, data);
-                                }
-                                else{
-                                    pushNewNotificationToFirebase(notification);
-                                }
+
+        FirebaseFirestore.getInstance().collection("users").document(book.getOwner()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            String userToken = verifyReceiverTokenNotNull(task.getResult());
+                            if (userToken!=null) {
+                                Log.d("NotiBookRequested",userToken);
+                                Data data = new Data(msg, "New Request", notification.getNotificationDate(), notification.getType(), R.drawable.ic_logo_vector, notification.getReceiver());
+                                pushNewNotificationToFirebase(notification);
+                                sendNotification(userToken, data);
+                            }
+                            else{
+                                pushNewNotificationToFirebase(notification);
                             }
                         }
-                    });
-        }
-        // notify the user in-app only if they are logged out
-        else{
-            pushNewNotificationToFirebase(notification);
-        }
+                    }
+                });
+
     }
 
     public static void sendNotificationRequestDeclined(Request request, Book book){
         String msg = String.format("Your request for '%s' has " + "been declined", book.getTitle());
         Notification notification = new Notification(msg, book.getOwner(), request.getRequester(), book.getId(), false, "REQUEST_DECLINED");
-        if (checkLoggedInUser(request.getRequester())){
+        if (true){
         //send a notification to the requester
         FirebaseFirestore.getInstance().collection("users")
                 .document(request.getRequester())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        String userToken = verifyReceiverTokenNotNull(document);
+                        if(userToken!=null){
+                        if (task.isSuccessful()){
                         FirebaseFirestore.getInstance()
                                 .collection("users")
                                 .document(request.getRequestee())
                                 .get()
                                 .addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
-                                        DocumentSnapshot document = task1.getResult();
-                                        if (document != null) {
-                                            User requestee = FirebaseIntegrity.getUserFromFirestore(document);
-                                            String userToken = verifyReceiverTokenNotNull(document);
-                                            if (userToken != null) {
-                                                Data data = new Data(msg,
-                                                        "Request Declined",
-                                                        notification.getNotificationDate(),
-                                                        notification.getType(),
-                                                        R.drawable.ic_logo_vector,
-                                                        notification.getReceiver());
-                                                pushNewNotificationToFirebase(notification);
-                                                sendNotification(userToken, data);
-                                            }
-                                            else{
-                                                pushNewNotificationToFirebase(notification);
-                                            }
+                                        DocumentSnapshot document1 = task1.getResult();
+                                        if (document1 != null) {
+                                            User requestee = FirebaseIntegrity.getUserFromFirestore(document1);
+                                            Log.d("Notirequestdeclined",userToken);
+                                            Data data = new Data(msg, "Request Declined", notification.getNotificationDate(), notification.getType(), R.drawable.ic_logo_vector, notification.getReceiver());
+                                            pushNewNotificationToFirebase(notification);
+                                            sendNotification(userToken, data);
                                         }
                                     }
                                 });
+                    }}}
+                    else{
+                        pushNewNotificationToFirebase(notification);
                     }
 
 
     });
     }
-        else{
-            pushNewNotificationToFirebase(notification);
-        }
     }
 
     public static void sendNotificationRequestAccepted(Request request, Book book) {
         String msg = String.format("Your request for '%s' has " + "been accepted", book.getTitle());
         Notification notification = new Notification(msg, book.getOwner(), request.getRequester(), book.getId(), false, "REQUEST_ACCEPTED");
-        if (checkLoggedInUser(request.getRequestee())) {
+        if (true) {
             FirebaseFirestore.getInstance().collection("users")
                     .document(request.getRequester())
                     .get()
                     .addOnCompleteListener(task -> {
+                        DocumentSnapshot document = task.getResult();
+                        String userToken = verifyReceiverTokenNotNull(document);
+                        if (userToken != null){
                         if (task.isSuccessful()) {
                             FirebaseFirestore.getInstance()
                                     .collection("users")
@@ -147,11 +127,11 @@ public class NotificationHandler {
                                     .get()
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            DocumentSnapshot document = task1.getResult();
-                                            if (document != null) {
-                                                User requestee = FirebaseIntegrity.getUserFromFirestore(document);
-                                                String userToken = verifyReceiverTokenNotNull(document);
-                                                if (userToken != null) {
+                                            DocumentSnapshot document1 = task1.getResult();
+                                            if (document1 != null) {
+                                                User requestee = FirebaseIntegrity.getUserFromFirestore(document1);
+
+                                                    Log.d("Notirequestaccepted",userToken);
                                                     Data data = new Data(msg,
                                                             "Request Accepted",
                                                             notification.getNotificationDate(),
@@ -160,25 +140,25 @@ public class NotificationHandler {
                                                             notification.getReceiver());
                                                     pushNewNotificationToFirebase(notification);
                                                     sendNotification(userToken, data);
-                                                }
-                                                else{
-                                                    pushNewNotificationToFirebase(notification);
-                                                }
+
+
                                             }
 
                                         }
                                     });
                         }
+                        }
+                        else{
+                            pushNewNotificationToFirebase(notification);
+                        }
                     });
-        }
-        else{
-            pushNewNotificationToFirebase(notification);
         }
     }
 
     private static void sendNotification(String token,Data data) {
 
         Sender sender = new Sender(data, token);
+        Log.d("notisent to",token);
         apiService.sendNotification(sender).enqueue((new Callback<Response>() {
 
             @Override

@@ -1116,13 +1116,10 @@ public class FirebaseIntegrity {
         String owner = document.getString("owner");
         String status = document.getString("status");
         Log.e("GET_BOOK", id + " " + title + " " + author);
-        String nonExchangeString;
-        nonExchangeString = Objects.requireNonNull(document.getBoolean("nonExchange")).toString();
         if (document.get("nonExchange") == null) {
             return null;
         }
-        boolean nonExchange = Objects
-                .requireNonNull(document.get("nonExchange")).toString().equals("true");
+        boolean nonExchange = Objects.requireNonNull(document.get("nonExchange")).toString().equals("true");
 //        Log.e("GET_BOOK", id + " " + title + " " + author);
         String comment = document.getString("comment");
         String condition = document.getString("condition");
@@ -2027,12 +2024,13 @@ public class FirebaseIntegrity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         // get the token for this instance of the app
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        if (refreshToken!=null){
         //  update the user's token in Firestore
         Token token = new Token(refreshToken);
         FirebaseFirestore.getInstance().collection("users")
                 .document(currentUser.getEmail())
                 .update("token",token.getToken());
-        Log.d("token","updated to "+refreshToken);
+        Log.d("token","updated to "+refreshToken);}
     }
 
     public static void updateToken(){
@@ -2041,12 +2039,16 @@ public class FirebaseIntegrity {
         // get the token for this instance of the app
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
         //  update the user's token in Firestore
+        if(refreshToken!=null){
         Token token = new Token(refreshToken);
         FirebaseFirestore.getInstance().collection("users")
                 .document(firebaseUser.getEmail())
                 .update("token",token.getToken());
         Log.d("token","updated to "+refreshToken);
+        }
     }
+
+
 
 
     /*

@@ -42,17 +42,6 @@ import java.util.Objects;
 public class ProfileExistingFragment extends Fragment {
     private User currentUser;
     ListenerRegistration listenerRegistration;
-    private boolean firstTimeFragLoads = true;
-    private Fragment profileExistingFragment = this;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ProfileExistingFragment() {
         // Required empty public constructor
@@ -61,7 +50,7 @@ public class ProfileExistingFragment extends Fragment {
     public static ProfileExistingFragment newInstance(User user) {
         ProfileExistingFragment profileExistingFragment = new ProfileExistingFragment();
         Bundle args = new Bundle();
-        args.putSerializable("PF_USER", user);
+        args.putSerializable("VMBF_USER", user);
         profileExistingFragment.setArguments(args);
         return profileExistingFragment;
     }
@@ -71,52 +60,17 @@ public class ProfileExistingFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            this.currentUser = (User) getArguments().getSerializable("PF_USER");
+            this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
         }
 
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
-                .document(currentUser.getEmail());
-        docRef.addSnapshotListener((snapshot, e) -> {
-            if (e != null) {
-                Log.e("OWNER_LISTENER", "Listen failed.", e);
-                return;
-            }
-
-            if ((snapshot != null) && snapshot.exists()) {
-                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
-
-                if (currentUser == null) {
-                    return;
-                }
-
-                // TODO: Add isAdded to other listeners
-                // if fragment can have a manager; tests crash without this line
-                if ((!firstTimeFragLoads) && profileExistingFragment.isAdded()) {
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .detach(ProfileExistingFragment.this)
-                            .attach(ProfileExistingFragment.this)
-                            .setTransition(FragmentTransaction.TRANSIT_NONE)
-                            .addToBackStack(null)
-                            .commitAllowingStateLoss();
-                } else {
-                    firstTimeFragLoads = false;
-                }
-            }
-            else if (profileExistingFragment.isAdded()) {
-                getParentFragmentManager().beginTransaction()
-                        .detach(ProfileExistingFragment.this).commitAllowingStateLoss();
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (container != null) {
-            container.removeAllViews();
-        }
-        View rootView = inflater.inflate(R.layout.fragment_profile_existing, container, false);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_profile_existing,
+                container, false);
 
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
 
@@ -160,18 +114,19 @@ public class ProfileExistingFragment extends Fragment {
             }
         });
 
-
         // access the layout materials
         TabLayout tabLayout = rootView.findViewById(R.id.profileExistingTabLayout);
+        // TabItem bookTab = rootView.findViewById(R.id.viewMyBookFragBookTab);
+        // TabItem requestsTab = rootView.findViewById(R.id.viewMyBookFragRequestsTab);
         ViewPager viewPager = rootView.findViewById(R.id.profileExistingViewPager);
-//
-//
-//        // set up the adapter
-        ProfilePageAdapter profilePageAdapter =
+        // Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.viewMyBookFragToolbar);
+
+        // set up the adapter
+        ProfilePageAdapter profilePagerAdapter =
                 new ProfilePageAdapter(getChildFragmentManager(),
                         tabLayout.getTabCount(), currentUser);
-//
-        viewPager.setAdapter(profilePageAdapter);
+
+        viewPager.setAdapter(profilePagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         // handle tab selection
@@ -179,18 +134,12 @@ public class ProfileExistingFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                Log.e("Tab", String.valueOf(tab.getPosition()));
             }
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
-
 
         return rootView;
 

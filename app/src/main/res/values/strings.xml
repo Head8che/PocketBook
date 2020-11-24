@@ -51,6 +51,7 @@
     <string name="addBookPageTitle">Add Book</string>
     <string name="signUpPageTitle">Create An Account</string>
     <string name="signUp">Sign Up</string>
+    <string name="signOut">Sign Out</string>
 
     <string name="edit_profile">Edit Profile</string>
     <string name="suggested_books">Suggested Books</string>

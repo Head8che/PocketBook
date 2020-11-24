@@ -1116,14 +1116,14 @@ public class FirebaseIntegrity {
         String owner = document.getString("owner");
         String status = document.getString("status");
         Log.e("GET_BOOK", id + " " + title + " " + author);
-        String nonExchangeString;
-        nonExchangeString = Objects.requireNonNull(document.get("nonExchange")).toString();
-        boolean nonExchange;
-        if (nonExchangeString.equals("false"))
-            nonExchange = false;
-        else{
-            nonExchange =  true;
+
+        if (document.get("nonExchange") == null) {
+            return null;
         }
+
+        boolean nonExchange = Objects
+                .requireNonNull(document.get("nonExchange")).toString().equals("true");
+
 //        Log.e("GET_BOOK", id + " " + title + " " + author);
         String comment = document.getString("comment");
         String condition = document.getString("condition");

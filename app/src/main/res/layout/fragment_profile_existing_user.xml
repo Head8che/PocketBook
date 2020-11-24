@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -18,7 +17,7 @@
 
 
         <TextView
-            android:id="@+id/profileName"
+            android:id="@+id/profileExistingFullName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:letterSpacing="0.02"
@@ -36,7 +35,7 @@
 
 
     <ScrollView
-        android:id="@+id/userProfileScrollView"
+        android:id="@+id/profileExistingScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?actionBarSize"
@@ -57,7 +56,7 @@
                 android:paddingTop="4dp">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/Img_cardView"
+                    android:id="@+id/profileExistingProfilePictureCardView"
                     android:layout_width="170dp"
                     android:layout_height="170dp"
                     android:layout_gravity="center"
@@ -71,10 +70,11 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/profile_image"
+                        android:id="@+id/profileExistingProfilePicture"
                         android:layout_width="match_parent"
                         android:shape="ring"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/profile_image"
                         android:src="@mipmap/ic_user_foreground" />
 
                 </androidx.cardview.widget.CardView>
@@ -86,25 +86,26 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
                     android:src="@drawable/ic_sign_out"
+                    android:contentDescription="@string/signOut"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/user_name"
+                android:id="@+id/profileExistingUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="4sp"
                 android:gravity="center_horizontal"
-                android:text="profile_username"
+                android:text="@string/username"
                 android:textColor="@color/textBlack"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/profileEmail"
+                android:id="@+id/profileExistingEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -115,7 +116,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/edit_profile_button"
+                android:id="@+id/profileExistingEditBtn"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:paddingTop="6dp"
@@ -140,7 +141,7 @@
                 android:layout_marginTop="16dp">
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/profileTabLayout"
+                    android:id="@+id/profileExistingTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorBackground"
@@ -148,13 +149,13 @@
                     app:tabTextColor="@color/colorUnselected">
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/profileFragOwnerTab"
+                        android:id="@+id/profileExistingOwnerTab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/owner" />
 
                     <com.google.android.material.tabs.TabItem
-                        android:id="@+id/profileFragBorrowerTab"
+                        android:id="@+id/profileExistingBorrowerTab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/borrower" />

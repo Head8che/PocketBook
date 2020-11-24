@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.R;
@@ -73,6 +75,11 @@ public class ViewLocationFragment extends Fragment implements OnMapReadyCallback
                 view.findViewById(R.id.viewLocationDateField);
         TextInputEditText layoutViewTime = (TextInputEditText)
                 view.findViewById(R.id.viewLocationTimeField);
+
+        TextView viewLocationTitle = (TextView) view.findViewById(R.id.viewLocationTitle);
+        if ((exchange.getBorrowerBookStatus().equals("BORROWED"))) {
+            viewLocationTitle.setText(R.string.viewReturnLocation);
+        }
 
         layoutViewLocation.setText(exchange.getMeetingDetails().getAddress());
         layoutViewDate.setText(exchange.getMeetingDetails().getMeetingDate());

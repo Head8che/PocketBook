@@ -1118,8 +1118,6 @@ public class FirebaseIntegrity {
         Log.e("GET_BOOK", id + " " + title + " " + author);
         String nonExchangeString;
         nonExchangeString = Objects.requireNonNull(document.getBoolean("nonExchange")).toString();
-        boolean nonExchange;
-        nonExchange = !nonExchangeString.equals("false");
         if (document.get("nonExchange") == null) {
             return null;
         }

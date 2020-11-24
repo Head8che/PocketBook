@@ -35,12 +35,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 //        FirebaseIntegrity.copyObjectBetweenCollectionsFirebase("test_catalogue", "Book", "cataloguer");
 //        FirebaseIntegrity.cleanObjectCollection("Book");
 
-<<<<<<< HEAD
         /* UNCOMMENT OUT THE LINE BELOW TO ACCESS LOGIN PAGE */
         //FirebaseAuth.getInstance().signOut();
 
-=======
->>>>>>> staging
         /* Duration of wait in milliseconds */
         int SPLASH_DISPLAY_LENGTH = 1500;
         new Handler().postDelayed(new Runnable(){

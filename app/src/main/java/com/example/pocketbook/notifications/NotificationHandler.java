@@ -1,7 +1,6 @@
 package com.example.pocketbook.notifications;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,11 +12,8 @@ import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +23,7 @@ import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationT
 public class NotificationHandler {
 
     private static final APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
 
     // verify if the user has a valid token
     private static String verifyReceiverTokenNotNull(DocumentSnapshot documentSnapshot){
@@ -38,7 +35,33 @@ public class NotificationHandler {
         }
     }
 
-    // check if the receiver of the notification is logged in
+//    private static void checkIfUsersShareSameToken(String sender, String receiver) {
+//        boolean toSend = false;
+//        FirebaseFirestore.getInstance().collection("users").document(sender)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            String senderToken = (String) task.getResult().get("token");
+//                            FirebaseFirestore.getInstance().collection("users").document(receiver)
+//                                    .get()
+//                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                            if (task.isSuccessful()) {
+//                                                String receiverToken = (String) task.getResult().get("token");
+//                                                if ((receiverToken.equals(senderToken))) {
+//
+//                                            }
+//                                        }
+//                                    });
+//                        }
+//                    }
+//                });
+//    }
+
 
 
     public static void sendNotificationBookRequested(User currentUser,Book book){
@@ -93,7 +116,10 @@ public class NotificationHandler {
                                         if (document1 != null) {
                                             User requestee = FirebaseIntegrity.getUserFromFirestore(document1);
                                             Log.d("Notirequestdeclined",userToken);
-                                            Data data = new Data(msg, "Request Declined", notification.getNotificationDate(), notification.getType(), R.drawable.ic_logo_vector, notification.getReceiver());
+                                            Data data = new Data(msg, "Request Declined",
+                                                    notification.getNotificationDate(),
+                                                    notification.getType(), R.drawable.ic_logo_vector,
+                                                    notification.getReceiver());
                                             pushNewNotificationToFirebase(notification);
                                             sendNotification(userToken, data);
                                         }

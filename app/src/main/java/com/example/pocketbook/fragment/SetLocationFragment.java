@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -23,20 +25,34 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.model.MeetingDetails;
 import com.example.pocketbook.model.Request;
+import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.Parser;
+import com.example.pocketbook.util.ScanHandler;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationRequestAccepted;
+import static com.example.pocketbook.notifications
+        .NotificationHandler.sendNotificationRequestAccepted;
 
-public class SetLocationFragment extends Fragment {
+public class SetLocationFragment extends Fragment implements OnMapReadyCallback {
 
     private Book book;
     private Request request;
@@ -69,18 +85,26 @@ public class SetLocationFragment extends Fragment {
 
     String bookOwner;
     String bookRequester;
+    private User currentUser;
+
+    GoogleMap googleMap = null;
+    private LatLng mPinnedMap;
+    Marker marker;
+    SupportMapFragment mapFrag;
 
     public SetLocationFragment() {
         // Required empty public constructor
     }
 
     public static SetLocationFragment newInstance(Book book, Request request,
-                                                  String bookOwner, String bookRequester) {
+                                                  String bookOwner, String bookRequester,
+                                                  User currentUser) {
         SetLocationFragment layoutSetLocationFragment = new SetLocationFragment();
         Bundle args = new Bundle();
         args.putSerializable("SLF_BOOK", book);
         args.putSerializable("SLF_REQUEST", request);
         args.putSerializable("SLF_BOOK_OWNER", bookOwner);
+        args.putSerializable("SLF_CURRENT_USER", currentUser);
         args.putSerializable("SLF_BOOK_REQUESTER", bookRequester);
         layoutSetLocationFragment.setArguments(args);
         return layoutSetLocationFragment;
@@ -98,6 +122,7 @@ public class SetLocationFragment extends Fragment {
             this.book = (Book) getArguments().getSerializable("SLF_BOOK");
             this.request = (Request) getArguments().getSerializable("SLF_REQUEST");
             this.bookOwner = (String) getArguments().getSerializable("SLF_BOOK_OWNER");
+            this.currentUser = (User) getArguments().getSerializable("SLF_CURRENT_USER");
             this.bookRequester = (String) getArguments().getSerializable("SLF_BOOK_REQUESTER");
         }
 
@@ -115,10 +140,21 @@ public class SetLocationFragment extends Fragment {
         layoutSetTime = (TextInputEditText) view.findViewById(R.id.setTimeField);
         confirmBtn = (Button) view.findViewById(R.id.confirmPickupBtn);
 
+        TextView setLocationTitle = (TextView) view.findViewById(R.id.setLocationTitle);
+        if (currentUser != null) {
+            setLocationTitle.setText(R.string.setReturnLocation);
+        }
+
         // access the layout text containers
         layoutSetLocationContainer = (TextInputLayout) view.findViewById(R.id.setLocationContainer);
         layoutSetDateContainer = (TextInputLayout) view.findViewById(R.id.setDateContainer);
         layoutSetTimeContainer = (TextInputLayout) view.findViewById(R.id.setTimeContainer);
+
+        if (this.googleMap == null) {
+            mapFrag = (SupportMapFragment)
+                    getChildFragmentManager().findFragmentById(R.id.setLocationFragMap);
+            mapFrag.getMapAsync(this);
+        }
 
         TimePickerDialog.OnTimeSetListener time = (view1, hourOfDay, minute) -> {
 //                layoutSetTime.setText(String.valueOf(hourOfDay)+"Hours "+String.valueOf(minute)+" minutes ");
@@ -175,28 +211,104 @@ public class SetLocationFragment extends Fragment {
             // TODO: Need to Notify the user of Accept and Decline all other Requests
             if (validLocation && validDate && validTime
                     && (latitude != invalidCoord) && (longitude != invalidCoord)) {
-                String exchangeID = UUID.randomUUID().toString();
-                MeetingDetails meetingDetails = new MeetingDetails(latitude,
-                        longitude, address, meetingDate, meetingTime);
 
-                String ownerBookStatus = (book.getStatus().equals("REQUESTED"))
-                        ? "ACCEPTED" : book.getStatus();
-                String borrowerBookStatus = (book.getStatus().equals("REQUESTED"))
-                        ? "ACCEPTED" : book.getStatus();
+                if (book.getStatus().equals("REQUESTED")) {
+                    String exchangeID = UUID.randomUUID().toString();
+                    MeetingDetails meetingDetails = new MeetingDetails(latitude,
+                            longitude, address, meetingDate, meetingTime);
 
-                Exchange exchange = new Exchange(exchangeID, book.getId(), bookOwner,
-                        bookRequester, ownerBookStatus, borrowerBookStatus, meetingDetails);
+                    String ownerBookStatus = (book.getStatus().equals("REQUESTED"))
+                            ? "ACCEPTED" : book.getStatus();
+                    String borrowerBookStatus = (book.getStatus().equals("REQUESTED"))
+                            ? "ACCEPTED" : book.getStatus();
 
-                if ((meetingDetails.getAddress() == null)
-                        || (exchange.getExchangeId() == null)) {
-                    Toast.makeText(getContext(), "Invalid Details",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Valid Details",
-                            Toast.LENGTH_SHORT).show();
-                    FirebaseIntegrity.pushNewExchangeToFirebase(exchange);
-                    FirebaseIntegrity.acceptBookRequest(request);
-                    Objects.requireNonNull(getActivity()).onBackPressed();
+                    Exchange exchange = new Exchange(exchangeID, book.getId(), bookOwner,
+                            bookRequester, ownerBookStatus, borrowerBookStatus, meetingDetails);
+
+                    if ((meetingDetails.getAddress() == null)
+                            || (exchange.getExchangeId() == null)) {
+                        Toast.makeText(getContext(), "Invalid Details",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Valid Details",
+                                Toast.LENGTH_SHORT).show();
+                        FirebaseIntegrity.pushNewExchangeToFirebase(exchange);
+                        FirebaseIntegrity.acceptBookRequest(request);
+                        Objects.requireNonNull(getActivity()).onBackPressed();
+
+                        // notify user
+                        sendNotificationRequestAccepted(request, book);
+                    }
+                } else if (book.getStatus().equals("ACCEPTED")) {
+                    if (currentUser != null) {
+
+                        FirebaseFirestore.getInstance()
+                                .collection("exchange")
+                                .whereEqualTo("owner", currentUser.getEmail())
+                                .whereEqualTo("relatedBook", book.getId())
+                                .whereEqualTo("ownerBookStatus", "ACCEPTED")
+                                .get() // get only 1 book with given isbn
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        Log.e("SIZE",
+                                                String.valueOf(task1.getResult().size()));
+                                        if (task1.getResult().size() == 0) {
+                                            Toast.makeText(getContext(),
+                                                    "No Results Found for ISBN: "
+                                                            + book.getISBN(), Toast.LENGTH_SHORT)
+                                                    .show();
+                                        } else {
+
+                                            for (QueryDocumentSnapshot document1
+                                                    : task1.getResult()) {
+
+                                                MeetingDetails meetingDetails = new MeetingDetails(latitude,
+                                                        longitude, address, meetingDate, meetingTime);
+
+                                                if (meetingDetails.getAddress() == null) {
+                                                    Toast.makeText(getContext(),
+                                                            "Invalid Details",
+                                                            Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getContext(),
+                                                            "Valid Details",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                    Map<String, Object> docData = new HashMap<>();
+                                                    docData.put("address",
+                                                            meetingDetails.getAddress());
+                                                    docData.put("latitude",
+                                                            meetingDetails.getLatitude());
+                                                    docData.put("longitude",
+                                                            meetingDetails.getLongitude());
+                                                    docData.put("meetingDate",
+                                                            meetingDetails.getMeetingDate());
+                                                    docData.put("meetingTime",
+                                                            meetingDetails.getMeetingTime());
+
+                                                    FirebaseFirestore.getInstance()
+                                                            .collection("exchange")
+                                                            .document(document1.getId())
+                                                            .update("ownerBookStatus",
+                                                                    "BORROWED",
+                                                                    "meetingDetails",
+                                                                    docData);
+
+                                                    FirebaseIntegrity
+                                                            .setBookStatusFirebase(book,
+                                                                    "BORROWED");
+
+                                                    Objects.requireNonNull(getActivity())
+                                                            .onBackPressed();
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+
                 }
             } else {  // if not all fields are valid
                 if (!validLocation) {
@@ -237,8 +349,6 @@ public class SetLocationFragment extends Fragment {
                     layoutSetTime.requestFocus();
                 }
             }
-            // notify user
-            sendNotificationRequestAccepted(request,book);
         });
 
 
@@ -330,6 +440,7 @@ public class SetLocationFragment extends Fragment {
                     validLocation = true;
                     layoutSetLocation.setError(null);
                     layoutSetLocationContainer.setErrorEnabled(false);
+                    onMapReady(googleMap);
                 }
             }
             @Override
@@ -343,6 +454,60 @@ public class SetLocationFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        if (this.googleMap != null) {
+
+            if ((address != null) && (latitude != invalidCoord) && (longitude != invalidCoord)) {
+
+                Log.e("ADDRESS", address + " " + latitude + " " + longitude);
+
+                if (marker != null) {
+                    marker.remove();
+                }
+                mPinnedMap = new LatLng(latitude, longitude);
+
+                MarkerOptions options = new MarkerOptions()
+                        .draggable(true)
+                        .title(address)
+                        .position(mPinnedMap);
+
+                if (this.googleMap != null) {
+                    marker = this.googleMap.addMarker(options);
+                }
+
+                marker.setTitle(address);
+
+            } else {
+
+                String antarctica = "Antarctica";
+                double antLat = -82.862755;
+                double antLng = 135.0;
+
+                Log.e("ADDRESS", "Antarctica" + " " + antLat + " " + antLng);
+
+                if (marker != null) {
+                    marker.remove();
+                }
+                mPinnedMap = new LatLng(antLat, antLng);
+
+                MarkerOptions options = new MarkerOptions()
+                        .draggable(true)
+                        .title(antarctica)
+                        .position(mPinnedMap);
+
+                if (this.googleMap != null) {
+                    marker = this.googleMap.addMarker(options);
+                }
+
+                marker.setTitle(antarctica);
+
+            }
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mPinnedMap,15));
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

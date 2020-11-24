@@ -258,6 +258,7 @@ public class FirebaseIntegrity {
             docData.put("owner", owner);
             docData.put("status", status);
             docData.put("comment", comment);
+            docData.put("nonExchange", true);
             docData.put("condition", condition);
             docData.put("keywords", getBookKeywords(title, author, isbn));
             docData.put("requesters", new ArrayList<>());
@@ -293,6 +294,7 @@ public class FirebaseIntegrity {
             docData.put("author", author);
             docData.put("isbn", Parser.convertToIsbn13(isbn));
             docData.put("owner", owner);
+            docData.put("nonExchange", true);
             docData.put("status", status);
             docData.put("comment", comment);
             docData.put("condition", condition);
@@ -310,6 +312,81 @@ public class FirebaseIntegrity {
     }
 
     public static void deleteBookFirebase(Book book) {
+        FirebaseFirestore.getInstance()
+                .collection("catalogue")
+                .document(book.getId())
+                .collection("requests")
+                .get()
+                .addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+
+                        // if subcollection has documents
+                        if (!Objects.requireNonNull(
+                                task1.getResult()).isEmpty()) {
+
+                            int numOfReturnedRows = task1.getResult().size();
+                            int rowCount = 0;
+
+                            // for each document in subcollection
+                            for (DocumentSnapshot document1 : task1.getResult()) {
+
+                                rowCount += 1;
+
+                                if (document1.exists()) {
+
+                                    // get an instance of the document and delete it
+                                    int finalRowCount = rowCount;
+                                    FirebaseFirestore.getInstance()
+                                            .collection("catalogue")
+                                            .document(book.getId())
+                                            .collection("requests")
+                                            .document(document1.getId())
+                                            .delete()
+                                            .addOnCompleteListener(task2 -> {
+                                                if (!(task2.isSuccessful())) {
+                                                    Log.e("DELETE_DOCUMENT_FROM_COLLECTION",
+                                                            "Error deleting collection document!");
+                                                } else {
+                                                    if (finalRowCount == numOfReturnedRows) {
+                                                        FirebaseFirestore.getInstance()
+                                                                .collection("catalogue")
+                                                                .document(book.getId())
+                                                                .delete();
+
+                                                        FirebaseFirestore.getInstance()
+                                                                .collection("exchange")
+                                                                .whereEqualTo("relatedBook", book.getId())
+                                                                .get()
+                                                                .addOnCompleteListener(task3 -> {
+                                                                    if (task3.isSuccessful()) {
+                                                                        Log.e("SIZE",
+                                                                                String.valueOf(task3.getResult().size()));
+                                                                        if (task3.getResult().size() > 0) {
+
+                                                                            for (QueryDocumentSnapshot document2
+                                                                                    : task3.getResult()) {
+
+                                                                                FirebaseFirestore
+                                                                                        .getInstance()
+                                                                                        .collection("exchange")
+                                                                                        .document(document2.getId())
+                                                                                        .delete();
+
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                });
+                                                    }
+                                                }
+                                            });
+
+                                }
+                            }
+                        }
+                    }
+                });
+
         FirebaseFirestore.getInstance()
                 .collection("catalogue")
                 .document(book.getId())
@@ -1043,6 +1120,11 @@ public class FirebaseIntegrity {
         nonExchangeString = Objects.requireNonNull(document.getBoolean("nonExchange")).toString();
         boolean nonExchange;
         nonExchange = !nonExchangeString.equals("false");
+        if (document.get("nonExchange") == null) {
+            return null;
+        }
+        boolean nonExchange = Objects
+                .requireNonNull(document.get("nonExchange")).toString().equals("true");
 //        Log.e("GET_BOOK", id + " " + title + " " + author);
         String comment = document.getString("comment");
         String condition = document.getString("condition");

@@ -10,13 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.pocketbook.fragment.NotificationsFragment;
+import com.example.pocketbook.fragment.ProfileExistingFragment;
 import com.example.pocketbook.util.ScanHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
-import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.fragment.ProfileNewFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
@@ -151,8 +152,8 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
-                        Fragment profileFragment = ProfileFragment.newInstance(currentUser);
-                        Fragment ownerFragment = OwnerFragment.newInstance(currentUser);
+                        Fragment profileNewFragment = ProfileNewFragment.newInstance(currentUser);
+                        Fragment profileExistingFragment = ProfileExistingFragment.newInstance(currentUser);
 
                         FirebaseFirestore.getInstance()
                                 .collection("catalogue")
@@ -165,7 +166,7 @@ public class HomeActivity extends AppCompatActivity {
                                             if (!(CURRENT_TAG.equals(FRAG_TAG))) {
                                                 getSupportFragmentManager().beginTransaction()
                                                         .replace(R.id.container,
-                                                                profileFragment,
+                                                                profileNewFragment,
                                                                 FRAG_TAG)
                                                         .addToBackStack(FRAG_TAG)
                                                         .commit();
@@ -174,7 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                                             FRAG_TAG = "OWNER_FRAGMENT";
                                             if (!(CURRENT_TAG.equals(FRAG_TAG))) {
                                                 getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container, ownerFragment,
+                                                        .replace(R.id.container, profileExistingFragment,
                                                                 FRAG_TAG)
                                                         .addToBackStack(FRAG_TAG)
                                                         .commit();

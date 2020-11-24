@@ -143,7 +143,7 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     public void onDataChanged() {
         super.onDataChanged();
         int dataSize = options.getSnapshots().size();
-//        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
+        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
         if (dataSize > 0) {
             rowTitle.setVisibility(View.VISIBLE);
             rowRecycler.setVisibility(View.VISIBLE);

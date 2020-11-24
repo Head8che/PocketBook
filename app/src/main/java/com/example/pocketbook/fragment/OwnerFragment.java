@@ -198,46 +198,13 @@ public class OwnerFragment extends Fragment {
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_profile_existing_user, container, false);
-
-        StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
-
-        String first_Name = currentUser.getFirstName();
-        String last_Name = currentUser.getLastName();
-        String user_Name = currentUser.getUsername();
-        String user_Email = currentUser.getEmail();
-        ImageView signOut = (ImageView) v.findViewById(R.id.profileExistingSignOut);
-        ImageView profilePicture = (ImageView) v.findViewById(R.id.profileExistingProfilePicture);
-        TextView ProfileName = (TextView) v.findViewById(R.id.profileExistingFullName);
-        TextView UserName = (TextView) v.findViewById(R.id.profileExistingUsername);
-        TextView Email = (TextView) v.findViewById(R.id.profileExistingEmail);
-        ProfileName.setText(first_Name + ' ' + last_Name);
-        UserName.setText(user_Name);
-        Email.setText(user_Email);
-
-        signOut.setColorFilter(ContextCompat
-                        .getColor(Objects.requireNonNull(getActivity()).getBaseContext(),
-                                R.color.colorAccent),
-                android.graphics.PorterDuff.Mode.SRC_IN);
-
-        signOut.setOnClickListener(v1 -> {
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            startActivity(intent);
-            FirebaseAuth.getInstance().signOut();
-            Objects.requireNonNull(getActivity()).finishAffinity();
-        });
-
-        GlideApp.with(Objects.requireNonNull(getContext()))
-                .load(userProfilePicture)
-                .circleCrop()
-                .into(profilePicture);
+        View v = inflater.inflate(R.layout.fragment_owner, container, false);
 
         LinearLayout titleReadyForPickups = v.findViewById(R.id.TitleBarReadyForPickupOwner);
         LinearLayout titleRequested = v.findViewById(R.id.TitleBarRequestedOwner);
         LinearLayout titleBorrowed = v.findViewById(R.id.TitleBarBorrowedOwner);
         LinearLayout titleOwned = v.findViewById(R.id.TitleBarOwnedOwner);
 
-        TextView layoutEditProfile = v.findViewById(R.id.profileExistingEditBtn);
         TextView viewAllReadyForPickups = v.findViewById(R.id.ViewAllReadyForPickupOwner);
         TextView viewAllRequestedBooks = v.findViewById(R.id.ViewAllRequestedOwner);
         TextView viewAllBorrowedBooks = v.findViewById(R.id.ViewAllBorrowedOwner);
@@ -245,6 +212,7 @@ public class OwnerFragment extends Fragment {
 
         mReadyForPickupBooksRecycler = v.findViewById(R.id.profileOwnerRecyclerReadyForPickupBooks);
         LinearLayoutManager readyForPickuplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
         mReadyForPickupBooksRecycler.setLayoutManager(readyForPickuplayoutManager);
         FirestoreRecyclerOptions<Book> readyForPickupOptions = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(readyForPickupBooksQuery, Book.class)
@@ -285,22 +253,22 @@ public class OwnerFragment extends Fragment {
         Log.e("OWN", mOwnedBooksRecycler.getChildCount() + " " + ownedBookAdapter.getItemCount());
 
         // initially hide views if they have no content
-        if (readyForPickupOptions.getSnapshots().size() == 0) {
-            titleReadyForPickups.setVisibility(View.GONE);
-            mReadyForPickupBooksRecycler.setVisibility(View.GONE);
-        }
-        if (requestedOptions.getSnapshots().size() == 0) {
-            titleRequested.setVisibility(View.GONE);
-            mRequestedBooksRecycler.setVisibility(View.GONE);
-        }
-        if (borrowedOptions.getSnapshots().size() == 0) {
-            titleBorrowed.setVisibility(View.GONE);
-            mBorrowedBooksRecycler.setVisibility(View.GONE);
-        }
-        if (ownedOptions.getSnapshots().size() == 0) {
-            titleOwned.setVisibility(View.GONE);
-            mOwnedBooksRecycler.setVisibility(View.GONE);
-        }
+//        if (readyForPickupOptions.getSnapshots().size() == 0) {
+//            titleReadyForPickups.setVisibility(View.GONE);
+//            mReadyForPickupBooksRecycler.setVisibility(View.GONE);
+//        }
+//        if (requestedOptions.getSnapshots().size() == 0) {
+//            titleRequested.setVisibility(View.GONE);
+//            mRequestedBooksRecycler.setVisibility(View.GONE);
+//        }
+//        if (borrowedOptions.getSnapshots().size() == 0) {
+//            titleBorrowed.setVisibility(View.GONE);
+//            mBorrowedBooksRecycler.setVisibility(View.GONE);
+//        }
+//        if (ownedOptions.getSnapshots().size() == 0) {
+//            titleOwned.setVisibility(View.GONE);
+//            mOwnedBooksRecycler.setVisibility(View.GONE);
+//        }
 
         viewAllReadyForPickups.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
@@ -351,14 +319,6 @@ public class OwnerFragment extends Fragment {
             }
         });
 
-        layoutEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileActivity.class);
-                intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
-            }
-        });
 
         return v;
     }

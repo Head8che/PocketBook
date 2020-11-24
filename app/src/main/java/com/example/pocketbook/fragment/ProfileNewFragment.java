@@ -19,14 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.example.pocketbook.util.ScrollUpdate;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -55,12 +55,11 @@ public class ProfileNewFragment extends Fragment {
     private TextView editProfile;
     private static final String USERS = "users";
     private User currentUser;
-    private ScrollUpdate scrollUpdate;
     private Fragment profileFragment = this;
 
     private int itemCount;
 
-    FirestoreRecyclerOptions<Book> options;
+    FirestorePagingOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
     /**
@@ -92,13 +91,17 @@ public class ProfileNewFragment extends Fragment {
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        // Query to retrieve all books
+        // Retrieving books that do not belong to user
         mQuery = mFirestore.collection("catalogue")
-                .whereNotEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+                .whereNotEqualTo("owner",currentUser.getEmail());
 
-        options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
-                .build();
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4).build();
+
+        options = new FirestorePagingOptions.Builder<Book>()
+                .setLifecycleOwner(this)
+                .setQuery(mQuery, config, Book.class).build();
 
         EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
             if (snapshots != null) {
@@ -195,9 +198,6 @@ public class ProfileNewFragment extends Fragment {
         mBooksRecycler = v.findViewById(R.id.profileNewRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
-        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
-                .build();
         mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
@@ -248,9 +248,6 @@ public class ProfileNewFragment extends Fragment {
                 .into(profilePicture);
 
         editProfile = v.findViewById(R.id.profileNewEditBtn);
-
-//        scrollUpdate = new ScrollUpdate(ownedBooks, mQuery, mAdapter, mBooksRecycler);
-//        scrollUpdate.load();
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

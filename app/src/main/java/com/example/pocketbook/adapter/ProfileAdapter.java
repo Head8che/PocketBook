@@ -1,13 +1,9 @@
 package com.example.pocketbook.adapter;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,26 +21,10 @@ import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.firebase.ui.common.ChangeEventType;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-
-
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-
-import com.example.pocketbook.model.Book;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
@@ -52,7 +32,6 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     private User currentUser;
     private User bookOwner;
     private FragmentActivity activity;
-    private FirebaseAuth mAuth;
     private FirestoreRecyclerOptions<Book> options;
     private LinearLayout rowTitle;
     private RecyclerView rowRecycler;
@@ -143,7 +122,7 @@ public class ProfileAdapter extends FirestoreRecyclerAdapter<Book, ProfileAdapte
     public void onDataChanged() {
         super.onDataChanged();
         int dataSize = options.getSnapshots().size();
-        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
+//        Log.e("CHANGE_PROFILE_ADAPTER", dataSize + "");
         if (dataSize > 0) {
             rowTitle.setVisibility(View.VISIBLE);
             rowRecycler.setVisibility(View.VISIBLE);

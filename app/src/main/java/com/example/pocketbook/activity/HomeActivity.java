@@ -155,8 +155,6 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
                         Fragment profileNewFragment = ProfileNewFragment.newInstance(currentUser);
-                        ArrayList<String> a = new ArrayList<String>();
-                        a.add("owen@gmail.com");
                         Fragment profileExistingFragment = ProfileExistingFragment.newInstance(currentUser);
 
                         FirebaseFirestore.getInstance()

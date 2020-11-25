@@ -166,7 +166,7 @@ public class HomeFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         Button notificationBtn = (Button) rootView.findViewById(R.id.homeFragmentNotificationBtn);
-        mBooksRecycler = rootView.findViewById(R.id.recycler_books);
+        mBooksRecycler = rootView.findViewById(R.id.homeFragmentRecyclerBooks);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), NUM_COLUMNS));
 
         mBooksRecycler.setAdapter(mAdapter);

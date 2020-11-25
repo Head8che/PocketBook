@@ -115,7 +115,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_books"
+            android:id="@+id/homeFragmentRecyclerBooks"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

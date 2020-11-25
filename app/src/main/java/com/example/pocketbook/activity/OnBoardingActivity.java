@@ -79,7 +79,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("CURRENT_USER", currentUser);
         startActivity(intent);
-        finishAffinity();
+//        finishAffinity();
     }
 
     public void next() {

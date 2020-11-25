@@ -22,6 +22,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.NotificationCounter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment {
 
     private User currentUser;
 
-    FirestorePagingOptions<Book> options;
+    FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
     /**
      * Home Page fragment instance that bundles the user/catalogue to be displayed
@@ -87,9 +88,9 @@ public class HomeFragment extends Fragment {
                 .setInitialLoadSizeHint(4)
                 .setPageSize(4).build();
 
-        options = new FirestorePagingOptions.Builder<Book>()
-                .setLifecycleOwner(this)
-                .setQuery(mQuery, config, Book.class).build();
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
 
         EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
             if (snapshots != null) {

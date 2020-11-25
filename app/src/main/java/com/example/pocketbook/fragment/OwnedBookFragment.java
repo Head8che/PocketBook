@@ -19,6 +19,7 @@ import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -31,14 +32,13 @@ import com.google.firebase.firestore.Query;
 public class OwnedBookFragment extends Fragment {
 
     private static final int numColumns = 2;
-    private static final int LIMIT = 20;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private RecyclerView mBooksRecycler;
     private ViewAllBookAdapter mAdapter;
     private User currentUser;
 
-    FirestorePagingOptions<Book> options;
+    FirestoreRecyclerOptions<Book> options;
 
     public static OwnedBookFragment newInstance(User user) {
         OwnedBookFragment ownedbookfragment = new OwnedBookFragment();
@@ -61,15 +61,15 @@ public class OwnedBookFragment extends Fragment {
 
         // retrieving owned books
         mQuery = mFirestore.collection("catalogue")
-                .whereEqualTo("owner", currentUser.getEmail()).limit(LIMIT);
+                .whereEqualTo("owner", currentUser.getEmail());
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(4)
                 .setPageSize(4).build();
 
-        options = new FirestorePagingOptions.Builder<Book>()
-                .setLifecycleOwner(this)
-                .setQuery(mQuery, config, Book.class).build();
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
 
     }
 

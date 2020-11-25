@@ -1,6 +1,11 @@
 package com.example.pocketbook.adapter;
 
 import android.os.Bundle;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
@@ -21,9 +23,8 @@ import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.firebase.ui.firestore.paging.LoadingState;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,15 +32,15 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ViewAllBookAdapter
-        extends FirestorePagingAdapter<Book, ViewAllBookAdapter.BookHolder> {
+        extends FirestoreRecyclerAdapter<Book, ViewAllBookAdapter.BookHolder> {
 
     private User currentUser;
     private User bookOwner;
     private FragmentActivity activity;
     private boolean isOwnerTab;
 
-    public ViewAllBookAdapter(@NonNull FirestorePagingOptions<Book> options, User currentUser,
-                       FragmentActivity activity, boolean isOwnerTab) {
+    public ViewAllBookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
+                              FragmentActivity activity, boolean isOwnerTab) {
         super(options);
         this.currentUser = currentUser;
         this.activity = activity;
@@ -63,28 +64,6 @@ public class ViewAllBookAdapter
             statusImageView = itemView.findViewById(R.id.itemBookV2Status);
             otherUser = itemView.findViewById(R.id.itemBookV2OtherUser);
 
-        }
-    }
-
-    @Override
-    protected void onLoadingStateChanged(@NonNull LoadingState state) {
-        super.onLoadingStateChanged(state);
-        switch (state) {
-            case LOADING_INITIAL:
-                Log.d("PAGER_BOOK_ADAPTER", "LOADING_INITIAL");
-                break;
-            case LOADING_MORE:
-                Log.d("PAGER_BOOK_ADAPTER", "LOADING_MORE");
-                break;
-            case FINISHED:
-                Log.d("PAGER_BOOK_ADAPTER", "FINISHED");
-                break;
-            case ERROR:
-                Log.d("PAGER_BOOK_ADAPTER", "ERROR");
-                break;
-            case LOADED:
-                Log.d("PAGER_BOOK_ADAPTER", "LOADED " + getItemCount() + " items!");
-                break;
         }
     }
 

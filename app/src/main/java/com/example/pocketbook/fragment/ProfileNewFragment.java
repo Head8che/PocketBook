@@ -26,6 +26,7 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -59,7 +60,7 @@ public class ProfileNewFragment extends Fragment {
 
     private int itemCount;
 
-    FirestorePagingOptions<Book> options;
+    FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
     /**
@@ -99,9 +100,9 @@ public class ProfileNewFragment extends Fragment {
                 .setInitialLoadSizeHint(4)
                 .setPageSize(4).build();
 
-        options = new FirestorePagingOptions.Builder<Book>()
-                .setLifecycleOwner(this)
-                .setQuery(mQuery, config, Book.class).build();
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
 
         EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
             if (snapshots != null) {

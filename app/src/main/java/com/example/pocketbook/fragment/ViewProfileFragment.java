@@ -54,7 +54,7 @@ public class ViewProfileFragment extends Fragment {
     private Fragment viewProfileFragment = this;
     private boolean firstTimeFragLoads = true;
 
-    FirestorePagingOptions<Book> options;
+    FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
     TextView layoutFullName;
@@ -108,9 +108,9 @@ public class ViewProfileFragment extends Fragment {
                 .setInitialLoadSizeHint(4)
                 .setPageSize(4).build();
 
-        options = new FirestorePagingOptions.Builder<Book>()
-                .setLifecycleOwner(this)
-                .setQuery(mQuery, config, Book.class).build();
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
 
         EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
             if (snapshots != null) {

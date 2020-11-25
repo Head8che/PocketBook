@@ -19,6 +19,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -36,7 +37,7 @@ public class ReadyForPickupFragment extends Fragment {
     private User currentUser;
     private boolean isOwnerTab;
 
-    FirestorePagingOptions<Book> options;
+    FirestoreRecyclerOptions<Book> options;
 
     public static ReadyForPickupFragment newInstance(User user, boolean isOwnerTab) {
         ReadyForPickupFragment readyForPickupfragment = new ReadyForPickupFragment();
@@ -71,9 +72,9 @@ public class ReadyForPickupFragment extends Fragment {
                 .setInitialLoadSizeHint(4)
                 .setPageSize(4).build();
 
-        options = new FirestorePagingOptions.Builder<Book>()
-                .setLifecycleOwner(this)
-                .setQuery(mQuery, config, Book.class).build();
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
     }
 
     @SuppressLint("SetTextI18n")

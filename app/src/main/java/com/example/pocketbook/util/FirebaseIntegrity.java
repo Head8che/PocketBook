@@ -917,19 +917,20 @@ public class FirebaseIntegrity {
         String meetingDate = (String) meetingDetailsMap.get("meetingDate");
         String meetingTime = (String) meetingDetailsMap.get("meetingTime");
 
-        MeetingDetails meetingDetails = (Parser.isValidMeetingData(latitude,
+        MeetingDetails meetingDetails = (Parser.isValidMeetingDataFormat(latitude,
                 longitude, address, meetingDate, meetingTime)) ? new MeetingDetails(latitude,
                 longitude, address, meetingDate, meetingTime) : null;
 
         if (meetingDetails == null) {
             return null;
         }
+//        Log.e("GET_EXCHANGE", "meetingDetails is: " + meetingDetails);
 
 //        Log.e("GET_DOC_FIRE_FROM_OBJECT", Parser.parseBook(id, title, author, isbn, owner,
 //                status, comment, condition, photo, requesters) + " " + id);
 
         // return a valid Exchange variable
-        return (Parser.isValidExchangeData(exchangeId, relatedBook, owner, borrower,
+        return (Parser.isValidExchangeDataFormat(exchangeId, relatedBook, owner, borrower,
                 ownerBookStatus, borrowerBookStatus, meetingDetails)) ? new Exchange(exchangeId,
                 relatedBook, owner, borrower, ownerBookStatus,
                 borrowerBookStatus, meetingDetails) : null;

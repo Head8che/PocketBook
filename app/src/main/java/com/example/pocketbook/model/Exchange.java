@@ -46,7 +46,7 @@ public class Exchange implements Serializable {
             borrowerBookStatus = borrowerBookStatus.trim().toUpperCase();  // uppercase status
 
             // only sets Exchange data if the data is valid
-            if (Parser.isValidExchangeData(exchangeId, relatedBook, owner, borrower,
+            if (Parser.isValidExchangeDataFormat(exchangeId, relatedBook, owner, borrower,
                     ownerBookStatus, borrowerBookStatus, meetingDetails)) {
 
                 this.exchangeId = exchangeId;

@@ -34,7 +34,7 @@ public class MeetingDetails implements Serializable {
             meetingTime = meetingTime.trim();
 
             // only sets MeetingDetails data if the data is valid
-            if (Parser.isValidMeetingData(latitude,
+            if (Parser.isValidMeetingDataFormat(latitude,
                     longitude, address, meetingDate, meetingTime)) {
 
                 this.latitude = latitude;

@@ -1,6 +1,5 @@
 package com.example.pocketbook.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,21 +16,13 @@ import android.widget.TextView;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ProfileAdapter;
-import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.example.pocketbook.util.ScrollUpdate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
 
@@ -43,29 +34,15 @@ public class BorrowerFragment extends Fragment {
     private User currentUser;
     private FirebaseFirestore mFirestore;
 
-    private static final int numColumns = 2;
     private static final int LIMIT = 20;
-
-    private Query readyForPickupBooksQuery;
-    private Query borrowedBooksQuery;
-    private Query requestedBooksQuery;
-
-    private RecyclerView mReadyForPickupBooksRecycler;
-    private RecyclerView mBorrowedBooksRecycler;
-    private RecyclerView mRequestedBooksRecycler;
 
     private ProfileAdapter readyForPickupBookAdapter;
     private ProfileAdapter borrowedBookAdapter;
     private ProfileAdapter requestedBookAdapter;
 
-    private static final String USERS = "users";
-    private ScrollUpdate scrollUpdate;
     private Fragment ownerFragment = this;
     private boolean firstTimeFragLoads = true;
-
-    FirestoreRecyclerOptions<Book> readyForPickupBookOptions;
-    FirestoreRecyclerOptions<Book> borrowedBookOptions;
-    FirestoreRecyclerOptions<Book> requestedBookOptions;
+    private boolean isOwnerTab = false;
 
 
     public static BorrowerFragment newInstance(User user) {
@@ -87,33 +64,6 @@ public class BorrowerFragment extends Fragment {
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
-
-        // query to retrieve accepted books
-        readyForPickupBooksQuery = mFirestore.collection("catalogue")
-                .whereArrayContains("requesters", currentUser.getEmail())
-                .whereEqualTo("status", "ACCEPTED").limit(LIMIT);
-
-        // query to retrieve borrowed books
-        borrowedBooksQuery = mFirestore.collection("catalogue")
-                .whereArrayContains("requesters", currentUser.getEmail())
-                .whereEqualTo("status", "BORROWED").limit(LIMIT);
-
-        // query to retrieve requested books
-        requestedBooksQuery = mFirestore.collection("catalogue")
-                .whereArrayContains("requesters", currentUser.getEmail())
-                .whereEqualTo("status", "REQUESTED").limit(LIMIT);
-
-        readyForPickupBookOptions = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(readyForPickupBooksQuery, Book.class)
-                .build();
-
-        borrowedBookOptions = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(borrowedBooksQuery, Book.class)
-                .build();
-
-        requestedBookOptions = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(requestedBooksQuery, Book.class)
-                .build();
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
                 .document(currentUser.getEmail());
@@ -165,8 +115,13 @@ public class BorrowerFragment extends Fragment {
         TextView viewAllRequestedBooks = rootView.findViewById(R.id.ViewAllRequestedBorrower);
         TextView viewAllBorrowedBooks = rootView.findViewById(R.id.ViewAllBorrowedBorrower);
 
-        mReadyForPickupBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerReadyForPickupBooks);
+        RecyclerView mReadyForPickupBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerReadyForPickupBooks);
         LinearLayoutManager readyForPickuplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        // query to retrieve accepted books
+        Query readyForPickupBooksQuery = mFirestore.collection("catalogue")
+                .whereArrayContains("requesters", currentUser.getEmail())
+                .whereEqualTo("status", "ACCEPTED").limit(LIMIT);
 
         mReadyForPickupBooksRecycler.setLayoutManager(readyForPickuplayoutManager);
         FirestoreRecyclerOptions<Book> readyForPickupOptions = new FirestoreRecyclerOptions.Builder<Book>()
@@ -175,8 +130,14 @@ public class BorrowerFragment extends Fragment {
         readyForPickupBookAdapter = new ProfileAdapter(readyForPickupOptions, currentUser, getActivity(), titleReadyForPickups, mReadyForPickupBooksRecycler);
         mReadyForPickupBooksRecycler.setAdapter(readyForPickupBookAdapter);
 
-        mBorrowedBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerBorrowedBooks);
+        RecyclerView mBorrowedBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerBorrowedBooks);
         LinearLayoutManager borrowedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        // query to retrieve borrowed books
+        Query borrowedBooksQuery = mFirestore.collection("catalogue")
+                .whereArrayContains("requesters", currentUser.getEmail())
+                .whereEqualTo("status", "BORROWED").limit(LIMIT);
+
         mBorrowedBooksRecycler.setLayoutManager(borrowedlayoutManager);
         FirestoreRecyclerOptions<Book> borrowedOptions = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(borrowedBooksQuery, Book.class)
@@ -184,8 +145,14 @@ public class BorrowerFragment extends Fragment {
         borrowedBookAdapter = new ProfileAdapter(borrowedOptions, currentUser, getActivity(), titleBorrowed, mBorrowedBooksRecycler);
         mBorrowedBooksRecycler.setAdapter(borrowedBookAdapter);
 
-        mRequestedBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerRequestedBooks);
+        RecyclerView mRequestedBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerRequestedBooks);
         LinearLayoutManager requestedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        // query to retrieve requested books
+        Query requestedBooksQuery = mFirestore.collection("catalogue")
+                .whereArrayContains("requesters", currentUser.getEmail())
+                .whereEqualTo("status", "REQUESTED").limit(LIMIT);
+
         mRequestedBooksRecycler.setLayoutManager(requestedlayoutManager);
         FirestoreRecyclerOptions<Book> requestedOptions = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(requestedBooksQuery, Book.class)
@@ -210,9 +177,10 @@ public class BorrowerFragment extends Fragment {
         viewAllReadyForPickups.setOnClickListener(v1 -> {
 
             ReadyForPickupFragment readyForPickupFragment
-                    = ReadyForPickupFragment.newInstance(currentUser);
+                    = ReadyForPickupFragment.newInstance(currentUser, isOwnerTab);
             Bundle bundle = new Bundle();
             bundle.putSerializable("PF_USER", currentUser);
+            bundle.putSerializable("PF_IS_OWNER_TAB", isOwnerTab);
             readyForPickupFragment.setArguments(bundle);
             Objects.requireNonNull(getActivity())
                     .getSupportFragmentManager().beginTransaction()
@@ -225,9 +193,10 @@ public class BorrowerFragment extends Fragment {
         viewAllRequestedBooks.setOnClickListener(v1 -> {
 
             RequestedBooksFragment requestedBooksFragment
-                    = RequestedBooksFragment.newInstance(currentUser);
+                    = RequestedBooksFragment.newInstance(currentUser, isOwnerTab);
             Bundle bundle = new Bundle();
             bundle.putSerializable("PF_USER", currentUser);
+            bundle.putSerializable("PF_IS_OWNER_TAB", isOwnerTab);
             requestedBooksFragment.setArguments(bundle);
             Objects.requireNonNull(getActivity())
                     .getSupportFragmentManager().beginTransaction()
@@ -240,9 +209,10 @@ public class BorrowerFragment extends Fragment {
         viewAllBorrowedBooks.setOnClickListener(v1 -> {
 
             BorrowedBooksFragment borrowedBooksFragment
-                    = BorrowedBooksFragment.newInstance(currentUser);
+                    = BorrowedBooksFragment.newInstance(currentUser, isOwnerTab);
             Bundle bundle = new Bundle();
             bundle.putSerializable("PF_USER", currentUser);
+            bundle.putSerializable("PF_IS_OWNER_TAB", isOwnerTab);
             borrowedBooksFragment.setArguments(bundle);
             Objects.requireNonNull(getActivity())
                     .getSupportFragmentManager().beginTransaction()

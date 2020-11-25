@@ -17,6 +17,8 @@
     <string name="condition_text">Condition: %1$s</string>
     <string name="comment_text">Comment: %1$s</string>
     <string name="borrowed_book_text">Borrower: %1$s</string>
+    <string name="accepted_book_text">Accepted: %1$s</string>
+    <string name="requested_book_text">Requester: %1$s</string>
     <string name="owned_book_text">Owner: %1$s</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
     <string name="this_is_my_book_title">This is My book Title</string>

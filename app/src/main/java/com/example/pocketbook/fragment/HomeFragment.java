@@ -1,20 +1,18 @@
 package com.example.pocketbook.fragment;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentTransaction;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,10 +22,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.NotificationCounter;
-import com.example.pocketbook.util.ScrollUpdate;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -35,7 +30,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.setNotificationCounterNumber;
@@ -55,8 +49,7 @@ public class HomeFragment extends Fragment {
 
     private User currentUser;
 
-    private ScrollUpdate scrollUpdate;
-    FirestoreRecyclerOptions<Book> options;
+    FirestorePagingOptions<Book> options;
     ListenerRegistration listenerRegistration;
     /**
      * Home Page fragment instance that bundles the user/catalogue to be displayed
@@ -88,11 +81,15 @@ public class HomeFragment extends Fragment {
 
         // Retrieving books that do not belong to user
         mQuery = mFirestore.collection("catalogue")
-                .whereNotEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
+                .whereNotEqualTo("owner",currentUser.getEmail());
 
-        options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
-                .build();
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4).build();
+
+        options = new FirestorePagingOptions.Builder<Book>()
+                .setLifecycleOwner(this)
+                .setQuery(mQuery, config, Book.class).build();
 
         EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
             if (snapshots != null) {
@@ -172,9 +169,6 @@ public class HomeFragment extends Fragment {
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), NUM_COLUMNS));
 
         mBooksRecycler.setAdapter(mAdapter);
-
-//        scrollUpdate = new ScrollUpdate(catalogue, mQuery, mAdapter, mBooksRecycler);
-//        scrollUpdate.load();
 
         notificationBtn.setOnClickListener(v -> {
             NotificationsFragment nextFragment = NotificationsFragment.newInstance(currentUser);

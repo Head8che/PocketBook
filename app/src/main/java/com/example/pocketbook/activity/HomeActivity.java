@@ -59,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
+        updateToken(currentUser); //update the token for the user to send and receive notifications
         scanHandler = new ScanHandler(HomeActivity.this,
                 getSupportFragmentManager(), currentUser);
         bottomNav = findViewById(R.id.bottomNavigationView);
@@ -84,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.container,
                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
         }
-        updateToken(currentUser); //update the token for the user to send and receive notifications
+
 
     }
 

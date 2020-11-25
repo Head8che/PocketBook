@@ -1,7 +1,7 @@
 package com.example.pocketbook.notifications;
 
 public class Token {
-    //A Token is unique id for each device, changes everytime the app starts
+    // A Token is a unique id for each device
     private String token;
 
     public Token(String token){

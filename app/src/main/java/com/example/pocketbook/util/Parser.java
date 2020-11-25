@@ -1347,7 +1347,7 @@ public class Parser {
         ownerBookStatus = ownerBookStatus.trim();
         borrowerBookStatus = borrowerBookStatus.trim();
 
-        Log.e("PARSER_VALID_MEETING", exchangeId + " is not valid!"
+        Log.e("PARSER_VALID_EXCHANGE", exchangeId + " is not valid!"
                 + " " + "exchangeId:" + isValidMeetingExchangeId(exchangeId)
                 + " " + "relatedBook:" + isValidMeetingExchangeId(relatedBook)
                 + " " + "owner:" + isValidUserEmail(owner)
@@ -1363,6 +1363,44 @@ public class Parser {
                 && isValidExchangeStatus(ownerBookStatus)
                 && isValidExchangeStatus(borrowerBookStatus)
                 && isValidMeetingObject(meetingDetails));
+    }
+
+    public static boolean isValidExchangeDataFormat(String exchangeId, String relatedBook,
+                                              String owner, String borrower,
+                                              String ownerBookStatus, String borrowerBookStatus,
+                                              MeetingDetails meetingDetails) {
+
+        // return false if non-optional fields are null
+        if ((exchangeId == null) || (owner == null) || (relatedBook == null)
+                || (borrower == null) || (ownerBookStatus == null)
+                || (borrowerBookStatus == null) || (meetingDetails == null)) {
+            return false;
+        }
+
+        // trim all values
+        exchangeId = exchangeId.trim();
+        relatedBook = relatedBook.trim();
+        owner = owner.trim();
+        borrower = borrower.trim();
+        ownerBookStatus = ownerBookStatus.trim();
+        borrowerBookStatus = borrowerBookStatus.trim();
+//
+//        Log.e("PARSER_VALID_EXCHANGE", exchangeId + " is not valid!"
+//                + " " + "exchangeId:" + isValidMeetingExchangeId(exchangeId)
+//                + " " + "relatedBook:" + isValidMeetingExchangeId(relatedBook)
+//                + " " + "owner:" + isValidUserEmail(owner)
+//                + " " + "borrower:" + isValidUserEmail(borrower)
+//                + " " + "ownerBookStatus:" + isValidExchangeStatus(ownerBookStatus)
+//                + " " + "borrowerBookStatus:" + isValidExchangeStatus(borrowerBookStatus)
+//                + " " + "meetingDetails:" + isValidMeetingObjectFormat(meetingDetails)
+//        );
+
+        // return true if all fields are valid
+        return (isValidMeetingExchangeId(exchangeId) && isValidBookId(relatedBook)
+                && isValidUserEmail(owner) && isValidUserEmail(borrower)
+                && isValidExchangeStatus(ownerBookStatus)
+                && isValidExchangeStatus(borrowerBookStatus)
+                && isValidMeetingObjectFormat(meetingDetails));
     }
 
     /**
@@ -1407,6 +1445,34 @@ public class Parser {
                 && isValidMeetingTime(null, meetingTime));  // only check time
     }
 
+    public static boolean isValidMeetingDataFormat(double latitude,
+                                             double longitude, String address,
+                                             String meetingDate, String meetingTime) {
+
+        // return false if non-optional fields are null
+        if ((address == null)
+                || (meetingDate == null) || (meetingTime == null)) {
+            return false;
+        }
+
+        // trim all values
+        address = address.trim();
+        meetingDate = meetingDate.trim();
+        meetingTime = meetingTime.trim();
+
+//        Log.e("PARSER_VALID_MEETING", address + " is not valid!"
+//                + " " + "address:" + isValidMeetingAddress(address)
+//                + " " + "meetingDate:" + isValidMeetingDateFormat(meetingDate)
+//                + " " + "meetingTime:" + isValidMeetingTime(null, meetingTime)
+//        );
+
+        // return true if all fields are valid
+        return (isValidMeetingAddress(address)
+                /*&& isValidMeetingLatitude(latitude) && isValidMeetingLongitude(longitude)*/
+                && isValidMeetingDateFormat(meetingDate)
+                && isValidMeetingTime(null, meetingTime));  // only check time
+    }
+
     public static boolean isValidMeetingObject(MeetingDetails meetingDetails) {
 
         String address = meetingDetails.getAddress();
@@ -1436,6 +1502,35 @@ public class Parser {
                 && isValidMeetingTime(null, meetingTime));  // only check time
     }
 
+    public static boolean isValidMeetingObjectFormat(MeetingDetails meetingDetails) {
+
+        String address = meetingDetails.getAddress();
+        String meetingDate = meetingDetails.getMeetingDate();
+        String meetingTime = meetingDetails.getMeetingTime();
+
+        // return false if non-optional fields are null
+        if ((address == null) || (meetingDate == null) || (meetingTime == null)) {
+            return false;
+        }
+
+        // trim all values
+        address = address.trim();
+        meetingDate = meetingDate.trim();
+        meetingTime = meetingTime.trim();
+
+//        Log.e("PARSER_VALID_MEETING_OBJ_FORMAT", address + " is not valid!"
+//                + " " + "address:" + isValidMeetingAddress(address)
+//                + " " + "meetingDate:" + isValidMeetingDateFormat(meetingDate)
+//                + " " + "meetingTime:" + isValidMeetingTime(null, meetingTime)
+//        );
+
+        // return true if all fields are valid
+        return (isValidMeetingAddress(address)
+                /*&& isValidMeetingLatitude(latitude) && isValidMeetingLongitude(longitude)*/
+                && isValidMeetingDateFormat(meetingDate)
+                && isValidMeetingTime(null, meetingTime));  // only check time
+    }
+
     /**
      * This checks if a meeting id is valid
      * @param id meeting id
@@ -1456,6 +1551,21 @@ public class Parser {
      */
     public static boolean isValidMeetingAddress(String address) {
         return ((address != null) && (address.trim().length() > 0));
+    }
+
+    public static boolean isValidMeetingDateFormat(String meetingDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd",
+                Locale.CANADA);
+        dateFormat.setLenient(false);
+
+        try {
+            dateFormat.parse(meetingDate);
+            dateFormat.parse(dateFormat.format(new Date()));
+        } catch (ParseException pe) {
+            return false;
+        }
+
+        return true;
     }
 
     public static boolean isValidMeetingDate(String meetingDate) {

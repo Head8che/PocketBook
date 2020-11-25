@@ -128,7 +128,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Bottom navigation bar options
+     * Bottom Menu navigation bar options
      */
     private BottomNavigationView.OnNavigationItemSelectedListener NavListener =
             new BottomNavigationView.OnNavigationItemSelectedListener(){

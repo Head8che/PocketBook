@@ -92,7 +92,8 @@ public class EditProfileActivityTest {
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
         solo.clickOnView(solo.getView(R.id.bottom_nav_profile));  // click on profile button
-        solo.clickOnView(solo.getView(R.id.edit_profile_button));  // click on Edit Profile
+//        solo.clickOnView(solo.getView(R.id.edit_profile_button));  // click on Edit Profile
+        solo.clickOnView(solo.getView(R.id.profileExistingEditBtn));
 
         // Asserts that the current activity is EditProfileActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);

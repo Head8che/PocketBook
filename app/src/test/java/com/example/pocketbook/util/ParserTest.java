@@ -273,20 +273,20 @@ public class ParserTest {
 
         // assert that Parser returns a Book i.e. assert that input was valid
         assertThat(Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
+                status, false, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
 
         isbn = "123456789X";  // valid isbn10 condition
         // assert that Parser returns a Book i.e. assert that input was valid
         assertThat(Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
+                status, false, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
 
         // assert that Parser returns a Book i.e. assert that input was valid
         assertThat(Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
+                status, false, comment, condition, photo, new ArrayList<>()), instanceOf(Book.class));
 
         // assert that Parser fails with bad data
         assertNull(Parser.parseBook(id, title, author, isbn, owner,
-                status, comment, condition, "jpg", new ArrayList<>()));
+                status, false, comment, condition, "jpg", new ArrayList<>()));
 
         // Parser.ParseBook(...) is based on the other Parser Book methods,
         // which have been tested, so further argument testing would be redundant.

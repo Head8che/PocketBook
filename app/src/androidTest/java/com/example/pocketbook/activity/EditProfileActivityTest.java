@@ -2,6 +2,9 @@ package com.example.pocketbook.activity;
 
 import android.view.View;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -86,6 +89,13 @@ public class EditProfileActivityTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
+        ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
+
+        View skipBtn = skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
+        solo.clickOnView(skipBtn);
+
+        solo.sleep(2000); // give it time to change activity
+
         //////////////////////////////// GO TO EditProfileActivity /////////////////////////////////
 
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
@@ -93,7 +103,7 @@ public class EditProfileActivityTest {
 
         solo.clickOnView(solo.getView(R.id.bottom_nav_profile));  // click on profile button
 //        solo.clickOnView(solo.getView(R.id.edit_profile_button));  // click on Edit Profile
-        solo.clickOnView(solo.getView(R.id.profileExistingEditBtn));
+        solo.clickOnView(solo.getView(R.id.profileNewEditBtn));
 
         // Asserts that the current activity is EditProfileActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", EditProfileActivity.class);
@@ -319,6 +329,9 @@ public class EditProfileActivityTest {
 
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.profileNewScrollView))
+                .perform(ViewActions.swipeDown());
 
         // Asserts that Profile Fragment is updated with the new username
         assertTrue(solo.searchText("newMockUsername"));

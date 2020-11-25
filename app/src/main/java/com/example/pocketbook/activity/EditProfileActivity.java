@@ -99,17 +99,17 @@ public class EditProfileActivity extends AppCompatActivity {
         validPhoneNumber = true;
 
         // Toolbar toolbar = (Toolbar) findViewById(R.id.editProfileToolbar);
-        ImageView cancelButton = (ImageView) findViewById(R.id.editProfileCancelBtn);
-        TextView saveButton = (TextView) findViewById(R.id.editProfileSaveBtn);
-        TextView changePhotoButton = (TextView) findViewById(R.id.editProfileChangePhotoBtn);
+        ImageView cancelButton = findViewById(R.id.editProfileCancelBtn);
+        TextView saveButton = findViewById(R.id.editProfileSaveBtn);
+        TextView changePhotoButton = findViewById(R.id.editProfileChangePhotoBtn);
 
         // access the layout text fields
-        layoutUserFirstName = (TextInputEditText) findViewById(R.id.editProfileFirstNameField);
-        layoutUserLastName = (TextInputEditText) findViewById(R.id.editProfileLastNameField);
-        layoutUserUsername = (TextInputEditText) findViewById(R.id.editProfileUsernameField);
-        layoutUserPhoneNumber = (TextInputEditText) findViewById(R.id.editProfilePhoneNumberField);
-        layoutUserEmail = (TextInputEditText) findViewById(R.id.editProfileEmailField);
-        layoutProfilePicture = (ImageView) findViewById(R.id.editProfileProfilePictureField);
+        layoutUserFirstName = findViewById(R.id.editProfileFirstNameField);
+        layoutUserLastName = findViewById(R.id.editProfileLastNameField);
+        layoutUserUsername = findViewById(R.id.editProfileUsernameField);
+        layoutUserPhoneNumber = findViewById(R.id.editProfilePhoneNumberField);
+        layoutUserEmail = findViewById(R.id.editProfileEmailField);
+        layoutProfilePicture = findViewById(R.id.editProfileProfilePictureField);
 
         // set the layout text fields to the appropriate user variables
         layoutUserFirstName.setText(userFirstName);
@@ -119,16 +119,11 @@ public class EditProfileActivity extends AppCompatActivity {
         layoutUserEmail.setText(userEmail);
 
         // access the layout text containers
-        layoutUserFirstNameContainer = (TextInputLayout)
-                findViewById(R.id.editProfileFirstNameContainer);
-        layoutUserLastNameContainer = (TextInputLayout)
-                findViewById(R.id.editProfileLastNameContainer);
-        layoutUserUsernameContainer = (TextInputLayout)
-                findViewById(R.id.editProfileUsernameContainer);
-        layoutUserPhoneNumberContainer =
-                (TextInputLayout) findViewById(R.id.editProfilePhoneNumberContainer);
-        layoutUserEmailContainer = (TextInputLayout)
-                findViewById(R.id.editProfileEmailContainer);
+        layoutUserFirstNameContainer = findViewById(R.id.editProfileFirstNameContainer);
+        layoutUserLastNameContainer = findViewById(R.id.editProfileLastNameContainer);
+        layoutUserUsernameContainer = findViewById(R.id.editProfileUsernameContainer);
+        layoutUserPhoneNumberContainer = findViewById(R.id.editProfilePhoneNumberContainer);
+        layoutUserEmailContainer = findViewById(R.id.editProfileEmailContainer);
 
         // add a text field listener that validates the inputted text
         layoutUserFirstName.addTextChangedListener(new TextWatcher() {

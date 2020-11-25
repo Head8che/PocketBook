@@ -1,5 +1,6 @@
 package com.example.pocketbook.fragment;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -109,7 +110,7 @@ public class ViewBookFragmentTest {
 
         ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
 
-        View skipBtn = solo.getView(R.id.skip_btn);
+        View skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
 
         ///////////////////////////////////// ADD A MOCK BOOK //////////////////////////////////////
@@ -151,9 +152,13 @@ public class ViewBookFragmentTest {
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
+        Log.e("VIEW_BOOK_TEST", "pre-signOut");
+
         signOut();  // sign out of the created user account
 
         solo.sleep(2000); // give it time to sign out
+
+        Log.e("VIEW_BOOK_TEST", "pre-signOut");
 
         // return to LoginActivity
         solo.goBackToActivity("LoginActivity");
@@ -200,21 +205,29 @@ public class ViewBookFragmentTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
+        ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
+
+        skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
+        solo.clickOnView(skipBtn);
+
+        solo.sleep(2000); // give it time to change activity
+
         ////////////////////////////////// GO TO ViewBookFragment //////////////////////////////////
 
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
         // gets the recycler for the books
-        RecyclerView view = (RecyclerView) solo.getView(R.id.recycler_books);
+        RecyclerView view = (RecyclerView) solo.getView(R.id.homeFragmentRecyclerBooks);
 
         // gets the number of books in the recycler
         int numOfBooks = Objects.requireNonNull(view.getAdapter()).getItemCount();
 
         int position = -1;
         for (int i = 0; i < numOfBooks; i++) {
+            Log.e("VIEW_BOOK_TEST", "in-scroll");
             // scroll to the book position
-            onView(withId(R.id.recycler_books)).perform(scrollToPosition(i));
+            onView(withId(R.id.homeFragmentRecyclerBooks)).perform(scrollToPosition(i));
             RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(i);
             if ((viewHolder != null)  // check if the current book is the mock book
                     && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
@@ -226,7 +239,7 @@ public class ViewBookFragmentTest {
         // assert that the mock book was actually found
         assertNotEquals(-1, position);
 
-        onView(withId(R.id.recycler_books))  // click on the mock book
+        onView(withId(R.id.homeFragmentRecyclerBooks))  // click on the mock book
                 .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
         solo.sleep(2000); // give it time to change fragments to ViewBookFragment
@@ -282,28 +295,30 @@ public class ViewBookFragmentTest {
      */
     @After
     public void removeMockFromFirebase() {
-        if (Objects.equals(Objects.requireNonNull(
-                FirebaseAuth.getInstance().getCurrentUser()).getEmail(), email1)) {
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();  // sign out of the created user account
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email2, password);
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();
-        } else if (Objects.equals(
-                FirebaseAuth.getInstance().getCurrentUser().getEmail(), email2)) {
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();  // sign out of the created user account
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email1, password);
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            if (Objects.equals(Objects.requireNonNull(
+                    FirebaseAuth.getInstance().getCurrentUser()).getEmail(), email1)) {
+                FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+                solo.sleep(5000);  // give it time to complete task
+                signOut();  // sign out of the created user account
+                solo.sleep(5000);  // give it time to complete task
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email2, password);
+                solo.sleep(5000);  // give it time to complete task
+                FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+                solo.sleep(5000);  // give it time to complete task
+                signOut();
+            } else if (Objects.equals(
+                    FirebaseAuth.getInstance().getCurrentUser().getEmail(), email2)) {
+                FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+                solo.sleep(5000);  // give it time to complete task
+                signOut();  // sign out of the created user account
+                solo.sleep(5000);  // give it time to complete task
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email1, password);
+                solo.sleep(5000);  // give it time to complete task
+                FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+                solo.sleep(5000);  // give it time to complete task
+                signOut();
+            }
         }
         FirebaseIntegrity.deleteDocumentsFromSubcollectionOnFieldValue("catalogue",
                 "requests", "requester", email2);

@@ -22,7 +22,7 @@ public class BookTest {
         String condition = "GOOD";
         String photo = "";
 
-        return new Book(id, title, author, isbn, owner, status, comment, condition, photo,
+        return new Book(id, title, author, isbn, owner, status, false, comment, condition, photo,
                 new ArrayList<>());
     }
 
@@ -41,7 +41,7 @@ public class BookTest {
         String condition = "GOOD";
         String photo = "";
 
-        return new Book(id, title, author, isbn, owner, status, comment, condition, photo,
+        return new Book(id, title, author, isbn, owner, status, false, comment, condition, photo,
                 new ArrayList<>());
     }
 

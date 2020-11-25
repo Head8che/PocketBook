@@ -88,9 +88,9 @@ public class HomeActivityTest {
 
     @Test
     public void checkBookCover(){
-        View book = solo.getView(R.id.recycler_books);
+        View book = solo.getView(R.id.homeFragmentRecyclerBooks);
         solo.clickOnView(book);
-        ViewInteraction recyclerView = onView(allOf(withId(R.id.recycler_books), childAtPosition(withId(R.id.container), 0)));
+        ViewInteraction recyclerView = onView(allOf(withId(R.id.homeFragmentRecyclerBooks), childAtPosition(withId(R.id.container), 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction bottomNavigationItemView = onView(allOf(withId(R.id.bottom_nav_home), withContentDescription("Home"), childAtPosition(
@@ -101,9 +101,9 @@ public class HomeActivityTest {
 
     @Test
     public void checkBookNoCover() {
-        View book = solo.getView(R.id.recycler_books);
+        View book = solo.getView(R.id.homeFragmentRecyclerBooks);
         solo.clickOnView(book);
-        ViewInteraction recyclerView2 = onView(allOf(withId(R.id.recycler_books), childAtPosition(withId(R.id.container), 0)));
+        ViewInteraction recyclerView2 = onView(allOf(withId(R.id.homeFragmentRecyclerBooks), childAtPosition(withId(R.id.container), 0)));
         recyclerView2.perform(actionOnItemAtPosition(2, click()));
         ViewInteraction bottomNavigationItemView2 = onView(allOf(withId(R.id.bottom_nav_home), withContentDescription("Home"), childAtPosition(
                 childAtPosition(withId(R.id.bottomNavigationView), 0), 0), isDisplayed()));bottomNavigationItemView2.perform(click());

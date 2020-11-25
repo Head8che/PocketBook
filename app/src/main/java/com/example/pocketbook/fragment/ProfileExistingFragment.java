@@ -42,6 +42,7 @@ import java.util.Objects;
 public class ProfileExistingFragment extends Fragment {
     private User currentUser;
     ListenerRegistration listenerRegistration;
+    private Fragment profileFragment = this;
 
     public ProfileExistingFragment() {
         // Required empty public constructor
@@ -62,6 +63,33 @@ public class ProfileExistingFragment extends Fragment {
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
         }
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.getEmail());
+        docRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.w("VMBBF_LISTENER", "Listen failed.", e);
+                return;
+            }
+
+            if ((snapshot != null) && snapshot.exists()) {
+
+                currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
+
+                // TODO; Add isAdded to other listeners
+                // if fragment can have a manager; tests crash without this line
+                if (profileFragment.isAdded()) {
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .detach(ProfileExistingFragment.this)
+                            .attach(ProfileExistingFragment.this)
+                            .commitAllowingStateLoss();
+                }
+            } else if (profileFragment.isAdded()) {
+                getParentFragmentManager().beginTransaction()
+                        .detach(ProfileExistingFragment.this).commitAllowingStateLoss();
+            }
+        });
 
     }
 

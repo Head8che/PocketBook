@@ -1,10 +1,13 @@
 package com.example.pocketbook.fragment;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -25,8 +28,17 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Objects;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -96,8 +108,10 @@ public class ViewMyBookFragmentTest {
         assertFalse(solo.searchText("Input required"));
 
         ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
-        View skipBtn = solo.getView(R.id.skip_btn);
+        View skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
+
+        solo.sleep(2000); // give it time to change activity
 
         ///////////////////////////////////// ADD A MOCK BOOK //////////////////////////////////////
 
@@ -144,7 +158,32 @@ public class ViewMyBookFragmentTest {
         assertTrue(solo.searchText("Mock Title"));  // book title
         assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
 
-        solo.clickOnView(solo.getView(R.id.itemBookCard));  // click on book
+        // gets the recycler for the books
+        RecyclerView view = (RecyclerView) solo.getView(R.id.profileOwnerRecyclerOwnedBooks);
+
+        // gets the number of books in the recycler
+        int numOfBooks = Objects.requireNonNull(view.getAdapter()).getItemCount();
+
+        int position = -1;
+        for (int i = 0; i < numOfBooks; i++) {
+            Log.e("VIEW_BOOK_TEST", "in-scroll");
+            // scroll to the book position
+            onView(withId(R.id.profileOwnerRecyclerOwnedBooks)).perform(scrollToPosition(i));
+            RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(i);
+            if ((viewHolder != null)  // check if the current book is the mock book
+                    && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
+                position = i;
+                break;
+            }
+        }
+
+        // assert that the mock book was actually found
+        assertNotEquals(-1, position);
+
+        onView(withId(R.id.profileOwnerRecyclerOwnedBooks))  // click on the mock book
+                .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+
+//        solo.clickOnView(solo.getView(R.id.itemBookCard));  // click on book
 
         solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
     }
@@ -180,19 +219,18 @@ public class ViewMyBookFragmentTest {
         BottomNavigationView bottomNavigation = (BottomNavigationView)
                 solo.getView(R.id.bottomNavigationView);
 
-        // scroll up to the top of OwnerFragment
-        //FIXME : R.id.userProfileScrollView not found
-//        Espresso.onView(ViewMatchers.withId(R.id.userProfileScrollView))
-//                .perform(ViewActions.swipeDown());
-//
-//        // assert that we are in OwnerFragment i.e. that the user's first name and last name
-//        // are shown, and that Edit button is shown
-//        assertTrue(solo.searchText("MockFirst"));
-//        assertTrue(solo.searchText("MockLast"));
-//        assertTrue(solo.searchText("Edit"));
-//
-//        // assert that the profile bottom navigation item is currently selected
-//        assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
+        // scroll up to the top of ProfileExistingFrag
+        Espresso.onView(ViewMatchers.withId(R.id.profileExistingScrollView))
+                .perform(ViewActions.swipeDown());
+
+        // assert that we are in ProfileExistingFrag i.e. that the user's first name and last name
+        // are shown, and that Edit button is shown
+        assertTrue(solo.searchText("MockFirst"));
+        assertTrue(solo.searchText("MockLast"));
+        assertTrue(solo.searchText("Edit"));
+
+        // assert that the profile bottom navigation item is currently selected
+        assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
     }
 
     /**

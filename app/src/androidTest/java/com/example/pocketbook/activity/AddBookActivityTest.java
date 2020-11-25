@@ -88,6 +88,13 @@ public class AddBookActivityTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
+        ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
+
+        View skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
+        solo.clickOnView(skipBtn);
+
+        solo.sleep(2000); // give it time to change activity
+
         ////////////////////////////////// GO TO AddBookActivity ///////////////////////////////////
 
         // Asserts that the current activity is HomeActivity (i.e. save redirected).

@@ -47,10 +47,10 @@ public class OnBoardingActivity extends AppCompatActivity {
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
 
         //Hooks
-        viewPager = findViewById(R.id.slider);
-        dotsLayout = findViewById(R.id.dots);
-        nextBtn = findViewById(R.id.next_btn);
-        skipBtn = findViewById(R.id.skip_btn);
+        viewPager = findViewById(R.id.onBoardingActivitySlider);
+        dotsLayout = findViewById(R.id.onBoardingActivityDots);
+        nextBtn = findViewById(R.id.onBoardingActivityNextBtn);
+        skipBtn = findViewById(R.id.onBoardingActivitySkipBtn);
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override

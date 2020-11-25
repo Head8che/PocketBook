@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -37,9 +38,9 @@ public class EditBookActivity extends AppCompatActivity {
 
     Book book;
 
-    private Boolean validTitle;
-    private Boolean validAuthor;
-    private Boolean validISBN;
+    private boolean validTitle;
+    private boolean validAuthor;
+    private boolean validISBN;
     private String bookTitle;
     private String bookAuthor;
     private String bookISBN;
@@ -90,17 +91,17 @@ public class EditBookActivity extends AppCompatActivity {
         validISBN = true;
 
         // Toolbar toolbar = (Toolbar) findViewById(R.id.editBookToolbar);
-        ImageView cancelButton = (ImageView) findViewById(R.id.editBookCancelBtn);
-        TextView saveButton = (TextView) findViewById(R.id.editBookSaveBtn);
-        TextView changePhotoButton = (TextView) findViewById(R.id.editBookChangePhotoBtn);
+        ImageView cancelButton = findViewById(R.id.editBookCancelBtn);
+        TextView saveButton = findViewById(R.id.editBookSaveBtn);
+        TextView changePhotoButton = findViewById(R.id.editBookChangePhotoBtn);
 
         // access the layout text fields
-        layoutBookTitle = (TextInputEditText) findViewById(R.id.editBookTitleField);
-        layoutBookAuthor = (TextInputEditText) findViewById(R.id.editBookAuthorField);
-        layoutBookISBN = (TextInputEditText) findViewById(R.id.editBookISBNField);
-        layoutBookCover = (ImageView) findViewById(R.id.editBookBookCoverField);
-        layoutBookCondition = (TextInputEditText) findViewById(R.id.editBookConditionField);
-        layoutBookComment = (TextInputEditText) findViewById(R.id.editBookCommentField);
+        layoutBookTitle = findViewById(R.id.editBookTitleField);
+        layoutBookAuthor = findViewById(R.id.editBookAuthorField);
+        layoutBookISBN = findViewById(R.id.editBookISBNField);
+        layoutBookCover = findViewById(R.id.editBookBookCoverField);
+        layoutBookCondition = findViewById(R.id.editBookConditionField);
+        layoutBookComment = findViewById(R.id.editBookCommentField);
 
         // set the layout text fields to the appropriate user variables
         layoutBookTitle.setText(bookTitle);
@@ -110,12 +111,11 @@ public class EditBookActivity extends AppCompatActivity {
         layoutBookComment.setText(bookComment);
 
         // access the layout text containers
-        layoutBookTitleContainer = (TextInputLayout) findViewById(R.id.editBookTitleContainer);
-        layoutBookAuthorContainer = (TextInputLayout) findViewById(R.id.editBookAuthorContainer);
-        layoutBookISBNContainer = (TextInputLayout) findViewById(R.id.editBookISBNContainer);
-        layoutBookConditionContainer = (TextInputLayout)
-                findViewById(R.id.editBookConditionContainer);
-        layoutBookCommentContainer = (TextInputLayout) findViewById(R.id.editBookCommentContainer);
+        layoutBookTitleContainer = findViewById(R.id.editBookTitleContainer);
+        layoutBookAuthorContainer = findViewById(R.id.editBookAuthorContainer);
+        layoutBookISBNContainer = findViewById(R.id.editBookISBNContainer);
+        layoutBookConditionContainer = findViewById(R.id.editBookConditionContainer);
+        layoutBookCommentContainer = findViewById(R.id.editBookCommentContainer);
 
         // add a text field listener that validates the inputted text
         layoutBookTitle.addTextChangedListener(new TextWatcher() {
@@ -125,6 +125,7 @@ public class EditBookActivity extends AppCompatActivity {
                 if (!(Parser.isValidBookTitle(s.toString()))) {
                     layoutBookTitle.setError("Input required");
                     layoutBookTitleContainer.setErrorEnabled(true);
+                    validTitle = false;
                 } else {  // if the inputted text is valid
                     validTitle = true;
                     layoutBookTitle.setError(null);
@@ -145,6 +146,7 @@ public class EditBookActivity extends AppCompatActivity {
                 if (!(Parser.isValidBookAuthor(s.toString()))) {
                     layoutBookAuthor.setError("Input required");
                     layoutBookAuthorContainer.setErrorEnabled(true);
+                    validAuthor = false;
                 } else {  // if the inputted text is valid
                     validAuthor = true;
                     layoutBookAuthor.setError(null);
@@ -170,6 +172,7 @@ public class EditBookActivity extends AppCompatActivity {
                         layoutBookISBN.setError("Invalid ISBN");
                     }
                     layoutBookISBNContainer.setErrorEnabled(true);
+                    validISBN = false;
                 } else {  // if the inputted text is valid
                     validISBN = true;
                     layoutBookISBN.setError(null);
@@ -253,6 +256,7 @@ public class EditBookActivity extends AppCompatActivity {
                 KeyboardHandler.hideKeyboard(EditBookActivity.this);
                 finish();
             } else {
+                Log.e("valids", validTitle + " " + validAuthor + " " + validISBN);
                 if (!validTitle) {
                     layoutBookTitle.setError("Input required");
                     layoutBookTitleContainer.setErrorEnabled(true);
@@ -262,7 +266,12 @@ public class EditBookActivity extends AppCompatActivity {
                     layoutBookAuthorContainer.setErrorEnabled(true);
                     layoutBookAuthor.requestFocus();
                 } else {
-                    layoutBookISBN.setError("Input required");
+                    String isbn = Objects.requireNonNull(layoutBookISBN.getText()).toString();
+                    if (isbn.equals("")) {
+                        layoutBookISBN.setError("Input required");
+                    } else {  // if the inputted text is otherwise invalid
+                        layoutBookISBN.setError("Invalid ISBN");
+                    }
                     layoutBookISBNContainer.setErrorEnabled(true);
                     layoutBookISBN.requestFocus();
                 }

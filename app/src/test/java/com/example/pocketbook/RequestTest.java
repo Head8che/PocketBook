@@ -34,7 +34,7 @@ public class RequestTest {
         String requestee = "mockrequestee@mock.com";
         Book requestedBookObject = new Book("mockID", "mockBookTitle",
                 "mockBookAuthor", "9781861972712", "mock@mock.com",
-                "AVAILABLE", "This is a mock book.", "GOOD",
+                "AVAILABLE", false, "This is a mock book.", "GOOD",
                 "photo.jpg", new ArrayList<>());  // valid Book
         String requestDate = "2020/11/06 15:17";
 

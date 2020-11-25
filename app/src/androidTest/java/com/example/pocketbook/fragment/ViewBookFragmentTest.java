@@ -110,7 +110,7 @@ public class ViewBookFragmentTest {
 
         ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
 
-        View skipBtn = solo.getView(R.id.skip_btn);
+        View skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
 
         ///////////////////////////////////// ADD A MOCK BOOK //////////////////////////////////////
@@ -207,8 +207,10 @@ public class ViewBookFragmentTest {
 
         ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
 
-        skipBtn = solo.getView(R.id.skip_btn);
+        skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
+
+        solo.sleep(2000); // give it time to change activity
 
         ////////////////////////////////// GO TO ViewBookFragment //////////////////////////////////
 

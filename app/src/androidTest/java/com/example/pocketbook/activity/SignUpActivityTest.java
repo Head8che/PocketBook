@@ -403,8 +403,8 @@ public class SignUpActivityTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
-        // Asserts that the current activity is HomeActivity (i.e. save redirected).
-        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+        // Asserts that the current activity is OnBoardingActivity (i.e. save redirected).
+        solo.assertCurrentActivity("Wrong Activity", OnBoardingActivity.class);
     }
 
     /**

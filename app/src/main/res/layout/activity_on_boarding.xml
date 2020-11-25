@@ -10,7 +10,7 @@
     tools:context=".activity.OnBoardingActivity">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/slider"
+        android:id="@+id/onBoardingActivitySlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/skip_btn"
+        android:id="@+id/onBoardingActivitySkipBtn"
         android:textColor="@color/colorAccent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:id="@+id/dots"
+            android:id="@+id/onBoardingActivityDots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -47,7 +47,7 @@
             android:layout_alignParentStart="true" />
 
         <Button
-            android:id="@+id/next_btn"
+            android:id="@+id/onBoardingActivityNextBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"

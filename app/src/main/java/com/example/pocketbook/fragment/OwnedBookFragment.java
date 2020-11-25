@@ -2,7 +2,6 @@ package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +10,18 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
+import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
-import com.example.pocketbook.util.FirebaseIntegrity;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,13 +35,10 @@ public class OwnedBookFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private RecyclerView mBooksRecycler;
-    private BookAdapter mAdapter;
+    private ViewAllBookAdapter mAdapter;
     private User currentUser;
-    private Fragment requestFragment = this;
-    private boolean firstTimeFragLoads = true;
 
-    FirestoreRecyclerOptions<Book> options;
-    ListenerRegistration listenerRegistration;
+    FirestorePagingOptions<Book> options;
 
     public static OwnedBookFragment newInstance(User user) {
         OwnedBookFragment ownedbookfragment = new OwnedBookFragment();
@@ -69,109 +58,35 @@ public class OwnedBookFragment extends Fragment {
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
-        // Query to retrieve all books
-        mQuery = mFirestore.collection("catalogue").whereEqualTo("owner",currentUser.getEmail()).limit(LIMIT);
 
-        options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
-                .build();
+        // retrieving owned books
+        mQuery = mFirestore.collection("catalogue")
+                .whereEqualTo("owner", currentUser.getEmail()).limit(LIMIT);
 
-        EventListener<QuerySnapshot> dataListener = (snapshots, error) -> {
-            if (snapshots != null) {
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    if (error != null) {
-                        Log.e("SCROLL_UPDATE_ERROR", "Listen failed.", error);
-                        return;
-                    }
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4).build();
 
-                    DocumentSnapshot document = dc.getDocument();
+        options = new FirestorePagingOptions.Builder<Book>()
+                .setLifecycleOwner(this)
+                .setQuery(mQuery, config, Book.class).build();
 
-                    Book book = FirebaseIntegrity.getBookFromFirestore(document);
-
-                    if (book != null) {
-
-                        switch (dc.getType()) {
-                            case ADDED:
-                                Log.d("SCROLL_UPDATE", "New doc: " + document);
-
-                                mAdapter.notifyDataSetChanged();
-                                break;
-
-                            case MODIFIED:
-                                Log.d("SCROLL_UPDATE", "Modified doc: " + document);
-
-                                mAdapter.notifyDataSetChanged();
-                                break;
-
-                            case REMOVED:
-                                Log.d("SCROLL_UPDATE", "Removed doc: " + document);
-
-                                mAdapter.notifyDataSetChanged();
-                                break;
-                        }
-                    }
-                }
-            }
-        };
-
-        listenerRegistration = mQuery.addSnapshotListener(dataListener);
-
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
-                .document(currentUser.getEmail());
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("VMBBF_LISTENER", "Listen failed.", e);
-                    return;
-                }
-
-                if ((snapshot != null) && snapshot.exists()) {
-                    currentUser = FirebaseIntegrity.getUserFromFirestore(snapshot);
-
-                    if (currentUser == null) {
-                        return;
-                    }
-
-                    // TODO: Add isAdded to other listeners
-                    // if fragment can have a manager; tests crash without this line
-                    if ((!firstTimeFragLoads) && requestFragment.isAdded()) {
-                        getParentFragmentManager()
-                                .beginTransaction()
-                                .detach(OwnedBookFragment.this)
-                                .attach(OwnedBookFragment.this)
-                                .setTransition(FragmentTransaction.TRANSIT_NONE)
-                                .addToBackStack(null)
-                                .commitAllowingStateLoss();
-                    } else {
-                        firstTimeFragLoads = false;
-                    }
-                }
-                else if (requestFragment.isAdded()) {
-                    getParentFragmentManager().beginTransaction()
-                            .detach(OwnedBookFragment.this).commitAllowingStateLoss();
-                }
-            }
-
-        });
     }
 
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
             container.removeAllViews();
         }
 
-        View rootView = inflater.inflate(R.layout.fragment_owned_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_owned_book,
+                container, false);
         mBooksRecycler = rootView.findViewById(R.id.ownedBooksRecyclerBooks);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
-        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(mQuery, Book.class)
-                .build();
-        mAdapter = new BookAdapter(options, currentUser, getActivity());
+        mAdapter = new ViewAllBookAdapter(options, currentUser, getActivity(), true);
         mBooksRecycler.setAdapter(mAdapter);
 
         ImageView backButton = rootView.findViewById(R.id.ownedBooksFragBackBtn);
@@ -184,12 +99,6 @@ public class OwnedBookFragment extends Fragment {
 
         return rootView;
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        listenerRegistration.remove();
     }
 
     @Override

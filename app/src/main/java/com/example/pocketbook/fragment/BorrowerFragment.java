@@ -1,20 +1,18 @@
 package com.example.pocketbook.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ProfileAdapter;
@@ -29,50 +27,43 @@ import com.google.firebase.firestore.Query;
 import java.util.Objects;
 
 /**
- * Owner Profile Page fragment that contains the user Profile (Books/Info)
+ * Borrower Profile Page fragment that contains the user Profile (Books/Info)
  */
-public class OwnerFragment extends Fragment {
-    private static final int LIMIT = 8;
+public class BorrowerFragment extends Fragment {
+
+    private User currentUser;
     private FirebaseFirestore mFirestore;
+
+    private static final int LIMIT = 20;
 
     private ProfileAdapter readyForPickupBookAdapter;
     private ProfileAdapter borrowedBookAdapter;
     private ProfileAdapter requestedBookAdapter;
-    private ProfileAdapter ownedBookAdapter;
 
-    private User currentUser;
     private Fragment ownerFragment = this;
     private boolean firstTimeFragLoads = true;
-    private boolean isOwnerTab = true;
+    private boolean isOwnerTab = false;
 
-    /**
-     * Owner Profile fragment instance that bundles the user information to be accessible/displayed
-     * @param user
-     * @return
-     */
-    public static OwnerFragment newInstance(User user) {
-        OwnerFragment ownerFragment = new OwnerFragment();
+
+    public static BorrowerFragment newInstance(User user) {
+        BorrowerFragment ownerFragment = new BorrowerFragment();
         Bundle args = new Bundle();
         args.putSerializable("PF_USER", user);
         ownerFragment.setArguments(args);
         return ownerFragment;
     }
 
-    /**
-     * Obtains and create the information/data required for this screen.
-     * @param savedInstanceState
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // get the book argument passed to the newInstance() method
         if (getArguments() != null) {
             this.currentUser = (User) getArguments().getSerializable("PF_USER");
         }
 
         // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
-
 
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users")
                 .document(currentUser.getEmail());
@@ -94,8 +85,8 @@ public class OwnerFragment extends Fragment {
                 if ((!firstTimeFragLoads) && ownerFragment.isAdded()) {
                     getParentFragmentManager()
                             .beginTransaction()
-                            .detach(OwnerFragment.this)
-                            .attach(OwnerFragment.this)
+                            .detach(BorrowerFragment.this)
+                            .attach(BorrowerFragment.this)
                             .setTransition(FragmentTransaction.TRANSIT_NONE)
                             .addToBackStack(null)
                             .commitAllowingStateLoss();
@@ -105,45 +96,31 @@ public class OwnerFragment extends Fragment {
             }
             else if (ownerFragment.isAdded()) {
                 getParentFragmentManager().beginTransaction()
-                        .detach(OwnerFragment.this).commitAllowingStateLoss();
+                        .detach(BorrowerFragment.this).commitAllowingStateLoss();
             }
         });
-
     }
 
-    /**
-     * Inflates the layout/container in the respectful fields and fills
-     * the fields that require the owner information to be displayed
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
-    @SuppressLint("SetTextI18n")
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (container != null) {
-            container.removeAllViews();
-        }
-        View rootView = inflater.inflate(R.layout.fragment_owner, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        LinearLayout titleReadyForPickups = rootView.findViewById(R.id.TitleBarReadyForPickupOwner);
-        LinearLayout titleRequested = rootView.findViewById(R.id.TitleBarRequestedOwner);
-        LinearLayout titleBorrowed = rootView.findViewById(R.id.TitleBarBorrowedOwner);
-        LinearLayout titleOwned = rootView.findViewById(R.id.TitleBarOwnedOwner);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_borrower, container, false);
 
-        TextView viewAllReadyForPickups = rootView.findViewById(R.id.ViewAllReadyForPickupOwner);
-        TextView viewAllRequestedBooks = rootView.findViewById(R.id.ViewAllRequestedOwner);
-        TextView viewAllBorrowedBooks = rootView.findViewById(R.id.ViewAllBorrowedOwner);
-        TextView viewAllOwnedBooks = rootView.findViewById(R.id.ViewAllOwnedOwner);
+        LinearLayout titleReadyForPickups = rootView.findViewById(R.id.TitleBarReadyForPickupBorrower);
+        LinearLayout titleRequested = rootView.findViewById(R.id.TitleBarRequestedBorrower);
+        LinearLayout titleBorrowed = rootView.findViewById(R.id.TitleBarBorrowedBorrower);
 
-        RecyclerView mReadyForPickupBooksRecycler = rootView.findViewById(R.id.profileOwnerRecyclerReadyForPickupBooks);
+        TextView viewAllReadyForPickups = rootView.findViewById(R.id.ViewAllReadyForPickupBorrower);
+        TextView viewAllRequestedBooks = rootView.findViewById(R.id.ViewAllRequestedBorrower);
+        TextView viewAllBorrowedBooks = rootView.findViewById(R.id.ViewAllBorrowedBorrower);
+
+        RecyclerView mReadyForPickupBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerReadyForPickupBooks);
         LinearLayoutManager readyForPickuplayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         // query to retrieve accepted books
         Query readyForPickupBooksQuery = mFirestore.collection("catalogue")
-                .whereEqualTo("owner",currentUser.getEmail())
+                .whereArrayContains("requesters", currentUser.getEmail())
                 .whereEqualTo("status", "ACCEPTED").limit(LIMIT);
 
         mReadyForPickupBooksRecycler.setLayoutManager(readyForPickuplayoutManager);
@@ -153,12 +130,12 @@ public class OwnerFragment extends Fragment {
         readyForPickupBookAdapter = new ProfileAdapter(readyForPickupOptions, currentUser, getActivity(), titleReadyForPickups, mReadyForPickupBooksRecycler);
         mReadyForPickupBooksRecycler.setAdapter(readyForPickupBookAdapter);
 
-        RecyclerView mBorrowedBooksRecycler = rootView.findViewById(R.id.profileOwnerRecyclerBorrowedBooks);
+        RecyclerView mBorrowedBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerBorrowedBooks);
         LinearLayoutManager borrowedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         // query to retrieve borrowed books
         Query borrowedBooksQuery = mFirestore.collection("catalogue")
-                .whereEqualTo("owner",currentUser.getEmail())
+                .whereArrayContains("requesters", currentUser.getEmail())
                 .whereEqualTo("status", "BORROWED").limit(LIMIT);
 
         mBorrowedBooksRecycler.setLayoutManager(borrowedlayoutManager);
@@ -168,12 +145,12 @@ public class OwnerFragment extends Fragment {
         borrowedBookAdapter = new ProfileAdapter(borrowedOptions, currentUser, getActivity(), titleBorrowed, mBorrowedBooksRecycler);
         mBorrowedBooksRecycler.setAdapter(borrowedBookAdapter);
 
-        RecyclerView mRequestedBooksRecycler = rootView.findViewById(R.id.profileOwnerRecyclerRequestedBooks);
+        RecyclerView mRequestedBooksRecycler = rootView.findViewById(R.id.profileBorrowerRecyclerRequestedBooks);
         LinearLayoutManager requestedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         // query to retrieve requested books
         Query requestedBooksQuery = mFirestore.collection("catalogue")
-                .whereEqualTo("owner",currentUser.getEmail())
+                .whereArrayContains("requesters", currentUser.getEmail())
                 .whereEqualTo("status", "REQUESTED").limit(LIMIT);
 
         mRequestedBooksRecycler.setLayoutManager(requestedlayoutManager);
@@ -182,22 +159,6 @@ public class OwnerFragment extends Fragment {
                 .build();
         requestedBookAdapter = new ProfileAdapter(requestedOptions, currentUser, getActivity(), titleRequested, mRequestedBooksRecycler);
         mRequestedBooksRecycler.setAdapter(requestedBookAdapter);
-
-        RecyclerView mOwnedBooksRecycler = rootView.findViewById(R.id.profileOwnerRecyclerOwnedBooks);
-        LinearLayoutManager ownedlayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-
-        // query to retrieve owned books
-        Query ownedBooksQuery = mFirestore.collection("catalogue")
-                .whereEqualTo("owner", currentUser.getEmail()).limit(LIMIT);
-
-        mOwnedBooksRecycler.setLayoutManager(ownedlayoutManager);
-        FirestoreRecyclerOptions<Book> ownedOptions = new FirestoreRecyclerOptions.Builder<Book>()
-                .setQuery(ownedBooksQuery, Book.class)
-                .build();
-        ownedBookAdapter = new ProfileAdapter(ownedOptions, currentUser, getActivity(), titleOwned, mOwnedBooksRecycler);
-        mOwnedBooksRecycler.setAdapter(ownedBookAdapter);
-
-        Log.e("OWN", mOwnedBooksRecycler.getChildCount() + " " + ownedBookAdapter.getItemCount());
 
         // initially hide views if they have no content
         if (readyForPickupOptions.getSnapshots().size() == 0) {
@@ -211,10 +172,6 @@ public class OwnerFragment extends Fragment {
         if (borrowedOptions.getSnapshots().size() == 0) {
             titleBorrowed.setVisibility(View.GONE);
             mBorrowedBooksRecycler.setVisibility(View.GONE);
-        }
-        if (ownedOptions.getSnapshots().size() == 0) {
-            titleOwned.setVisibility(View.GONE);
-            mOwnedBooksRecycler.setVisibility(View.GONE);
         }
 
         viewAllReadyForPickups.setOnClickListener(v1 -> {
@@ -239,7 +196,6 @@ public class OwnerFragment extends Fragment {
                     = RequestedBooksFragment.newInstance(currentUser, isOwnerTab);
             Bundle bundle = new Bundle();
             bundle.putSerializable("PF_USER", currentUser);
-            bundle.putSerializable("PF_IS_OWNER_TAB", isOwnerTab);
             bundle.putSerializable("PF_IS_OWNER_TAB", isOwnerTab);
             requestedBooksFragment.setArguments(bundle);
             Objects.requireNonNull(getActivity())
@@ -266,24 +222,12 @@ public class OwnerFragment extends Fragment {
 
         });
 
-        viewAllOwnedBooks.setOnClickListener(v1 -> {
-
-            OwnedBookFragment ownedBookFragment
-                    = OwnedBookFragment.newInstance(currentUser);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("PF_USER", currentUser);
-            bundle.putSerializable("PF_IS_OWNER_TAB", isOwnerTab);
-            ownedBookFragment.setArguments(bundle);
-            Objects.requireNonNull(getActivity())
-                    .getSupportFragmentManager().beginTransaction()
-                    .replace(getActivity().findViewById(R.id.container).getId(),
-                            ownedBookFragment)
-                    .addToBackStack(null).commit();
-
-        });
-
-
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -292,7 +236,6 @@ public class OwnerFragment extends Fragment {
         readyForPickupBookAdapter.startListening();
         borrowedBookAdapter.startListening();
         requestedBookAdapter.startListening();
-        ownedBookAdapter.startListening();
     }
 
     @Override
@@ -301,6 +244,5 @@ public class OwnerFragment extends Fragment {
         readyForPickupBookAdapter.stopListening();
         borrowedBookAdapter.stopListening();
         requestedBookAdapter.stopListening();
-        ownedBookAdapter.stopListening();
     }
 }

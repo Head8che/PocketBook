@@ -2,45 +2,33 @@ package com.example.pocketbook.activity;
 
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AlertDialog;
 
 import com.example.pocketbook.fragment.NotificationsFragment;
+import com.example.pocketbook.fragment.ProfileExistingFragment;
 import com.example.pocketbook.util.ScanHandler;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentSnapshot;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
 import com.example.pocketbook.fragment.OwnerFragment;
-import com.example.pocketbook.fragment.ProfileFragment;
+import com.example.pocketbook.fragment.ProfileNewFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
 import com.example.pocketbook.fragment.ViewMyBookFragment;
 import com.example.pocketbook.model.Book;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.pocketbook.model.User;
-import static com.example.pocketbook.util.FirebaseIntegrity.getUserFromFirestore;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
@@ -49,24 +37,21 @@ import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
  * Home Page Screen
  */
 public class HomeActivity extends AppCompatActivity {
-    private static final String TAG ="MainActivity";
-    private FirebaseFirestore mFirestore;
     private User currentUser;
-    public BottomNavigationView bottomNav;
+    private BottomNavigationView bottomNav;
     private Bundle extras;
-
     private int LAUNCH_ADD_BOOK_CODE = 1234;
-    private int SEE_DESCRIPTION_CODE = 1111;
-    private int LEND_BOOK_CODE = 2222;
-    private int BORROW_BOOK_CODE = 3333;
-    private int RETURN_BOOK_CODE = 4444;
-    private int RECEIVE_BOOK_CODE = 5555;
+    private Fragment selectedFragment;
+    private String FRAG_TAG;
+    private ScanHandler scanHandler;
 
-    Fragment selectedFragment;
-    public String FRAG_TAG;
+    public BottomNavigationView getBottomNav() {
+        return bottomNav;
+    }
 
-    ScanHandler scanHandler;
-
+    public String getFragTag() {
+        return FRAG_TAG;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
+        updateToken(currentUser); //update the token for the user to send and receive notifications
         scanHandler = new ScanHandler(HomeActivity.this,
                 getSupportFragmentManager(), currentUser);
         bottomNav = findViewById(R.id.bottomNavigationView);
@@ -82,10 +68,14 @@ public class HomeActivity extends AppCompatActivity {
         FRAG_TAG = "HOME_FRAGMENT";
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
         extras = intent.getExtras();
-        if (extras.containsKey("NOTI_FRAG") ) {
+        if ((extras != null) && (extras.containsKey("NOTI_FRAG"))) {
             if (extras.getBoolean("NOTI_FRAG")) {
-                if (!(FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(currentUser.getEmail())))
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(currentUser.getEmail(), currentUser.getPassword());
+                if (!(Objects.equals(Objects
+                        .requireNonNull(FirebaseAuth.getInstance().getCurrentUser())
+                        .getEmail(), currentUser.getEmail())))
+                    FirebaseAuth.getInstance()
+                            .signInWithEmailAndPassword(currentUser.getEmail(),
+                                    currentUser.getPassword());
                 onNewIntent(intent);
             }
         }
@@ -95,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.container,
                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
         }
-        updateToken(currentUser); //update the token for the user to send and receive notifications
+
 
     }
 
@@ -138,14 +128,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * Greeting message displayed on the screen open successful logging in.
-     * @param message
-     */
-    private void toastMessage(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-
-    /**
      * Bottom navigation bar options
      */
     private BottomNavigationView.OnNavigationItemSelectedListener NavListener =
@@ -168,56 +150,37 @@ public class HomeActivity extends AppCompatActivity {
                             startActivityForResult(intent, LAUNCH_ADD_BOOK_CODE);
                             break;
                         case R.id.bottom_nav_scan:
-//                            selectedFragment = ScanFragment.newInstance(currentUser);
-//                            ScanFragment nextFrag = ScanFragment.newInstance(currentUser);
-//                            Bundle bundle = new Bundle();
-//                            bundle.putSerializable("SCAN_USER", currentUser);
-//                            nextFrag.setArguments(bundle);
                             scanHandler.showScanningSpinnerDialog();
-//                            FRAG_TAG = "SCAN_FRAGMENT";
                             break;
-                        // showSpinnerDialog when layoutBookCondition is clicked
-                        //ISSUE need to manually set camera permissions. Android manifest permission not working
-                        //ISSUE how to test using actual isbn?
-                        //TODO get information from the isbn
-//                            Intent scanIntent = new Intent(getBaseContext(), ScanActivity.class);
-//                            scanIntent.putExtra("SA_USER", currentUser);
-//                            startActivityForResult(scanIntent, SEE_DESCRIPTION_CODE);
-
-//                            startActivity(new Intent(HomeActivity.this, ScanActivity.class));
-
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
-                        Fragment profileFragment = ProfileFragment.newInstance(currentUser);
-                        Fragment ownerFragment = OwnerFragment.newInstance(currentUser);
+                        Fragment profileNewFragment = ProfileNewFragment.newInstance(currentUser);
+                        Fragment profileExistingFragment = ProfileExistingFragment.newInstance(currentUser);
 
-                        mFirestore = FirebaseFirestore.getInstance();
-                        mFirestore.collection("catalogue")
+                        FirebaseFirestore.getInstance()
+                                .collection("catalogue")
                                 .whereEqualTo("owner",currentUser.getEmail())
                                 .get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            if (task.getResult().isEmpty()) {
-                                                FRAG_TAG = "PROFILE_FRAGMENT";
-                                                if (!(CURRENT_TAG.equals(FRAG_TAG))) {
-                                                    getSupportFragmentManager().beginTransaction()
-                                                            .replace(R.id.container,
-                                                                    profileFragment,
-                                                                    FRAG_TAG)
-                                                            .addToBackStack(FRAG_TAG)
-                                                            .commit();
-                                                }
-                                            } else {
-                                                FRAG_TAG = "OWNER_FRAGMENT";
-                                                if (!(CURRENT_TAG.equals(FRAG_TAG))) {
-                                                    getSupportFragmentManager().beginTransaction()
-                                                            .replace(R.id.container, ownerFragment,
-                                                                    FRAG_TAG)
-                                                            .addToBackStack(FRAG_TAG)
-                                                            .commit();
-                                                }
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().isEmpty()) {
+                                            FRAG_TAG = "PROFILE_FRAGMENT";
+                                            if (!(CURRENT_TAG.equals(FRAG_TAG))) {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container,
+                                                                profileNewFragment,
+                                                                FRAG_TAG)
+                                                        .addToBackStack(FRAG_TAG)
+                                                        .commit();
+                                            }
+                                        } else {
+                                            FRAG_TAG = "OWNER_FRAGMENT";
+                                            if (!(CURRENT_TAG.equals(FRAG_TAG))) {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, profileExistingFragment,
+                                                                FRAG_TAG)
+                                                        .addToBackStack(FRAG_TAG)
+                                                        .commit();
                                             }
                                         }
                                     }
@@ -247,6 +210,7 @@ public class HomeActivity extends AppCompatActivity {
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if ((result != null) && (result.getContents() != null)){
+            scanHandler.dismissAlertDialog();
             scannedIsbn = result.getContents();
             Log.e("SCAN", scannedIsbn);
         }
@@ -266,9 +230,33 @@ public class HomeActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(findViewById(R.id.container)
                         .getId(), nextFrag).addToBackStack(null).commit();
             }
-        } else if (scanHandler.userSelection.equals("SEE_DESCRIPTION_CODE")) {
-            if (scannedIsbn != null) {
-                scanHandler.handleSeeDescription(scannedIsbn);
+        }  else if (scanHandler.getUserSelection() != null) {
+            switch (scanHandler.getUserSelection()) {
+                case "SEE_DESCRIPTION_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleSeeDescription(scannedIsbn);
+                    }
+                    break;
+                case "LEND_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleLendBook(scannedIsbn);
+                    }
+                    break;
+                case "BORROW_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleBorrowBook(scannedIsbn);
+                    }
+                    break;
+                case "RETURN_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleReturnBook(scannedIsbn);
+                    }
+                    break;
+                case "RECEIVE_BOOK_CODE":
+                    if (scannedIsbn != null) {
+                        scanHandler.handleReceiveBook(scannedIsbn);
+                    }
+                    break;
             }
         }
     }

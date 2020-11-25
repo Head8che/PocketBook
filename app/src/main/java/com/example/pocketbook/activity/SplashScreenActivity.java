@@ -36,7 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 //        FirebaseIntegrity.cleanObjectCollection("Book");
 
         /* UNCOMMENT OUT THE LINE BELOW TO ACCESS LOGIN PAGE */
-         FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut();
 
         /* Duration of wait in milliseconds */
         int SPLASH_DISPLAY_LENGTH = 1500;

@@ -1,12 +1,9 @@
 package com.example.pocketbook.adapter;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.pocketbook.fragment.ProfileFragment;
 import com.example.pocketbook.fragment.SearchMainFragment;
 import com.example.pocketbook.model.User;
 

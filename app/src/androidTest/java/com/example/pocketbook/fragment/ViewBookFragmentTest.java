@@ -44,6 +44,7 @@ public class ViewBookFragmentTest {
     private long currentTime = System.currentTimeMillis();
     private String email1 = "mockviewbook1" + currentTime + "@gmail.com";
     private String email2 = "mockviewbook2" + currentTime + "@gmail.com";
+    private String username = "MockUsername" + currentTime;
     private String password = "123456";
 
     @Rule
@@ -93,7 +94,7 @@ public class ViewBookFragmentTest {
         solo.enterText(lastNameField, "MockLast");  // add a lastName
 
         assertNotNull(usernameField);  // username field exists
-        solo.enterText(usernameField, "MockUsername");  // add a username
+        solo.enterText(usernameField, username);  // add a unique username
 
         assertNotNull(emailField);  // email field exists
         solo.enterText(emailField, email1); // add email
@@ -105,6 +106,11 @@ public class ViewBookFragmentTest {
 
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
+
+        ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
+
+        View skipBtn = solo.getView(R.id.skip_btn);
+        solo.clickOnView(skipBtn);
 
         ///////////////////////////////////// ADD A MOCK BOOK //////////////////////////////////////
 
@@ -226,40 +232,6 @@ public class ViewBookFragmentTest {
         solo.sleep(2000); // give it time to change fragments to ViewBookFragment
     }
 
-    /**
-     * Runs after each test to remove the mock users and the mock book from Firebase.
-     */
-    @After
-    public void removeMockFromFirebase() {
-        if (Objects.equals(Objects.requireNonNull(
-                FirebaseAuth.getInstance().getCurrentUser()).getEmail(), email1)) {
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();  // sign out of the created user account
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email2, password);
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();
-        } else if (Objects.equals(
-                FirebaseAuth.getInstance().getCurrentUser().getEmail(), email2)) {
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();  // sign out of the created user account
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email1, password);
-            solo.sleep(5000);  // give it time to complete task
-            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
-            solo.sleep(5000);  // give it time to complete task
-            signOut();
-        }
-        FirebaseIntegrity.deleteDocumentsFromSubcollectionOnFieldValue("catalogue",
-                "requests", "requester", email2);
-        solo.sleep(5000);  // give it time to complete task
-        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
-                "author", "M0cKAUtH0R");
-    }
 
     /**
      * Check if the back button returned to HomeActivity with assertCurrentActivity.
@@ -304,5 +276,51 @@ public class ViewBookFragmentTest {
         // assert that the profile bottom navigation item is currently selected
         assertEquals(R.id.bottom_nav_home, bottomNavigation.getSelectedItemId());
     }
-    
+
+    /**
+     * Runs after each test to remove the mock users and the mock book from Firebase.
+     */
+    @After
+    public void removeMockFromFirebase() {
+        if (Objects.equals(Objects.requireNonNull(
+                FirebaseAuth.getInstance().getCurrentUser()).getEmail(), email1)) {
+            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+            solo.sleep(5000);  // give it time to complete task
+            signOut();  // sign out of the created user account
+            solo.sleep(5000);  // give it time to complete task
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email2, password);
+            solo.sleep(5000);  // give it time to complete task
+            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+            solo.sleep(5000);  // give it time to complete task
+            signOut();
+        } else if (Objects.equals(
+                FirebaseAuth.getInstance().getCurrentUser().getEmail(), email2)) {
+            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+            solo.sleep(5000);  // give it time to complete task
+            signOut();  // sign out of the created user account
+            solo.sleep(5000);  // give it time to complete task
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email1, password);
+            solo.sleep(5000);  // give it time to complete task
+            FirebaseIntegrity.deleteCurrentlyLoggedInUser();
+            solo.sleep(5000);  // give it time to complete task
+            signOut();
+        }
+        FirebaseIntegrity.deleteDocumentsFromSubcollectionOnFieldValue("catalogue",
+                "requests", "requester", email2);
+        solo.sleep(5000);  // give it time to complete task
+        FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
+                "author", "M0cKAUtH0R");
+    }
+
+//    /**
+//     * Close activity after each test
+//     * @throws Exception
+//     */
+//    @After
+//    public void tearDown() throws Exception{
+//        solo.finishOpenedActivities();
+//    }
+
+
+
 }

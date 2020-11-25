@@ -1102,6 +1102,7 @@ public class FirebaseIntegrity {
                                     });
                         }
                     });
+            Log.d("DEBUG", "Successfully deleted user from Firebase.");
         }
 
 

@@ -60,7 +60,7 @@ public class ViewMyBookRequestsFragmentTest {
     public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         mockBook = new Book("mockID", "mockTitle", "mockAuthor",
-                "0000000000000", "mock@mock.com", "AVAILABLE",
+                "0000000000000", "mock@mock.com", "AVAILABLE", false,
                 "this is a test", "GOOD", "", new ArrayList<>());
 //        mockBook.pushNewBookToFirebase();
 //        mockRequester = new User("mockFirst", "mockLast", "mockuser@gmail.com", "mockUser", "123456", "");

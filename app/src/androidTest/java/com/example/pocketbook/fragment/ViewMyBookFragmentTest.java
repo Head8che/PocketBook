@@ -95,6 +95,10 @@ public class ViewMyBookFragmentTest {
         // False if 'Input required' is present
         assertFalse(solo.searchText("Input required"));
 
+        ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
+        View skipBtn = solo.getView(R.id.skip_btn);
+        solo.clickOnView(skipBtn);
+
         ///////////////////////////////////// ADD A MOCK BOOK //////////////////////////////////////
 
         // Asserts that the current activity is HomeActivity (i.e. save redirected).

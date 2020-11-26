@@ -38,6 +38,19 @@ android:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
 
+# whitelist
+branches:
+  only:
+    - master
+  except:
+    - staging
+    - Ayo
+    - Della
+    - Eden
+    - MahmoodF
+    - MahmoudAJ
+    - Zubier
+
 before_install:
   - yes | sdkmanager "platforms;android-$ANDROID_EMU_API_LEVEL"
   - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"

@@ -298,23 +298,27 @@ public class ViewBookFragmentTest {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             if (Objects.equals(Objects.requireNonNull(
                     FirebaseAuth.getInstance().getCurrentUser()).getEmail(), email1)) {
+                FirebaseIntegrity.deleteUserNotificationsFromFirebase(email1);
                 FirebaseIntegrity.deleteCurrentlyLoggedInUser();
                 solo.sleep(5000);  // give it time to complete task
                 signOut();  // sign out of the created user account
                 solo.sleep(5000);  // give it time to complete task
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email2, password);
                 solo.sleep(5000);  // give it time to complete task
+                FirebaseIntegrity.deleteUserNotificationsFromFirebase(email2);
                 FirebaseIntegrity.deleteCurrentlyLoggedInUser();
                 solo.sleep(5000);  // give it time to complete task
                 signOut();
             } else if (Objects.equals(
                     FirebaseAuth.getInstance().getCurrentUser().getEmail(), email2)) {
+                FirebaseIntegrity.deleteUserNotificationsFromFirebase(email2);
                 FirebaseIntegrity.deleteCurrentlyLoggedInUser();
                 solo.sleep(5000);  // give it time to complete task
                 signOut();  // sign out of the created user account
                 solo.sleep(5000);  // give it time to complete task
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email1, password);
                 solo.sleep(5000);  // give it time to complete task
+                FirebaseIntegrity.deleteUserNotificationsFromFirebase(email1);
                 FirebaseIntegrity.deleteCurrentlyLoggedInUser();
                 solo.sleep(5000);  // give it time to complete task
                 signOut();

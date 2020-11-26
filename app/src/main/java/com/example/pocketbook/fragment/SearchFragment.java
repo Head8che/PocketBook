@@ -7,53 +7,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.adapter.LinearBookAdapter;
 import com.example.pocketbook.adapter.SearchStateAdapter;
-import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.KeyboardHandler;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-
-import java.util.Objects;
 
 public class SearchFragment extends Fragment{
 
-    private static final String TAG = "SearchFragment";
-    private static final int LIMIT = 20;
-
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private RecyclerView mBooksRecycler;
-    private LinearBookAdapter mAdapter;
-
     private User currentUser;
-
-    private SearchView searchView;
-
-    private TabLayout tabLayout;
     private ViewPager2 pager;
-    private SearchStateAdapter searchStateAdapter;
 
 
     /**
      * Search fragment instance that bundles the user information to be accessible
-     * @param user
-     * @return
+     * @param user current user
+     * @return SearchFragment
      */
     public static SearchFragment newInstance(User user) {
         SearchFragment searchFragment = new SearchFragment();
@@ -79,15 +57,15 @@ public class SearchFragment extends Fragment{
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_search, container, false);
 
-        return v;
+        return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
-        searchStateAdapter = new SearchStateAdapter(this, currentUser);
-        tabLayout = rootView.findViewById(R.id.searchFragTabLayout);
+        SearchStateAdapter searchStateAdapter
+                = new SearchStateAdapter(this, currentUser);
+        TabLayout tabLayout = rootView.findViewById(R.id.searchFragTabLayout);
         pager = rootView.findViewById(R.id.searchFragPager);
         pager.setAdapter(searchStateAdapter);
 
@@ -96,43 +74,46 @@ public class SearchFragment extends Fragment{
             else tab.setText("Non-Exchange");
         }).attach();
 
-        SearchManager searchManager = (SearchManager) getActivity()
-                .getSystemService(Context.SEARCH_SERVICE);
-        searchView = rootView.findViewById(R.id.searchView);
+        if (getActivity() != null) {
 
-        // Assumes current activity is the searchable activity
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+            SearchManager searchManager = (SearchManager) getActivity()
+                    .getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = rootView.findViewById(R.id.searchView);
 
-        KeyboardHandler keyboardHandler = new KeyboardHandler(rootView, getActivity());
-        keyboardHandler.hideViewOnKeyboardUp(R.id.bottomNavigationView);
+            // Assumes current activity is the searchable activity
+            searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it
 
-        searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getActivity().getComponentName()));
+            KeyboardHandler keyboardHandler = new KeyboardHandler(rootView, getActivity());
+            keyboardHandler.hideViewOnKeyboardUp(R.id.bottomNavigationView);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // calling the update query of the active fragment
-                // and updating the Firebase query
-                FragmentManager fm = getChildFragmentManager();
+            searchView.setSearchableInfo(searchManager
+                    .getSearchableInfo(getActivity().getComponentName()));
 
-                // android automatically assigns tags to newly created fragments
-                Fragment f = (SearchMainFragment)
-                        fm.findFragmentByTag("f"+ pager.getCurrentItem());
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    // calling the update query of the active fragment
+                    // and updating the Firebase query
+                    FragmentManager fm = getChildFragmentManager();
 
-                if(f != null)
-                    ((SearchMainFragment) f).updateQuery(newText);
-                return true;
-            }
+                    // android automatically assigns tags to newly created fragments
+                    SearchMainFragment f = (SearchMainFragment)
+                            fm.findFragmentByTag("f" + pager.getCurrentItem());
 
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.i("onQueryTextSubmit", query);
-                // TODO: implement this
-                // TODO: no reloading but conclusion
-                return true;
-            }
-        });
+                    if (f != null)
+                        f.updateQuery(newText);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Log.i("onQueryTextSubmit", query);
+                    // TODO: implement this
+                    // TODO: no reloading but conclusion
+                    return true;
+                }
+            });
+        }
 
     }
 

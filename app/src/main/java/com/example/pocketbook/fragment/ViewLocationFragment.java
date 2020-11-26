@@ -1,8 +1,5 @@
 package com.example.pocketbook.fragment;
 
-import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.activity.LocationActivity;
-import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
-import com.example.pocketbook.model.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,14 +21,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
-import java.util.List;
-
 public class ViewLocationFragment extends Fragment implements OnMapReadyCallback {
 
     Exchange exchange;
     GoogleMap googleMap = null;
-    private LatLng mPinnedMap;
     Marker marker;
     SupportMapFragment mapFrag;
 
@@ -66,17 +56,15 @@ public class ViewLocationFragment extends Fragment implements OnMapReadyCallback
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_view_location, container, false);
-        ImageView backButton = (ImageView) view.findViewById(R.id.viewLocationBackBtn);
+        View view = inflater.inflate(R.layout.fragment_view_location,
+                container, false);
+        ImageView backButton = view.findViewById(R.id.viewLocationBackBtn);
 
-        TextInputEditText layoutViewLocation = (TextInputEditText)
-                view.findViewById(R.id.viewLocationField);
-        TextInputEditText layoutViewDate = (TextInputEditText)
-                view.findViewById(R.id.viewLocationDateField);
-        TextInputEditText layoutViewTime = (TextInputEditText)
-                view.findViewById(R.id.viewLocationTimeField);
+        TextInputEditText layoutViewLocation = view.findViewById(R.id.viewLocationField);
+        TextInputEditText layoutViewDate = view.findViewById(R.id.viewLocationDateField);
+        TextInputEditText layoutViewTime = view.findViewById(R.id.viewLocationTimeField);
 
-        TextView viewLocationTitle = (TextView) view.findViewById(R.id.viewLocationTitle);
+        TextView viewLocationTitle = view.findViewById(R.id.viewLocationTitle);
         if ((exchange.getBorrowerBookStatus().equals("BORROWED"))) {
             viewLocationTitle.setText(R.string.viewReturnLocation);
         }
@@ -88,15 +76,19 @@ public class ViewLocationFragment extends Fragment implements OnMapReadyCallback
         if (this.googleMap == null) {
             mapFrag = (SupportMapFragment)
                     getChildFragmentManager().findFragmentById(R.id.viewLocationFragMap);
-            mapFrag.getMapAsync(this);
+            if (mapFrag != null) {
+                mapFrag.getMapAsync(this);
+            }
         }
 
-//        layoutViewLocation.setOnClickListener(v -> {
-//            Intent intent = new Intent(getContext(), LocationActivity.class);
-//            startActivity(intent);
-//        });
-
-        backButton.setOnClickListener(v -> getActivity().onBackPressed());
+        // go back when backButton is clicked
+        backButton.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                backButton.setClickable(false);
+                getActivity().onBackPressed();
+                backButton.setClickable(true);
+            }
+        });
 
         return view;
     }
@@ -115,7 +107,7 @@ public class ViewLocationFragment extends Fragment implements OnMapReadyCallback
             if (marker != null) {
                 marker.remove();
             }
-            mPinnedMap = new LatLng(latitude, longitude);
+            LatLng mPinnedMap = new LatLng(latitude, longitude);
 
             MarkerOptions options = new MarkerOptions()
                     .draggable(true)

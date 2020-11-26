@@ -10,17 +10,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
-import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -32,9 +29,6 @@ import com.google.firebase.firestore.Query;
 public class OwnedBookFragment extends Fragment {
 
     private static final int numColumns = 2;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private RecyclerView mBooksRecycler;
     private ViewAllBookAdapter mAdapter;
     private User currentUser;
 
@@ -57,15 +51,11 @@ public class OwnedBookFragment extends Fragment {
         }
 
         // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         // retrieving owned books
-        mQuery = mFirestore.collection("catalogue")
+        Query mQuery = mFirestore.collection("catalogue")
                 .whereEqualTo("owner", currentUser.getEmail());
-
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(4)
-                .setPageSize(4).build();
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -84,7 +74,7 @@ public class OwnedBookFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_owned_book,
                 container, false);
-        mBooksRecycler = rootView.findViewById(R.id.ownedBooksRecyclerBooks);
+        RecyclerView mBooksRecycler = rootView.findViewById(R.id.ownedBooksRecyclerBooks);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
         mAdapter = new ViewAllBookAdapter(options, currentUser, getActivity(), true);
         mBooksRecycler.setAdapter(mAdapter);
@@ -93,7 +83,9 @@ public class OwnedBookFragment extends Fragment {
 
         backButton.setOnClickListener(v -> {
             if (getActivity() != null) {
+                backButton.setClickable(false);
                 getActivity().onBackPressed();
+                backButton.setClickable(true);
             }
         });
 

@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +27,6 @@ import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.Parser;
-import com.example.pocketbook.util.ScanHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -64,13 +62,9 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     private TextInputLayout layoutSetDateContainer;
     private TextInputLayout layoutSetTimeContainer;
 
-    private Button confirmBtn;
-    private ImageView cover;
-    private String selectedDate;
     public static final int REQUEST_CODE = 11; // Used to identify the result
     private double invalidCoord = -999.0;
     private final Calendar myCalendar = Calendar.getInstance();
-    private TimePickerDialog timePickerDialog;
     private final Calendar myTime = Calendar.getInstance();
 
     private double latitude;
@@ -88,7 +82,6 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     private User currentUser;
 
     GoogleMap googleMap = null;
-    private LatLng mPinnedMap;
     Marker marker;
     SupportMapFragment mapFrag;
 
@@ -131,33 +124,36 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_set_location, container, false);
-        ImageView backButton = (ImageView) view.findViewById(R.id.setLocationBackBtn);
-        layoutSetLocation = (TextInputEditText) view.findViewById(R.id.setLocationField);
-        layoutSetDate = (TextInputEditText) view.findViewById(R.id.setDateField);
-        layoutSetTime = (TextInputEditText) view.findViewById(R.id.setTimeField);
-        confirmBtn = (Button) view.findViewById(R.id.confirmPickupBtn);
+        View view = inflater.inflate(R.layout.fragment_set_location,
+                container, false);
+        ImageView backButton = view.findViewById(R.id.setLocationBackBtn);
+        layoutSetLocation = view.findViewById(R.id.setLocationField);
+        layoutSetDate = view.findViewById(R.id.setDateField);
+        layoutSetTime = view.findViewById(R.id.setTimeField);
+        Button confirmBtn = view.findViewById(R.id.confirmPickupBtn);
 
-        TextView setLocationTitle = (TextView) view.findViewById(R.id.setLocationTitle);
+        TextView setLocationTitle = view.findViewById(R.id.setLocationTitle);
         if (currentUser != null) {
             setLocationTitle.setText(R.string.setReturnLocation);
         }
 
         // access the layout text containers
-        layoutSetLocationContainer = (TextInputLayout) view.findViewById(R.id.setLocationContainer);
-        layoutSetDateContainer = (TextInputLayout) view.findViewById(R.id.setDateContainer);
-        layoutSetTimeContainer = (TextInputLayout) view.findViewById(R.id.setTimeContainer);
+        layoutSetLocationContainer = view.findViewById(R.id.setLocationContainer);
+        layoutSetDateContainer = view.findViewById(R.id.setDateContainer);
+        layoutSetTimeContainer = view.findViewById(R.id.setTimeContainer);
 
         if (this.googleMap == null) {
             mapFrag = (SupportMapFragment)
                     getChildFragmentManager().findFragmentById(R.id.setLocationFragMap);
-            mapFrag.getMapAsync(this);
+            if (mapFrag != null) {
+                mapFrag.getMapAsync(this);
+            }
         }
 
         TimePickerDialog.OnTimeSetListener time = (view1, hourOfDay, minute) -> {
-//                layoutSetTime.setText(String.valueOf(hourOfDay)+"Hours "+String.valueOf(minute)+" minutes ");
             if (view1.isShown()) {
                 String myFormat = "HH:mm"; // In which you need put here
                 myTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -165,20 +161,19 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
                 @SuppressLint ("SimpleDateFormat") SimpleDateFormat dateFormatter
                         = new SimpleDateFormat(myFormat);
                 layoutSetTime.setText(dateFormatter.format(myTime.getTime()));
-                if ((layoutSetTime.getText() != null) && !(layoutSetTime.getText().toString().equals(""))) {
+                if ((layoutSetTime.getText() != null)
+                        && !(layoutSetTime.getText().toString().equals(""))) {
                     meetingTime = layoutSetTime.getText().toString();
                 }
             }
         };
 
-        layoutSetTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // TODO Auto-generated method stub
-                new TimePickerDialog(getContext(), time, myTime
-                        .get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE), true).show();
-            }
+        layoutSetTime.setOnClickListener(v -> {
+            layoutSetTime.setClickable(false);
+            new TimePickerDialog(getContext(), time, myTime
+                    .get(Calendar.HOUR_OF_DAY), myTime.get(Calendar.MINUTE),
+                    true).show();
+            layoutSetTime.setClickable(true);
         });
 
         // add a text field listener that validates the inputted text
@@ -262,8 +257,10 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
                                             for (QueryDocumentSnapshot document1
                                                     : task1.getResult()) {
 
-                                                MeetingDetails meetingDetails = new MeetingDetails(latitude,
-                                                        longitude, address, meetingDate, meetingTime);
+                                                MeetingDetails meetingDetails
+                                                        = new MeetingDetails(latitude,
+                                                        longitude, address,
+                                                        meetingDate, meetingTime);
 
                                                 if (meetingDetails.getAddress() == null) {
                                                     Toast.makeText(getContext(),
@@ -353,33 +350,30 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
 
 
 
-        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                String myFormat = "yyyy/MM/dd";
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        DatePickerDialog.OnDateSetListener date = (view12, year, monthOfYear, dayOfMonth) -> {
+            String myFormat = "yyyy/MM/dd";
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-                layoutSetDate.setText(sdf.format(myCalendar.getTime()));
+            layoutSetDate.setText(sdf.format(myCalendar.getTime()));
 
-                if ((layoutSetDate.getText() != null)
-                        && !(layoutSetDate.getText().toString().equals(""))) {
-                    meetingDate = layoutSetDate.getText().toString();
-                    validDate = true;
-                }
+            if ((layoutSetDate.getText() != null)
+                    && !(layoutSetDate.getText().toString().equals(""))) {
+                meetingDate = layoutSetDate.getText().toString();
+                validDate = true;
             }
         };
 
-        layoutSetDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        layoutSetDate.setOnClickListener(v -> {
+            layoutSetDate.setClickable(false);
+            if (getActivity() != null) {
                 new DatePickerDialog(getActivity(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
+            layoutSetDate.setClickable(true);
         });
 
         // add a text field listener that validates the inputted text
@@ -414,13 +408,11 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
             public void afterTextChanged(Editable s) {}
         });
 
-        layoutSetLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), LocationActivity.class);
-                startActivityForResult(intent,REQUEST_CODE);
-//                layoutSetLocation.setText("LongLat");
-            }
+        layoutSetLocation.setOnClickListener(v -> {
+            layoutSetLocation.setClickable(false);
+            Intent intent = new Intent(getContext(), LocationActivity.class);
+            startActivityForResult(intent,REQUEST_CODE);
+            layoutSetLocation.setClickable(true);
         });
 
         // add a text field listener that validates the inputted text
@@ -449,7 +441,13 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
             public void afterTextChanged(Editable s) {}
         });
 
-        backButton.setOnClickListener(v -> getActivity().onBackPressed());
+        backButton.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                backButton.setClickable(false);
+                getActivity().onBackPressed();
+                backButton.setClickable(true);
+            }
+        });
 
         return view;
     }
@@ -459,6 +457,7 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
         this.googleMap = googleMap;
         if (this.googleMap != null) {
 
+            LatLng mPinnedMap;
             if ((address != null) && (latitude != invalidCoord) && (longitude != invalidCoord)) {
 
                 Log.e("ADDRESS", address + " " + latitude + " " + longitude);

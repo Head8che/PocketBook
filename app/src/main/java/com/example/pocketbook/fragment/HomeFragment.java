@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentTransaction;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,15 +22,15 @@ import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.example.pocketbook.util.NotificationCounter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.setNotificationCounterNumber;
 
@@ -41,10 +40,6 @@ import static com.example.pocketbook.util.FirebaseIntegrity.setNotificationCount
 public class HomeFragment extends Fragment {
     private static final String TAG = "HOME_ACTIVITY";
     private static final int NUM_COLUMNS = 2;
-    private static final int LIMIT = 20;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
     private NotificationCounter notificationCounter;
 
@@ -54,8 +49,8 @@ public class HomeFragment extends Fragment {
     ListenerRegistration listenerRegistration;
     /**
      * Home Page fragment instance that bundles the user/catalogue to be displayed
-     * @param user
-     * @return
+     * @param user current user
+     * @return HomeFragment
      */
     public static HomeFragment newInstance(User user) {
         HomeFragment homeFragment = new HomeFragment();
@@ -67,7 +62,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Obtains and create the information/data required for this screen.
-     * @param savedInstanceState
+     * @param savedInstanceState saved instance state
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,15 +73,11 @@ public class HomeFragment extends Fragment {
         }
 
         // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         // Retrieving books that do not belong to user
-        mQuery = mFirestore.collection("catalogue")
-                .whereNotEqualTo("owner",currentUser.getEmail());
-
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(4)
-                .setPageSize(4).build();
+        Query mQuery = mFirestore.collection("catalogue")
+                .whereNotEqualTo("owner", currentUser.getEmail());
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -129,35 +120,38 @@ public class HomeFragment extends Fragment {
 
         };
 
-        mFirestore.collection("users").document(currentUser.getEmail()).collection("notifications")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.w(TAG, "listen:error", error);
-                            return;
-                        }
+        mFirestore.collection("users")
+                .document(currentUser.getEmail()).collection("notifications")
+                .addSnapshotListener((snapshots, error) -> {
+                    if (error != null) {
+                        Log.w(TAG, "listen:error", error);
+                        return;
+                    }
+                    if (snapshots != null) {
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
                                 case REMOVED:
-                                    setNotificationCounterNumber(notificationCounter, currentUser);
+                                    setNotificationCounterNumber(notificationCounter,
+                                            currentUser);
                                     break;
                             }
                         }
-                    }});
+                    }
+                });
 
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
     }
     /**
      * Inflates the layout/container with the following (Layout and Books)
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * @param inflater layout inflater
+     * @param container ViewGroup container
+     * @param savedInstanceState saved instance state
+     * @return inflated view
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
             container.removeAllViews();
         }
@@ -165,18 +159,21 @@ public class HomeFragment extends Fragment {
         mAdapter = new BookAdapter(options, currentUser, getActivity());
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        Button notificationBtn = (Button) rootView.findViewById(R.id.homeFragmentNotificationBtn);
-        mBooksRecycler = rootView.findViewById(R.id.homeFragmentRecyclerBooks);
+        Button notificationBtn = rootView.findViewById(R.id.homeFragmentNotificationBtn);
+        RecyclerView mBooksRecycler = rootView.findViewById(R.id.homeFragmentRecyclerBooks);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), NUM_COLUMNS));
 
         mBooksRecycler.setAdapter(mAdapter);
 
         notificationBtn.setOnClickListener(v -> {
+            notificationBtn.setClickable(false);
             NotificationsFragment nextFragment = NotificationsFragment.newInstance(currentUser);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, nextFragment ); // give your fragment container id in first parameter
-            transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+            FragmentTransaction transaction = Objects.requireNonNull(getActivity())
+                    .getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, nextFragment );
+            transaction.addToBackStack(null);
             transaction.commit();
+            notificationBtn.setClickable(true);
         });
         notificationCounter = new NotificationCounter(rootView);
         setNotificationCounterNumber(notificationCounter,currentUser);

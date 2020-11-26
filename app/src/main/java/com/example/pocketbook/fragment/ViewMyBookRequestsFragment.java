@@ -15,7 +15,6 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
-import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentChange;
@@ -33,16 +32,8 @@ import com.google.firebase.firestore.QuerySnapshot;
  */
 public class ViewMyBookRequestsFragment extends Fragment {
 
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String VMBF_BOOK = "VMBF_BOOK";
-
-
-    private RecyclerView requestsRecycler;
     private RequestAdapter requestAdapter;
     private Book book;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
 
     FirestoreRecyclerOptions<Request> options;
     ListenerRegistration listenerRegistration;
@@ -56,7 +47,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
     /**
      * create a new instance of ViewMyBookRequestsFragment
      * @param book: the book being viewed
-     * @return
+     * @return ViewMyBookRequestsFragment
      */
     public static ViewMyBookRequestsFragment newInstance(Book book) {
         ViewMyBookRequestsFragment viewMyBookRequestsFragment = new ViewMyBookRequestsFragment();
@@ -76,10 +67,10 @@ public class ViewMyBookRequestsFragment extends Fragment {
         }
 
         // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         // Query to retrieve all book requests
-        mQuery = mFirestore.collection("catalogue").document(book.getId())
+        Query mQuery = mFirestore.collection("catalogue").document(book.getId())
                 .collection("requests");
 
         options = new FirestoreRecyclerOptions.Builder<Request>()
@@ -100,19 +91,22 @@ public class ViewMyBookRequestsFragment extends Fragment {
 
                         switch (dc.getType()) {
                             case ADDED:
-                                Log.d("REQUEST_SCROLL_UPDATE", "New doc: " + document);
+                                Log.d("REQUEST_SCROLL_UPDATE", "New doc: "
+                                        + document);
 
                                 requestAdapter.notifyDataSetChanged();
                                 break;
 
                             case MODIFIED:
-                                Log.d("REQUEST_SCROLL_UPDATE", "Modified doc: " + document);
+                                Log.d("REQUEST_SCROLL_UPDATE", "Modified doc: "
+                                        + document);
 
                                 requestAdapter.notifyDataSetChanged();
                                 break;
 
                             case REMOVED:
-                                Log.d("REQUEST_SCROLL_UPDATE", "Removed doc: " + document);
+                                Log.d("REQUEST_SCROLL_UPDATE", "Removed doc: "
+                                        + document);
 
                                 requestAdapter.notifyDataSetChanged();
                                 break;
@@ -124,7 +118,8 @@ public class ViewMyBookRequestsFragment extends Fragment {
 
         listenerRegistration = mQuery.addSnapshotListener(dataListener);
 
-        bookListenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
+        bookListenerRegistration = FirebaseFirestore
+                .getInstance().collection("catalogue")
                 .document(book.getId()).addSnapshotListener((snapshot, e) -> {
                     if (e != null) {
                         Log.w("VMBBF_LISTENER", "Listen failed.", e);
@@ -142,7 +137,8 @@ public class ViewMyBookRequestsFragment extends Fragment {
                     } else {
                         if ( getActivity() == null) {
                             getParentFragmentManager().beginTransaction()
-                                    .detach(ViewMyBookRequestsFragment.this).commitAllowingStateLoss();
+                                    .detach(ViewMyBookRequestsFragment.this)
+                                    .commitAllowingStateLoss();
                         } else {
                             getActivity().getFragmentManager().popBackStack();
                         }
@@ -153,13 +149,16 @@ public class ViewMyBookRequestsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_view_my_book_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_view_my_book_requests,
+                container, false);
 
         //get the id of the recycler for this layout and set its layout manager
-        requestsRecycler = view.findViewById(R.id.viewMyBookRequestsRecyclerView);
+        RecyclerView requestsRecycler
+                = view.findViewById(R.id.viewMyBookRequestsRecyclerView);
         requestsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //set a new requestAdapter as an adapter for the recycler

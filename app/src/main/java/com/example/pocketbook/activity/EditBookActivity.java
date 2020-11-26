@@ -186,11 +186,18 @@ public class EditBookActivity extends AppCompatActivity {
         });
 
         // showSpinnerDialog when layoutBookCondition is clicked
-        layoutBookCondition.setOnClickListener(v -> showSpinnerDialog());
+        layoutBookCondition.setOnClickListener(v -> {
+            layoutBookCondition.setClickable(false);
+            showSpinnerDialog();
+            layoutBookCondition.setClickable(true);
+        });
 
         // showImageSelectorDialog when changePhotoButton is clicked
-        changePhotoButton.setOnClickListener(v -> (photoHandler)
-                .showImageSelectorDialog(this, bookCover, layoutBookCover));
+        changePhotoButton.setOnClickListener(v -> {
+            changePhotoButton.setClickable(false);
+            (photoHandler).showImageSelectorDialog(this, bookCover, layoutBookCover);
+            changePhotoButton.setClickable(true);
+        });
 
         // load the user's book cover into ImageLayout
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
@@ -199,12 +206,15 @@ public class EditBookActivity extends AppCompatActivity {
 
         // go back when cancelButton is clicked
         cancelButton.setOnClickListener(v -> {
+            cancelButton.setClickable(false);
             KeyboardHandler.hideKeyboard(EditBookActivity.this);
             onBackPressed();
+            cancelButton.setClickable(true);
         });
 
         // when saveButton is clicked
         saveButton.setOnClickListener(v -> {
+            saveButton.setClickable(false);
             // if all fields are valid
             if (validTitle && validAuthor && validISBN) {
                 if (!noChanges()) {  // if the user has entered some text or chosen a photo
@@ -276,6 +286,7 @@ public class EditBookActivity extends AppCompatActivity {
                     layoutBookISBN.requestFocus();
                 }
             }
+            saveButton.setClickable(true);
         });
     }
 
@@ -340,26 +351,34 @@ public class EditBookActivity extends AppCompatActivity {
 
         // set the condition layout text to great when greatOption is clicked
         greatOption.setOnClickListener(v -> {
+            greatOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.greatCondition);
+            greatOption.setClickable(true);
         });
 
         // set the condition layout text to good when goodOption is clicked
         goodOption.setOnClickListener(v -> {
+            goodOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.goodCondition);
+            goodOption.setClickable(true);
         });
 
         // set the condition layout text to fair when fairOption is clicked
         fairOption.setOnClickListener(v -> {
+            fairOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.fairCondition);
+            fairOption.setClickable(true);
         });
 
         // set the condition layout text to acceptable when acceptableOption is clicked
         acceptableOption.setOnClickListener(v -> {
+            acceptableOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.acceptableCondition);
+            acceptableOption.setClickable(true);
         });
     }
 
@@ -381,13 +400,19 @@ public class EditBookActivity extends AppCompatActivity {
         alertDialog.show();
 
         // stay in this activity if the user opts to keep editing
-        keepEditingBtn.setOnClickListener(v -> alertDialog.dismiss());
+        keepEditingBtn.setOnClickListener(v -> {
+            keepEditingBtn.setClickable(false);
+            alertDialog.dismiss();
+            keepEditingBtn.setClickable(true);
+        });
 
         // finish this activity if the user opts to discard their changes
         discardBtn.setOnClickListener(v -> {
+            discardBtn.setClickable(false);
             alertDialog.dismiss();
             SystemClock.sleep(300);
             finish();
+            discardBtn.setClickable(true);
         });
     }
 

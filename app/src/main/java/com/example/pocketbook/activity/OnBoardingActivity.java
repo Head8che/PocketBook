@@ -1,15 +1,14 @@
 package com.example.pocketbook.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,38 +38,32 @@ public class OnBoardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_on_boarding);
+
+        // make fullscreen
+        final WindowInsetsController insetsController = getWindow().getInsetsController();
+        if (insetsController != null) {
+            insetsController.hide(WindowInsets.Type.statusBars());
+        }
 
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
 
-        //Hooks
+        // Hooks
         viewPager = findViewById(R.id.onBoardingActivitySlider);
         dotsLayout = findViewById(R.id.onBoardingActivityDots);
         nextBtn = findViewById(R.id.onBoardingActivityNextBtn);
         skipBtn = findViewById(R.id.onBoardingActivitySkipBtn);
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                next();
-            }
-        });
+        nextBtn.setOnClickListener(v -> next());
 
-        skipBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skip();
-            }
-        });
+        skipBtn.setOnClickListener(v -> skip());
 
-        //Call adapter
+        // Call adapter
         sliderAdapter = new OnBoardingSliderAdapter(this);
         viewPager.setAdapter(sliderAdapter);
 
-        //Dots
+        // Dots
         addDots(0);
         viewPager.addOnPageChangeListener(changeListener);
     }
@@ -79,7 +72,6 @@ public class OnBoardingActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("CURRENT_USER", currentUser);
         startActivity(intent);
-//        finishAffinity();
     }
 
     public void next() {
@@ -99,15 +91,16 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("•"));
+            dots[i].setText(HtmlCompat.fromHtml("•", HtmlCompat.FROM_HTML_MODE_LEGACY));
             dots[i].setTextSize(35);
-            dots[i].setTextColor(getResources().getColor(R.color.colorUnselected));
+            dots[i].setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorBorrowed));
 
             dotsLayout.addView(dots[i]);
         }
 
         if (dots.length > 0) {
-            dots[position].setTextColor(getResources().getColor(R.color.colorAccent));
+            dots[position].setTextColor(ContextCompat.getColor(getBaseContext(),
+                    R.color.colorBorrowed));
         }
 
     }
@@ -123,9 +116,9 @@ public class OnBoardingActivity extends AppCompatActivity {
             addDots(position);
             currentPos = position;
             if (currentPos == (slideCount - 1)) {
-                nextBtn.setText("Finish");
+                nextBtn.setText(R.string.finish);
             } else {
-                nextBtn.setText("Next");
+                nextBtn.setText(R.string.next);
             }
 
         }

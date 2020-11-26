@@ -52,16 +52,16 @@ public class LoginActivity extends AppCompatActivity {
         validUserPassword = false;
 
         // access the buttons
-        loginButton = (Button) findViewById(R.id.loginLoginBtn);
-        signUpButton = (Button) findViewById(R.id.loginSignUpBtn);
+        loginButton = findViewById(R.id.loginLoginBtn);
+        signUpButton = findViewById(R.id.loginSignUpBtn);
 
         // access the layout text fields
-        layoutUserEmail = (TextInputEditText) findViewById(R.id.loginEmailField);
-        layoutUserPassword = (TextInputEditText) findViewById(R.id.loginPasswordField);
+        layoutUserEmail = findViewById(R.id.loginEmailField);
+        layoutUserPassword = findViewById(R.id.loginPasswordField);
 
         // access the layout text containers
-        layoutUserEmailContainer = (TextInputLayout) findViewById(R.id.loginEmailContainer);
-        layoutUserPasswordContainer = (TextInputLayout) findViewById(R.id.loginPasswordContainer);
+        layoutUserEmailContainer = findViewById(R.id.loginEmailContainer);
+        layoutUserPasswordContainer = findViewById(R.id.loginPasswordContainer);
 
         // add a text field listener that validates the inputted text
         layoutUserEmail.addTextChangedListener(new TextWatcher() {
@@ -103,13 +103,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // go to SignUpActivity when signUpButton is clicked
         signUpButton.setOnClickListener(v -> {
+            signUpButton.setClickable(false);
             Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
             startActivity(intent);
+            signUpButton.setClickable(true);
         });
 
         // when loginButton is clicked
         loginButton.setOnClickListener(v -> {
-
+            loginButton.setClickable(false);
             // if all fields are valid
             if (validUserEmail && validUserPassword) {
 
@@ -155,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                     layoutUserPasswordContainer.setErrorEnabled(true);
                     layoutUserPassword.requestFocus();
                 }
+                loginButton.setClickable(true);
             }
         });
 
@@ -213,17 +216,21 @@ public class LoginActivity extends AppCompatActivity {
                                     intent.putExtra("CURRENT_USER", currentUser);
                                     startActivity(intent);
                                     finish();  // finish the current activity
+                                    loginButton.setClickable(true);
 
                                 } else {  // if the user does not exist in the database
+                                    loginButton.setClickable(true);
                                     Log.d("LOGIN_ACTIVITY", "No such document");
                                 }
                             } else {  // if getting the user document failed
+                                loginButton.setClickable(true);
                                 Log.d("LOGIN_ACTIVITY",
                                         "get failed with ", task1.getException());
                             }
                         });
 
                     } else {
+                        loginButton.setClickable(true);
                         // if sign in fails, display a message to the user
                         Log.w("LOGIN_ACTIVITY",
                                 "signInWithEmail:failure", task.getException());

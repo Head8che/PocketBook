@@ -3,10 +3,8 @@ package com.example.pocketbook.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
@@ -21,15 +19,12 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.adapter.ProfilePageAdapter;
-import com.example.pocketbook.adapter.ViewMyBookPagerAdapter;
-import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
@@ -41,7 +36,6 @@ import java.util.Objects;
  */
 public class ProfileExistingFragment extends Fragment {
     private User currentUser;
-    ListenerRegistration listenerRegistration;
     private Fragment profileFragment = this;
 
     public ProfileExistingFragment() {
@@ -102,19 +96,21 @@ public class ProfileExistingFragment extends Fragment {
 
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
 
-        String first_Name = currentUser.getFirstName();
-        String last_Name = currentUser.getLastName();
-        String user_Name = currentUser.getUsername();
-        String user_Email = currentUser.getEmail();
-        ImageView signOut = (ImageView) rootView.findViewById(R.id.profileExistingSignOut);
-        ImageView profilePicture = (ImageView) rootView.findViewById(R.id.profileExistingProfilePicture);
-        TextView ProfileName = (TextView) rootView.findViewById(R.id.profileExistingFullName);
-        TextView UserName = (TextView) rootView.findViewById(R.id.profileExistingUsername);
-        TextView Email = (TextView) rootView.findViewById(R.id.profileExistingEmail);
+        String firstName = currentUser.getFirstName();
+        String lastName = currentUser.getLastName();
+        String username = currentUser.getUsername();
+        String userEmail = currentUser.getEmail();
+
+        ImageView signOut = rootView.findViewById(R.id.profileExistingSignOut);
+        ImageView profilePicture = rootView.findViewById(R.id.profileExistingProfilePicture);
+        TextView ProfileName = rootView.findViewById(R.id.profileExistingFullName);
+        TextView UserName = rootView.findViewById(R.id.profileExistingUsername);
+        TextView Email = rootView.findViewById(R.id.profileExistingEmail);
         TextView layoutEditProfile = rootView.findViewById(R.id.profileExistingEditBtn);
-        ProfileName.setText(first_Name + ' ' + last_Name);
-        UserName.setText(user_Name);
-        Email.setText(user_Email);
+
+        ProfileName.setText(String.format("%s %s", firstName, lastName));
+        UserName.setText(username);
+        Email.setText(userEmail);
 
         signOut.setColorFilter(ContextCompat
                         .getColor(Objects.requireNonNull(getActivity()).getBaseContext(),
@@ -133,13 +129,12 @@ public class ProfileExistingFragment extends Fragment {
                 .circleCrop()
                 .into(profilePicture);
 
-        layoutEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileActivity.class);
-                intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
-            }
+        layoutEditProfile.setOnClickListener(v -> {
+            layoutEditProfile.setClickable(false);
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            intent.putExtra("currentUser", currentUser);
+            startActivity(intent);
+            layoutEditProfile.setClickable(true);
         });
 
         // access the layout materials

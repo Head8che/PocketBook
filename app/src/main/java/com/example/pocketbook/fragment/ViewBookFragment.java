@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,32 +19,20 @@ import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
-import com.example.pocketbook.model.Notification;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
-import com.example.pocketbook.notifications.APIService;
-import com.example.pocketbook.notifications.Client;
-import com.example.pocketbook.notifications.Data;
-import com.example.pocketbook.notifications.Response;
-import com.example.pocketbook.notifications.Sender;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
 
-import static com.example.pocketbook.notifications.NotificationHandler.sendNotificationBookRequested;
-import static com.example.pocketbook.util.FirebaseIntegrity.pushNewNotificationToFirebase;
+import static com.example.pocketbook.notifications
+        .NotificationHandler.sendNotificationBookRequested;
 
 
 /**
@@ -164,9 +151,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
             bookLocationField.setVisibility(View.VISIBLE);
             bookLocationField.setOnClickListener(v -> {
+                bookLocationField.setClickable(false);
                 if (getActivity() != null) {
-                    bookLocationField.setClickable(false);
-
                     FirebaseFirestore.getInstance()
                             .collection("exchange")
                             .whereEqualTo("relatedBook", book.getId())
@@ -200,9 +186,9 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                             }
 
                         }
-                        bookLocationField.setClickable(true);
                     });
                 }
+                bookLocationField.setClickable(true);
             });
         } else {
             bookLocationField.setVisibility(View.GONE);
@@ -212,11 +198,11 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
         backButton.setOnClickListener(v -> {
             if (getActivity() != null) {
+                backButton.setClickable(false);
                 getActivity().onBackPressed();
+                backButton.setClickable(true);
             }
         });
-
-        // TODO: clicking on View Pickup MeetingDetails should show pickup location page
 
         // set the views' values to the values of the book being viewed
         bookTitleField.setText(book.getTitle());
@@ -246,28 +232,21 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 .circleCrop()
                 .into(userProfilePicture);
 
-        View.OnClickListener profileClickListener = view1 -> {
-            FirebaseFirestore.getInstance().collection("users")
-                    .document(book.getOwner())
-                    .get().addOnCompleteListener(task -> {
-                DocumentSnapshot document = task.getResult();
-                if ((document != null) && (document.exists())) {
-                    User bookOwner = FirebaseIntegrity.getUserFromFirestore(document);
-                    ViewProfileFragment nextFrag = ViewProfileFragment.newInstance(currentUser,
-                            bookOwner);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("VPF_CURRENT_USER", currentUser);
-                    bundle.putSerializable("VPF_PROFILE_USER", bookOwner);
-                    nextFrag.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(getActivity().findViewById(R.id.container).getId(), nextFrag)
-                            .addToBackStack(null).commit();
-                }
-            });
-        };
+        userProfilePicture.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                userProfilePicture.setClickable(false);
+                goToProfile();
+                userProfilePicture.setClickable(true);
+            }
+        });
 
-        userProfilePicture.setOnClickListener(profileClickListener);
-        usernameField.setOnClickListener(profileClickListener);
+        usernameField.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                usernameField.setClickable(false);
+                goToProfile();
+                usernameField.setClickable(true);
+            }
+        });
 
         usernameField.setText(bookOwner.getUsername());
 
@@ -299,6 +278,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
                 requestButton.setOnClickListener(view1 -> {
 
+                    requestButton.setClickable(false);
+
                     // display a message confirming that the book has been requested
                     new AlertDialog.Builder(getContext())
                             .setTitle("Request canceled!")
@@ -306,17 +287,16 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                     + book.getTitle() + "!")
                             .show();
 
-                    requestButton.setClickable(false);
-
                     FirebaseFirestore.getInstance()
                             .collection("catalogue")
                             .document(book.getId())
                             .collection("requests")
                             .get()
-                            .addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
+                            .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     // get 1st request; there should only be one request
-                                    String requester = task.getResult().getDocuments().get(0).getId();
+                                    String requester
+                                            = task.getResult().getDocuments().get(0).getId();
 
                                     FirebaseFirestore.getInstance()
                                             .collection("exchange")
@@ -326,9 +306,12 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                             .get().addOnCompleteListener(task1 -> {
                                                 if (!(task1.isSuccessful())) {
                                                     Log.e("VIEW_BOOK_EXCHANGE",
-                                                            "Error getting exchange document!");
+                                                            "Error getting " +
+                                                                    "exchange document!");
+
                                                 } else {
-                                                    List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                                    List<DocumentSnapshot> documents
+                                                            = task1.getResult().getDocuments();
                                                     DocumentSnapshot document = documents.get(0);
 
                                                     FirebaseFirestore.getInstance()
@@ -336,12 +319,15 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                                                             .document(document.getId())
                                                             .delete();
 
-                                                    FirebaseIntegrity.deleteBookRequest(book.getId(),
+                                                    FirebaseIntegrity
+                                                            .deleteBookRequest(book.getId(),
                                                             requester);
 
                                                 }
                                                 requestButton.setClickable(true);
                                     });
+                                } else {
+                                    requestButton.setClickable(true);
                                 }
                             });
 
@@ -370,6 +356,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
 
                     requestButton.setOnClickListener(view1 -> {
 
+                        requestButton.setClickable(false);
+
                         // display a message confirming that the book has been requested
                         new AlertDialog.Builder(getContext())
                                 .setTitle("Request canceled!")
@@ -383,6 +371,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                         if (getActivity() != null) {
                             getActivity().onBackPressed();
                         }
+
+                        requestButton.setClickable(true);
                     });
                 }
 
@@ -401,6 +391,8 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
         if ((bookStatus.equals("AVAILABLE"))
                 || (bookStatus.equals("REQUESTED") && !currentUserRequested)) {
             requestButton.setOnClickListener(view1 -> {
+
+                requestButton.setClickable(false);
 
                 Request request = new Request(currentUser.getEmail(),
                         bookOwner.getEmail(), book, null);
@@ -422,9 +414,34 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 if (getActivity() != null) {
                     getActivity().onBackPressed();
                 }
+
+                requestButton.setClickable(true);
             });
         }
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    public void goToProfile() {
+        if (getActivity() != null) {
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(book.getOwner())
+                    .get().addOnCompleteListener(task -> {
+                DocumentSnapshot document = task.getResult();
+                if ((document != null) && (document.exists())) {
+                    User bookOwner = FirebaseIntegrity.getUserFromFirestore(document);
+                    ViewProfileFragment nextFrag = ViewProfileFragment.newInstance(currentUser,
+                            bookOwner);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("VPF_CURRENT_USER", currentUser);
+                    bundle.putSerializable("VPF_PROFILE_USER", bookOwner);
+                    nextFrag.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(getActivity()
+                                    .findViewById(R.id.container).getId(), nextFrag)
+                            .addToBackStack(null).commit();
+                }
+            });
+        }
     }
 
     @Override

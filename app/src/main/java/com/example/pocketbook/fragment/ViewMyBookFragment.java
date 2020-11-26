@@ -31,7 +31,6 @@ import java.util.Objects;
 public class ViewMyBookFragment extends Fragment {
 
     private Book book;
-    private User currentUser;
     ListenerRegistration listenerRegistration;
 
     public ViewMyBookFragment() {
@@ -57,7 +56,6 @@ public class ViewMyBookFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.currentUser = (User) getArguments().getSerializable("VMBF_USER");
             this.book = (Book) getArguments().getSerializable("VMBF_BOOK");
         }
 
@@ -102,16 +100,26 @@ public class ViewMyBookFragment extends Fragment {
         // TabItem requestsTab = rootView.findViewById(R.id.viewMyBookFragRequestsTab);
         ViewPager viewPager = rootView.findViewById(R.id.viewMyBookFragViewPager);
         // Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.viewMyBookFragToolbar);
-        ImageView backButton = (ImageView) rootView.findViewById(R.id.viewMyBookFragBackBtn);
-        TextView deleteButton = (TextView) rootView.findViewById(R.id.viewMyBookFragDeleteBtn);
+        ImageView backButton = rootView.findViewById(R.id.viewMyBookFragBackBtn);
+        TextView deleteButton = rootView.findViewById(R.id.viewMyBookFragDeleteBtn);
 
         // go back when backButton is clicked
-        backButton.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
+        backButton.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                backButton.setClickable(false);
+                getActivity().onBackPressed();
+                backButton.setClickable(true);
+            }
+        });
 
         // show delete dialog when deleteButton is clicked
         deleteButton.setOnClickListener(v -> {
-            AlertDialog diaBox = AskOption();
-            diaBox.show();
+            if (getActivity() != null) {
+                deleteButton.setClickable(false);
+                AlertDialog diaBox = AskOption();
+                diaBox.show();
+                deleteButton.setClickable(true);
+            }
         });
 
         // set up the adapter

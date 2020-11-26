@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.GlideApp;
@@ -27,14 +26,12 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,14 +44,7 @@ import java.util.Objects;
  */
 public class ProfileNewFragment extends Fragment {
     private static final int NUM_COLUMNS = 2;
-    private static final int LIMIT = 20;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
-    private TextView profileName, userName;
-    private TextView editProfile;
-    private static final String USERS = "users";
     private User currentUser;
     private Fragment profileFragment = this;
 
@@ -65,8 +55,8 @@ public class ProfileNewFragment extends Fragment {
 
     /**
      * Profile fragment instance that bundles the user information to be accessible/displayed
-     * @param user
-     * @return
+     * @param user current user
+     * @return ProfileNewFragment
      */
     public static ProfileNewFragment newInstance(User user) {
         ProfileNewFragment profileNewFragment = new ProfileNewFragment();
@@ -78,7 +68,7 @@ public class ProfileNewFragment extends Fragment {
 
     /**
      * Obtains and create the information/data required for this screen.
-     * @param savedInstanceState
+     * @param savedInstanceState saved instance state
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,15 +80,11 @@ public class ProfileNewFragment extends Fragment {
         }
 
         // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         // Retrieving books that do not belong to user
-        mQuery = mFirestore.collection("catalogue")
-                .whereNotEqualTo("owner",currentUser.getEmail());
-
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(4)
-                .setPageSize(4).build();
+        Query mQuery = mFirestore.collection("catalogue")
+                .whereNotEqualTo("owner", currentUser.getEmail());
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -177,41 +163,45 @@ public class ProfileNewFragment extends Fragment {
     }
 
     /**
-     * Inflates the layout/container in the respectful fields and fills the fields that require the user information
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     * Inflates the layout/container in the respectful fields
+     * and fills the fields that require the user information
+     * @param inflater layout inflater
+     * @param container ViewGroup container
+     * @param savedInstanceState saved instance state
+     * @return inflated layout
      */
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (container != null) {
             container.removeAllViews();
         }
-        View v = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
-        mBooksRecycler = v.findViewById(R.id.profileNewRecyclerBooks);
+        View rootView = inflater.inflate(R.layout.fragment_profile_new_user, container, false);
+        RecyclerView mBooksRecycler = rootView.findViewById(R.id.profileNewRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(currentUser);
-        mBooksRecycler.setLayoutManager(new GridLayoutManager(v.getContext(), NUM_COLUMNS));
+        mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), NUM_COLUMNS));
         mAdapter = new BookAdapter(options, currentUser, getActivity());
         mBooksRecycler.setAdapter(mAdapter);
 
 
-        String first_Name = currentUser.getFirstName();
-        String last_Name = currentUser.getLastName();
-        String user_Name = currentUser.getUsername();
-        String user_Email = currentUser.getEmail();
+        String firstName = currentUser.getFirstName();
+        String lastName = currentUser.getLastName();
+        String username = currentUser.getUsername();
+        String userEmail = currentUser.getEmail();
 
         // TODO: obtain user_photo from firebase
-        ImageView signOut = (ImageView) v.findViewById(R.id.profileNewSignOut);
-        ImageView profilePicture = (ImageView) v.findViewById(R.id.profileNewProfilePicture);
-        TextView ProfileName = (TextView) v.findViewById(R.id.profileNewFullName);
-        TextView Email = (TextView) v.findViewById(R.id.profileNewEmail);
-        TextView UserName = (TextView) v.findViewById(R.id.profileNewUsername);
-        ProfileName.setText(first_Name + ' ' + last_Name);
-        UserName.setText(user_Name);
-        Email.setText(user_Email);
+        ImageView signOut = rootView.findViewById(R.id.profileNewSignOut);
+        ImageView profilePicture = rootView.findViewById(R.id.profileNewProfilePicture);
+        TextView ProfileName = rootView.findViewById(R.id.profileNewFullName);
+        TextView Email = rootView.findViewById(R.id.profileNewEmail);
+        TextView UserName = rootView.findViewById(R.id.profileNewUsername);
+        TextView layoutEditProfile = rootView.findViewById(R.id.profileNewEditBtn);
+
+        ProfileName.setText(String.format("%s %s", firstName, lastName));
+        UserName.setText(username);
+        Email.setText(userEmail);
 
         int rowCount = (int) Math.ceil((double) itemCount / NUM_COLUMNS);
         int recyclerSizeInDp = (rowCount * (295 + 40));  // rows * (bookHeight + padding)
@@ -232,10 +222,12 @@ public class ProfileNewFragment extends Fragment {
                 android.graphics.PorterDuff.Mode.SRC_IN);
 
         signOut.setOnClickListener(v1 -> {
+            signOut.setClickable(false);
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
             FirebaseAuth.getInstance().signOut();
             Objects.requireNonNull(getActivity()).finishAffinity();
+            signOut.setClickable(true);
         });
 
         GlideApp.with(Objects.requireNonNull(getContext()))
@@ -243,17 +235,15 @@ public class ProfileNewFragment extends Fragment {
                 .circleCrop()
                 .into(profilePicture);
 
-        editProfile = v.findViewById(R.id.profileNewEditBtn);
-
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileActivity.class);
-                intent.putExtra("currentUser", currentUser);
-                startActivity(intent);
-            }
+        layoutEditProfile.setOnClickListener(v -> {
+            layoutEditProfile.setClickable(false);
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            intent.putExtra("currentUser", currentUser);
+            startActivity(intent);
+            layoutEditProfile.setClickable(true);
         });
-        return v;
+
+        return rootView;
     }
 
     @Override

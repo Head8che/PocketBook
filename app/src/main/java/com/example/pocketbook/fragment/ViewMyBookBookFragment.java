@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -22,15 +21,9 @@ import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
@@ -68,7 +61,8 @@ public class ViewMyBookBookFragment extends Fragment {
             return;
         }
 
-        listenerRegistration = FirebaseFirestore.getInstance().collection("catalogue")
+        listenerRegistration = FirebaseFirestore.getInstance()
+                .collection("catalogue")
                 .document(book.getId()).addSnapshotListener((snapshot, e) -> {
                     if (e != null) {
                         Log.w("VMBBF_LISTENER", "Listen failed.", e);
@@ -86,7 +80,8 @@ public class ViewMyBookBookFragment extends Fragment {
                     } else {
                         if ( getActivity() == null) {
                             getParentFragmentManager().beginTransaction()
-                                    .detach(ViewMyBookBookFragment.this).commitAllowingStateLoss();
+                                    .detach(ViewMyBookBookFragment.this)
+                                    .commitAllowingStateLoss();
                         } else {
                             getActivity().getFragmentManager().popBackStack();
                         }
@@ -97,7 +92,7 @@ public class ViewMyBookBookFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // clear the container before starting the fragment
@@ -106,7 +101,8 @@ public class ViewMyBookBookFragment extends Fragment {
         }
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_view_my_book_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_my_book_book,
+                container, false);
 
         String bookTitle = book.getTitle();
         String bookAuthor = book.getAuthor();
@@ -116,14 +112,14 @@ public class ViewMyBookBookFragment extends Fragment {
         String bookCondition = book.getCondition();
         String bookComment = book.getComment();
 
-        TextView layoutBookTitle = (TextView) rootView.findViewById(R.id.viewMyBookBookTitleTextView);
-        TextView bookLocationField = (TextView) rootView.findViewById(R.id.viewMyBookViewPickupLocation);
-        TextView layoutBookAuthor = (TextView) rootView.findViewById(R.id.viewMyBookAuthorTextView);
-        TextView layoutBookISBN = (TextView) rootView.findViewById(R.id.viewMyBookISBNTextView);
-        ImageView layoutBookCover = (ImageView) rootView.findViewById(R.id.viewMyBookBookCoverImageView);
-        ImageView layoutBookStatus = (ImageView) rootView.findViewById(R.id.viewBookBookStatusImageView);
-        TextView layoutBookCondition = (TextView) rootView.findViewById(R.id.viewMyBookConditionTextView);
-        TextView layoutBookComment = (TextView) rootView.findViewById(R.id.viewMyBookCommentTextView);
+        TextView layoutBookTitle = rootView.findViewById(R.id.viewMyBookBookTitleTextView);
+        TextView bookLocationField = rootView.findViewById(R.id.viewMyBookViewPickupLocation);
+        TextView layoutBookAuthor = rootView.findViewById(R.id.viewMyBookAuthorTextView);
+        TextView layoutBookISBN = rootView.findViewById(R.id.viewMyBookISBNTextView);
+        ImageView layoutBookCover = rootView.findViewById(R.id.viewMyBookBookCoverImageView);
+        ImageView layoutBookStatus = rootView.findViewById(R.id.viewBookBookStatusImageView);
+        TextView layoutBookCondition = rootView.findViewById(R.id.viewMyBookConditionTextView);
+        TextView layoutBookComment = rootView.findViewById(R.id.viewMyBookCommentTextView);
 
         if ((book.getStatus().equals("ACCEPTED") || book.getStatus().equals("BORROWED"))) {
 
@@ -133,18 +129,19 @@ public class ViewMyBookBookFragment extends Fragment {
 
             bookLocationField.setVisibility(View.VISIBLE);
             bookLocationField.setOnClickListener(v -> {
+                bookLocationField.setClickable(false);
                 if (getActivity() != null) {
-                    bookLocationField.setClickable(false);
 
                     FirebaseFirestore.getInstance()
                             .collection("catalogue")
                             .document(book.getId())
                             .collection("requests")
                             .get()
-                            .addOnCompleteListener((OnCompleteListener<QuerySnapshot>) task -> {
+                            .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     // get 1st request; there should only be one request
-                                    String requester = task.getResult().getDocuments().get(0).getId();
+                                    String requester
+                                            = task.getResult().getDocuments().get(0).getId();
 
                                     FirebaseFirestore.getInstance()
                                             .collection("exchange")
@@ -154,9 +151,11 @@ public class ViewMyBookBookFragment extends Fragment {
                                             .get().addOnCompleteListener(task1 -> {
                                                 if (!(task1.isSuccessful())) {
                                                     Log.e("VIEW_BOOK_EXCHANGE",
-                                                            "Error getting exchange document!");
+                                                            "Error getting " +
+                                                                    "exchange document!");
                                                 } else {
-                                                    List<DocumentSnapshot> documents = task1.getResult().getDocuments();
+                                                    List<DocumentSnapshot> documents
+                                                            = task1.getResult().getDocuments();
                                                     DocumentSnapshot document = documents.get(0);
 
                                                     Exchange exchange = FirebaseIntegrity
@@ -164,16 +163,19 @@ public class ViewMyBookBookFragment extends Fragment {
 
                                                     if (exchange != null) {
                                                         ViewLocationFragment nextFrag
-                                                                = ViewLocationFragment.newInstance(exchange);
+                                                                = ViewLocationFragment
+                                                                .newInstance(exchange);
 
                                                         Bundle bundle = new Bundle();
-                                                        bundle.putSerializable("VBF_EXCHANGE", exchange);
+                                                        bundle.putSerializable("VBF_EXCHANGE",
+                                                                exchange);
                                                         nextFrag.setArguments(bundle);
 
                                                         getActivity().getSupportFragmentManager()
                                                                 .beginTransaction()
                                                                 .replace(getActivity()
-                                                                        .findViewById(R.id.container)
+                                                                        .findViewById(
+                                                                                R.id.container)
                                                                         .getId(), nextFrag)
                                                                 .addToBackStack(null).commit();
                                                     }
@@ -181,6 +183,8 @@ public class ViewMyBookBookFragment extends Fragment {
                                                 }
                                                 bookLocationField.setClickable(true);
                                     });
+                                } else {
+                                    bookLocationField.setClickable(true);
                                 }
                             });
                 }
@@ -200,22 +204,26 @@ public class ViewMyBookBookFragment extends Fragment {
         switch(bookStatus.toUpperCase()) {
             case "REQUESTED":
                 layoutBookStatus.setImageResource(R.drawable.ic_requested);
-                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorRequested),
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(),
+                        R.color.colorRequested),
                         android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
             case "ACCEPTED":
                 layoutBookStatus.setImageResource(R.drawable.ic_accepted);
-                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAccepted),
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(),
+                        R.color.colorAccepted),
                         android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
             case "BORROWED":
                 layoutBookStatus.setImageResource(R.drawable.ic_borrowed);
-                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBorrowed),
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(),
+                        R.color.colorBorrowed),
                         android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
             default:
                 layoutBookStatus.setImageResource(R.drawable.ic_available);
-                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorAvailable),
+                layoutBookStatus.setColorFilter(ContextCompat.getColor(getContext(),
+                        R.color.colorAvailable),
                         android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
@@ -233,15 +241,14 @@ public class ViewMyBookBookFragment extends Fragment {
             layoutBookComment.setVisibility(View.GONE);
         }
 
-        Button editButton = (Button) rootView.findViewById(R.id.viewMyBookEditBtn);
+        Button editButton = rootView.findViewById(R.id.viewMyBookEditBtn);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditBookActivity.class);
-                intent.putExtra("VMBBF_BOOK", book);
-                startActivity(intent);
-            }
+        editButton.setOnClickListener(v -> {
+            editButton.setClickable(false);
+            Intent intent = new Intent(getContext(), EditBookActivity.class);
+            intent.putExtra("VMBBF_BOOK", book);
+            startActivity(intent);
+            editButton.setClickable(true);
         });
 
         return rootView;

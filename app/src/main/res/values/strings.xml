@@ -20,6 +20,8 @@
     <string name="accepted_book_text">Accepted: %1$s</string>
     <string name="requested_book_text">Requester: %1$s</string>
     <string name="owned_book_text">Owner: %1$s</string>
+    <string name="finish">Finish</string>
+    <string name="next">Next</string>
     <string name="splash_screen_logo_text">POCKETBOOK</string>
     <string name="this_is_my_book_title">This is My book Title</string>
     <string name="lengthier_author_name">Lengthier Author Name</string>

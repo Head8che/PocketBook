@@ -83,28 +83,27 @@ public class AddBookActivity extends AppCompatActivity {
         validISBN = false;
 
         // Toolbar toolbar = (Toolbar) findViewById(R.id.addBookToolbar);
-        ImageView cancelButton = (ImageView) findViewById(R.id.addBookCancelBtn);
-        TextView saveButton = (TextView) findViewById(R.id.addBookSaveBtn);
-        TextView changePhotoButton = (TextView) findViewById(R.id.addBookChangePhotoBtn);
+        ImageView cancelButton = findViewById(R.id.addBookCancelBtn);
+        TextView saveButton = findViewById(R.id.addBookSaveBtn);
+        TextView changePhotoButton = findViewById(R.id.addBookChangePhotoBtn);
 
         // access the layout text fields
-        layoutBookTitle = (TextInputEditText) findViewById(R.id.addBookTitleField);
-        layoutBookAuthor = (TextInputEditText) findViewById(R.id.addBookAuthorField);
-        layoutBookISBN = (TextInputEditText) findViewById(R.id.addBookISBNField);
-        layoutBookCover = (ImageView) findViewById(R.id.addBookBookCoverField);
-        layoutBookCondition = (TextInputEditText) findViewById(R.id.addBookConditionField);
-        layoutBookComment = (TextInputEditText) findViewById(R.id.addBookCommentField);
+        layoutBookTitle = findViewById(R.id.addBookTitleField);
+        layoutBookAuthor = findViewById(R.id.addBookAuthorField);
+        layoutBookISBN = findViewById(R.id.addBookISBNField);
+        layoutBookCover = findViewById(R.id.addBookBookCoverField);
+        layoutBookCondition = findViewById(R.id.addBookConditionField);
+        layoutBookComment = findViewById(R.id.addBookCommentField);
 
         // set the initial book condition
         layoutBookCondition.setText(R.string.fairCondition);
 
         // access the layout text containers
-        layoutBookTitleContainer = (TextInputLayout) findViewById(R.id.addBookTitleContainer);
-        layoutBookAuthorContainer = (TextInputLayout) findViewById(R.id.addBookAuthorContainer);
-        layoutBookISBNContainer = (TextInputLayout) findViewById(R.id.addBookISBNContainer);
-        layoutBookConditionContainer = (TextInputLayout)
-                findViewById(R.id.addBookConditionContainer);
-        layoutBookCommentContainer = (TextInputLayout) findViewById(R.id.addBookCommentContainer);
+        layoutBookTitleContainer = findViewById(R.id.addBookTitleContainer);
+        layoutBookAuthorContainer = findViewById(R.id.addBookAuthorContainer);
+        layoutBookISBNContainer = findViewById(R.id.addBookISBNContainer);
+        layoutBookConditionContainer = findViewById(R.id.addBookConditionContainer);
+        layoutBookCommentContainer = findViewById(R.id.addBookCommentContainer);
 
         // add a text field listener that validates the inputted text
         layoutBookTitle.addTextChangedListener(new TextWatcher() {
@@ -172,11 +171,18 @@ public class AddBookActivity extends AppCompatActivity {
         });
 
         // showSpinnerDialog when layoutBookCondition is clicked
-        layoutBookCondition.setOnClickListener(v -> showSpinnerDialog());
+        layoutBookCondition.setOnClickListener(v -> {
+            layoutBookCondition.setClickable(false);
+            showSpinnerDialog();
+            layoutBookCondition.setClickable(true);
+        });
 
         // showImageSelectorDialog when changePhotoButton is clicked
-        changePhotoButton.setOnClickListener(v -> (photoHandler)
-                .showImageSelectorDialog(this, defaultBookCover, layoutBookCover));
+        changePhotoButton.setOnClickListener(v -> {
+            changePhotoButton.setClickable(false);
+            (photoHandler).showImageSelectorDialog(this, defaultBookCover, layoutBookCover);
+            changePhotoButton.setClickable(true);
+        });
 
         // load default book cover into ImageLayout
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
@@ -184,10 +190,15 @@ public class AddBookActivity extends AppCompatActivity {
                 .into(layoutBookCover);
 
         // go back when cancelButton is clicked
-        cancelButton.setOnClickListener(v -> onBackPressed());
+        cancelButton.setOnClickListener(v -> {
+            cancelButton.setClickable(false);
+            onBackPressed();
+            cancelButton.setClickable(true);
+        });
 
         // when saveButton is clicked
         saveButton.setOnClickListener(v -> {
+            saveButton.setClickable(false);
             // if all fields are valid
             if (validTitle && validAuthor && validISBN) {
                 if (!noChanges()) {  // if the user has entered some text or chosen a photo
@@ -258,6 +269,7 @@ public class AddBookActivity extends AppCompatActivity {
                     layoutBookISBN.requestFocus();
                 }
             }
+            saveButton.setClickable(true);
         });
     }
 
@@ -322,26 +334,34 @@ public class AddBookActivity extends AppCompatActivity {
 
         // set the condition layout text to great when greatOption is clicked
         greatOption.setOnClickListener(v -> {
+            greatOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.greatCondition);
+            greatOption.setClickable(true);
         });
 
         // set the condition layout text to good when goodOption is clicked
         goodOption.setOnClickListener(v -> {
+            goodOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.goodCondition);
+            goodOption.setClickable(true);
         });
 
         // set the condition layout text to fair when fairOption is clicked
         fairOption.setOnClickListener(v -> {
+            fairOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.fairCondition);
+            fairOption.setClickable(true);
         });
 
         // set the condition layout text to acceptable when acceptableOption is clicked
         acceptableOption.setOnClickListener(v -> {
+            acceptableOption.setClickable(false);
             alertDialog.dismiss();
             layoutBookCondition.setText(R.string.acceptableCondition);
+            acceptableOption.setClickable(true);
         });
     }
 
@@ -363,13 +383,19 @@ public class AddBookActivity extends AppCompatActivity {
         alertDialog.show();
 
         // stay in this activity if the user opts to keep editing
-        keepEditingBtn.setOnClickListener(v -> alertDialog.dismiss());
+        keepEditingBtn.setOnClickListener(v -> {
+            keepEditingBtn.setClickable(false);
+            alertDialog.dismiss();
+            keepEditingBtn.setClickable(true);
+        });
 
         // finish this activity if the user opts to discard their changes
         discardBtn.setOnClickListener(v -> {
+            discardBtn.setClickable(false);
             alertDialog.dismiss();
             SystemClock.sleep(300);
             finish();
+            discardBtn.setClickable(true);
         });
     }
 

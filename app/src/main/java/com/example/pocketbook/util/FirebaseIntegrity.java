@@ -1036,6 +1036,31 @@ public class FirebaseIntegrity {
         return notifications;
     }
 
+    public static void deleteUserNotificationsFromFirebase(String userEmail) {
+
+        // get an instance of the document and delete it
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userEmail)
+                .collection("notifications")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            FirebaseFirestore.getInstance()
+                                    .collection("users")
+                                    .document(userEmail)
+                                    .collection("notifications")
+                                    .document(document.getId())
+                                    .delete();
+                        }
+                    } else {
+                        Log.d("DELETE_ALL_NOTI_FAILED",
+                                "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
     public static void deleteNotificationFromFirebase(ArrayList<String> notifications,
                                                       int position, String userEmail) {
 

@@ -1,16 +1,10 @@
 package com.example.pocketbook.fragment;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.LinearBookAdapter;
-import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.example.pocketbook.util.KeyboardHandler;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,12 +26,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class SearchMainFragment extends Fragment {
 
-    private static final String TAG = "SearchMainFragment";
     private static final int LIMIT = 20;
 
     private FirebaseFirestore mFirestore;
@@ -48,31 +36,20 @@ public class SearchMainFragment extends Fragment {
     private LinearBookAdapter mAdapter;
 
     private User currentUser;
-
-    private DocumentSnapshot lastVisible;
-    private boolean isScrolling = false;
-    private boolean isLastItemReached = false;
-
-    private SearchView searchView;
-
-
-    private RecyclerView requestsRecycler;
-    private RequestAdapter requestAdapter;
-    private Book book;
     private int pos;
 
     FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
 
-//    public SearchMainFragment() {
-//        // Required empty public constructor
-//    }
+    public SearchMainFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Displays list of books given a search query
-     * @param user
-     * @return
+     * @param user current user
+     * @return SearchMainFragment
      */
     public static SearchMainFragment newInstance(User user, int position) {
         SearchMainFragment searchMainFragment = new SearchMainFragment();
@@ -150,10 +127,8 @@ public class SearchMainFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_search_main,
-                container, false);
 
-        return rootView;
+        return inflater.inflate(R.layout.fragment_search_main, container, false);
     }
 
     @Override

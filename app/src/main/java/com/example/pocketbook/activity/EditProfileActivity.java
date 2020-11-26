@@ -210,8 +210,11 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         // showImageSelectorDialog when changePhotoButton is clicked
-        changePhotoButton.setOnClickListener(v -> (photoHandler)
-                .showImageSelectorDialog(this, defaultPhoto, layoutProfilePicture));
+        changePhotoButton.setOnClickListener(v -> {
+            changePhotoButton.setClickable(false);
+            (photoHandler).showImageSelectorDialog(this, defaultPhoto, layoutProfilePicture);
+            changePhotoButton.setClickable(true);
+        });
 
         // load profile picture into ImageLayout
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
@@ -219,11 +222,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 .into(layoutProfilePicture);
 
         // go back when cancelButton is clicked
-        cancelButton.setOnClickListener(v -> onBackPressed());
+        cancelButton.setOnClickListener(v -> {
+            cancelButton.setClickable(false);
+            onBackPressed();
+            cancelButton.setClickable(true);
+        });
 
         // when saveButton is clicked
         saveButton.setOnClickListener(v -> {
-
+            saveButton.setClickable(false);
             // if all fields are valid
             if (validFirstName && validLastName && validUsername && validPhoneNumber) {
                 if (!noChanges()) {  // if the user has changed some text or changed their photo
@@ -289,6 +296,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     layoutUserUsername.requestFocus();
                 }
             }
+            saveButton.setClickable(true);
         });
     }
 
@@ -322,13 +330,19 @@ public class EditProfileActivity extends AppCompatActivity {
         alertDialog.show();
 
         // stay in this activity if the user opts to keep editing
-        keepEditingBtn.setOnClickListener(v -> alertDialog.dismiss());
+        keepEditingBtn.setOnClickListener(v -> {
+            keepEditingBtn.setClickable(false);
+            alertDialog.dismiss();
+            keepEditingBtn.setClickable(true);
+        });
 
         // finish this activity if the user opts to discard their changes
         discardBtn.setOnClickListener(v -> {
+            discardBtn.setClickable(false);
             alertDialog.dismiss();
             SystemClock.sleep(300);
             finish();
+            discardBtn.setClickable(true);
         });
     }
 
@@ -365,4 +379,3 @@ public class EditProfileActivity extends AppCompatActivity {
                 requestCode, resultCode, data);
     }
 }
-

@@ -1,7 +1,6 @@
 package com.example.pocketbook.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,26 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketbook.GlideApp;
 import com.example.pocketbook.R;
-import com.example.pocketbook.activity.EditProfileActivity;
 import com.example.pocketbook.adapter.BookAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,10 +38,6 @@ import java.util.Objects;
 public class ViewProfileFragment extends Fragment {
 
     private static final int numColumns = 2;
-    private static final int LIMIT = 20;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private RecyclerView mBooksRecycler;
     private BookAdapter mAdapter;
     private User profileUser;
     private User currentUser;
@@ -64,9 +54,9 @@ public class ViewProfileFragment extends Fragment {
 
     /**
      * View Profile fragment instance that bundles the user information to be accessible/displayed
-     * @param profileUser
-     * @param currentUser
-     * @return
+     * @param profileUser the user of the profile being view
+     * @param currentUser the signed in user
+     * @return ViewProfileFragment
      */
     public static ViewProfileFragment newInstance(User currentUser, User profileUser) {
         ViewProfileFragment viewProfileFragment = new ViewProfileFragment();
@@ -79,7 +69,7 @@ public class ViewProfileFragment extends Fragment {
 
     /**
      * Obtains and create the information/data required for this screen.
-     * @param savedInstanceState
+     * @param savedInstanceState the state of a saved instance
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,15 +88,11 @@ public class ViewProfileFragment extends Fragment {
         Log.e("VPF", currentUser + " " + currentUser.getEmail());
 
         // Initialize Firestore
-        mFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
         // Retrieving books that do not belong to user
-        mQuery = mFirestore.collection("catalogue")
-                .whereNotEqualTo("owner",currentUser.getEmail());
-
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(4)
-                .setPageSize(4).build();
+        Query mQuery = mFirestore.collection("catalogue")
+                .whereEqualTo("owner", profileUser.getEmail());
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -197,8 +183,8 @@ public class ViewProfileFragment extends Fragment {
         }
         View rootView = inflater.inflate(R.layout.fragment_view_profile,
                 container, false);
-        ImageView backButton = (ImageView) rootView.findViewById(R.id.viewUserProfileBackBtn);
-        mBooksRecycler = rootView.findViewById(R.id.viewProfileRecyclerBooks);
+        ImageView backButton = rootView.findViewById(R.id.viewUserProfileBackBtn);
+        RecyclerView mBooksRecycler = rootView.findViewById(R.id.viewProfileRecyclerBooks);
         StorageReference userProfilePicture = FirebaseIntegrity.getUserProfilePicture(profileUser);
         mBooksRecycler.setLayoutManager(new GridLayoutManager(rootView.getContext(), numColumns));
         mAdapter = new BookAdapter(options, currentUser, getActivity());
@@ -227,12 +213,7 @@ public class ViewProfileFragment extends Fragment {
                 .circleCrop()
                 .into(layoutProfilePicture);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backButton.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
 
 
         return rootView;

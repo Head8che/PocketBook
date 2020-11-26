@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import java.util.Objects;
 
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -330,8 +331,8 @@ public class EditProfileActivityTest {
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
 
-        Espresso.onView(ViewMatchers.withId(R.id.profileNewScrollView))
-                .perform(ViewActions.swipeDown());
+        Espresso.onView(withText("newMockUsername"))
+                .perform(ViewActions.scrollTo());
 
         // Asserts that Profile Fragment is updated with the new username
         assertTrue(solo.searchText("newMockUsername"));

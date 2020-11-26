@@ -2,7 +2,6 @@ package com.example.pocketbook.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -87,27 +86,26 @@ public class SignUpActivity extends AppCompatActivity {
         validUserPassword = false;
 
         // Toolbar toolbar = (Toolbar) findViewById(R.id.signUpToolbar);
-        ImageView backButton = (ImageView) findViewById(R.id.signUpBackBtn);
-        signUpButton = (TextView) findViewById(R.id.signUpSignUpBtn);
-        TextView changePhotoButton = (TextView) findViewById(R.id.signUpChangePhotoBtn);
+        ImageView backButton = findViewById(R.id.signUpBackBtn);
+        signUpButton = findViewById(R.id.signUpSignUpBtn);
+        TextView changePhotoButton = findViewById(R.id.signUpChangePhotoBtn);
 
         // access the layout text fields
-        layoutUserFirstName = (TextInputEditText) findViewById(R.id.signUpFirstNameField);
-        layoutUserLastName = (TextInputEditText) findViewById(R.id.signUpLastNameField);
-        layoutUserUsername = (TextInputEditText) findViewById(R.id.signUpUsernameField);
-        layoutUserPhoneNumber = (TextInputEditText) findViewById(R.id.signUpPhoneNumberField);
-        layoutUserEmail = (TextInputEditText) findViewById(R.id.signUpEmailField);
-        layoutUserPassword = (TextInputEditText) findViewById(R.id.signUpPasswordField);
-        layoutProfilePicture = (ImageView) findViewById(R.id.signUpProfilePictureField);
+        layoutUserFirstName = findViewById(R.id.signUpFirstNameField);
+        layoutUserLastName = findViewById(R.id.signUpLastNameField);
+        layoutUserUsername = findViewById(R.id.signUpUsernameField);
+        layoutUserPhoneNumber = findViewById(R.id.signUpPhoneNumberField);
+        layoutUserEmail = findViewById(R.id.signUpEmailField);
+        layoutUserPassword = findViewById(R.id.signUpPasswordField);
+        layoutProfilePicture = findViewById(R.id.signUpProfilePictureField);
 
         // access the layout text containers
-        layoutUserFirstNameContainer = (TextInputLayout)
-                findViewById(R.id.signUpFirstNameContainer);
-        layoutUserLastNameContainer = (TextInputLayout) findViewById(R.id.signUpLastNameContainer);
-        layoutUserUsernameContainer = (TextInputLayout) findViewById(R.id.signUpUsernameContainer);
-        layoutUserPhoneNumberContainer = (TextInputLayout) findViewById(R.id.signUpPhoneNumberContainer);
-        layoutUserEmailContainer = (TextInputLayout) findViewById(R.id.signUpEmailContainer);
-        layoutUserPasswordContainer = (TextInputLayout) findViewById(R.id.signUpPasswordContainer);
+        layoutUserFirstNameContainer = findViewById(R.id.signUpFirstNameContainer);
+        layoutUserLastNameContainer = findViewById(R.id.signUpLastNameContainer);
+        layoutUserUsernameContainer = findViewById(R.id.signUpUsernameContainer);
+        layoutUserPhoneNumberContainer = findViewById(R.id.signUpPhoneNumberContainer);
+        layoutUserEmailContainer = findViewById(R.id.signUpEmailContainer);
+        layoutUserPasswordContainer = findViewById(R.id.signUpPasswordContainer);
 
         // add a text field listener that validates the inputted text
         layoutUserFirstName.addTextChangedListener(new TextWatcher() {
@@ -248,8 +246,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         // showImageSelectorDialog when changePhotoButton is clicked
-        changePhotoButton.setOnClickListener(v -> (photoHandler)
-                .showImageSelectorDialog(this, defaultPhoto, layoutProfilePicture));
+        changePhotoButton.setOnClickListener(v -> {
+            changePhotoButton.setClickable(false);
+            (photoHandler).showImageSelectorDialog(this,
+                    defaultPhoto, layoutProfilePicture);
+            changePhotoButton.setClickable(true);
+        });
 
         // load default photo into ImageLayout
         GlideApp.with(Objects.requireNonNull(getApplicationContext()))
@@ -257,10 +259,16 @@ public class SignUpActivity extends AppCompatActivity {
                 .into(layoutProfilePicture);
 
         // go back when backButton is clicked
-        backButton.setOnClickListener(v -> onBackPressed());
+        backButton.setOnClickListener(v -> {
+            backButton.setClickable(false);
+            onBackPressed();
+            backButton.setClickable(true);
+        });
 
         // when signUpButton is clicked
         signUpButton.setOnClickListener(v -> {
+            // user can't create account multiple times with multi-click
+            signUpButton.setClickable(false);
 
             // if all fields are valid
             if (validFirstName && validLastName && validUsername
@@ -287,14 +295,12 @@ public class SignUpActivity extends AppCompatActivity {
                     currentUser = Parser.parseUser(newFirstName, newLastName, newUserEmail,
                             newUsername, newUserPassword, newUserPhoneNumber, "");
 
-                    // user can't create account multiple times with multi-click
-                    signUpButton.setClickable(false);
-
                     // attempt to sign the user up
                     signUpUser();
 
                 } else {  // if the user has not made any changes
                     finish();
+                    signUpButton.setClickable(true);
                 }
 
             } else {  // if not all fields are valid
@@ -344,6 +350,7 @@ public class SignUpActivity extends AppCompatActivity {
                     layoutUserPasswordContainer.setErrorEnabled(true);
                     layoutUserPassword.requestFocus();
                 }
+                signUpButton.setClickable(true);
             }
         });
 
@@ -435,7 +442,8 @@ public class SignUpActivity extends AppCompatActivity {
         docData.put("photo", photo);
 
         // if the user chose a photo from their gallery
-        if ((photoHandler.getCurrentPhotoPath() != null) && photoHandler.getCurrentPhotoPath().equals("BITMAP")) {
+        if ((photoHandler.getCurrentPhotoPath() != null)
+                && photoHandler.getCurrentPhotoPath().equals("BITMAP")) {
 
             // if the user's fields are all valid
             if (Parser.isValidUserObject(currentUser)) {
@@ -521,6 +529,7 @@ public class SignUpActivity extends AppCompatActivity {
                             intent.putExtra("CURRENT_USER", currentUser);
                             startActivity(intent);
                             finish();  // finish the current activity
+                            signUpButton.setClickable(true);
 
                         } else {  // if the sign up attempt failed
 
@@ -573,13 +582,19 @@ public class SignUpActivity extends AppCompatActivity {
         alertDialog.show();
 
         // stay in this activity if the user opts to keep editing
-        keepEditingBtn.setOnClickListener(v -> alertDialog.dismiss());
+        keepEditingBtn.setOnClickListener(v -> {
+            keepEditingBtn.setClickable(false);
+            alertDialog.dismiss();
+            keepEditingBtn.setClickable(true);
+        });
 
         // finish this activity if the user opts to discard their changes
         discardBtn.setOnClickListener(v -> {
+            discardBtn.setClickable(false);
             alertDialog.dismiss();
             SystemClock.sleep(300);
             finish();
+            discardBtn.setClickable(true);
         });
     }
 

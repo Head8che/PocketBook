@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.pocketbook.fragment.HomeFragment;
-import com.example.pocketbook.fragment.OwnerFragment;
 import com.example.pocketbook.fragment.ProfileNewFragment;
 import com.example.pocketbook.R;
 import com.example.pocketbook.fragment.SearchFragment;
@@ -28,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
@@ -155,7 +153,8 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     if (item.getItemId() ==  R.id.bottom_nav_profile) {
                         Fragment profileNewFragment = ProfileNewFragment.newInstance(currentUser);
-                        Fragment profileExistingFragment = ProfileExistingFragment.newInstance(currentUser);
+                        Fragment profileExistingFragment
+                                = ProfileExistingFragment.newInstance(currentUser);
 
                         FirebaseFirestore.getInstance()
                                 .collection("catalogue")
@@ -177,7 +176,8 @@ public class HomeActivity extends AppCompatActivity {
                                             FRAG_TAG = "OWNER_FRAGMENT";
                                             if (!(CURRENT_TAG.equals(FRAG_TAG))) {
                                                 getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container, profileExistingFragment,
+                                                        .replace(R.id.container,
+                                                                profileExistingFragment,
                                                                 FRAG_TAG)
                                                         .addToBackStack(FRAG_TAG)
                                                         .commit();

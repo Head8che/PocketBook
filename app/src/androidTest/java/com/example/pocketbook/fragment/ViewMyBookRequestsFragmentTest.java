@@ -118,6 +118,16 @@ public class ViewMyBookRequestsFragmentTest {
         goToViewBookFragment();
     }
 
+
+    @Test
+    public void checkMyBookRequestsTab() {
+
+    }
+
+
+    /**
+     * Views a Book selected
+     */
     private void goToViewBookFragment() {
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
@@ -149,12 +159,6 @@ public class ViewMyBookRequestsFragmentTest {
 
         solo.sleep(2000); // give it time to change fragments to ViewBookFragment
     }
-
-    @Test
-    public void checkMyBookRequestTab() {
-        Log.d("DEBUG", "On ViewBookFragment");
-    }
-
 
     /**
      * Creates a mock user account

@@ -32,6 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Decode google-services.json
+      env:
+        GS_SECRET: ${{ secrets.GS_SECRET }}
+      run: echo $GS_SECRET > app/google-services.json
+
     - name: Unit Tests
       run: chmod +x gradlew && ./gradlew test 
       

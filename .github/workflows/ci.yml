@@ -25,7 +25,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Decode google-services.json
-      run: echo ${{ secrets.GS_SECRET }} > Pocketbook/app/google-services.json
+      env:
+        GS_SECRET: ${{ secrets.GS_SECRET }}
+      run: echo $GS_SECRET > Pocketbook/app/google-services.json
     - name: Instrumented Tests
       uses: ReactiveCircus/android-emulator-runner@v2.12.0
       with:

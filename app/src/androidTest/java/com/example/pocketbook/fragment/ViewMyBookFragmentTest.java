@@ -183,8 +183,6 @@ public class ViewMyBookFragmentTest {
         onView(withId(R.id.profileOwnerRecyclerOwnedBooks))  // click on the mock book
                 .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
-//        solo.clickOnView(solo.getView(R.id.itemBookCard));  // click on book
-
         solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
     }
 
@@ -232,81 +230,81 @@ public class ViewMyBookFragmentTest {
         // assert that the profile bottom navigation item is currently selected
         assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
     }
-
-    /**
-     * Check if the selected book's details are correct with assertTrue.
-     */
-    @Test
-    public void checkBookDetails() {
-
-        // assert that we are in ViewMyBookFragment and that the book details are visible
-        assertTrue(solo.searchText("Mock Title"));  // book title
-        assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
-        assertTrue(solo.searchText("9781234567897"));  // book isbn
-        assertTrue(solo.searchText("FAIR"));  // book condition
-    }
-
-    /**
-     * Check if the selected book has no requests with with assertFalse.
-     */
-    @Test
-    public void checkEmptyRequest() {
-
-        int fromX, toX, fromY, toY;
-        int[] location = new int[2];
-
-        TextView titleField = (TextView) solo.getView(R.id.viewMyBookBookTitleTextView);
-
-        assertNotNull(titleField);  // title field exists
-        assertEquals("Mock Title", titleField.getText());  // assert that title is valid
-
-        solo.getText("Mock Title").getLocationInWindow(location);
-
-        fromX = location[0];
-        fromY = location[1];
-
-        toX = location[0] - 200;
-        toY = fromY;
-
-        solo.drag(fromX, toX, fromY, toY, 10);
-
-        // assert that there are no requests (no ACCEPT and DECLINE button)
-        assertFalse(solo.searchText("ACCEPT"));
-        assertFalse(solo.searchText("DECLINE"));
-    }
-
-    /**
-     * Check if deleting a book works and navigates to OwnerFragment with assertTrue.
-     * Check if the book is deleted with assertFalse.
-     */
-    @Test
-    public void checkDeleteBook() {
-
-        View deleteBtn = solo.getView(R.id.viewMyBookFragDeleteBtn);
-
-        solo.clickOnView(deleteBtn); // click delete button
-
-        solo.clickOnView(solo.getView(android.R.id.button1));
-
-        BottomNavigationView bottomNavigation = (BottomNavigationView)
-                solo.getView(R.id.bottomNavigationView);
-
-        // scroll up to the top of OwnerFragment
-        //FIXME:   R.id.userProfileScrollView not found
-//        Espresso.onView(ViewMatchers.withId(R.id.userProfileScrollView))
-//                .perform(ViewActions.swipeDown());
-
-        // assert that we are in OwnerFragment i.e. that the user's first name and last name
-        // are shown, and that Edit button is shown
-        assertTrue(solo.searchText("MockFirst"));
-        assertTrue(solo.searchText("MockLast"));
-        assertTrue(solo.searchText("Edit"));
-
-        // assert that the profile bottom navigation item is currently selected
-        assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
-
-        // assert that we are in OwnerFragment and that the book is not found
-        assertFalse(solo.searchText("Mock Title"));  // book title
-        assertFalse(solo.searchText("M0cKAUtH0R"));  // book author
-    }
+//
+//    /**
+//     * Check if the selected book's details are correct with assertTrue.
+//     */
+//    @Test
+//    public void checkBookDetails() {
+//
+//        // assert that we are in ViewMyBookFragment and that the book details are visible
+//        assertTrue(solo.searchText("Mock Title"));  // book title
+//        assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
+//        assertTrue(solo.searchText("9781234567897"));  // book isbn
+//        assertTrue(solo.searchText("FAIR"));  // book condition
+//    }
+//
+//    /**
+//     * Check if the selected book has no requests with with assertFalse.
+//     */
+//    @Test
+//    public void checkEmptyRequest() {
+//
+//        int fromX, toX, fromY, toY;
+//        int[] location = new int[2];
+//
+//        TextView titleField = (TextView) solo.getView(R.id.viewMyBookBookTitleTextView);
+//
+//        assertNotNull(titleField);  // title field exists
+//        assertEquals("Mock Title", titleField.getText());  // assert that title is valid
+//
+//        solo.getText("Mock Title").getLocationInWindow(location);
+//
+//        fromX = location[0];
+//        fromY = location[1];
+//
+//        toX = location[0] - 200;
+//        toY = fromY;
+//
+//        solo.drag(fromX, toX, fromY, toY, 10);
+//
+//        // assert that there are no requests (no ACCEPT and DECLINE button)
+//        assertFalse(solo.searchText("ACCEPT"));
+//        assertFalse(solo.searchText("DECLINE"));
+//    }
+//
+//    /**
+//     * Check if deleting a book works and navigates to OwnerFragment with assertTrue.
+//     * Check if the book is deleted with assertFalse.
+//     */
+//    @Test
+//    public void checkDeleteBook() {
+//
+//        View deleteBtn = solo.getView(R.id.viewMyBookFragDeleteBtn);
+//
+//        solo.clickOnView(deleteBtn); // click delete button
+//
+//        solo.clickOnView(solo.getView(android.R.id.button1));
+//
+//        BottomNavigationView bottomNavigation = (BottomNavigationView)
+//                solo.getView(R.id.bottomNavigationView);
+//
+//        // scroll up to the top of OwnerFragment
+//        //FIXME:   R.id.userProfileScrollView not found
+////        Espresso.onView(ViewMatchers.withId(R.id.userProfileScrollView))
+////                .perform(ViewActions.swipeDown());
+//
+//        // assert that we are in OwnerFragment i.e. that the user's first name and last name
+//        // are shown, and that Edit button is shown
+//        assertTrue(solo.searchText("MockFirst"));
+//        assertTrue(solo.searchText("MockLast"));
+//        assertTrue(solo.searchText("Edit"));
+//
+//        // assert that the profile bottom navigation item is currently selected
+//        assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
+//
+//        // assert that we are in OwnerFragment and that the book is not found
+//        assertFalse(solo.searchText("Mock Title"));  // book title
+//        assertFalse(solo.searchText("M0cKAUtH0R"));  // book author
+//    }
 }

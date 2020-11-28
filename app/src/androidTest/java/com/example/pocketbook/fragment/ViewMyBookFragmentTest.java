@@ -183,8 +183,6 @@ public class ViewMyBookFragmentTest {
         onView(withId(R.id.profileOwnerRecyclerOwnedBooks))  // click on the mock book
                 .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
-//        solo.clickOnView(solo.getView(R.id.itemBookCard));  // click on book
-
         solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
     }
 
@@ -292,7 +290,6 @@ public class ViewMyBookFragmentTest {
                 solo.getView(R.id.bottomNavigationView);
 
         // scroll up to the top of OwnerFragment
-        //FIXME:   R.id.userProfileScrollView not found
 //        Espresso.onView(ViewMatchers.withId(R.id.userProfileScrollView))
 //                .perform(ViewActions.swipeDown());
 

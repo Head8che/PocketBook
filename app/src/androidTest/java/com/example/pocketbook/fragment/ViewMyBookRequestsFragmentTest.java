@@ -23,6 +23,7 @@ import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.robotium.solo.Solo;
@@ -50,6 +51,9 @@ import static org.junit.Assert.assertTrue;
 
 public class ViewMyBookRequestsFragmentTest {
     private Solo solo;
+
+    // timeout
+    private int timeOut;
     // initialize two accounts with a default password
     private long currentTime = System.currentTimeMillis();
     private String email1 = "mockviewbook1" + currentTime + "@gmail.com";
@@ -77,6 +81,7 @@ public class ViewMyBookRequestsFragmentTest {
      */
     @Before
     public void setUp(){
+        final int timeOut = 2000;
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
 
         // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
@@ -101,10 +106,7 @@ public class ViewMyBookRequestsFragmentTest {
 
         // Create another mock user account, User2
 
-        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
-        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.clickOnView(solo.getView(R.id.loginSignUpBtn));  // click on sign up button
-
         // Asserts that the current activity is SignUpActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
         solo.sleep(2000); // give it time to change activity
@@ -114,13 +116,112 @@ public class ViewMyBookRequestsFragmentTest {
         // Skip the onboarding instructions
         skipOnboarding();
 
-        // As User2, View the Books available
-        goToViewBookFragment();
+        // As User2, View the mockBook created by User 1
+//        goToViewBookFragment();
+
+        // Asserts that the current activity is HomeActivity (i.e. save redirected).
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        // gets the recycler for the books
+        RecyclerView view = (RecyclerView) solo.getView(R.id.homeFragmentRecyclerBooks);
+
+        // gets the number of books in the recycler
+        int numOfBooks = Objects.requireNonNull(view.getAdapter()).getItemCount();
+
+        int position = -1;
+        for (int i = 0; i < numOfBooks; i++) {
+            Log.e("VIEW_BOOK_TEST", "in-scroll");
+            // scroll to the book position
+            onView(withId(R.id.homeFragmentRecyclerBooks)).perform(scrollToPosition(i));
+            RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(i);
+            if ((viewHolder != null)  // check if the current book is the mock book
+                    && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
+                position = i;
+                break;
+            }
+        }
+
+        // assert that the mock book was actually found
+        assertNotEquals(-1, position);
+
+        onView(withId(R.id.homeFragmentRecyclerBooks))  // click on the mock book
+                .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+
+        solo.sleep(timeOut); // give it time to change fragments to ViewBookFragment
+
     }
 
 
     @Test
     public void checkMyBookRequestsTab() {
+        Log.d("DEBUG", "Entered Test");
+        // click the request button
+        View requestBtn = solo.getView(R.id.viewBookRequestBtn);
+        solo.clickOnView(requestBtn); // click request button
+        solo.sleep(timeOut); // give it time to change activity
+        assertTrue(solo.waitForText("You have requested Mock Title!"));
+
+        //  press anywhere, in this case Home
+        BottomNavigationView bottomNavigation = (BottomNavigationView)
+                solo.getView(R.id.bottomNavigationView);
+        // assert that the profile bottom navigation item is currently selected
+        assertEquals(R.id.bottom_nav_home, bottomNavigation.getSelectedItemId());
+
+        // Log out of User2 and return to the Login Activity
+        returnToLoginActivity();
+//
+//        // Log in as User1
+//        View loginBtn = solo.getView(R.id.loginLoginBtn);
+//        TextInputEditText emailField = (TextInputEditText)
+//                solo.getView(R.id.loginEmailField);
+//        TextInputEditText passwordField = (TextInputEditText)
+//                solo.getView(R.id.loginPasswordField);
+//
+//        assertNotNull(emailField);  // email field exists
+//        solo.enterText(emailField, email1); // add email
+//
+//        assertNotNull(passwordField);
+//        solo.enterText(passwordField, password);  // add a password
+//
+//        solo.clickOnView(loginBtn); // click save button
+//
+//        // False if 'Input required' is present
+//        assertFalse(solo.searchText("Input required"));
+//
+//        solo.sleep(timeOut); // wait for activity to change to Home Activity
+//
+//        // False if current activity is not Home activity
+//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+//
+//        // go to User1's profile
+//        // assert that the profile bottom navigation item is currently selected
+//        assertEquals(R.id.bottom_nav_profile, bottomNavigation.getSelectedItemId());
+//        // assert that the current activity is the profile
+//        solo.assertCurrentActivity("Wrong Activity", ProfileExistingFragment.class);
+
+        // check for mockBook
+
+
+        // go to requests tab
+        // check if list is nonempty
+        // check for User2's request
+
+    }
+
+    private void signInUser() {
+    }
+
+    private void signOutUser() {
+         View signOutBtn = solo.getView(R.id.profileExistingSignOut);
+         solo.clickOnView(signOutBtn);
+         solo.sleep(timeOut);
+    }
+
+    private void goToProfile() {
+
+    }
+
+    private void makeRequestForBook() {
 
     }
 
@@ -157,7 +258,7 @@ public class ViewMyBookRequestsFragmentTest {
         onView(withId(R.id.homeFragmentRecyclerBooks))  // click on the mock book
                 .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
-        solo.sleep(2000); // give it time to change fragments to ViewBookFragment
+        solo.sleep(timeOut); // give it time to change fragments to ViewBookFragment
     }
 
     /**
@@ -204,7 +305,7 @@ public class ViewMyBookRequestsFragmentTest {
     private void skipOnboarding() {
         View skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
-        solo.sleep(2000); // give it time to change activity
+        solo.sleep(timeOut); // give it time to change activity
 
     }
 
@@ -220,7 +321,7 @@ public class ViewMyBookRequestsFragmentTest {
 
         // Asserts that the current activity is AddBookActivity. Otherwise, show Wrong Activity
         solo.assertCurrentActivity("Wrong Activity", AddBookActivity.class);
-        solo.sleep(2000); // give it time to change activity
+        solo.sleep(timeOut); // give it time to change activity
 
         View saveBtn = solo.getView(R.id.addBookSaveBtn);
         TextInputEditText titleField = (TextInputEditText) solo.getView(R.id.addBookTitleField);
@@ -247,9 +348,6 @@ public class ViewMyBookRequestsFragmentTest {
      * Returns to the LoginActivity
      */
     private void returnToLoginActivity() {
-        View backBtn = solo.getView(R.id.viewMyBookFragBackBtn);
-
-        solo.clickOnView(backBtn); // click back button
 
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
@@ -260,7 +358,7 @@ public class ViewMyBookRequestsFragmentTest {
 
         solo.sleep(2000); // give it time to sign out
 
-        Log.e("VIEW_BOOK_TEST", "pre-signOut");
+        Log.e("VIEW_MY_BOOK_REQUEST_TEST", "pre-signOut");
 
         // return to LoginActivity
         solo.goBackToActivity("LoginActivity");

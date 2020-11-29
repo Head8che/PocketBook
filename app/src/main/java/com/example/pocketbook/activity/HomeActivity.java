@@ -187,36 +187,61 @@ public class HomeActivity extends AppCompatActivity {
 
                         FirebaseFirestore.getInstance()
                                 .collection("catalogue")
-                                .whereEqualTo("owner",currentUser.getEmail())
+                                .whereEqualTo("owner", currentUser.getEmail())
                                 .get()
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         if (task.getResult().isEmpty()) {
-                                            FRAG_TAG = PROFILE_FRAG_TAG;
-                                            if (!(CURRENT_TAG.equals(FRAG_TAG))
-                                                    && shouldReplaceFragment) {
-                                                getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container,
-                                                                profileNewFragment,
-                                                                FRAG_TAG)
-                                                        .addToBackStack(FRAG_TAG)
-                                                        .commit();
-                                            }
-                                        } else {
-                                            FRAG_TAG = OWNER_FRAG_TAG;
-                                            if (!(CURRENT_TAG.equals(FRAG_TAG))
-                                                    && shouldReplaceFragment) {
-                                                getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container,
-                                                                profileExistingFragment,
-                                                                FRAG_TAG)
-                                                        .addToBackStack(FRAG_TAG)
-                                                        .commit();
-                                            }
+                                            FirebaseFirestore.getInstance()
+                                                    .collection("catalogue")
+                                                    .whereArrayContains("requesters",
+                                                            currentUser.getEmail())
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            if (task1.getResult().isEmpty()) {
+                                                                FRAG_TAG = PROFILE_FRAG_TAG;
+                                                                if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                                        && shouldReplaceFragment) {
+                                                                    getSupportFragmentManager()
+                                                                            .beginTransaction()
+                                                                            .replace(R.id.container,
+                                                                                    profileNewFragment,
+                                                                                    FRAG_TAG)
+                                                                            .addToBackStack(FRAG_TAG)
+                                                                            .commit();
+                                                                }
+                                                            } else {
+                                                                FRAG_TAG = OWNER_FRAG_TAG;
+                                                                if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                                        && shouldReplaceFragment) {
+                                                                    getSupportFragmentManager()
+                                                                            .beginTransaction()
+                                                                            .replace(R.id.container,
+                                                                                    profileExistingFragment,
+                                                                                    FRAG_TAG)
+                                                                            .addToBackStack(FRAG_TAG)
+                                                                            .commit();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    } else {
+                                        FRAG_TAG = OWNER_FRAG_TAG;
+                                        if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                && shouldReplaceFragment) {
+                                            getSupportFragmentManager().beginTransaction()
+                                                    .replace(R.id.container,
+                                                            profileExistingFragment,
+                                                            FRAG_TAG)
+                                                    .addToBackStack(FRAG_TAG)
+                                                    .commit();
                                         }
                                     }
                                 });
                     }
+
                     if ((selectedFragment != null) && shouldReplaceFragment) {
 
                         if (!(CURRENT_TAG.equals(FRAG_TAG))

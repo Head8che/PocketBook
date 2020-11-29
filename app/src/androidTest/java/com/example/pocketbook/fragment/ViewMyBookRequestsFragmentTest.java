@@ -397,67 +397,6 @@ public class ViewMyBookRequestsFragmentTest {
 
     }
 
-//    @Test
-//    public void checkRequestTab() {
-//
-//    }
-
-//    /**
-//     * Gets the Activity
-//     * @throws Exception
-//     */
-//    @Test
-//    public void start() throws Exception{
-//        Activity activity = rule.getActivity();
-//    }
-
-//    /**
-//     * test whether the info of a request is displayed
-//     */
-//    @Test
-//    public void testDisplayInfo(){
-//        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
-//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-//        //asserts whether the request's info appears on screen
-//        assertTrue(solo.waitForText(mockRequester.getUsername(), 1, 2000));
-//        assertTrue(solo.waitForText(mockRequest.getRequestDate(), 1, 2000));
-//    }
-
-//    /**
-//     * test accept button on a request
-//     * after clicking on accept, test if the user can click on accept again
-//     * after clicking on accept, test if the text on the button changes to "Accepted" for the request
-//     * after clicking on accept, tests whether the user can click on decline on the same request
-//     */
-//    @Test
-//    public void testAcceptRequest(){
-//        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
-//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-//        Button acceptRequest = (Button) solo.getView(R.id.itemRequestAcceptButton);
-//        Button declineRequest = (Button) solo.getView(R.id.itemRequestDeclineButton);
-//        solo.clickOnView(acceptRequest);//click on accept
-//        acceptRequest = (Button) solo.getView(R.id.itemRequestAcceptButton); //update the accept button's attributes
-//        //solo.clickOnView(acceptRequest);
-//        assertTrue(!acceptRequest.isEnabled());//check if the accept button has been disabled
-//        assertEquals("Accepted",acceptRequest.getText().toString());
-//        assertTrue(solo.waitForText("Accepted", 1, 2000));
-//        assertTrue(!declineRequest.isEnabled());//check if the decline button has been disabled
-//    }
-//
-//    /**
-//     * test the decline button for a request
-//     * test if the requests disappears after clicking on decline
-//     */
-//    @Test
-//    public void testDeclineRequest(){
-//        //asserts that the current activity is HomeActivity. Otherwise, show Wrong Activity
-//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-//        Button declineRequest = (Button) solo.getView(R.id.itemRequestDeclineButton);
-//        solo.clickOnView(declineRequest);
-//        //asserts if the request's info is no longer displayed
-//        assertFalse(solo.waitForText(mockRequester.getUsername(), 1, 2000));
-//        assertFalse(solo.waitForText(mockRequest.getRequestDate(), 1, 2000));
-//    }
 
     /**
      * Runs after each test to remove the mock users and the mock book from Firebase.

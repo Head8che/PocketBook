@@ -35,34 +35,6 @@ public class NotificationHandler {
         }
     }
 
-//    private static void checkIfUsersShareSameToken(String sender, String receiver) {
-//        boolean toSend = false;
-//        FirebaseFirestore.getInstance().collection("users").document(sender)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            String senderToken = (String) task.getResult().get("token");
-//                            FirebaseFirestore.getInstance().collection("users").document(receiver)
-//                                    .get()
-//                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                            if (task.isSuccessful()) {
-//                                                String receiverToken = (String) task.getResult().get("token");
-//                                                if ((receiverToken.equals(senderToken))) {
-//
-//                                            }
-//                                        }
-//                                    });
-//                        }
-//                    }
-//                });
-//    }
-
-
 
     public static void sendNotificationBookRequested(User currentUser,Book book){
         String msg = String.format("%s has requested '%s'",
@@ -93,7 +65,7 @@ public class NotificationHandler {
     }
 
     public static void sendNotificationRequestDeclined(Request request, Book book){
-        String msg = String.format("Your request for '%s' has " + "been declined", book.getTitle());
+        String msg = String.format("Your request for '%s' has been declined", book.getTitle());
         Notification notification = new Notification(msg, book.getOwner(), request.getRequester(), book.getId(), false, "REQUEST_DECLINED");
         if (true){
         //send a notification to the requester

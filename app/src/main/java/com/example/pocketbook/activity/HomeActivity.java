@@ -253,7 +253,6 @@ public class HomeActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
                         }
-                        // TODO: Scroll up selected fragment if it is current fragment
                     }
 
                     if (!shouldReplaceFragment) {

@@ -226,17 +226,17 @@ public class HomeActivity extends AppCompatActivity {
                                                             }
                                                         }
                                                     });
-                                        }
-                                    } else {
-                                        FRAG_TAG = OWNER_FRAG_TAG;
-                                        if (!(CURRENT_TAG.equals(FRAG_TAG))
-                                                && shouldReplaceFragment) {
-                                            getSupportFragmentManager().beginTransaction()
-                                                    .replace(R.id.container,
-                                                            profileExistingFragment,
-                                                            FRAG_TAG)
-                                                    .addToBackStack(FRAG_TAG)
-                                                    .commit();
+                                        } else {
+                                            FRAG_TAG = OWNER_FRAG_TAG;
+                                            if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                    && shouldReplaceFragment) {
+                                                getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container,
+                                                                profileExistingFragment,
+                                                                FRAG_TAG)
+                                                        .addToBackStack(FRAG_TAG)
+                                                        .commit();
+                                            }
                                         }
                                     }
                                 });

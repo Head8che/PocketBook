@@ -186,7 +186,6 @@ public class NotificationsFragment extends Fragment {
             // delete notification when the user swipes on it
             deleteNotificationFromFirebase(notifications,
                     viewHolder.getAdapterPosition(),currentUser.getEmail());
-            notificationAdapter.notifyDataSetChanged();
         }
     };
 }

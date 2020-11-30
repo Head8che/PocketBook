@@ -24,9 +24,9 @@ import com.google.firebase.firestore.Query;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReadyForPickupFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * shows the ready-for-pickup-books
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(User, boolean) newInstance} factory method to create an instance of this fragment.
  */
 public class ReadyForPickupFragment extends Fragment {
 
@@ -37,6 +37,12 @@ public class ReadyForPickupFragment extends Fragment {
 
     FirestoreRecyclerOptions<Book> options;
 
+    /**
+     *
+     * @param user
+     * @param isOwnerTab
+     * @return a new instace
+     */
     public static ReadyForPickupFragment newInstance(User user, boolean isOwnerTab) {
         ReadyForPickupFragment readyForPickupfragment = new ReadyForPickupFragment();
         Bundle args = new Bundle();

@@ -90,10 +90,22 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     Marker marker;
     SupportMapFragment mapFrag;
 
+    /**
+     * Required empty public constructor
+     */
     public SetLocationFragment() {
-        // Required empty public constructor
+
     }
 
+    /**
+     * method to create a new instance of SetLocationFragment
+     * @param book the book being exchanged
+     * @param request the request of the book
+     * @param bookOwner the owner of the book
+     * @param bookRequester the requester of the book
+     * @param currentUser the currentUser logged in in the app
+     * @return a new instance of SetLocationFragment
+     */
     public static SetLocationFragment newInstance(Book book, Request request,
                                                   String bookOwner, String bookRequester,
                                                   User currentUser) {

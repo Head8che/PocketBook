@@ -26,6 +26,11 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/**
+ * Displays list of books given a search query
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(User,int) newInstance}  method to create an instance of this fragment.
+ */
 public class SearchMainFragment extends Fragment {
 
     private static final int LIMIT = 20;
@@ -41,15 +46,18 @@ public class SearchMainFragment extends Fragment {
     FirestoreRecyclerOptions<Book> options;
     ListenerRegistration listenerRegistration;
 
-
+    /**
+     * Required empty public constructor
+     */
     public SearchMainFragment() {
-        // Required empty public constructor
+
     }
 
     /**
-     * Displays list of books given a search query
-     * @param user current user
-     * @return SearchMainFragment
+     * Method to create a new instance of SearchMainFragment
+     * @param user current user as a User object
+     * @param position int
+     * @return a new instance of SearchMainFragment
      */
     public static SearchMainFragment newInstance(User user, int position) {
         SearchMainFragment searchMainFragment = new SearchMainFragment();
@@ -133,7 +141,7 @@ public class SearchMainFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
-        // TODO: see if possibility to switch
+
         mBooksRecycler = v.findViewById(R.id.search_recycler_books);
         mBooksRecycler.setLayoutManager(new LinearLayoutManager(v.getContext()));
 
@@ -142,8 +150,7 @@ public class SearchMainFragment extends Fragment {
     }
 
     public void updateQuery(String newText){
-        // TODO: add batch loading
-        // TODO: descriptive message when no books found
+
 
         newText = newText.toLowerCase();
 
@@ -157,7 +164,7 @@ public class SearchMainFragment extends Fragment {
                     .whereArrayContains("keywords", newText);
         }
         else { // searching in available books only
-            // TODO: create AvailableOrRequested variable in Firebase and Book Model
+
             mQuery = mFirestore.collection("catalogue")
                     .whereEqualTo("nonExchange", true)
                     .whereArrayContains("keywords", newText);

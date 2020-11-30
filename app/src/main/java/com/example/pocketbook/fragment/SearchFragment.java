@@ -22,6 +22,10 @@ import com.example.pocketbook.util.KeyboardHandler;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+/**
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(User) newInstance}  method to create an instance of this fragment.
+ */
 public class SearchFragment extends Fragment{
 
     private User currentUser;
@@ -29,9 +33,9 @@ public class SearchFragment extends Fragment{
 
 
     /**
-     * Search fragment instance that bundles the user information to be accessible
-     * @param user current user
-     * @return SearchFragment
+     * method to create a new SearchFragment instance that bundles the user information to be accessible
+     * @param user current user as a User object
+     * @return a new instance of SearchFragment
      */
     public static SearchFragment newInstance(User user) {
         SearchFragment searchFragment = new SearchFragment();
@@ -108,8 +112,6 @@ public class SearchFragment extends Fragment{
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     Log.i("onQueryTextSubmit", query);
-                    // TODO: implement this
-                    // TODO: no reloading but conclusion
                     return true;
                 }
             });

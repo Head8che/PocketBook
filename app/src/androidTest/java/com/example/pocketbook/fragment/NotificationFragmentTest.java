@@ -2,7 +2,10 @@ package com.example.pocketbook.fragment;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +16,7 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.pocketbook.R;
 import com.example.pocketbook.activity.AddBookActivity;
 import com.example.pocketbook.activity.HomeActivity;
+import com.example.pocketbook.activity.LocationActivity;
 import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.activity.SignUpActivity;
 import com.example.pocketbook.util.FirebaseIntegrity;
@@ -38,6 +42,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class NotificationFragmentTest {
 
@@ -111,7 +116,7 @@ public class NotificationFragmentTest {
         assertFalse(solo.searchText("Input required"));
 
         ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
-
+        solo.sleep(2000);
         View skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
 
@@ -208,7 +213,7 @@ public class NotificationFragmentTest {
         assertFalse(solo.searchText("Input required"));
 
         ////////////////////////////// SKIP ONBOARDING INSTRUCTIONS ////////////////////////////////
-
+        solo.sleep(2000); // give it time to change activity
         skipBtn = solo.getView(R.id.onBoardingActivitySkipBtn);
         solo.clickOnView(skipBtn);
 
@@ -242,7 +247,6 @@ public class NotificationFragmentTest {
 
         onView(withId(R.id.homeFragmentRecyclerBooks))  // click on the mock book
                 .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
-        solo.sleep(2000);
         View requestBtn = solo.getView(R.id.viewBookRequestBtn);
         solo.clickOnView(requestBtn); //send notification to other user
         solo.sleep(2000); // give it time
@@ -276,7 +280,7 @@ public class NotificationFragmentTest {
 
 
     @Test
-    public void testRequestBookNotificationIsDisplayed(){
+    public void testRequestBookNotifications(){
 
         Button notificationsBtn = (Button) solo.getView(R.id.homeFragmentNotificationBtn);
         solo.clickOnView(notificationsBtn);
@@ -293,56 +297,124 @@ public class NotificationFragmentTest {
 
     }
 
-//    @Test
-//    public void testRequestDeclinedNotificationIsDisplayed() {
-//        View profileIcon = solo.getView(R.id.bottom_nav_profile);
-//        solo.clickOnView(profileIcon);
-//        solo.sleep(2000);
-//        onView(withId(R.id.profileOwnerRecyclerRequestedBooks))  // click on the requested mock book
-//                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-//        solo.sleep(2000);
-//        solo.clickOnView(solo.getView(R.id.viewMyBookFragRequestsTab));
-//        solo.sleep(2000);
-//        solo.clickOnButton("Decline");
-//        signOut();
-//        solo.sleep(2000); // give it time to sign out
-//        solo.goBackToActivity("LoginActivity");
-//        solo.sleep(2000);
-//        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
-//        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-//        View loginBtn = solo.getView(R.id.loginLoginBtn);
-//        TextInputEditText emailFieldLogin = (TextInputEditText)
-//                solo.getView(R.id.loginEmailField);
-//        TextInputEditText passwordFieldLogin= (TextInputEditText)
-//                solo.getView(R.id.loginPasswordField);
-//
-//        assertNotNull(emailFieldLogin);  // email field exist
-//        solo.enterText(emailFieldLogin, email2);  // enter email
-//
-//        assertNotNull(passwordFieldLogin);  // password field exists
-//        solo.enterText(passwordFieldLogin, password);  // enter password
-//        solo.clickOnView(loginBtn);
-//        solo.sleep(2000);
-//        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
-//
-//        Button notificationsBtn = (Button) solo.getView(R.id.homeFragmentNotificationBtn);
-//        solo.clickOnView(notificationsBtn);
-//        solo.sleep(2000);
-//        RecyclerView notiView = (RecyclerView) solo.getView(R.id.notificationsViewRecyclerView);
-//
-//        int numOfNotifications = Objects.requireNonNull(notiView.getAdapter()).getItemCount();
-//        assertEquals(1,numOfNotifications);
-//
-//        TextView descriptionNotiView = (TextView) solo.getView(R.id.itemNotiDescriptionTextView);
-//        TextView usernameNotiView = (TextView)solo.getView(R.id.itemNotiUsernameTextView);
-//        assertEquals(descriptionNotiView.getText(),"Your request for 'Mock Title' has been declined");
-//        assertEquals(usernameNotiView.getText(),"MockUsername1");
-//
-//    }
+    @Test
+    public void testRequestDeclinedNotification() {
+        View profileIcon = solo.getView(R.id.bottom_nav_profile);
+        solo.clickOnView(profileIcon);
+        solo.sleep(2000);
+        RecyclerView bookView = (RecyclerView) solo.getView(R.id.profileOwnerRecyclerRequestedBooks);
+
+        // gets the number of books in the recycler
+        int numOfBooks = Objects.requireNonNull(bookView.getAdapter()).getItemCount();
+
+        int position = -1;
+        for (int i = 0; i < numOfBooks; i++) {
+            Log.e("NOTIFICATION_TEST", "in-scroll");
+            // scroll to the book position
+            onView(withId(R.id.profileOwnerRecyclerRequestedBooks)).perform(scrollToPosition(i));
+            RecyclerView.ViewHolder viewHolder = bookView.findViewHolderForAdapterPosition(i);
+            if ((viewHolder != null)  // check if the current book is the mock book
+                    && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
+                position = i;
+                break;
+            }
+        }
+        assertNotEquals(-1, position);
+
+        onView(withId(R.id.profileOwnerRecyclerRequestedBooks))  // click on the mock book
+                .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+
+        solo.sleep(2000);
+        goToRequestsTab();
+        solo.sleep(2000);
+
+        solo.clickOnButton("Decline");
+        solo.sleep(2000);
+
+        solo.clickOnView(solo.getView(R.id.viewMyBookFragBackBtn));
+        solo.sleep(2000); // give it time to sign out
+        solo.clickOnView(solo.getView(R.id.profileExistingSignOut));
+        solo.sleep(2000);
+        // Asserts that the current activity is LoginActivity. Otherwise, show Wrong Activity
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        View loginBtn = solo.getView(R.id.loginLoginBtn);
+        TextInputEditText emailFieldLogin = (TextInputEditText)
+                solo.getView(R.id.loginEmailField);
+        TextInputEditText passwordFieldLogin= (TextInputEditText)
+                solo.getView(R.id.loginPasswordField);
+
+        assertNotNull(emailFieldLogin);  // email field exist
+        solo.enterText(emailFieldLogin, email2);  // enter email
+
+        assertNotNull(passwordFieldLogin);  // password field exists
+        solo.enterText(passwordFieldLogin, password);  // enter password
+        solo.clickOnView(loginBtn);
+        solo.sleep(2000);
+        solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
+
+        Button notificationsBtn = (Button) solo.getView(R.id.homeFragmentNotificationBtn);
+        solo.clickOnView(notificationsBtn);
+        solo.sleep(2000);
+        RecyclerView notiView = (RecyclerView) solo.getView(R.id.notificationsViewRecyclerView);
+
+        int numOfNotifications = Objects.requireNonNull(notiView.getAdapter()).getItemCount();
+        assertEquals(1,numOfNotifications);
+
+        TextView descriptionNotiView = (TextView) solo.getView(R.id.itemNotiDescriptionTextView);
+        TextView usernameNotiView = (TextView)solo.getView(R.id.itemNotiUsernameTextView);
+        assertEquals(descriptionNotiView.getText(),"Your request for 'Mock Title' has been declined");
+        assertEquals(usernameNotiView.getText(),username1);
+
+    }
+
+    @Test
+    public void testDeleteNotification(){
+        Button notificationsBtn = (Button) solo.getView(R.id.homeFragmentNotificationBtn);
+        solo.clickOnView(notificationsBtn);
+        solo.sleep(2000);
+        String message = "MockUsername2 has requested 'Mock Title'";
+        assertTrue(solo.searchText(message));
+        int fromX, toX, fromY, toY;
+        int[] location = new int[2];
+
+        View row = solo.getText(message);
+        row.getLocationInWindow(location);
 
 
+        fromX = location[0] + 100;
+        fromY = location[1];
+
+        toX = location[0];
+        toY = fromY;
+
+        solo.drag(fromX, toX, fromY, toY, 10);
+
+        assertFalse(solo.searchText(message));
 
 
+    }
+
+    private void goToRequestsTab() {
+        int fromX, toX, fromY, toY;
+        int[] location = new int[2];
+
+        TextView titleField = (TextView) solo.getView(R.id.viewMyBookBookTitleTextView);
+
+        assertNotNull(titleField);  // title field exists
+        assertEquals("Mock Title", titleField.getText());  // assert that title is valid
+
+        solo.getText("Mock Title").getLocationInWindow(location);
+
+        fromX = location[0] + 100;
+        fromY = location[1];
+
+        toX = location[0] - 500;
+        toY = fromY;
+
+        solo.drag(fromX, toX, fromY, toY, 15);
+
+        solo.sleep(2000);
+    }
 
 
     /**

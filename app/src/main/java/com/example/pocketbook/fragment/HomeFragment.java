@@ -45,8 +45,8 @@ public class HomeFragment extends Fragment {
 
     private User currentUser;
 
-    FirestoreRecyclerOptions<Book> options;
-    ListenerRegistration listenerRegistration;
+    private FirestoreRecyclerOptions<Book> options;
+    private ListenerRegistration listenerRegistration;
     /**
      * Home Page fragment instance that bundles the user/catalogue to be displayed
      * @param user current user

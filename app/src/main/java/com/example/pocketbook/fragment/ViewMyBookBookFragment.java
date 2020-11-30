@@ -34,7 +34,7 @@ public class ViewMyBookBookFragment extends Fragment {
 
     private Book book;
 
-    ListenerRegistration listenerRegistration;
+    private ListenerRegistration listenerRegistration;
 
     public ViewMyBookBookFragment() {
         // Required empty public constructor

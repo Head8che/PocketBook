@@ -35,9 +35,9 @@ public class ViewMyBookRequestsFragment extends Fragment {
     private RequestAdapter requestAdapter;
     private Book book;
 
-    FirestoreRecyclerOptions<Request> options;
-    ListenerRegistration listenerRegistration;
-    ListenerRegistration bookListenerRegistration;
+    private FirestoreRecyclerOptions<Request> options;
+    private ListenerRegistration listenerRegistration;
+    private ListenerRegistration bookListenerRegistration;
 
 
     public ViewMyBookRequestsFragment() {

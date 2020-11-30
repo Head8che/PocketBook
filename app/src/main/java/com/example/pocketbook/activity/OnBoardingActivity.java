@@ -25,15 +25,15 @@ public class OnBoardingActivity extends AppCompatActivity {
      */
 
     //Variables
-    ViewPager viewPager;
-    LinearLayout dotsLayout;
-    OnBoardingSliderAdapter sliderAdapter;
-    TextView[] dots;
-    Button nextBtn;
-    Button skipBtn;
-    int slideCount = 3;
-    int currentPos;
-    User currentUser;
+    private ViewPager viewPager;
+    private LinearLayout dotsLayout;
+    private OnBoardingSliderAdapter sliderAdapter;
+    private TextView[] dots;
+    private Button nextBtn;
+    private Button skipBtn;
+    private int slideCount = 3;
+    private int currentPos;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

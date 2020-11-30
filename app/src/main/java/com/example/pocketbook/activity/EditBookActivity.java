@@ -36,7 +36,7 @@ import java.util.Objects;
  */
 public class EditBookActivity extends AppCompatActivity {
 
-    Book book;
+    private Book book;
 
     private boolean validTitle;
     private boolean validAuthor;
@@ -47,20 +47,20 @@ public class EditBookActivity extends AppCompatActivity {
     private String bookCondition;
     private String bookComment;
 
-    TextInputEditText layoutBookTitle;
-    TextInputEditText layoutBookAuthor;
-    TextInputEditText layoutBookISBN;
-    ImageView layoutBookCover;
-    TextInputEditText layoutBookCondition;
-    TextInputEditText layoutBookComment;
+    private TextInputEditText layoutBookTitle;
+    private TextInputEditText layoutBookAuthor;
+    private TextInputEditText layoutBookISBN;
+    private ImageView layoutBookCover;
+    private TextInputEditText layoutBookCondition;
+    private TextInputEditText layoutBookComment;
 
-    TextInputLayout layoutBookTitleContainer;
-    TextInputLayout layoutBookAuthorContainer;
-    TextInputLayout layoutBookISBNContainer;
-    TextInputLayout layoutBookConditionContainer;
-    TextInputLayout layoutBookCommentContainer;
+    private TextInputLayout layoutBookTitleContainer;
+    private TextInputLayout layoutBookAuthorContainer;
+    private TextInputLayout layoutBookISBNContainer;
+    private TextInputLayout layoutBookConditionContainer;
+    private TextInputLayout layoutBookCommentContainer;
 
-    PhotoHandler photoHandler;
+    private PhotoHandler photoHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

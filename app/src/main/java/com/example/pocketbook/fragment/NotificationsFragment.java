@@ -38,9 +38,9 @@ public class NotificationsFragment extends Fragment {
 
     private NotificationAdapter notificationAdapter;
     private User currentUser;
-    private  ArrayList<String> notifications;
-    FirestoreRecyclerOptions<Notification> options;
-    ListenerRegistration listenerRegistration;
+    private ArrayList<String> notifications;
+    private FirestoreRecyclerOptions<Notification> options;
+    private ListenerRegistration listenerRegistration;
 
 
     public NotificationsFragment() {

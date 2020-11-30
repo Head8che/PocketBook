@@ -27,6 +27,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.getUserFromFirestore;
 
+// FirebaseMessaging to handle sending notifications between users and displaying them
 public class FirebaseMessaging extends FirebaseMessagingService {
 
     @Override
@@ -41,13 +42,20 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
     }
 
+    /**
+     * sending notifications for android oreo and above
+     * @param remoteMessage: the message carrying the notification data
+     */
+
     private void sendOreoNotification(RemoteMessage remoteMessage){
+        // get the data of the notification
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         String date = remoteMessage.getData().get("date");
         String group = remoteMessage.getData().get("group");
         String icon = remoteMessage.getData().get("icon");
         String receiver = remoteMessage.getData().get("receiver");
+
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         if (receiver != null) {
             FirebaseFirestore.getInstance().collection("users").document(receiver)
@@ -89,6 +97,10 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
     }
 
+    /**
+     * sending notifications for android before oreo
+     * @param remoteMessage: message carrying notification data
+     */
     private void sendNotification(RemoteMessage remoteMessage){
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
@@ -97,7 +109,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
 
 
-        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(Integer.parseInt(icon))
                 .setContentTitle(title)

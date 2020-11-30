@@ -54,9 +54,9 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     /**
      * create a new instance of the ViewBookFragment
      *
-     * @param currentUser: the user currently signed in the app
-     * @param bookOwner:   the owner of the book being viewed
-     * @param book:        the book being viewed
+     * @param currentUser : the user currently signed in the app
+     * @param bookOwner :   the owner of the book being viewed
+     * @param book :        the book being viewed
      * @return a new instance of the ViewBookFragment
      */
     public static ViewBookFragment newInstance(User currentUser, User bookOwner, Book book) {

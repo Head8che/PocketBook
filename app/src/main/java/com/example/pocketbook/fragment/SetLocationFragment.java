@@ -77,13 +77,13 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     private boolean validDate;
     private boolean validTime;
 
-    String bookOwner;
-    String bookRequester;
+    private String bookOwner;
+    private String bookRequester;
     private User currentUser;
 
-    GoogleMap googleMap = null;
-    Marker marker;
-    SupportMapFragment mapFrag;
+    private GoogleMap googleMap = null;
+    private Marker marker;
+    private SupportMapFragment mapFrag;
 
     public SetLocationFragment() {
         // Required empty public constructor

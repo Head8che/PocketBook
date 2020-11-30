@@ -19,13 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-// TODO: for Request and Notification set date format to have milliseconds (for sorting),
-//  but have the classes' get...Date() methods return a hour-minute formatted string
-
-// TODO: extract common methods to single method (like book owner and user email methods)
-
-// TODO: Parser request book breaks; handle null book objects / Parser-invalid book objects
-
 /**
  * Parser class ensures the validity of the
  * objects and text within the app

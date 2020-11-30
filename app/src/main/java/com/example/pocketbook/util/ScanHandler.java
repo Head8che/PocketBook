@@ -44,12 +44,19 @@ public class ScanHandler {
         this.currentUser = currentUser;
     }
 
+    /**
+     * dismisses Alert dialog
+     */
     public void dismissAlertDialog() {
         if (this.alertDialog != null) {
             this.alertDialog.dismiss();
         }
     }
 
+    /**
+     * Getter method for userSelection
+     * @return userSelection as String
+     */
     public String getUserSelection() {
         return userSelection;
     }

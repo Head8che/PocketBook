@@ -200,14 +200,25 @@ public class PhotoHandler {
         }
     }
 
+    /**
+     * Getter method for currentPhotoPath
+     * @return currentPhotoPath as String
+     */
     public String getCurrentPhotoPath() {
         return this.currentPhotoPath;
     }
 
+    /**
+     * Getter method for galleryPhoto
+     * @return galleryPhoto as String
+     */
     public Bitmap getGalleryPhoto() {
         return galleryPhoto;
     }
 
+    /**
+     * Setter method for showRemovePhoto
+     */
     public void setShowRemovePhoto(Boolean showRemovePhoto) {
         this.showRemovePhoto = showRemovePhoto;
     }

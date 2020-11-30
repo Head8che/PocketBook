@@ -13,13 +13,25 @@ public class KeyboardHandler {
     View rootView;
     Activity activity;
 
+    /**
+     * Empty constructor for Keyboard Handler
+     */
     public KeyboardHandler() {}
 
+    /**
+     * Constructor for Keyboard Handler
+     * @param rootView root view
+     * @param activity activity
+     */
     public KeyboardHandler(View rootView, Activity activity) {
         this.rootView = rootView;
         this.activity = activity;
     }
 
+    /**
+     * hides view when keyboard is visible
+     * @param viewId id of view to hide
+     */
     public void hideViewOnKeyboardUp(int viewId) {
         /*
           KEYBOARD CODE SOURCE: https://stackoverflow.com/questions/4745988/
@@ -54,6 +66,10 @@ public class KeyboardHandler {
                 });
     }
 
+    /**
+     * hides the keyboard
+     * @param activity activity
+     */
     public static void hideKeyboard(Activity activity) {
         /*
           KEYBOARD CODE SOURCE: https://stackoverflow.com/questions/1109022/

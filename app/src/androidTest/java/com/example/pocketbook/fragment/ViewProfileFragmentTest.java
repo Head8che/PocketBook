@@ -242,27 +242,46 @@ public class ViewProfileFragmentTest {
         onView(withId(R.id.homeFragmentRecyclerBooks))  // click on the mock book
                 .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
 
+        View profileBtn = solo.getView(R.id.viewBookUsernameTextView);
+        solo.clickOnView(profileBtn);
+
+        // gets the recycler for the books
+        RecyclerView profileView = (RecyclerView) solo.getView(R.id.viewProfileRecyclerBooks);
+
+        // gets the number of books in the recycler
+        int userNumOfBooks = Objects.requireNonNull(profileView.getAdapter()).getItemCount();
+
+        int bookPosition = -1;
+        for (int i = 0; i < userNumOfBooks; i++) {
+            Log.e("VIEW_BOOK_TEST", "in-scroll");
+            // scroll to the book position
+            onView(withId(R.id.viewProfileRecyclerBooks)).perform(scrollToPosition(i));
+            RecyclerView.ViewHolder viewHolder = profileView.findViewHolderForAdapterPosition(i);
+            if ((viewHolder != null)  // check if the current book is the mock book
+                    && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
+                bookPosition = i;
+                break;
+            }
+        }
+
+        // assert that the mock book was actually found
+        assertNotEquals(-1, bookPosition);
+
+        onView(withId(R.id.viewProfileRecyclerBooks))  // click on the mock book
+                .perform(RecyclerViewActions.actionOnItemAtPosition(bookPosition, click()));
+
+        View profileBackBtn = solo.getView(R.id.viewBookFragBackBtn);
+        solo.clickOnView(profileBackBtn);
+
         solo.sleep(2000); // give it time to change fragments to ViewBookFragment
     }
 
     /**
-     * Check if the back button in the fragment view profile worked with assertTrue.
+     *
      * Check if the back button in the ViewProfileFragment worked with assertTrue.
      */
     @Test
     public void checkBackButton(){
-
-        View userProfileBtn = solo.getView(R.id.viewBookUsernameTextView);
-
-        solo.clickOnView(userProfileBtn); // click back button
-
-        solo.sleep(2000); // give it time to change activity
-
-        // assert that we are in ProfileFragment i.e. that the user's first name and last name
-        // are shown, and that Suggested Books is shown, since the user has no books
-        assertTrue(solo.searchText("MockFirst"));
-        assertTrue(solo.searchText("MockLast"));
-        assertTrue(solo.searchText("Owned Books"));
 
         View userProfileBackBtn = solo.getView(R.id.viewUserProfileBackBtn);
 

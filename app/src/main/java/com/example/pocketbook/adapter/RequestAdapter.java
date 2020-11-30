@@ -104,11 +104,6 @@ public class RequestAdapter extends FirestoreRecyclerAdapter<Request,
         //get the requester's info from Firestore to display it to the owner
         String requesterEmail = request.getRequester();
 
-        // TODO: if request is accepted:
-        //  - change tab title from REQUESTS to ACCEPTED
-        //  - hide decline button
-        //  - set test to You Accepted Username's Request
-        //  - feat: add Cancel Accept feature to requests & cancel request to ViewBookFrag
 
         FirebaseFirestore.getInstance().collection("users").document(requesterEmail)
                 .get()

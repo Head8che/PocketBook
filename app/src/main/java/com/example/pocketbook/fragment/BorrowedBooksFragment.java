@@ -25,7 +25,7 @@ import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BorrowedBooksFragment#newInstance} factory method to
+ * Use the {@link #newInstance(User,boolean) newInstance} factory method to
  * create an instance of this fragment.
  */
 public class BorrowedBooksFragment extends Fragment {
@@ -37,6 +37,11 @@ public class BorrowedBooksFragment extends Fragment {
 
     FirestoreRecyclerOptions<Book> options;
 
+    /**
+     * @param user User object
+     * @param isOwnerTab boolean
+     * @return a new instance of BorrowedBooksFragment
+     */
     public static BorrowedBooksFragment newInstance(User user, boolean isOwnerTab) {
         BorrowedBooksFragment borrowedBooksfragment = new BorrowedBooksFragment();
         Bundle args = new Bundle();

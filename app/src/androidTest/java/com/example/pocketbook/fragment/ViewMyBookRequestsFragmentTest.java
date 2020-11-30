@@ -396,7 +396,7 @@ public class ViewMyBookRequestsFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
     }
-    
+
     /**
      * Runs after each test to remove the mock users and the mock book from Firebase.
      */

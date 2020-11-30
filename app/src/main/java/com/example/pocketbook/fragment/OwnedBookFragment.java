@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,7 +24,7 @@ import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link OwnedBookFragment#newInstance} factory method to
+ * Use the {@link #newInstance(User) newInstance} factory method to
  * create an instance of this fragment.
  */
 public class OwnedBookFragment extends Fragment {

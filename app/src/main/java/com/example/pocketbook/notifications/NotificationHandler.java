@@ -43,8 +43,8 @@ public class NotificationHandler {
 
     /**
      * send notification to a user when the currentUser requests a book owned by that user
-     * @param currentUser : the user currently using the app
-     * @param book : the book being requested
+     * @param currentUser  the user currently using the app
+     * @param book  the book being requested
      */
     public static void sendNotificationBookRequested(User currentUser,Book book){
 
@@ -77,8 +77,8 @@ public class NotificationHandler {
 
     /**
      * send a notification to a user when the current user declined their request
-     * @param request : the request object carrying info about the request
-     * @param book : the book its request got declined
+     * @param request  the request object carrying info about the request
+     * @param book  the book its request got declined
      */
     public static void sendNotificationRequestDeclined(Request request, Book book){
 
@@ -124,8 +124,8 @@ public class NotificationHandler {
 
     /**
      * send notification to a user when currentUser accepts their request
-     * @param request : request object carrying information about the request
-     * @param book : the book its request was accepted
+     * @param request  request object carrying information about the request
+     * @param book  the book its request was accepted
      */
     public static void sendNotificationRequestAccepted(Request request, Book book) {
         String msg = String.format("Your request for '%s' has " + "been accepted", book.getTitle());
@@ -173,8 +173,8 @@ public class NotificationHandler {
 
     /**
      * send RemoteMessage carrying the notification's data to a user with a token
-      * @param token : the token of the user receiving the notification
-     * @param data : the data of the notification
+      * @param token  the token of the user receiving the notification as a String
+     * @param data  the data of the notification as a Data object
      */
     private static void sendNotification(String token,Data data) {
 

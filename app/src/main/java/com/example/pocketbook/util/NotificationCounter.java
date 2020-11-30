@@ -16,7 +16,7 @@ public class NotificationCounter {
 
     /**
      * constructor for the NotificationCounter class
-     * @param view : the view where the counter is displayed
+     * @param view  the view where the counter is displayed
      */
     public NotificationCounter(View view){
         notificationNumberCounter = view.findViewById(R.id.fragmentHomeCounterTextView);
@@ -25,7 +25,7 @@ public class NotificationCounter {
 
     /**
      * updates the notification counter in the app
-     * @param counter : the number of unseen notifications for the user
+     * @param counter  the number of unseen notifications for the user
      */
     public void setNotificationNumberCounterInTextView(int counter) {
         int maxNumber = 99; // max number that  can be displayed

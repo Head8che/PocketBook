@@ -20,6 +20,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.activity.EditBookActivity;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
+import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,17 +31,30 @@ import java.util.List;
 import java.util.Objects;
 
 
+/**
+ *  Allows user to view details of a book they own.
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(Book) newInstance} method to create an instance of this fragment.
+ */
 public class ViewMyBookBookFragment extends Fragment {
 
     private Book book;
 
     private ListenerRegistration listenerRegistration;
 
+    /**
+     *  required empty public constructor
+     */
     public ViewMyBookBookFragment() {
-        // Required empty public constructor
+
     }
 
 
+    /**
+     * method used to  create a new instance for the fragment
+     * @param book the book being viewed as a book object
+     * @return a new instance  of the ViewMyBookBookFragment
+     */
     public static ViewMyBookBookFragment newInstance(Book book) {
         ViewMyBookBookFragment fragment = new ViewMyBookBookFragment();
         Bundle args = new Bundle();

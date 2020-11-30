@@ -43,7 +43,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     }
 
     /**
-     * sending notifications for android oreo and above
+     * method to send notifications for android oreo and above
      * @param remoteMessage: the message carrying the notification data
      */
 
@@ -98,7 +98,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     }
 
     /**
-     * sending notifications for android before oreo
+     * method to send notifications for android before oreo
      * @param remoteMessage: message carrying notification data
      */
     private void sendNotification(RemoteMessage remoteMessage){

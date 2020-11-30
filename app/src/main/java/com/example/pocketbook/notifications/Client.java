@@ -8,6 +8,11 @@ public class Client {
 
     private static Retrofit retrofit = null;
 
+    /**
+     * getter method for the retrofit client
+     * @param url
+     * @return retrofit object
+     */
     public static Retrofit getClient(String url){
         if(retrofit == null){
             retrofit = new Retrofit.Builder()

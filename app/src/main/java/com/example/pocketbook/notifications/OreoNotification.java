@@ -27,8 +27,11 @@ public class OreoNotification extends ContextWrapper {
         }
     }
 
-    // creating a channel for the app's notifications, required for android oreo and above
+
     @TargetApi(Build.VERSION_CODES.O)
+    /**
+     * creating a channel for the app's notifications, required for android oreo and above
+     */
     private void createChannel(){
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                 CHANNEL_NAME,NotificationManager.IMPORTANCE_DEFAULT);
@@ -38,7 +41,10 @@ public class OreoNotification extends ContextWrapper {
         getManager().createNotificationChannel(channel);
     }
 
-    // returns a NotificationManager object to build and display notifications
+    /**
+     * getter function for the notificationManager to build and display notifications
+     * @return notificationManager object
+     */
     public NotificationManager getManager(){
         if (notificationManager == null){
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -47,7 +53,15 @@ public class OreoNotification extends ContextWrapper {
         return notificationManager;
     }
 
-    // method to return Notification.Builder object used to display the notification
+    /**
+     * getter method for a Notification.Builder object
+     * @param title the title of the notification displayed in the phone's notifications as a String
+     * @param body the body of  the notification
+     * @param icon the icon of the app
+     * @param group the group the notification belongs to
+     * @param pendingIntent a pendingIntent to direct the user to the NotificationFragment in the HomeActivity in the app
+     * @return Notification.Builder object used to display the notification
+     */
     @TargetApi(Build.VERSION_CODES.O)
     public Notification.Builder getOreoNotification(String title, String body, String icon, String group, PendingIntent pendingIntent){
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)

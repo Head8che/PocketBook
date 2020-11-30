@@ -11,7 +11,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.pocketbook.R;
+import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Exchange;
+import com.example.pocketbook.model.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,6 +23,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
+
+/**
+ *  Allows the user to view a pickup location for a book
+ * A {@link Fragment} subclass.
+ * implements {@link OnMapReadyCallback}.
+ * Use the {@link #newInstance(Exchange) newInstance} method to create an instance of this fragment.
+ */
 public class ViewLocationFragment extends Fragment implements OnMapReadyCallback {
 
     Exchange exchange;
@@ -28,10 +37,17 @@ public class ViewLocationFragment extends Fragment implements OnMapReadyCallback
     Marker marker;
     SupportMapFragment mapFrag;
 
+    /**
+     * required empty constructor
+     */
     public ViewLocationFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     * method to create a new instance of the ViewLocationFragment
+     * @param exchange carries information about a book exchange between two users, stored in an exchange object
+     * @return new instance of ViewLocationFragment
+     */
     public static ViewLocationFragment newInstance(Exchange exchange) {
 
         ViewLocationFragment viewLocationFragment = new ViewLocationFragment();

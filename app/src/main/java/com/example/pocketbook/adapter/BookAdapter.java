@@ -34,6 +34,12 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.Book
     private User bookOwner;
     private FragmentActivity activity;
 
+    /**
+     * BookAdapter constructor
+     * @param options Firestore Recycler Options
+     * @param currentUser current user
+     * @param activity current activity
+     */
     public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, User currentUser,
                        FragmentActivity activity) {
         super(options);
@@ -152,6 +158,10 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.Book
 
     }
 
+    /**
+     * Gets the current item count
+     * @return current count
+     */
     @Override
     public int getItemCount() {
         return super.getItemCount();

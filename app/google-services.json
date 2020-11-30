@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "932279066440",
+    "firebase_url": "https://pocketbook-t09.firebaseio.com",
+    "project_id": "pocketbook-t09",
+    "storage_bucket": "pocketbook-t09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932279066440:android:de1aac366bd022dacf1d7d",
+        "android_client_info": {
+          "package_name": "com.example.pocketbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932279066440-b9fd8mkpnvn65bn61gn8ktpbvoi94nm1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8SIfcXQxG3GpesNpVOSnPLQmAqUR687s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932279066440-b9fd8mkpnvn65bn61gn8ktpbvoi94nm1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+

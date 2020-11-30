@@ -45,8 +45,8 @@ public class HomeFragment extends Fragment {
 
     private User currentUser;
 
-    FirestoreRecyclerOptions<Book> options;
-    ListenerRegistration listenerRegistration;
+    private FirestoreRecyclerOptions<Book> options;
+    private ListenerRegistration listenerRegistration;
     /**
      * Home Page fragment instance that bundles the user/catalogue to be displayed
      * @param user current user
@@ -106,6 +106,12 @@ public class HomeFragment extends Fragment {
                             case MODIFIED:
                                 Log.d("SCROLL_UPDATE", "Modified doc: " + document);
                                 mAdapter.notifyDataSetChanged();
+
+                                getParentFragmentManager()
+                                        .beginTransaction()
+                                        .detach(HomeFragment.this)
+                                        .attach(HomeFragment.this)
+                                        .commitAllowingStateLoss();
                                 break;
 
                             case REMOVED:

@@ -260,13 +260,15 @@ public class ViewMyBookFragmentTest {
 
         solo.getText("Mock Title").getLocationInWindow(location);
 
-        fromX = location[0];
+        fromX = location[0] + 100;
         fromY = location[1];
 
-        toX = location[0] - 200;
+        toX = location[0] - 500;
         toY = fromY;
 
-        solo.drag(fromX, toX, fromY, toY, 10);
+        solo.drag(fromX, toX, fromY, toY, 15);
+
+        solo.sleep(2000);
 
         // assert that there are no requests (no ACCEPT and DECLINE button)
         assertFalse(solo.searchText("ACCEPT"));

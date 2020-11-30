@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.ViewAllBookAdapter;
 import com.example.pocketbook.model.Book;
+import com.example.pocketbook.model.Request;
 import com.example.pocketbook.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,9 +25,9 @@ import com.google.firebase.firestore.Query;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RequestedBooksFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * shows the owned and non-owned requested books for a user
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(User, boolean) newInstance}  method to create an instance of this fragment.
  */
 public class RequestedBooksFragment extends Fragment {
 
@@ -37,6 +38,12 @@ public class RequestedBooksFragment extends Fragment {
 
     FirestoreRecyclerOptions<Book> options;
 
+    /**
+     * method to create a new instance of RequestedBooksFragment
+     * @param user the user viewing the fragment as a User object
+     * @param isOwnerTab a boolean to verify whether the user is an owner of the requested books or not
+     * @return a new instance of RequestedBooksFragment
+     */
     public static RequestedBooksFragment newInstance(User user, boolean isOwnerTab) {
         RequestedBooksFragment requestedbooksfragment = new RequestedBooksFragment();
         Bundle args = new Bundle();

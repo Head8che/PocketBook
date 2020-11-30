@@ -50,6 +50,11 @@ import java.util.UUID;
 import static com.example.pocketbook.notifications
         .NotificationHandler.sendNotificationRequestAccepted;
 
+/**
+ * Allows users to set a pickup location for their requested book
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(Book,Request,String,String,User) newInstance} method to create an instance of this fragment.
+ */
 public class SetLocationFragment extends Fragment implements OnMapReadyCallback {
 
     private Book book;
@@ -77,18 +82,30 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
     private boolean validDate;
     private boolean validTime;
 
-    String bookOwner;
-    String bookRequester;
+    private String bookOwner;
+    private String bookRequester;
     private User currentUser;
 
-    GoogleMap googleMap = null;
-    Marker marker;
-    SupportMapFragment mapFrag;
+    private GoogleMap googleMap = null;
+    private Marker marker;
+    private SupportMapFragment mapFrag;
 
+    /**
+     * Required empty public constructor
+     */
     public SetLocationFragment() {
-        // Required empty public constructor
+
     }
 
+    /**
+     * method to create a new instance of SetLocationFragment
+     * @param book the book being exchanged
+     * @param request the request of the book
+     * @param bookOwner the owner of the book
+     * @param bookRequester the requester of the book
+     * @param currentUser the currentUser logged in in the app
+     * @return a new instance of SetLocationFragment
+     */
     public static SetLocationFragment newInstance(Book book, Request request,
                                                   String bookOwner, String bookRequester,
                                                   User currentUser) {
@@ -203,7 +220,7 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
 
 
         confirmBtn.setOnClickListener(v -> {
-            // TODO: Need to Notify the user of Accept and Decline all other Requests
+
             if (validLocation && validDate && validTime
                     && (latitude != invalidCoord) && (longitude != invalidCoord)) {
 

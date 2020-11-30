@@ -15,6 +15,7 @@ import com.example.pocketbook.R;
 import com.example.pocketbook.adapter.RequestAdapter;
 import com.example.pocketbook.model.Book;
 import com.example.pocketbook.model.Request;
+import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentChange;
@@ -26,18 +27,19 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ViewMyBookRequestsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ /**
+ * Allows users to view requests for a book they own
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(Book) newInstance} method to create an instance of this fragment.
  */
 public class ViewMyBookRequestsFragment extends Fragment {
 
     private RequestAdapter requestAdapter;
     private Book book;
 
-    FirestoreRecyclerOptions<Request> options;
-    ListenerRegistration listenerRegistration;
-    ListenerRegistration bookListenerRegistration;
+    private FirestoreRecyclerOptions<Request> options;
+    private ListenerRegistration listenerRegistration;
+    private ListenerRegistration bookListenerRegistration;
 
 
     public ViewMyBookRequestsFragment() {
@@ -46,7 +48,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
 
     /**
      * create a new instance of ViewMyBookRequestsFragment
-     * @param book: the book being viewed
+     * @param book : the book being viewed
      * @return ViewMyBookRequestsFragment
      */
     public static ViewMyBookRequestsFragment newInstance(Book book) {

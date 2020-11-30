@@ -35,6 +35,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
+/**
+ * Allows users to view their profile or a profile for another user
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(User,User) newInstance} method to create an instance of this fragment.
+ */
 public class ViewProfileFragment extends Fragment {
 
     private static final int numColumns = 2;

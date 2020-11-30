@@ -34,17 +34,25 @@ import static com.example.pocketbook.util.FirebaseIntegrity
         .getAllNotificationsForCurrentUserFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.setAllNotificationsToSeenTrue;
 
+/**
+ * Displays notifications that user has received
+ * A simple {@link Fragment} subclass.
+ * Use the {@link #newInstance(User) newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class NotificationsFragment extends Fragment {
 
     private NotificationAdapter notificationAdapter;
     private User currentUser;
-    private  ArrayList<String> notifications;
-    FirestoreRecyclerOptions<Notification> options;
-    ListenerRegistration listenerRegistration;
+    private ArrayList<String> notifications;
+    private FirestoreRecyclerOptions<Notification> options;
+    private ListenerRegistration listenerRegistration;
 
-
+    /**
+     * Required empty public constructor
+     */
     public NotificationsFragment() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -186,7 +194,6 @@ public class NotificationsFragment extends Fragment {
             // delete notification when the user swipes on it
             deleteNotificationFromFirebase(notifications,
                     viewHolder.getAdapterPosition(),currentUser.getEmail());
-            notificationAdapter.notifyDataSetChanged();
         }
     };
 }

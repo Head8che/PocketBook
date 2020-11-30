@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.pocketbook.fragment.NotificationsFragment;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
@@ -37,11 +39,18 @@ import static com.example.pocketbook.util.FirebaseIntegrity.updateToken;
 public class HomeActivity extends AppCompatActivity {
     private User currentUser;
     private BottomNavigationView bottomNav;
-    private Bundle extras;
     private int LAUNCH_ADD_BOOK_CODE = 1234;
     private Fragment selectedFragment;
-    private String FRAG_TAG;
     private ScanHandler scanHandler;
+    private boolean shouldReplaceFragment = true;
+
+    private String FRAG_TAG;
+    private final String HOME_FRAG_TAG = "HOME_FRAGMENT";
+    private final String SEARCH_FRAG_TAG = "SEARCH_FRAGMENT";
+    private final String OWNER_FRAG_TAG = "OWNER_FRAGMENT";
+    private final String PROFILE_FRAG_TAG = "PROFILE_FRAGMENT";
+
+    HashMap <String, Integer> tagIds = new HashMap<>();
 
     public BottomNavigationView getBottomNav() {
         return bottomNav;
@@ -63,9 +72,14 @@ public class HomeActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(NavListener);
 
-        FRAG_TAG = "HOME_FRAGMENT";
+        tagIds.put(HOME_FRAG_TAG, R.id.bottom_nav_home);
+        tagIds.put(SEARCH_FRAG_TAG, R.id.bottom_nav_search);
+        tagIds.put(OWNER_FRAG_TAG, R.id.bottom_nav_profile);
+        tagIds.put(PROFILE_FRAG_TAG, R.id.bottom_nav_profile);
+
+        FRAG_TAG = HOME_FRAG_TAG;
         currentUser = (User) intent.getSerializableExtra("CURRENT_USER");
-        extras = intent.getExtras();
+        Bundle extras = intent.getExtras();
         if ((extras != null) && (extras.containsKey("NOTI_FRAG"))) {
             if (extras.getBoolean("NOTI_FRAG")) {
                 if (!(Objects.equals(Objects
@@ -87,7 +101,10 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Transfers the layout from the current activity to the selected activity
+     * @param intent data from the current activity
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -99,28 +116,45 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Back button
+     */
     @Override
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
         Log.e("COUNT", count + "");
 
-        if (count == 0) {
-            if (bottomNav.getSelectedItemId() != R.id.bottom_nav_home
-                    || (extras.containsKey("NOTI_FRAG") && extras.getBoolean("NOTI_FRAG")))  {
-                bottomNav.setSelectedItemId(R.id.bottom_nav_home);
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                        HomeFragment.newInstance(currentUser)).commit();
-                return;
-            }
-            super.onBackPressed();
-        } else if ((count == 1)  // if there's only one frag (the Home Frag)
-                && (getSupportFragmentManager().getBackStackEntryCount() == 1)) {
+        // if there's only one frag (the Home Frag)
+        if ((count == 0) || ((count == 1))) {
             finish();
         }
         else {
+            // (count - 1) = current fragment
+            FragmentManager.BackStackEntry backEntry
+                    = getSupportFragmentManager().getBackStackEntryAt(count - 2);
+            String penultimateFragTag = getSupportFragmentManager()
+                    .getBackStackEntryAt(count - 2).getName();
+            String currentFragTag = getSupportFragmentManager()
+                    .getBackStackEntryAt(count - 1).getName();
+
+            Log.e("BACK", currentFragTag + " " + penultimateFragTag);
+
             getSupportFragmentManager().popBackStack();
+            shouldReplaceFragment = (currentFragTag == null) && (penultimateFragTag == null);
+
+            if (selectedFragment.isAdded()) {
+                getSupportFragmentManager().saveFragmentInstanceState(selectedFragment);
+            }
+
+            if ((penultimateFragTag != null) && (tagIds.containsKey(penultimateFragTag))) {
+                Log.e("BACK", "CHOOSE " + penultimateFragTag);
+
+                bottomNav.setSelectedItemId(tagIds.get(penultimateFragTag));
+            }
+
+//            bottomNav.setSelectedItemId(R.id.bottom_nav_scan);
+            Log.e("BACK", "SELECT " + getSupportFragmentManager().getFragments().size());
         }
 
     }
@@ -136,11 +170,11 @@ public class HomeActivity extends AppCompatActivity {
                     switch (item.getItemId()){
                         case R.id.bottom_nav_home:
                             selectedFragment = HomeFragment.newInstance(currentUser);
-                            FRAG_TAG = "HOME_FRAGMENT";
+                            FRAG_TAG = HOME_FRAG_TAG;
                             break;
                         case R.id.bottom_nav_search:
                             selectedFragment = SearchFragment.newInstance(currentUser);
-                            FRAG_TAG = "SEARCH_FRAGMENT";
+                            FRAG_TAG = SEARCH_FRAG_TAG;
                             break;
                         case R.id.bottom_nav_add:
                             Intent intent = new Intent(getBaseContext(), AddBookActivity.class);
@@ -158,23 +192,49 @@ public class HomeActivity extends AppCompatActivity {
 
                         FirebaseFirestore.getInstance()
                                 .collection("catalogue")
-                                .whereEqualTo("owner",currentUser.getEmail())
+                                .whereEqualTo("owner", currentUser.getEmail())
                                 .get()
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         if (task.getResult().isEmpty()) {
-                                            FRAG_TAG = "PROFILE_FRAGMENT";
-                                            if (!(CURRENT_TAG.equals(FRAG_TAG))) {
-                                                getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container,
-                                                                profileNewFragment,
-                                                                FRAG_TAG)
-                                                        .addToBackStack(FRAG_TAG)
-                                                        .commit();
-                                            }
+                                            FirebaseFirestore.getInstance()
+                                                    .collection("catalogue")
+                                                    .whereArrayContains("requesters",
+                                                            currentUser.getEmail())
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            if (task1.getResult().isEmpty()) {
+                                                                FRAG_TAG = PROFILE_FRAG_TAG;
+                                                                if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                                        && shouldReplaceFragment) {
+                                                                    getSupportFragmentManager()
+                                                                            .beginTransaction()
+                                                                            .replace(R.id.container,
+                                                                                    profileNewFragment,
+                                                                                    FRAG_TAG)
+                                                                            .addToBackStack(FRAG_TAG)
+                                                                            .commit();
+                                                                }
+                                                            } else {
+                                                                FRAG_TAG = OWNER_FRAG_TAG;
+                                                                if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                                        && shouldReplaceFragment) {
+                                                                    getSupportFragmentManager()
+                                                                            .beginTransaction()
+                                                                            .replace(R.id.container,
+                                                                                    profileExistingFragment,
+                                                                                    FRAG_TAG)
+                                                                            .addToBackStack(FRAG_TAG)
+                                                                            .commit();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
                                         } else {
-                                            FRAG_TAG = "OWNER_FRAGMENT";
-                                            if (!(CURRENT_TAG.equals(FRAG_TAG))) {
+                                            FRAG_TAG = OWNER_FRAG_TAG;
+                                            if (!(CURRENT_TAG.equals(FRAG_TAG))
+                                                    && shouldReplaceFragment) {
                                                 getSupportFragmentManager().beginTransaction()
                                                         .replace(R.id.container,
                                                                 profileExistingFragment,
@@ -186,22 +246,35 @@ public class HomeActivity extends AppCompatActivity {
                                     }
                                 });
                     }
-                    if ((selectedFragment != null)) {
+
+                    if ((selectedFragment != null) && shouldReplaceFragment) {
 
                         if (!(CURRENT_TAG.equals(FRAG_TAG))
                                 && (item.getItemId() !=  R.id.bottom_nav_profile)
+                                && (!(FRAG_TAG.equals(OWNER_FRAG_TAG)))
+                                && (!(FRAG_TAG.equals(PROFILE_FRAG_TAG)))
                         ) {
                             // only change fragment if it is not the current fragment
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     selectedFragment, FRAG_TAG).addToBackStack(FRAG_TAG).commit();
                         }
-                        // TODO: Scroll up selected fragment if it is current fragment
                     }
+
+                    if (!shouldReplaceFragment) {
+                        shouldReplaceFragment = true;
+                    }
+
                     return true;
                 }
             };
 
 
+    /**
+     * Scan the ISBN of the book
+     * @param requestCode code that the image activity was launched with
+     * @param resultCode code that the image activity returns
+     * @param data data from the intent
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -216,7 +289,9 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         if (requestCode == LAUNCH_ADD_BOOK_CODE) {
-            bottomNav.setSelectedItemId(R.id.bottom_nav_home);
+            if (tagIds.containsKey(FRAG_TAG)) {
+                bottomNav.setSelectedItemId(tagIds.get(FRAG_TAG));
+            }
 
             if (resultCode == Activity.RESULT_OK) {
 

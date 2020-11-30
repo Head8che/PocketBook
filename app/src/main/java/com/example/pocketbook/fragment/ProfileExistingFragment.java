@@ -31,7 +31,7 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileExistingFragment#newInstance} factory method to
+ * Use the {@link #newInstance(User) newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ProfileExistingFragment extends Fragment {

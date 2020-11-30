@@ -25,15 +25,15 @@ public class OnBoardingActivity extends AppCompatActivity {
      */
 
     //Variables
-    ViewPager viewPager;
-    LinearLayout dotsLayout;
-    OnBoardingSliderAdapter sliderAdapter;
-    TextView[] dots;
-    Button nextBtn;
-    Button skipBtn;
-    int slideCount = 3;
-    int currentPos;
-    User currentUser;
+    private ViewPager viewPager;
+    private LinearLayout dotsLayout;
+    private OnBoardingSliderAdapter sliderAdapter;
+    private TextView[] dots;
+    private Button nextBtn;
+    private Button skipBtn;
+    private int slideCount = 3;
+    private int currentPos;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +68,18 @@ public class OnBoardingActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(changeListener);
     }
 
+    /**
+     * Transfers the user from the current activity to the home activity
+     */
     public void skip() {
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("CURRENT_USER", currentUser);
         startActivity(intent);
     }
 
+    /**
+     * Goes to the next activity
+     */
     public void next() {
         if (currentPos == (slideCount - 1)) {
             skip();
@@ -84,6 +90,10 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Add dots to the activity
+     * @param position gets the current position
+     */
     private void addDots(int position) {
 
         dots = new TextView[slideCount];

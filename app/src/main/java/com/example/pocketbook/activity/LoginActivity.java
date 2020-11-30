@@ -27,25 +27,27 @@ import java.util.Objects;
  * Allows users to login to Pocketbook with valid credentials
  */
 public class LoginActivity extends AppCompatActivity {
-    private User currentUser = new User();
+    private User currentUser;
 
     private Boolean validUserEmail;
     private Boolean validUserPassword;
 
-    TextInputEditText layoutUserEmail;
-    TextInputEditText layoutUserPassword;
+    private TextInputEditText layoutUserEmail;
+    private TextInputEditText layoutUserPassword;
 
-    TextInputLayout layoutUserEmailContainer;
-    TextInputLayout layoutUserPasswordContainer;
+    private TextInputLayout layoutUserEmailContainer;
+    private TextInputLayout layoutUserPasswordContainer;
 
-    Button loginButton;
-    Button signUpButton;
+    private Button loginButton;
+    private Button signUpButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        currentUser = new User();
 
         // initialize validation booleans to false
         validUserEmail = false;

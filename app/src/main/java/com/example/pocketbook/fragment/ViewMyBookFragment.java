@@ -25,13 +25,16 @@ import com.google.firebase.firestore.ListenerRegistration;
 import java.util.Objects;
 
 
+
 /**
- * Allows users to delete a book and move between the Book and Requests tab for their books
+ *  Allows users to delete a book and move between the Book and Requests tab for their books
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(User,Book) newInstance} method to create an instance of this fragment.
  */
 public class ViewMyBookFragment extends Fragment {
 
     private Book book;
-    ListenerRegistration listenerRegistration;
+    private ListenerRegistration listenerRegistration;
 
     public ViewMyBookFragment() {
         // Required empty public constructor

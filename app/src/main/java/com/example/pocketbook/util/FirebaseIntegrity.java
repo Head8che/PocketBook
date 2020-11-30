@@ -171,42 +171,89 @@ public class FirebaseIntegrity {
         }
     }
 
+    /**
+     * sets book title in Firebase
+     * @param book related book
+     * @param title book title
+     */
     public static void setBookTitleFirebase(Book book, String title) {
         if (Parser.isValidBookTitle(title)) {
             setBookDataFirebase(book, "title", title);
         }
     }
+
+    /**
+     * sets book author in Firebase
+     * @param book related book
+     * @param author book author
+     */
     public static void setBookAuthorFirebase(Book book, String author) {
         if (Parser.isValidBookAuthor(author)) {
             setBookDataFirebase(book, "author", author);
         }
     }
+
+    /**
+     * sets book isbn in Firebase
+     * @param book related book
+     * @param isbn book isbn
+     */
     public static void setBookIsbnFirebase(Book book, String isbn) {
         if (Parser.isValidBookIsbn(isbn)) {
             setBookDataFirebase(book, "isbn", Parser.convertToIsbn13(isbn));
         }
     }
+
+    /**
+     * sets book comment in Firebase
+     * @param book related book
+     * @param comment book comment
+     */
     public static void setBookCommentFirebase(Book book, String comment) {
         if (Parser.isValidBookComment(comment)) {
             setBookDataFirebase(book, "comment", comment);
         }
     }
+
+    /**
+     * sets book condition in Firebase
+     * @param book related book
+     * @param condition book condition
+     */
     public static void setBookConditionFirebase(Book book, String condition) {
         if (Parser.isValidBookCondition(condition)) {
             setBookDataFirebase(book, "condition", condition);
         }
     }
+
+    /**
+     * sets book status in Firebase
+     * @param book related book
+     * @param status book status
+     */
     public static void setBookStatusFirebase(Book book, String status) {
         if (Parser.isValidBookStatus(status)) {
             setBookDataFirebase(book, "status", status);
         }
     }
+
+    /**
+     * sets book photo in Firebase
+     * @param book related book
+     * @param photo book photo
+     */
     public static void setBookPhotoFirebase(Book book, String photo) {
         if (Parser.isValidBookPhoto(photo)) {
             setBookDataFirebase(book, "photo", photo);
         }
     }
 
+    /**
+     * sets book data in Firebase
+     * @param book related book
+     * @param bookFieldName book field to change
+     * @param bookFieldValue value that book field should be changed to
+     */
     public static void setBookDataFirebase(Book book, String bookFieldName, String bookFieldValue) {
         DocumentReference documentReference = FirebaseFirestore.getInstance()
                 .collection("catalogue")
@@ -236,6 +283,11 @@ public class FirebaseIntegrity {
                 });
     }
 
+    /**
+     * pushes new book to Firebase
+     * @param newBook book object
+     * @param localURL url of photo if it exists
+     */
     public static void pushNewBookToFirebaseWithURL(Book newBook, String localURL) {
 
         if (Parser.isValidBookObject(newBook)) {
@@ -275,6 +327,11 @@ public class FirebaseIntegrity {
 
     }
 
+    /**
+     * pushes new book to Firebase
+     * @param newBook book object
+     * @param bitmap bitmap of photo is it exists
+     */
     public static void pushNewBookToFirebaseWithBitmap(Book newBook, Bitmap bitmap) {
 
         if (Parser.isValidBookObject(newBook)) {
@@ -311,6 +368,10 @@ public class FirebaseIntegrity {
 
     }
 
+    /**
+     * deletes book from Firebase
+     * @param book book to delete
+     */
     public static void deleteBookFirebase(Book book) {
         FirebaseFirestore.getInstance()
                 .collection("catalogue")
@@ -508,11 +569,6 @@ public class FirebaseIntegrity {
                 .child("default_images").child("no_profileImg.png");
     }
 
-    public static void setEmailFirebase(User user, String email) {
-        if (Parser.isValidUserEmail(email)) {
-            setUserDataFirebase(user, "email", email);
-        }
-    }
     public static void setFirstNameFirebase(User user, String firstName) {
         if (Parser.isValidFirstName(firstName)) {
             setUserDataFirebase(user, "firstName", firstName);
@@ -528,11 +584,7 @@ public class FirebaseIntegrity {
             setUserDataFirebase(user, "username", username);
         }
     }
-    public static void setPasswordFirebase(User user, String password) {
-        if (Parser.isValidPassword(password)) {
-            setUserDataFirebase(user, "password", password);
-        }
-    }
+
     public static void setPhoneNumberFirebase(User user, String phoneNumber) {
         if (Parser.isValidPhoneNumber(phoneNumber)) {
             setUserDataFirebase(user, "phoneNumber", phoneNumber);
@@ -558,35 +610,6 @@ public class FirebaseIntegrity {
                         Log.e("SET_USER", "Error writing user data!", e);
                     }
                 });
-    }
-
-    /**
-     * puts user information into Firebase*
-     */
-    public static void pushUserToFirebaseNoAuth(User newUser) {
-
-        if (Parser.isValidUserObject(newUser)) {
-
-            String firstName = newUser.getFirstName();
-            String lastName = newUser.getLastName();
-            String email = newUser.getEmail();
-            String username = newUser.getUsername();
-            String password = newUser.getPassword();
-            String phoneNumber = newUser.getPhoneNumber();
-            String photo = newUser.getPhoto();
-
-            HashMap<String, Object> docData = new HashMap<>();
-            docData.put("firstName", firstName);
-            docData.put("lastName", lastName);
-            docData.put("email", email);
-            docData.put("username", username);
-            docData.put("password", password);
-            docData.put("phoneNumber", phoneNumber);
-            docData.put("photo", photo);
-
-            FirebaseIntegrity.setDocumentFromObject("users", email, docData);
-
-        }
     }
 
     public static void pushNewUserToFirebaseWithURL(User newUser, String localURL) {

@@ -178,6 +178,12 @@ public class ViewAllBookAdapter
 
     }
 
+    /**
+     * sets the owner tab user
+     * @param bookHolder The bookHolder
+     * @param documentId The documentId
+     * @param stringId The stringId
+     */
     protected void setOwnerTabUser(BookHolder bookHolder, String documentId, int stringId) {
         FirebaseFirestore.getInstance()
                 .collection("catalogue")
@@ -238,6 +244,12 @@ public class ViewAllBookAdapter
 
     }
 
+    /**
+     * sets the borrower tab user
+     * @param bookHolder The bookHolder
+     * @param documentId The documentId
+     * @param stringId The stringId
+     */
     protected void setBorrowerTabUser(BookHolder bookHolder, String documentId, int stringId) {
         FirebaseFirestore.getInstance()
                 .collection("users")

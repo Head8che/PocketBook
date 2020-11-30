@@ -1175,6 +1175,79 @@ public class FirebaseIntegrity {
         return keywords;
     }
 
+    public static void deleteDocumentsFromSubcollectionOnFieldValue(String collectionName,
+                                                                    String subcollectionName,
+                                                                    String field,
+                                                                    String fieldValue) {
+        // get an instance of the collection
+        FirebaseFirestore.getInstance().collection(collectionName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        // if collection has documents
+                        if (!Objects.requireNonNull(task.getResult()).isEmpty()) {
+
+                            // for each document in collection
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if (document.exists()) {
+
+                                    FirebaseFirestore.getInstance()
+                                            .collection(collectionName)
+                                            .document(document.getId())
+                                            .collection(subcollectionName)
+                                            .whereEqualTo(field, fieldValue)
+                                            .get()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+
+                                                    // if subcollection has documents
+                                                    if (!Objects.requireNonNull(
+                                                            task1.getResult()).isEmpty()) {
+
+                                                        // for each document in subcollection
+                                                        for (DocumentSnapshot document1
+                                                                : task1.getResult()) {
+                                                            if (document1.exists()) {
+
+                                                                // delete the document
+                                                                deleteDocumentFromSubcollectionFirebase(
+                                                                        collectionName,
+                                                                        document.getId(),
+                                                                        subcollectionName,
+                                                                        document1.getId());
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    public static void deleteDocumentFromSubcollectionFirebase(String collectionName,
+                                                               String docID,
+                                                               String subcollectionName,
+                                                               String subcollectionDocID) {
+
+        // get an instance of the document and delete it
+        FirebaseFirestore.getInstance()
+                .collection(collectionName)
+                .document(docID)
+                .collection(subcollectionName)
+                .document(subcollectionDocID)
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (!(task.isSuccessful())) {
+                        Log.e("DELETE_DOCUMENT_FROM_COLLECTION",
+                                "Error deleting collection document!");
+                    }
+                });
+    }
+
     public static void updateBookRequestersInCollection(String collectionName, String bookID) {
         ArrayList<String> requesters = new ArrayList<>();
 

@@ -1,19 +1,11 @@
 package com.example.pocketbook.fragment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -22,11 +14,7 @@ import com.example.pocketbook.activity.AddBookActivity;
 import com.example.pocketbook.activity.HomeActivity;
 import com.example.pocketbook.activity.LoginActivity;
 import com.example.pocketbook.activity.SignUpActivity;
-import com.example.pocketbook.model.Book;
-import com.example.pocketbook.model.Request;
-import com.example.pocketbook.model.User;
 import com.example.pocketbook.util.FirebaseIntegrity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.robotium.solo.Solo;
@@ -37,7 +25,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -52,15 +39,15 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class ViewMyBookRequestsFragmentTest {
+public class BorrowerFragmentTest {
     private Solo solo;
 
     // timeout
     private int timeOut = 2000;
     // initialize two accounts with a default password
     private long currentTime = System.currentTimeMillis();
-    private String email1 = "mockviewbook1" + currentTime + "@gmail.com";
-    private String email2 = "mockviewbook2" + currentTime + "@gmail.com";
+    private String email1 = "mockborrowerfrag1" + currentTime + "@gmail.com";
+    private String email2 = "mockborrowerfrag2" + currentTime + "@gmail.com";
     private String password = "123456";
 
 
@@ -122,31 +109,89 @@ public class ViewMyBookRequestsFragmentTest {
         // As User2, request the mockBook created by User 1
         makeRequestForBook();
 
-        // return to LoginActivity
-        returnToLoginActivity();
-
-        // sign in User1
-        signInUser(email1);
-
-        // go to User1 profile
+        // go to User2 profile
         goToProfile();
 
-        // go to User1 mockBook page
-        goToViewMyBookFragment();
+        // go to User2 borrower fragment
+        goToBorrowerFragment();
 
     }
 
     @Test
-    public void checkMyBookRequestsTab() {
+    public void testItem() {
+        // assert that we are in BorrowerFragment and that the book details are visible
+        assertTrue(solo.searchText("Mock Title"));  // book title
+        assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
+
+        // gets the recycler for the books
+        RecyclerView view = (RecyclerView) solo.getView(R.id.profileBorrowerRecyclerRequestedBooks);
+
+        // gets the number of books in the recycler
+        int numOfBooks = Objects.requireNonNull(view.getAdapter()).getItemCount();
+
+        // assert that the added book is in the recycler
+        assertEquals(1, numOfBooks);
+
+        int position = -1;
+        for (int i = 0; i < numOfBooks; i++) {
+            // scroll to the book position
+            onView(withId(R.id.profileBorrowerRecyclerRequestedBooks)).perform(scrollToPosition(i));
+            RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(i);
+            if ((viewHolder != null)  // check if the current book is the mock book
+                    && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
+                position = i;
+                break;
+            }
+        }
+
+        // assert that the mock book was actually found
+        assertNotEquals(-1, position);
+
+        onView(withId(R.id.profileBorrowerRecyclerRequestedBooks))  // click on the mock book
+                .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+
+        solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
+    }
+
+    @Test
+    public void testViewAll() {
+
+        View viewAllBtn = solo.getView(R.id.ViewAllRequestedBorrower);
+
+        solo.clickOnView(viewAllBtn); // click view all button
+
+        // assert that we are in OwnedBookFragment and that the book details are visible
+        assertTrue(solo.searchText("Mock Title"));  // book title
+        assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
+
+        // gets the recycler for the books
+        RecyclerView view = (RecyclerView) solo.getView(R.id.requestedBooksRecyclerBooks);
+
+        // gets the number of books in the recycler
+        int numOfBooks = Objects.requireNonNull(view.getAdapter()).getItemCount();
+
+        // assert that the added book is in the recycler
+        assertEquals(1, numOfBooks);
+
+        onView(withId(R.id.requestedBooksRecyclerBooks))  // click on the mock book
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
+
+        // assert that we are in ViewMyBookFragment and that the book details are visible
+        assertTrue(solo.searchText("Mock Title"));  // book title
+        assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
+        assertTrue(solo.searchText("9781234567897"));  // book isbn
+        assertTrue(solo.searchText("FAIR"));  // book condition
+    }
+
+    private void goToBorrowerFragment () {
+        solo.clickOnView(solo.getView(R.id.bottom_nav_profile));  // click on profile button
+
         int fromX, toX, fromY, toY;
         int[] location = new int[2];
 
-        TextView titleField = (TextView) solo.getView(R.id.viewMyBookBookTitleTextView);
-
-        assertNotNull(titleField);  // title field exists
-        assertEquals("Mock Title", titleField.getText());  // assert that title is valid
-
-        solo.getText("Mock Title").getLocationInWindow(location);
+        solo.getView(R.id.ownerFragmentScrollView).getLocationInWindow(location);
 
         fromX = location[0] + 100;
         fromY = location[1];
@@ -156,13 +201,6 @@ public class ViewMyBookRequestsFragmentTest {
 
         solo.drag(fromX, toX, fromY, toY, 15);
 
-        solo.sleep(2000);
-        Log.e("REQ", "pre-buttons");
-
-        // assert that there is one request (ACCEPT and DECLINE button are visible)
-        assertTrue(solo.searchText("mockUsername2" + currentTime));
-
-        Log.e("REQ", "post-buttons");
         solo.sleep(2000);
     }
 
@@ -217,43 +255,6 @@ public class ViewMyBookRequestsFragmentTest {
         // Asserts that the current activity is HomeActivity (i.e. save redirected).
         solo.assertCurrentActivity("Wrong Activity", HomeActivity.class);
     }
-
-    private void goToViewMyBookFragment() {
-
-        // assert that we are in OwnerFragment and that the book details are visible
-        assertTrue(solo.searchText("Mock Title"));  // book title
-        assertTrue(solo.searchText("M0cKAUtH0R"));  // book author
-
-        // gets the recycler for the books
-        RecyclerView view = (RecyclerView) solo.getView(R.id.profileOwnerRecyclerRequestedBooks);
-
-        assertNotNull(view);
-
-        // gets the number of books in the recycler
-        int numOfBooks = Objects.requireNonNull(view.getAdapter()).getItemCount();
-
-        int position = -1;
-        for (int i = 0; i < numOfBooks; i++) {
-            Log.e("VIEW_BOOK_TEST", "in-scroll");
-            // scroll to the book position
-            onView(withId(R.id.profileOwnerRecyclerRequestedBooks)).perform(scrollToPosition(i));
-            RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(i);
-            if ((viewHolder != null)  // check if the current book is the mock book
-                    && hasDescendant(withText("Mock Title")).matches(viewHolder.itemView)) {
-                position = i;
-                break;
-            }
-        }
-
-        // assert that the mock book was actually found
-        assertNotEquals(-1, position);
-
-        onView(withId(R.id.profileOwnerRecyclerRequestedBooks))  // click on the mock book
-                .perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
-
-        solo.sleep(2000); // give it time to change fragments to ViewMyBookFragment
-    }
-
 
     /**
      * Views a Book selected
@@ -396,7 +397,7 @@ public class ViewMyBookRequestsFragmentTest {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
     }
-    
+
     /**
      * Runs after each test to remove the mock users and the mock book from Firebase.
      */
@@ -437,5 +438,4 @@ public class ViewMyBookRequestsFragmentTest {
         FirebaseIntegrity.deleteDocumentsFromCollectionOnFieldValue("catalogue",
                 "author", "M0cKAUtH0R");
     }
-
 }

@@ -264,11 +264,18 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 break;
 
             case "ACCEPTED":
-                requestButton.setClickable(false);
-
                 bookStatusImage.setImageResource(R.drawable.ic_accepted);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
                         R.color.colorAccepted), android.graphics.PorterDuff.Mode.SRC_IN);
+
+                if (!(book.getRequesters().contains(currentUser.getEmail()))) {
+                    requestButton.setClickable(false);
+                    requestButton.setText(R.string.notAvailable);
+                    requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
+                            R.color.notAvailable));
+                    break;
+                }
+                requestButton.setClickable(false);
 
                 requestButton.setText(R.string.cancelRequest);
                 requestButton.setTextColor(ContextCompat.getColor(getContext(),

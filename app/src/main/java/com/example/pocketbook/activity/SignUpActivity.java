@@ -47,28 +47,28 @@ public class SignUpActivity extends AppCompatActivity {
     private Boolean validUserEmail;
     private Boolean validUserPassword;
 
-    User currentUser;
-    StorageReference defaultPhoto = FirebaseStorage.getInstance().getReference()
+    private User currentUser;
+    private StorageReference defaultPhoto = FirebaseStorage.getInstance().getReference()
             .child("default_images").child("no_profileImg.png");
 
-    TextInputEditText layoutUserFirstName;
-    TextInputEditText layoutUserLastName;
-    TextInputEditText layoutUserUsername;
-    TextInputEditText layoutUserPhoneNumber;
-    TextInputEditText layoutUserEmail;
-    TextInputEditText layoutUserPassword;
-    ImageView layoutProfilePicture;
+    private TextInputEditText layoutUserFirstName;
+    private TextInputEditText layoutUserLastName;
+    private TextInputEditText layoutUserUsername;
+    private TextInputEditText layoutUserPhoneNumber;
+    private TextInputEditText layoutUserEmail;
+    private TextInputEditText layoutUserPassword;
+    private ImageView layoutProfilePicture;
 
-    TextInputLayout layoutUserFirstNameContainer;
-    TextInputLayout layoutUserLastNameContainer;
-    TextInputLayout layoutUserUsernameContainer;
-    TextInputLayout layoutUserPhoneNumberContainer;
-    TextInputLayout layoutUserEmailContainer;
-    TextInputLayout layoutUserPasswordContainer;
+    private TextInputLayout layoutUserFirstNameContainer;
+    private TextInputLayout layoutUserLastNameContainer;
+    private TextInputLayout layoutUserUsernameContainer;
+    private TextInputLayout layoutUserPhoneNumberContainer;
+    private TextInputLayout layoutUserEmailContainer;
+    private TextInputLayout layoutUserPasswordContainer;
 
-    TextView signUpButton;
+    private TextView signUpButton;
 
-    PhotoHandler photoHandler;
+    private PhotoHandler photoHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

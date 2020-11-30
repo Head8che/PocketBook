@@ -31,7 +31,7 @@ import java.util.Objects;
 public class ViewMyBookFragment extends Fragment {
 
     private Book book;
-    ListenerRegistration listenerRegistration;
+    private ListenerRegistration listenerRegistration;
 
     public ViewMyBookFragment() {
         // Required empty public constructor

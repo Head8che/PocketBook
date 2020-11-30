@@ -45,23 +45,23 @@ public class AddBookActivity extends AppCompatActivity {
     private Boolean validAuthor;
     private Boolean validISBN;
 
-    StorageReference defaultBookCover = FirebaseStorage.getInstance().getReference()
+    private StorageReference defaultBookCover = FirebaseStorage.getInstance().getReference()
             .child("default_images").child("no_book_cover_light.png");
 
-    TextInputEditText layoutBookTitle;
-    TextInputEditText layoutBookAuthor;
-    TextInputEditText layoutBookISBN;
-    ImageView layoutBookCover;
-    TextInputEditText layoutBookCondition;
-    TextInputEditText layoutBookComment;
+    private TextInputEditText layoutBookTitle;
+    private TextInputEditText layoutBookAuthor;
+    private TextInputEditText layoutBookISBN;
+    private ImageView layoutBookCover;
+    private TextInputEditText layoutBookCondition;
+    private TextInputEditText layoutBookComment;
 
-    TextInputLayout layoutBookTitleContainer;
-    TextInputLayout layoutBookAuthorContainer;
-    TextInputLayout layoutBookISBNContainer;
-    TextInputLayout layoutBookConditionContainer;
-    TextInputLayout layoutBookCommentContainer;
+    private TextInputLayout layoutBookTitleContainer;
+    private TextInputLayout layoutBookAuthorContainer;
+    private TextInputLayout layoutBookISBNContainer;
+    private TextInputLayout layoutBookConditionContainer;
+    private TextInputLayout layoutBookCommentContainer;
 
-    PhotoHandler photoHandler;
+    private PhotoHandler photoHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

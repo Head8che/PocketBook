@@ -38,8 +38,8 @@ public class SearchMainFragment extends Fragment {
     private User currentUser;
     private int pos;
 
-    FirestoreRecyclerOptions<Book> options;
-    ListenerRegistration listenerRegistration;
+    private FirestoreRecyclerOptions<Book> options;
+    private ListenerRegistration listenerRegistration;
 
 
     public SearchMainFragment() {

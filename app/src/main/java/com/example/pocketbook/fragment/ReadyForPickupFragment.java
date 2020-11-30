@@ -38,10 +38,9 @@ public class ReadyForPickupFragment extends Fragment {
     FirestoreRecyclerOptions<Book> options;
 
     /**
-     *
-     * @param user
-     * @param isOwnerTab
-     * @return a new instace
+     * @param user User
+     * @param isOwnerTab boolean
+     * @return a new instance of readyForPickupfragment
      */
     public static ReadyForPickupFragment newInstance(User user, boolean isOwnerTab) {
         ReadyForPickupFragment readyForPickupfragment = new ReadyForPickupFragment();

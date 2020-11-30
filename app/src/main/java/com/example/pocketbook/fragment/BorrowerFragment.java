@@ -45,6 +45,10 @@ public class BorrowerFragment extends Fragment {
     private boolean isOwnerTab = false;
 
 
+    /**
+     * @param user User object
+     * @return new instance of BorrowerFragment
+     */
     public static BorrowerFragment newInstance(User user) {
         BorrowerFragment ownerFragment = new BorrowerFragment();
         Bundle args = new Bundle();

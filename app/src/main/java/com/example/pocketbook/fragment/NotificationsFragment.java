@@ -34,6 +34,12 @@ import static com.example.pocketbook.util.FirebaseIntegrity
         .getAllNotificationsForCurrentUserFromFirebase;
 import static com.example.pocketbook.util.FirebaseIntegrity.setAllNotificationsToSeenTrue;
 
+/**
+ * Displays notifications that user has received
+ * A simple {@link Fragment} subclass.
+ * Use the {@link #newInstance(User) newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class NotificationsFragment extends Fragment {
 
     private NotificationAdapter notificationAdapter;
@@ -42,9 +48,11 @@ public class NotificationsFragment extends Fragment {
     FirestoreRecyclerOptions<Notification> options;
     ListenerRegistration listenerRegistration;
 
-
+    /**
+     * Required empty public constructor
+     */
     public NotificationsFragment() {
-        // Required empty public constructor
+
     }
 
     /**

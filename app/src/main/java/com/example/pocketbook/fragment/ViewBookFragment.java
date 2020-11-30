@@ -54,9 +54,9 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
     /**
      * create a new instance of the ViewBookFragment
      *
-     * @param currentUser: the user currently signed in the app
-     * @param bookOwner:   the owner of the book being viewed
-     * @param book:        the book being viewed
+     * @param currentUser : the user currently signed in the app
+     * @param bookOwner :   the owner of the book being viewed
+     * @param book :        the book being viewed
      * @return a new instance of the ViewBookFragment
      */
     public static ViewBookFragment newInstance(User currentUser, User bookOwner, Book book) {
@@ -264,11 +264,18 @@ public class ViewBookFragment extends androidx.fragment.app.Fragment {
                 break;
 
             case "ACCEPTED":
-                requestButton.setClickable(false);
-
                 bookStatusImage.setImageResource(R.drawable.ic_accepted);
                 bookStatusImage.setColorFilter(ContextCompat.getColor(getContext(),
                         R.color.colorAccepted), android.graphics.PorterDuff.Mode.SRC_IN);
+
+                if (!(book.getRequesters().contains(currentUser.getEmail()))) {
+                    requestButton.setClickable(false);
+                    requestButton.setText(R.string.notAvailable);
+                    requestButton.setBackgroundColor(ContextCompat.getColor(getContext(),
+                            R.color.notAvailable));
+                    break;
+                }
+                requestButton.setClickable(false);
 
                 requestButton.setText(R.string.cancelRequest);
                 requestButton.setTextColor(ContextCompat.getColor(getContext(),

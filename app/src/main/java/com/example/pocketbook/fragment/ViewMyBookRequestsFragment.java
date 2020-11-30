@@ -46,7 +46,7 @@ public class ViewMyBookRequestsFragment extends Fragment {
 
     /**
      * create a new instance of ViewMyBookRequestsFragment
-     * @param book: the book being viewed
+     * @param book : the book being viewed
      * @return ViewMyBookRequestsFragment
      */
     public static ViewMyBookRequestsFragment newInstance(Book book) {

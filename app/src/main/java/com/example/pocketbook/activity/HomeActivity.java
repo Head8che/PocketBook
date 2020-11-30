@@ -101,7 +101,10 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Transfers the layout from the current activity to the selected activity
+     * @param intent data from the current activity
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -113,7 +116,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Back button
+     */
     @Override
     public void onBackPressed() {
 
@@ -264,6 +269,12 @@ public class HomeActivity extends AppCompatActivity {
             };
 
 
+    /**
+     * Scan the ISBN of the book
+     * @param requestCode code that the image activity was launched with
+     * @param resultCode code that the image activity returns
+     * @param data data from the intent
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

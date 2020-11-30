@@ -106,6 +106,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
+    /**
+     * Connects to the Google Api Server
+     * @return true if the connection to the server was successful, false otherwise
+     */
     public boolean checkServicesAvailability() {
         GoogleApiAvailability mapSdkConnection = GoogleApiAvailability.getInstance();
         int isAvailable = mapSdkConnection.isGooglePlayServicesAvailable(this);
@@ -121,59 +125,15 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         return false;
     }
 
-    // When the map is ready the user will have a functionality
-    // such as long click to drop the pin or drag the current pin to a new spot
+    /**
+     * When the map is ready the user will have a functionality
+     * such as long click to drop the pin or drag the current pin to a new spot
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         mGoogleMap = googleMap;
-//        if(mGoogleMap != null) {
-//            mGoogleMap.setOnMapLongClickListener(latLng -> {
-//                Geocoder geocoder = new Geocoder(LocationActivity.this);
-//                List<Address> list = null;
-//                try {
-//                    list = geocoder.getFromLocation(latLng.latitude, latLng.longitude,
-//                            1);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                Address addressLocation = list.get(0);
-//                marker.setTitle(addressLocation.getAddressLine(0));
-//                setPin(addressLocation.getAddressLine(0), addressLocation.getLatitude(),
-//                        addressLocation.getLongitude());
-//                Log.d("Long Click:", addressLocation.getAddressLine(0));
-//            });
-//
-//            mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-//                @Override
-//                public void onMarkerDragStart(Marker marker) {
-//                }
-//
-//                @Override
-//                public void onMarkerDrag(Marker marker) {
-//                }
-//
-//                @Override
-//                public void onMarkerDragEnd(Marker marker) {
-//                    Geocoder geoLocation = new Geocoder(LocationActivity.this);
-//                    LatLng ll = marker.getPosition();
-//                    List<Address> list = null;
-//                    try {
-//                        list = geoLocation.getFromLocation(ll.latitude, ll.longitude, 1);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    Address addressLocation = list.get(0);
-//                    marker.setTitle(addressLocation.getAddressLine(0));
-//                    setPin(addressLocation.getAddressLine(0),addressLocation.getLatitude(),
-//                            addressLocation.getLongitude());
-//                    Log.d("Marker Drag:", addressLocation.getAddressLine(0));
-//
-//
-//                }
-//            });
-//        }
 
         // Gets the device location if permission was granted
         if (mPermissionStatus) {
@@ -198,6 +158,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
     }
 
+    /**
+     * Gets the location permission
+     *
+     */
     private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
@@ -217,6 +181,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
+    /**
+     * Request permission to access the location
+     * @param requestCode code that the location activity was launched with
+     * @param permissions code that the location activity returns
+     * @param grantResults grant access
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -236,7 +206,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    // Locates the inputted MeetingDetails from the user
+    /**
+     * Locates the inputted MeetingDetails from the user
+     */
     private void geoLocate() {
         hideSoftKeyboard();
         Geocoder geocoder = new Geocoder(LocationActivity.this);
@@ -258,13 +230,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             Lng = addressLocation.getLongitude();
             locationAddress = addressLocation.getAddressLine(0);
             Log.d("GEoLocate", addressLocation.toString());
-//            Log.d("GEoLocate", addressLocation.getLocality());
-//            Log.d("GEoLocate", addressLocation.getAdminArea());
-//            Log.d("GEoLocate", addressLocation.getFeatureName());
         }
     }
 
-    // initializing the map
+    /**
+     * Initializing the map
+     */
     private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.LocationActivity);
@@ -273,7 +244,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    //Current MeetingDetails of the device [Bug] // Will resolve
+    /**
+     * Gets the current location from the device
+     */
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices
@@ -318,6 +291,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
+    /**
+     * Allow the user to zoom in into a specific location
+     * @param lat Gets the latitude of the selected location
+     * @param lng Gets the longitude of the selected location
+     * @param zoom Zooms in into the selected location
+     */
     public void goToLocationZoom(double lat, double lng, float zoom) {
         LatLng latilong = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latilong, zoom);
@@ -328,8 +307,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-
-    // Dropped Pin
+    /**
+     * Allow the user to use the dropped pin option to select a location
+     * @param title Gets the street name/number of the location
+     * @param lat Gets the latitude of the selected location
+     * @param lng Gets the longitude of the selected location
+     */
     private void setPin(String title, double lat, double lng) {
         if (marker != null) {
             marker.remove();
@@ -344,6 +327,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
+    /**
+     * Hides the Keyboard
+     */
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager
                 .LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

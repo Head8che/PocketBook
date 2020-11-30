@@ -106,6 +106,12 @@ public class HomeFragment extends Fragment {
                             case MODIFIED:
                                 Log.d("SCROLL_UPDATE", "Modified doc: " + document);
                                 mAdapter.notifyDataSetChanged();
+
+                                getParentFragmentManager()
+                                        .beginTransaction()
+                                        .detach(HomeFragment.this)
+                                        .attach(HomeFragment.this)
+                                        .commitAllowingStateLoss();
                                 break;
 
                             case REMOVED:

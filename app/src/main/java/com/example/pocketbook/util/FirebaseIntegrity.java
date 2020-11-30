@@ -757,6 +757,8 @@ public class FirebaseIntegrity {
                             // if collection has documents
                             if (!Objects.requireNonNull(task1.getResult()).isEmpty()) {
 
+                                FirebaseIntegrity.makeBookStatusAccepted(request);
+
                                 // for each document in collection
                                 for (DocumentSnapshot document1 : task1.getResult()) {
                                     Log.e("PRE_DEL_REQUESTER", document1.getId()
@@ -766,7 +768,7 @@ public class FirebaseIntegrity {
                                         Log.e("DEL_REQUESTER", document1.getId()
                                                 + " " + requester);
                                         FirebaseIntegrity.declineSpecificBookRequest(request,
-                                                document1.getId());
+                                                document1.getId(), true);
                                     }
                                 }
 
@@ -824,7 +826,7 @@ public class FirebaseIntegrity {
                 .addOnSuccessListener(aVoid -> {
                     Log.d("DELETE_REQUEST", "Request data successfully written!");
                     FirebaseIntegrity.handleDeclineBookRequest(
-                            "catalogue", requestedBook, requester);
+                            "catalogue", requestedBook, requester, false);
                 })
                 .addOnFailureListener(e -> Log.e("DELETE_REQUEST",
                         "Error writing request data!"));
@@ -845,14 +847,15 @@ public class FirebaseIntegrity {
                     .addOnSuccessListener(aVoid -> {
                         Log.d("DECLINE_REQUEST", "Request data successfully written!");
                         FirebaseIntegrity.handleDeclineBookRequest(
-                                "catalogue", requestedBook, requester);
+                                "catalogue", requestedBook, requester, false);
                     })
                     .addOnFailureListener(e -> Log.e("DECLINE_REQUEST",
                             "Error writing request data!"));
         }
     }
 
-    public static void declineSpecificBookRequest(Request request, String requester) {
+    public static void declineSpecificBookRequest(Request request,
+                                                  String requester, boolean accepted) {
 
         if (Parser.isValidRequestWithBookIdObject(request)) {
 
@@ -866,7 +869,7 @@ public class FirebaseIntegrity {
                     .addOnSuccessListener(aVoid -> {
                         Log.d("NEW_REQUEST", "Request data successfully written!");
                         FirebaseIntegrity.handleDeclineBookRequest(
-                                "catalogue", requestedBook, requester);
+                                "catalogue", requestedBook, requester, accepted);
                     })
                     .addOnFailureListener(e -> Log.e("NEW_REQUEST",
                             "Error writing request data!"));
@@ -1293,7 +1296,7 @@ public class FirebaseIntegrity {
     }
 
     public static void handleDeclineBookRequest(String collectionName,
-                                            String bookID, String requester) {
+                                            String bookID, String requester, boolean accepted) {
 
         FirebaseFirestore.getInstance().collection(collectionName)
                 .document(bookID)
@@ -1313,8 +1316,13 @@ public class FirebaseIntegrity {
 
                                 requesters.remove(requester);
 
-                                String status = (requesters.size() == 0)
-                                        ? "AVAILABLE" : "REQUESTED";
+                                String status;
+                                if (!accepted) {
+                                    status = (requesters.size() == 0)
+                                            ? "AVAILABLE" : "REQUESTED";
+                                } else {
+                                    status = "ACCEPTED";
+                                }
 
                                 FirebaseFirestore.getInstance()
                                         .collection(collectionName)

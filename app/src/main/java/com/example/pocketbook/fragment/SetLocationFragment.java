@@ -50,6 +50,11 @@ import java.util.UUID;
 import static com.example.pocketbook.notifications
         .NotificationHandler.sendNotificationRequestAccepted;
 
+/**
+ * Allows users to set a pickup location for their requested book
+ * A {@link Fragment} subclass.
+ * Use the {@link #newInstance(Book,Request,String,String,User) newInstance} method to create an instance of this fragment.
+ */
 public class SetLocationFragment extends Fragment implements OnMapReadyCallback {
 
     private Book book;
@@ -203,7 +208,7 @@ public class SetLocationFragment extends Fragment implements OnMapReadyCallback 
 
 
         confirmBtn.setOnClickListener(v -> {
-            // TODO: Need to Notify the user of Accept and Decline all other Requests
+
             if (validLocation && validDate && validTime
                     && (latitude != invalidCoord) && (longitude != invalidCoord)) {
 
